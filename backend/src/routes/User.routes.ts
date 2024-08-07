@@ -4,6 +4,14 @@ import User from "../models/User.models";
 const router = express.Router();
 
 // POST new user
+router.post(
+  "/users",
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const createUser = await User.create({});
+    } catch (error) {}
+  }
+);
 
 // GET 1 user
 router.get(
