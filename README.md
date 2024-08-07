@@ -1,3 +1,3 @@
 # asozial
 
-A social media app to unite anti-social devs
+A social app for asozial devs

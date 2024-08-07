@@ -1,7 +1,7 @@
 {
   "name": "asozial",
   "version": "1.0.0",
-  "description": "a social media app to unite anti-social devs",
+  "description": "A social app for asozial devs",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -10,7 +10,29 @@
     "type": "git",
     "url": "git+https://github.com/jrcopeti/asozial.git"
   },
-  "author": "",
+  "contributors": [
+    {
+      "name": "José Copeti",
+      "email": "jrcopeti@gmail.com",
+      "github": "https://github.com/jrcopeti",
+      "linkedin": "https://www.linkedin.com/in/josecopeti/",
+      "website": "https://jrcopeti.hashnode.dev/"
+    },
+    {
+      "name": "Benjamin Elliott",
+      "email": "hello@benjamin.dev",
+      "github": "https://github.com/benjamindotdev",
+      "linkedin": "https://www.linkedin.com/in/benjamindotdev/",
+      "website": "https://benjamin.dev"
+    },
+    {
+      "name": "Mirko Fede",
+      "email": "jrcopeti@gmail.com",
+      "github": "https://github.com/mirkoeffe",
+      "linkedin": "https://www.linkedin.com/in/mirko-fede/",
+      "website": "http://mirkoeffe.shop/"
+    }
+  ],
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/jrcopeti/asozial/issues"
