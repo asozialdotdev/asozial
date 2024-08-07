@@ -1,0 +1,22 @@
+{
+  "name": "asozial",
+  "version": "1.0.0",
+  "description": "a social media app to unite anti-social devs",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jrcopeti/asozial.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jrcopeti/asozial/issues"
+  },
+  "homepage": "https://github.com/jrcopeti/asozial#readme",
+  "dependencies": {
+    "concurrently": "^8.2.2"
+  }
+}
