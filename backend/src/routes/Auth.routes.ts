@@ -1,5 +1,7 @@
 import express, { Request, Response, NextFunction } from "express";
 import axios from "axios";
+import { generateJWT } from "../middleware/jwt.middleware";
+
 import User from "../models/User.models";
 
 // import middleware
@@ -47,7 +49,7 @@ githubRouter.post("/", async (req: Request, res: Response) => {
       const { _id, username, avatarUrl, email } = foundUser;
       const payload = { _id, username, avatarUrl, email };
       const refreshToken = generateJWT(payload, { refresh: true });
-      const accessToken = generateJWT(payload);
+      const accessToken = generateJWT(payload, { refresh: false });
       res
         .cookie("refreshToken", refreshToken, {
           httpOnly: true,
@@ -67,7 +69,7 @@ githubRouter.post("/", async (req: Request, res: Response) => {
     const { _id, username, avatarUrl, email } = createdUser;
     const payload = { _id, username, avatarUrl, email };
     const refreshToken = generateJWT(payload, { refresh: true });
-    const accessToken = generateJWT(payload);
+    const accessToken = generateJWT(payload, { refresh: false });
     res
       .cookie("refreshToken", refreshToken, {
         httpOnly: true,
