@@ -18,6 +18,8 @@ const userSchema = new Schema(
     projectsSuggested: [{ type: Schema.Types.ObjectId, ref: "Project" }],
     projectsApplied: [{ type: Schema.Types.ObjectId, ref: "Project" }],
     dashboardPosts: [{ type: Schema.Types.ObjectId, ref: "Post" }],
+    avoidedUsers: [{ type: Schema.Types.ObjectId, ref: "User" }],
+    avoidedProjects: [{ type: Schema.Types.ObjectId, ref: "Project" }],
   },
   {
     collection: "User",
