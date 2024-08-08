@@ -3,9 +3,7 @@ import Morgan from "morgan";
 import cookieParser from "cookie-parser";
 import cors from "cors";
 
-const app = Express();
-
-module.exports = (app: Express.Application) => {
+export default (app: Express.Application) => {
   app.set("trust proxy", 1);
 
   app.use(

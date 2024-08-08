@@ -1,21 +1,11 @@
 import express, { Request, Response, NextFunction } from "express";
 import User from "../models/User.models";
 
-const router = express.Router();
-
-// POST new user
-router.post(
-  "/users",
-  async (req: Request, res: Response, next: NextFunction) => {
-    try {
-      const createUser = await User.create({});
-    } catch (error) {}
-  }
-);
+const usersRouter = express.Router();
 
 // GET 1 user
-router.get(
-  "/users/:userId",
+usersRouter.get(
+  "/:userId",
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       const foundUser = await User.findById(req.params.userId);
@@ -27,3 +17,5 @@ router.get(
 );
 
 // GET all users
+
+export default usersRouter;
