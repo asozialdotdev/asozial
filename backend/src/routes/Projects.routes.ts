@@ -12,6 +12,8 @@ projectsRouter.get(
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       const repoUrl = req.query.repoUrl as string;
+      console.log(req);
+      // const ownerName = req.query.ownerName as string;
       if (!repoUrl) {
         return res
           .status(400)
