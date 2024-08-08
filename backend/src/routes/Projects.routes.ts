@@ -1,36 +1,32 @@
 import dotenv from "dotenv";
 import express, { Request, Response, NextFunction } from "express";
 import axios from "axios";
-/* import { Octokit } from "@octokit/core";
- */
 import Project from "../models/Project.models";
+
 const projectsRouter = express.Router();
+
 dotenv.config();
-
-/* 
-const githubSecretToken = process.env.GITHUB_AUTHORIZATION_TOKEN;
-const octokit = new Octokit({ auth: githubSecretToken });
-
-const response = await octokit.request("GET /orgs/{org}/repos", {
-  org: "octokit",
-  type: "private",
-});
-
-projectsRouter.get("/", (req: Request, res: Response, next: NextFunction) => {
-  const projectURL = ``;
-});
-
-*/
-// GET 1 project
 
 projectsRouter.get(
   "/new",
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const repoUrl = req.params.repoUrl;
+      const repoUrl = req.query.repoUrl as string;
+      if (!repoUrl) {
+        return res
+          .status(400)
+          .json({ error: "repoUrl query parameter is required" });
+      }
+
       const repoInfo = await axios.get(
         `https://api.github.com/repos/${repoUrl}`
       );
+      if (repoInfo.status !== 200) {
+        return res
+          .status(repoInfo.status)
+          .json({ error: "Failed to fetch repository information" });
+      }
+
       const { name, description, html_url, language, owner } = repoInfo.data;
 
       const createProject = await Project.create({
@@ -53,7 +49,7 @@ projectsRouter.get(
   }
 );
 
-// GET all projects
+// GET all projects only backend request
 
 projectsRouter.get(
   "/",
