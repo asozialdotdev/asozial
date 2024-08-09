@@ -2,7 +2,7 @@ import React from "react";
 import type { Metadata } from "next";
 import { Germania_One, Source_Code_Pro } from "next/font/google";
 import "./globals.css";
-import Navbar from "@/components/common/Navbar"
+import Navbar from "@/components/common/Navbar";
 import Footer from "@/components/common/Footer";
 import Main from "@/components/common/Main";
 
@@ -33,9 +33,9 @@ export default function RootLayout({
     >
       <body className="h-100vh w-100vw flex flex-col justify-between p-6">
         <Navbar />
-        <Main />
+        <Main>{children}</Main>
         <Footer />
-        </body>
+      </body>
     </html>
   );
 }
