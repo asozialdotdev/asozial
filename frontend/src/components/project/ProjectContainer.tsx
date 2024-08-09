@@ -1,10 +1,11 @@
 "use client";
 import React, { useEffect, useState } from "react";
+import { EventListener } from "../../../../backend/node_modules/undici-types/patch.d";
 
 function ProjectContainer() {
   const [input, setInput] = useState("");
 
-  const getProject = async (repoUrl) => {
+  const getProject = async (repoUrl: string) => {
     const response = await fetch(
       `http://localhost:5005/projects/new/?repoUrl=${repoUrl}`,
     );
@@ -12,7 +13,7 @@ function ProjectContainer() {
     console.log(data);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     getProject(input);
     console.log(input);
