@@ -46,7 +46,7 @@ function Footer() {
 
   return (
     <nav
-      className={`h-10vh flex flex-col items-center gap-2 border-t-2 ${theme === "light" ? "bg-light text-dark" : "bg-dark text-light"}`}
+      className={`h-10vh flex flex-col items-center gap-2 border-t-1 pb-2 ${theme === "light" ? "bg-light text-dark" : "bg-dark text-light"}`}
     >
       <h1 className="text-xl">© 2024 asozial</h1>
       <ul className="flex flex-row flex-wrap gap-6 font-sans">
@@ -55,9 +55,20 @@ function Footer() {
             <Image
               src={tech.icon}
               alt={tech.name}
-              className="h-auto max-h-6 w-12"
-              width={12}
-              height={12}
+              width={
+                tech.name === "Next.js" ||
+                tech.name === "Express" ||
+                tech.name === "MongoDB"
+                  ? 60
+                  : 30
+              }
+              height={
+                tech.name === "Next.js" ||
+                tech.name === "Express" ||
+                tech.name === "MongoDB"
+                  ? 60
+                  : 30
+              }
             />
             <a title="url" href={tech.url} target="_blank" rel="noreferrer"></a>
           </li>

@@ -9,10 +9,11 @@ import Image from "next/image";
 import { useProjectSidebar } from "@/hooks/useProjectSidebar";
 
 import { useThemeContext } from "@/context/ThemeContext";
-
+import { useUserSidebar } from "@/hooks/useUserSidebar";
 
 function Navbar() {
   const { toggleProjectSidebar, projectHeaderRef } = useProjectSidebar();
+  const { toggleUserSidebar, userHeaderRef } = useUserSidebar();
   const [isOpen, setIsOpen] = useState(false);
   const contributors = [
     {
@@ -46,75 +47,73 @@ function Navbar() {
 
   return (
     <>
-
-      <button onClick={() => {
-        toggleProjectSidebar()
-        console.log("clicked")
-
-      }}>
-        {" "}
-        click to open project sidebar
-      </button>
-    <nav
-      // ref={projectHeaderRef}
-      className={`flex w-full flex-col gap-2 border-b-2 p-6 ${theme === "light" ? "bg-light text-dark" : "bg-dark text-light"}`}
-    >
-      <h1
-        onClick={() => setIsOpen(!isOpen)}
-        className="cursor-pointer text-2xl"
+      <nav
+        ref={projectHeaderRef}
+        className={`flex w-full flex-col gap-2 border-b-2 p-6 ${theme === "light" ? "bg-light text-dark" : "bg-dark text-light"}`}
       >
-        asozial
-      </h1>
-      <p className="font-sans">A social app for asozial devs</p>
-      <div className="flex flex-row gap-4 self-end">
-        <button onClick={toggleTheme}>
-          {theme === "light" ? <CiLight /> : <CiDark />}
+        <button onClick={toggleProjectSidebar}>
+          {" "}
+          click to open project sidebar
         </button>
-        <button onClick={() => setIsOpen(!isOpen)}>Contributors</button>
-      </div>
-      {isOpen && (
-        <ul className="flex w-full flex-row flex-wrap justify-between py-10 font-sans">
-          {contributors.map((contributor) => (
-            <li
-              key={contributor.name}
-              className="flex flex-col items-center gap-2"
-            >
-              <h2 className="font-serif text-xl">{contributor.name}</h2>
-              <Image
-                src={contributor.github + ".png"}
-                alt={contributor.name}
-                width={100 }
-                height={100}
-                className={`h-24 w-24 rounded-full border-4 ${theme === "light" ? "border-dark" : "border-light"}`}
-
-              />
-              <div className="flex flex-row gap-4">
-                <a
-                  title="github"
-                  href={contributor.github}
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  <FaGithub size={24} />
+        <button onClick={toggleProjectSidebar}>
+          {" "}
+          click to open USER sidebar
+        </button>
+        <h1
+          onClick={() => setIsOpen(!isOpen)}
+          className="cursor-pointer text-2xl"
+        >
+          asozial
+        </h1>
+        <p className="font-sans">A social app for asozial devs</p>
+        <div className="flex flex-row gap-4 self-end">
+          <button onClick={toggleTheme}>
+            {theme === "light" ? <CiLight /> : <CiDark />}
+          </button>
+          <button onClick={() => setIsOpen(!isOpen)}>Contributors</button>
+        </div>
+        {isOpen && (
+          <ul className="flex w-full flex-row flex-wrap justify-between py-10 font-sans">
+            {contributors.map((contributor) => (
+              <li
+                key={contributor.name}
+                className="flex flex-col items-center gap-2"
+              >
+                <h2 className="font-serif text-xl">{contributor.name}</h2>
+                <Image
+                  src={contributor.github + ".png"}
+                  alt={contributor.name}
+                  width={100}
+                  height={100}
+                  className={`h-24 w-24 rounded-full border-4 ${theme === "light" ? "border-dark" : "border-light"}`}
+                />
+                <div className="flex flex-row gap-4">
+                  <a
+                    title="github"
+                    href={contributor.github}
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    <FaGithub size={24} />
+                  </a>
+                  <a
+                    title="linkedin"
+                    href={contributor.linkedin}
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    <FaLinkedin size={24} />
+                  </a>
+                </div>
+                <a href={`mailto:${contributor.email}`}>{contributor.email}</a>
+                <a href={contributor.website} target="_blank" rel="noreferrer">
+                  {contributor.website}
                 </a>
-                <a
-                  title="linkedin"
-                  href={contributor.linkedin}
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  <FaLinkedin size={24} />
-                </a>
-              </div>
-              <a href={`mailto:${contributor.email}`}>{contributor.email}</a>
-              <a href={contributor.website} target="_blank" rel="noreferrer">
-                {contributor.website}
-              </a>
-            </li>
-          ))}
-        </ul>
-      )}
-    </nav>
+              </li>
+            ))}
+          </ul>
+        )}
+      </nav>
     </>
   );
 }
