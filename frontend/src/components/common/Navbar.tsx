@@ -2,8 +2,14 @@
 
 import { useState } from "react";
 import { FaGithub, FaLinkedin } from "react-icons/fa";
+import { CiLight, CiDark } from "react-icons/ci";
+
 import Image from "next/image";
+
 import { useProjectSidebar } from "@/hooks/useProjectSidebar";
+
+import { useThemeContext } from "@/context/ThemeContext";
+
 
 function Navbar() {
   const { toggleProjectSidebar, projectHeaderRef } = useProjectSidebar();
@@ -32,6 +38,12 @@ function Navbar() {
     },
   ];
 
+  const { theme, setTheme } = useThemeContext();
+
+  const toggleTheme = () => {
+    setTheme(theme === "light" ? "dark" : "light");
+  };
+
   return (
     <>
 
@@ -44,8 +56,8 @@ function Navbar() {
         click to open project sidebar
       </button>
     <nav
-      className={`flex w-full flex-col gap-2 border-b-2`}
       // ref={projectHeaderRef}
+      className={`flex w-full flex-col gap-2 border-b-2 p-6 ${theme === "light" ? "bg-light text-dark" : "bg-dark text-light"}`}
     >
       <h1
         onClick={() => setIsOpen(!isOpen)}
@@ -54,6 +66,12 @@ function Navbar() {
         asozial
       </h1>
       <p className="font-sans">A social app for asozial devs</p>
+      <div className="flex flex-row gap-4 self-end">
+        <button onClick={toggleTheme}>
+          {theme === "light" ? <CiLight /> : <CiDark />}
+        </button>
+        <button onClick={() => setIsOpen(!isOpen)}>Contributors</button>
+      </div>
       {isOpen && (
         <ul className="flex w-full flex-row flex-wrap justify-between py-10 font-sans">
           {contributors.map((contributor) => (
@@ -67,7 +85,8 @@ function Navbar() {
                 alt={contributor.name}
                 width={100 }
                 height={100}
-                className="rounded-full border-4 border-black"
+                className={`h-24 w-24 rounded-full border-4 ${theme === "light" ? "border-dark" : "border-light"}`}
+
               />
               <div className="flex flex-row gap-4">
                 <a

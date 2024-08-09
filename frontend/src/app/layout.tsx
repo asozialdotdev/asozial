@@ -5,9 +5,7 @@ import "./globals.css";
 import Navbar from "@/components/common/Navbar";
 import Footer from "@/components/common/Footer";
 import Main from "@/components/common/Main";
-import UserSidebar from "@/components/user/UserSidebar";
-import ProjectSidebar from "@/components/project/ProjectSidebar";
-import Providers from "./providers";
+import { ThemeProvider } from "@/context/ThemeContext";
 
 const kanit = Kanit({
   subsets: ["latin"],

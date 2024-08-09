@@ -1,4 +1,7 @@
+"use client";
+
 import Image from "next/image";
+import { useThemeContext } from "@/context/ThemeContext";
 
 function Footer() {
   const techStack = [
@@ -38,8 +41,13 @@ function Footer() {
       icon: "https://avatars.githubusercontent.com/u/7552965?s=400&v=4",
     },
   ];
+
+  const { theme } = useThemeContext();
+
   return (
-    <nav className="h-10vh flex flex-col items-center gap-2 border-t-2">
+    <nav
+      className={`h-10vh flex flex-col items-center gap-2 border-t-2 ${theme === "light" ? "bg-light text-dark" : "bg-dark text-light"}`}
+    >
       <h1 className="text-xl">© 2024 asozial</h1>
       <ul className="flex flex-row flex-wrap gap-6 font-sans">
         {techStack.map((tech) => (
