@@ -8,7 +8,12 @@ export default (app: Express.Application) => {
 
   app.use(
     cors({
-      origin: ["http://localhost:3000", "https://your-domain.com"], // Add your frontend domain here
+      origin: [
+        "http://localhost:3000",
+        "http://localhost:3000/auth",
+        "http://localhost:5005/auth",
+        "https://your-domain.com",
+      ], // Add your frontend domain here
       credentials: true,
     })
   );

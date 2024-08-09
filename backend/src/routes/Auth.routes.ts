@@ -15,6 +15,7 @@ githubRouter.get("/", (req: Request, res: Response) => {
 
 githubRouter.post("/", async (req: Request, res: Response) => {
   const { code } = req.body;
+  console.log(code);
 
   if (!code) {
     res.status(404).json("code not found");
@@ -35,13 +36,16 @@ githubRouter.post("/", async (req: Request, res: Response) => {
         },
       }
     );
+    console.log(getGithubAccessToken.data);
     const githubAccessToken = getGithubAccessToken.data.access_token;
+    console.log(githubAccessToken);
     if (!githubAccessToken) return;
     const getUserInfo = await axios.get("https://api.github.com/user", {
       headers: {
         Authorization: `Bearer ${githubAccessToken}`,
       },
     });
+    console.log(getUserInfo);
     const { login, id, avatar_url, name } = getUserInfo.data;
     const foundUser = await User.findOne({ githubID: id });
 
