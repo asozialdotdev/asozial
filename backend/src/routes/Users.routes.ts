@@ -4,36 +4,8 @@ import Friendship from "../models/Friendship.models";
 
 const usersRouter = express.Router();
 
-// GET all users
-
-usersRouter.get(
-  "/search",
-  async (req: Request, res: Response, next: NextFunction) => {
-    try {
-      const foundUser = await User.find();
-      res.json(foundUser);
-    } catch (error) {
-      next(error);
-    }
-  }
-);
-
-// GET 1 user
-
-usersRouter.get(
-  "/:userId",
-  async (req: Request, res: Response, next: NextFunction) => {
-    try {
-      const foundUser = await User.findById(req.params.userId);
-      res.json(foundUser);
-    } catch (error) {
-      next(error);
-    }
-  }
-);
-
 // GET user friends
-// rendered in the /users
+// rendered in the /users route
 
 usersRouter.get(
   "/",
@@ -64,6 +36,65 @@ usersRouter.get(
         user: foundUser,
         friends: friends,
       });
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
+// GET all users
+
+usersRouter.get(
+  "/search",
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const foundUser = await User.find();
+      res.json(foundUser);
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
+// GET 1 user
+
+usersRouter.get(
+  "/:userId",
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const currentUserId = req.params._id;
+      const targetUserId = req.params.userId;
+
+      const targetUser = await User.findById(targetUserId);
+      if (!targetUser) {
+        res.status(404).send("User not found");
+        console.error("User not found");
+        return;
+      }
+
+      const friendships = await Friendship.findOne({
+        $or: [
+          { senderId: currentUserId, receiverId: targetUserId },
+          { senderId: targetUserId, receiverId: currentUserId },
+        ],
+        status: "accepted",
+      });
+
+      if (friendships) {
+        res.json({
+          user: targetUser,
+        });
+      } else {
+        res.json({
+          message: "You are not friend with this user",
+          basicInfo: {
+            username: targetUser.username,
+            name: targetUser.name,
+            email: targetUser.email,
+            avatarUrl: targetUser.avatarUrl,
+          },
+        });
+      }
     } catch (error) {
       next(error);
     }
