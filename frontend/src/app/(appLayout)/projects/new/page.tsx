@@ -3,10 +3,9 @@
 function Page() {
     return (
       <div>
-        
+        THIS IS NEW PROJECT
       </div>
     )
   }
-  
+
 export default Page
-  

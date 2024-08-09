@@ -5,9 +5,14 @@ import { FaGithub, FaLinkedin } from "react-icons/fa";
 import { CiLight, CiDark } from "react-icons/ci";
 
 import Image from "next/image";
+
+import { useProjectSidebar } from "@/hooks/useProjectSidebar";
+
 import { useThemeContext } from "@/context/ThemeContext";
 
+
 function Navbar() {
+  const { toggleProjectSidebar, projectHeaderRef } = useProjectSidebar();
   const [isOpen, setIsOpen] = useState(false);
   const contributors = [
     {
@@ -40,10 +45,26 @@ function Navbar() {
   };
 
   return (
+    <>
+
+      <button onClick={() => {
+        toggleProjectSidebar()
+        console.log("clicked")
+
+      }}>
+        {" "}
+        click to open project sidebar
+      </button>
     <nav
+      // ref={projectHeaderRef}
       className={`flex w-full flex-col gap-2 border-b-2 p-6 ${theme === "light" ? "bg-light text-dark" : "bg-dark text-light"}`}
     >
-      <h1 className="text-2xl">asozial</h1>
+      <h1
+        onClick={() => setIsOpen(!isOpen)}
+        className="cursor-pointer text-2xl"
+      >
+        asozial
+      </h1>
       <p className="font-sans">A social app for asozial devs</p>
       <div className="flex flex-row gap-4 self-end">
         <button onClick={toggleTheme}>
@@ -62,9 +83,10 @@ function Navbar() {
               <Image
                 src={contributor.github + ".png"}
                 alt={contributor.name}
+                width={100 }
+                height={100}
                 className={`h-24 w-24 rounded-full border-4 ${theme === "light" ? "border-dark" : "border-light"}`}
-                height={24}
-                width={24}
+
               />
               <div className="flex flex-row gap-4">
                 <a
@@ -93,6 +115,7 @@ function Navbar() {
         </ul>
       )}
     </nav>
+    </>
   );
 }
 
