@@ -35,7 +35,7 @@ function Navbar() {
       onClick={() => setIsOpen(!isOpen)}
       className={`flex w-full flex-col gap-2 border-b-2`}
     >
-      <h1 className="font-serif text-2xl">asozial</h1>
+      <h1 className="text-2xl">asozial</h1>
       <p className="font-sans">A social app for asozial devs</p>
       {isOpen && (
         <ul className="flex w-full flex-row flex-wrap justify-between py-10 font-sans">
