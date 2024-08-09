@@ -21,4 +21,11 @@ type User = {
   avoidedProjects?: Types.ObjectId[];
 };
 
-export default User;
+type UserSidebarContextTypes = {
+  isUserSidebarOpen: boolean;
+  toggleUserSidebar: () => void;
+  userSidebarRef: React.MutableRefObject<HTMLDivElement | null>;
+  userHeaderRef: React.MutableRefObject<HTMLDivElement | null>;
+};
+
+export type { User, UserSidebarContextTypes };
