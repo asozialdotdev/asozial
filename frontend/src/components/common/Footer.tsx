@@ -48,7 +48,7 @@ function Footer() {
     <nav
       className={`h-10vh flex flex-col items-center gap-2 border-t-1 pb-2 ${theme === "light" ? "bg-light text-dark" : "bg-dark text-light"}`}
     >
-      <h1 className="text-xl">© 2024 asozial</h1>
+      <h1 className="text-xl">A social app for asozial devs - 2024 ©</h1>
       <ul className="flex flex-row flex-wrap gap-6 font-sans">
         {techStack.map((tech) => (
           <li key={tech.name} className="flex flex-row items-center gap-2">

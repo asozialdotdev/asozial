@@ -1,7 +1,7 @@
 "use client";
 
-import { useState } from "react";
-import { FaGithub, FaLinkedin } from "react-icons/fa";
+import { useRef, useState } from "react";
+import { FaGithub, FaLinkedin, FaRegUserCircle } from "react-icons/fa";
 import { CiLight, CiDark } from "react-icons/ci";
 
 import Image from "next/image";
@@ -10,11 +10,22 @@ import { useProjectSidebar } from "@/hooks/useProjectSidebar";
 
 import { useThemeContext } from "@/context/ThemeContext";
 import { useUserSidebar } from "@/hooks/useUserSidebar";
+import { RxHamburgerMenu } from "react-icons/rx";
+import { IoMenu, IoMoonOutline, IoSunnyOutline } from "react-icons/io5";
+import { useOutsideClick } from "@/hooks/useOutsideClick";
+import useMergeRefs from "@/hooks/useCombinedRef";
 
 function Navbar() {
   const { toggleProjectSidebar, projectHeaderRef } = useProjectSidebar();
   const { toggleUserSidebar, userHeaderRef } = useUserSidebar();
   const [isOpen, setIsOpen] = useState(false);
+
+  const navRef = useRef<HTMLDivElement>(null);
+
+  useOutsideClick(() => setIsOpen(false), navRef);
+
+  const mergedRefs = useMergeRefs(navRef, projectHeaderRef, userHeaderRef);
+
   const contributors = [
     {
       name: "José Copeti",
@@ -48,32 +59,43 @@ function Navbar() {
   return (
     <>
       <nav
-        ref={projectHeaderRef}
-        className={`flex w-full flex-col gap-2 border-b-2 p-6 ${theme === "light" ? "bg-light text-dark" : "bg-dark text-light"}`}
+        ref={mergedRefs}
+        className={`sticky top-0 z-40 flex w-full justify-between gap-2 border-b-2 px-6 py-2 ${theme === "light" ? "bg-light text-dark" : "bg-dark text-light"}`}
       >
-        <button onClick={toggleProjectSidebar}>
-          {" "}
-          click to open project sidebar
-        </button>
-        <button onClick={toggleProjectSidebar}>
-          {" "}
-          click to open USER sidebar
-        </button>
-        <h1
-          onClick={() => setIsOpen(!isOpen)}
-          className="cursor-pointer text-2xl"
-        >
-          asozial
-        </h1>
-        <p className="font-sans">A social app for asozial devs</p>
-        <div className="flex flex-row gap-4 self-end">
-          <button onClick={toggleTheme}>
-            {theme === "light" ? <CiLight /> : <CiDark />}
-          </button>
-          <button onClick={() => setIsOpen(!isOpen)}>Contributors</button>
-        </div>
+        {!isOpen && (
+          <>
+            <section className="flex items-center gap-2">
+              <h1
+                onClick={() => setIsOpen(!isOpen)}
+                className="cursor-pointer text-2xl"
+              >
+                asozial
+              </h1>
+
+              <button onClick={toggleUserSidebar}>
+                <FaRegUserCircle size={20} />
+              </button>
+            </section>
+
+            <section className="flex items-center gap-2">
+              <button onClick={() => setIsOpen(!isOpen)}>Contributors</button>
+              <button className="" onClick={toggleTheme}>
+                {theme === "light" ? (
+                  <IoSunnyOutline size={26} />
+                ) : (
+                  <IoMoonOutline size={22} />
+                )}
+              </button>
+
+              <button onClick={toggleProjectSidebar}>
+                <IoMenu size={26} />
+              </button>
+            </section>
+          </>
+        )}
+
         {isOpen && (
-          <ul className="flex w-full flex-row flex-wrap justify-between py-10 font-sans">
+          <ul className="flex w-full flex-row flex-wrap justify-evenly py-10 font-sans">
             {contributors.map((contributor) => (
               <li
                 key={contributor.name}
