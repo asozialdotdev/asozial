@@ -7,6 +7,7 @@ import Footer from "@/components/common/Footer";
 import Main from "@/components/common/Main";
 import UserSidebar from "@/components/user/UserSidebar";
 import ProjectSidebar from "@/components/project/ProjectSidebar";
+import Providers from "./providers";
 
 const kanit = Kanit({
   subsets: ["latin"],
@@ -26,9 +27,11 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${kanit.className}`}>
       <body className="h-100vh w-100vw flex flex-col justify-between p-6">
-        <Navbar />
-        {children}
-        <Footer />
+        <Providers>
+          <Navbar />
+          {children}
+          <Footer />
+        </Providers>
       </body>
     </html>
   );

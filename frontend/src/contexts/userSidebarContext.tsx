@@ -1,3 +1,4 @@
+"use client";
 import { useOutsideClick } from "@/hooks/useOutsideClick";
 import { createContext, useState, useRef } from "react";
 import type { UserSidebarContextTypes } from "@/types/User";
@@ -9,9 +10,10 @@ const defaultContextValue: UserSidebarContextTypes = {
   userHeaderRef: { current: null },
 };
 
-const userSidebarContext = createContext(defaultContextValue);
+const UserSidebarContext =
+  createContext<UserSidebarContextTypes>(defaultContextValue);
 
-function OpenSidebarProvider({ children }: { children: React.ReactNode }) {
+function UserSidebarProvider({ children }: { children: React.ReactNode }) {
   const [isUserSidebarOpen, setIsUserSidebarOpen] = useState(false);
 
   const userSidebarRef = useRef<HTMLDivElement>(null);
@@ -28,7 +30,7 @@ function OpenSidebarProvider({ children }: { children: React.ReactNode }) {
   }
 
   return (
-    <userSidebarContext.Provider
+    <UserSidebarContext.Provider
       value={{
         isUserSidebarOpen,
         toggleUserSidebar,
@@ -37,8 +39,8 @@ function OpenSidebarProvider({ children }: { children: React.ReactNode }) {
       }}
     >
       {children}
-    </userSidebarContext.Provider>
+    </UserSidebarContext.Provider>
   );
 }
 
-export { userSidebarContext, OpenSidebarProvider };
+export { UserSidebarContext, UserSidebarProvider };

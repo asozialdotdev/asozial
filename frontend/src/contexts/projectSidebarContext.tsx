@@ -1,3 +1,4 @@
+"use client";
 import { useOutsideClick } from "@/hooks/useOutsideClick";
 import { createContext, useState, useRef } from "react";
 import type { ProjectSidebarContextTypes } from "@/types/Project";
@@ -9,36 +10,37 @@ const defaultContextValue: ProjectSidebarContextTypes = {
   projectHeaderRef: { current: null },
 };
 
-const projectSidebarContext = createContext(defaultContextValue);
+const ProjectSidebarContext =
+  createContext<ProjectSidebarContextTypes>(defaultContextValue);
 
-function OpenSidebarProvider({ children }: { children: React.ReactNode }) {
-  const [isProjectSidebarOpen, setisProjectSidebarOpen] = useState(false);
+function ProjectSidebarProvider({ children }: { children: React.ReactNode }) {
+  const [isProjectSidebarOpen, setIsProjectSidebarOpen] = useState(false);
 
   const projectSidebarRef = useRef<HTMLDivElement>(null);
   const projectHeaderRef = useRef<HTMLDivElement>(null);
 
-  useOutsideClick(
-    () => setisProjectSidebarOpen(false),
-    projectSidebarRef,
-    projectHeaderRef,
-  );
+  // useOutsideClick(
+  //   () => setIsProjectSidebarOpen(false),
+  //   projectSidebarRef,
+  //   projectHeaderRef,
+  // );
 
   function toggleProjectSidebar() {
-    setisProjectSidebarOpen((isProjectSidebarOpen) => !isProjectSidebarOpen);
+    setIsProjectSidebarOpen((isProjectSidebarOpen) => !isProjectSidebarOpen);
   }
 
   return (
-    <projectSidebarContext.Provider
+    <ProjectSidebarContext.Provider
       value={{
         isProjectSidebarOpen,
         toggleProjectSidebar,
-        projectSidebarRef,
-        projectHeaderRef,
+        // projectSidebarRef,
+        // projectHeaderRef,
       }}
     >
       {children}
-    </projectSidebarContext.Provider>
+    </ProjectSidebarContext.Provider>
   );
 }
 
-export { projectSidebarContext, OpenSidebarProvider };
+export { ProjectSidebarContext, ProjectSidebarProvider };

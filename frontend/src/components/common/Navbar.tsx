@@ -3,8 +3,10 @@
 import { useState } from "react";
 import { FaGithub, FaLinkedin } from "react-icons/fa";
 import Image from "next/image";
+import { useProjectSidebar } from "@/hooks/useProjectSidebar";
 
 function Navbar() {
+  const { toggleProjectSidebar, projectHeaderRef } = useProjectSidebar();
   const [isOpen, setIsOpen] = useState(false);
   const contributors = [
     {
@@ -31,11 +33,26 @@ function Navbar() {
   ];
 
   return (
+    <>
+
+      <button onClick={() => {
+        toggleProjectSidebar()
+        console.log("clicked")
+
+      }}>
+        {" "}
+        click to open project sidebar
+      </button>
     <nav
-      onClick={() => setIsOpen(!isOpen)}
       className={`flex w-full flex-col gap-2 border-b-2`}
+      // ref={projectHeaderRef}
     >
-      <h1 className="text-2xl">asozial</h1>
+      <h1
+        onClick={() => setIsOpen(!isOpen)}
+        className="cursor-pointer text-2xl"
+      >
+        asozial
+      </h1>
       <p className="font-sans">A social app for asozial devs</p>
       {isOpen && (
         <ul className="flex w-full flex-row flex-wrap justify-between py-10 font-sans">
@@ -48,7 +65,9 @@ function Navbar() {
               <Image
                 src={contributor.github + ".png"}
                 alt={contributor.name}
-                className="h-24 w-24 rounded-full border-4 border-black"
+                width={100 }
+                height={100}
+                className="rounded-full border-4 border-black"
               />
               <div className="flex flex-row gap-4">
                 <a
@@ -77,6 +96,7 @@ function Navbar() {
         </ul>
       )}
     </nav>
+    </>
   );
 }
 

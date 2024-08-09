@@ -1,11 +1,11 @@
-import { projectSidebarContext } from "@/contexts/projectSidebarContext";
+import { ProjectSidebarContext } from "@/contexts/ProjectSidebarContext";
 import { useContext } from "react";
 
 export function useProjectSidebar() {
-  const context = useContext(projectSidebarContext);
+  const context = useContext(ProjectSidebarContext);
   if (context === undefined) {
     throw new Error(
-      "useUserSidebar must be used within a projectSidebarProvider",
+      "useProjectSidebar must be used within a ProjectSidebarProvider",
     );
   }
   return context;
