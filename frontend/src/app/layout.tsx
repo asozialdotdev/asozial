@@ -4,8 +4,7 @@ import { Kanit } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/common/Navbar";
 import Footer from "@/components/common/Footer";
-import Main from "@/components/common/Main";
-import { ThemeProvider } from "@/context/ThemeContext";
+import Providers from "./providers";
 
 const kanit = Kanit({
   subsets: ["latin"],

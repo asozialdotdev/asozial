@@ -1,4 +1,4 @@
-import User from "@/types/User";
+import { User } from "@/types/User";
 import { FaGithub } from "react-icons/fa";
 
 function SignIn({ user }: { user: User }) {
