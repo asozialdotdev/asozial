@@ -13,12 +13,20 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@types/cookie-parser": "^1.4.7",
+    "@types/cors": "^2.8.17",
+    "@types/morgan": "^1.9.9",
+    "axios": "^1.7.3",
+    "cookie-parser": "^1.4.6",
+    "cors": "^2.8.5",
     "dotenv": "^16.4.5",
+    "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.5.2",
     "morgan": "^1.10.0"
   },
   "devDependencies": {
     "@types/express": "^4.17.21",
+    "@types/jsonwebtoken": "^9.0.6",
     "@types/node": "^22.1.0",
     "express": "^4.19.2",
     "nodemon": "^3.1.4",

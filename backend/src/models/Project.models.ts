@@ -7,6 +7,7 @@ const projectSchema = new Schema(
     githubRepo: { type: String },
     techStack: [{ type: String }],
     owner: { type: Schema.Types.ObjectId, ref: "User", required: true },
+    // githubOwner: { type: String },
     membersJoined: [{ type: Schema.Types.ObjectId, ref: "User" }],
     membersApplied: [{ type: Schema.Types.ObjectId, ref: "User" }],
     membersInvited: [{ type: Schema.Types.ObjectId, ref: "User" }],
