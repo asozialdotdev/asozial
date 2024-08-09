@@ -1,5 +1,5 @@
 "use client";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { FaGithub } from "react-icons/fa";
 import { useSearchParams } from "next/navigation";
 import getUser from "@/app/actions/getUser.server";
@@ -29,7 +29,8 @@ function SignIn() {
       const foundUser = await fetch("http://localhost:5005/auth", {
         method: "GET",
         headers: {
-          "Allow-Control-Allow-Origin": "*",
+          "Content-Type": "text/plain",
+          "Access-Control-Allow-Origin": "http://localhost:3000",
         },
       });
       if (!foundUser) {
@@ -48,10 +49,10 @@ function SignIn() {
       onSubmit={(e) => onSubmit(e)}
     >
       <h2>Sign In With Github</h2>
-      <Link className="border-2" type="submit" href="/dashboard">
+      <button className="border-2" type="submit">
         Sign In
         <FaGithub size={24} />
-      </Link>
+      </button>
     </form>
   );
 }

@@ -37,8 +37,6 @@ githubRouter.post("/", async (req: Request, res: Response) => {
       {
         headers: {
           Accept: "application/json",
-          "Access-Control-Allow-Origin": "*",
-          "Content-Type": "application/json",
         },
       }
     );
