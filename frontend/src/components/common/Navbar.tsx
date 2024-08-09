@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { FaGithub, FaLinkedin } from "react-icons/fa";
+import Image from "next/image";
 
 function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -44,7 +45,7 @@ function Navbar() {
               className="flex flex-col items-center gap-2"
             >
               <h2 className="font-serif text-xl">{contributor.name}</h2>
-              <img
+              <Image
                 src={contributor.github + ".png"}
                 alt={contributor.name}
                 className="h-24 w-24 rounded-full border-4 border-black"
