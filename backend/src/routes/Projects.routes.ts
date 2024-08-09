@@ -63,10 +63,27 @@ projectsRouter.get(
   }
 );
 
-// GET all projects only backend request
+// GET 1 project
 
 projectsRouter.get(
-  "/",
+  "/:projectId",
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const project = await Project.findById(req.params.projectId);
+      if (!project) {
+        return res.status(404).json({ error: "Project not found" });
+      }
+      res.json(project);
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
+// GET all projects
+
+projectsRouter.get(
+  "/search",
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       const project = await Project.find();
