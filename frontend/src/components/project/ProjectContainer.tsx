@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { EventListener } from "../../../../backend/node_modules/undici-types/patch.d";
+import { useThemeContext } from "@/context/ThemeContext";
 
 function ProjectContainer() {
   const [input, setInput] = useState("");
@@ -19,8 +19,12 @@ function ProjectContainer() {
     console.log(input);
   };
 
+  const { theme } = useThemeContext();
+
   return (
-    <section className="flex flex-col border-2 p-4 hover:grow lg:order-last lg:min-w-[400px] xl:order-last xl:min-w-[400px]">
+    <section
+      className={`flex flex-col border-2 p-4 hover:grow lg:order-last lg:min-w-[400px] xl:order-last xl:min-w-[400px] ${theme === "light" ? "bg-light text-dark" : "bg-dark text-light"}`}
+    >
       <h1 className="py-6 text-xl">Projects</h1>
       <form onSubmit={handleSubmit}>
         <input
