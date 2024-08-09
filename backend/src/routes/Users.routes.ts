@@ -6,6 +6,7 @@ const usersRouter = express.Router();
 
 // GET user friends
 // rendered in the /users route
+// TODO must check also for freindships status
 
 usersRouter.get(
   "/",
@@ -17,9 +18,10 @@ usersRouter.get(
       }
 
       const friendships = await Friendship.find({
+        // TODO the following filters must be reviewed because the logic of it is not really working.
         $or: [
-          { user1: foundUser._id, status: "accepted" },
-          { user2: foundUser._id, status: "accepted" },
+          { senderId: foundUser._id, status: "accepted" },
+          { receiverId: foundUser._id, status: "accepted" },
         ],
       });
 
