@@ -48,6 +48,8 @@ function Footer() {
               src={tech.icon}
               alt={tech.name}
               className="h-auto max-h-6 w-12"
+              width={12}
+              height={12}
             />
             <a title="url" href={tech.url} target="_blank" rel="noreferrer"></a>
           </li>
