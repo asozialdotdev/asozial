@@ -83,3 +83,5 @@ githubRouter.post("/", async (req: Request, res: Response) => {
     res.status(500).json("Server error");
   }
 });
+
+export default githubRouter;
