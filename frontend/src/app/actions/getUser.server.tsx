@@ -1,11 +1,11 @@
 const getUser = async () => {
-  const foundUser = await fetch("/auth", {
+  const res = await fetch("/auth", {
     method: "POST",
   });
-  if (!foundUser) {
+  if (!res) {
     console.log("User not found");
   } else {
-    console.log(foundUser);
+    console.log(res.headers);
   }
 };
 

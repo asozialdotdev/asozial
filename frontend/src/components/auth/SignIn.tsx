@@ -1,17 +1,19 @@
 "use client";
 import { useEffect } from "react";
 import { FaGithub } from "react-icons/fa";
-import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import getUser from "@/app/actions/getUser.server";
+import Link from "next/link";
 
 function SignIn() {
   const searchParams = useSearchParams();
+  console.log(searchParams);
 
   const code = searchParams.get("code");
 
   useEffect(() => {
     if (code) {
+      console.log(code);
       const user = getUser();
       if (!user) {
         console.log("User not found again");
@@ -24,12 +26,16 @@ function SignIn() {
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const foundUser = await fetch("/auth", {
+      const foundUser = await fetch("http://localhost:5005/auth", {
         method: "GET",
+        headers: {
+          "Allow-Control-Allow-Origin": "*",
+        },
       });
       if (!foundUser) {
         console.log("User not found");
       } else {
+        console.log(foundUser);
       }
     } catch (error) {
       console.error;

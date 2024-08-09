@@ -5,11 +5,15 @@ import { generateJWT } from "../middleware/jwt.middleware";
 import User from "../models/User.models";
 
 // import middleware
-
 const githubRouter = express.Router();
 
 githubRouter.get("/", (req: Request, res: Response) => {
+  console.log(process.env.GITHUB_CLIENT_ID);
+  console.log(process.env.GITHUB_REDIRECT_URI);
   const githubAuthURL = `https://github.com/login/oauth/authorize?client_id=${process.env.GITHUB_CLIENT_ID}&redirect_uri=${process.env.GITHUB_REDIRECT_URI}&scope=read:user`;
+  console.log("Before redirect");
+  console.log(res.statusCode);
+  console.log("After redirect");
   res.redirect(githubAuthURL);
 });
 
@@ -33,6 +37,8 @@ githubRouter.post("/", async (req: Request, res: Response) => {
       {
         headers: {
           Accept: "application/json",
+          "Access-Control-Allow-Origin": "*",
+          "Content-Type": "application/json",
         },
       }
     );

@@ -14,6 +14,11 @@ export default (app: Express.Application) => {
         "http://localhost:5005/auth",
         "https://your-domain.com",
       ], // Add your frontend domain here
+      exposedHeaders: [
+        "Access-Control-Allow-Origin",
+        "Content-Type",
+        "Authorization",
+      ],
       credentials: true,
     })
   );
