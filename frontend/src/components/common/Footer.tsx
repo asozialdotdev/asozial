@@ -40,7 +40,7 @@ function Footer() {
   ];
   return (
     <nav className="h-10vh flex flex-col items-center gap-2 border-t-2">
-      <h1 className="font-sans text-xl">© 2024 asozial</h1>
+      <h1 className="text-xl">© 2024 asozial</h1>
       <ul className="flex flex-row flex-wrap gap-6 font-sans">
         {techStack.map((tech) => (
           <li key={tech.name} className="flex flex-row items-center gap-2">
