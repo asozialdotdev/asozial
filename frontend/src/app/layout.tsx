@@ -5,6 +5,8 @@ import "./globals.css";
 import Navbar from "@/components/common/Navbar";
 import Footer from "@/components/common/Footer";
 import Main from "@/components/common/Main";
+import UserSidebar from "@/components/user/UserSidebar";
+import ProjectSidebar from "@/components/project/ProjectSidebar";
 
 const kanit = Kanit({
   subsets: ["latin"],
@@ -25,7 +27,7 @@ export default function RootLayout({
     <html lang="en" className={`${kanit.className}`}>
       <body className="h-100vh w-100vw flex flex-col justify-between p-6">
         <Navbar />
-        <Main>{children}</Main>
+        {children}
         <Footer />
       </body>
     </html>

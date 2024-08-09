@@ -5,8 +5,8 @@ import UserContainer from "@/components/user/UserContainer";
 function Page() {
   return (
     <>
-      <UserContainer />
-      <ProjectContainer />
+      {/* <UserContainer /> */}
+      {/* <ProjectContainer /> */}
       <DashboardContainer />
     </>
   );
