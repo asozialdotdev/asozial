@@ -1,54 +1,61 @@
 "use client";
-
+//React
 import { useRef, useState } from "react";
-import { FaGithub, FaLinkedin, FaRegUserCircle } from "react-icons/fa";
-import { CiLight, CiDark } from "react-icons/ci";
 
+//Next
 import Image from "next/image";
+import Link from "next/link";
 
+//Hooks
 import { useProjectSidebar } from "@/hooks/useProjectSidebar";
-
 import { useThemeContext } from "@/context/ThemeContext";
 import { useUserSidebar } from "@/hooks/useUserSidebar";
-import { RxHamburgerMenu } from "react-icons/rx";
-import { IoMenu, IoMoonOutline, IoSunnyOutline } from "react-icons/io5";
 import { useOutsideClick } from "@/hooks/useOutsideClick";
-import useMergeRefs from "@/hooks/useCombinedRef";
+import useCombinedRef from "@/hooks/useCombinedRef";
+import { useWindowWidth } from "@/hooks/useWindowWidth";
+
+//UI
+import { FaGithub, FaLinkedin, FaRegUserCircle } from "react-icons/fa";
+import { IoMenu, IoMoonOutline, IoSunnyOutline } from "react-icons/io5";
+
+const contributors = [
+  {
+    name: "José Copeti",
+    email: "jrcopeti@gmail.com",
+    github: "https://github.com/jrcopeti",
+    linkedin: "https://www.linkedin.com/in/josecopeti/",
+    website: "https://jrcopeti.hashnode.dev/",
+  },
+  {
+    name: "Benjamin Elliott",
+    email: "hello@benjamin.dev",
+    github: "https://github.com/benjamindotdev",
+    linkedin: "https://www.linkedin.com/in/benjamindotdev/",
+    website: "https://benjamin.dev",
+  },
+  {
+    name: "Mirko Fede",
+    email: "mirko@asozial.com",
+    github: "https://github.com/mirkoeffe",
+    linkedin: "https://www.linkedin.com/in/mirko-fede/",
+    website: "http://mirkoeffe.shop/",
+  },
+];
 
 function Navbar() {
-  const { toggleProjectSidebar, projectHeaderRef } = useProjectSidebar();
-  const { toggleUserSidebar, userHeaderRef } = useUserSidebar();
   const [isOpen, setIsOpen] = useState(false);
 
+  const { toggleProjectSidebar, projectHeaderRef, isProjectSidebarOpen } =
+    useProjectSidebar();
+
+  const { toggleUserSidebar, userHeaderRef, isUserSidebarOpen } =
+    useUserSidebar();
+
   const navRef = useRef<HTMLDivElement>(null);
-
   useOutsideClick(() => setIsOpen(false), navRef);
+  const mergedRefs = useCombinedRef(navRef, projectHeaderRef, userHeaderRef);
 
-  const mergedRefs = useMergeRefs(navRef, projectHeaderRef, userHeaderRef);
-
-  const contributors = [
-    {
-      name: "José Copeti",
-      email: "jrcopeti@gmail.com",
-      github: "https://github.com/jrcopeti",
-      linkedin: "https://www.linkedin.com/in/josecopeti/",
-      website: "https://jrcopeti.hashnode.dev/",
-    },
-    {
-      name: "Benjamin Elliott",
-      email: "hello@benjamin.dev",
-      github: "https://github.com/benjamindotdev",
-      linkedin: "https://www.linkedin.com/in/benjamindotdev/",
-      website: "https://benjamin.dev",
-    },
-    {
-      name: "Mirko Fede",
-      email: "mirko@asozial.com",
-      github: "https://github.com/mirkoeffe",
-      linkedin: "https://www.linkedin.com/in/mirko-fede/",
-      website: "http://mirkoeffe.shop/",
-    },
-  ];
+  const { width } = useWindowWidth();
 
   const { theme, setTheme } = useThemeContext();
 
@@ -65,14 +72,16 @@ function Navbar() {
         {!isOpen && (
           <>
             <section className="flex items-center gap-2">
-              <h1
-                onClick={() => setIsOpen(!isOpen)}
-                className="cursor-pointer text-2xl"
-              >
-                asozial
-              </h1>
+              <Link href="/dashboard">
+                <h1 className="cursor-pointer text-2xl">asozial</h1>
+              </Link>
 
-              <button onClick={toggleUserSidebar}>
+              <button
+                onClick={toggleUserSidebar}
+                disabled={
+                  width && width <= 640 ? !!isProjectSidebarOpen : undefined
+                }
+              >
                 <FaRegUserCircle size={20} />
               </button>
             </section>
@@ -87,7 +96,12 @@ function Navbar() {
                 )}
               </button>
 
-              <button onClick={toggleProjectSidebar}>
+              <button
+                onClick={toggleProjectSidebar}
+                disabled={
+                  width && width <= 640 ? !!isUserSidebarOpen : undefined
+                }
+              >
                 <IoMenu size={26} />
               </button>
             </section>
