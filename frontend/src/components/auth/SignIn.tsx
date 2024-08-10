@@ -23,23 +23,12 @@ function SignIn() {
     }
   }, [code]);
 
-  const onSubmit = async (e: React.FormEvent) => {
+  const onSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const foundUser = await fetch("http://localhost:5005/auth", {
-        method: "GET",
-        headers: {
-          "Content-Type": "text/plain",
-          "Access-Control-Allow-Origin": "http://localhost:3000",
-        },
-      });
-      if (!foundUser) {
-        console.log("User not found");
-      } else {
-        console.log(foundUser);
-      }
+      window.location.href = "http://localhost:5005/auth";
     } catch (error) {
-      console.error;
+      console.error("Failed to redirect to GitHub", error);
     }
   };
 
