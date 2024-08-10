@@ -1,6 +1,6 @@
 "use client";
 import { useOutsideClick } from "@/hooks/useOutsideClick";
-import { createContext, useState, useRef } from "react";
+import { createContext, useState, useRef, useContext } from "react";
 import type { UserSidebarContextTypes } from "@/types/User";
 
 const defaultContextValue: UserSidebarContextTypes = {
@@ -43,4 +43,12 @@ function UserSidebarProvider({ children }: { children: React.ReactNode }) {
   );
 }
 
-export { UserSidebarContext, UserSidebarProvider };
+function useUserSidebarContext() {
+  const context = useContext(UserSidebarContext);
+  if (context === undefined) {
+    throw new Error("useUserSidebar must be used within a UserSidebarProvider");
+  }
+  return context;
+}
+
+export { useUserSidebarContext, UserSidebarProvider };

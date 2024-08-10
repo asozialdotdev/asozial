@@ -7,9 +7,7 @@ import Image from "next/image";
 import Link from "next/link";
 
 //Hooks
-import { useProjectSidebar } from "@/hooks/useProjectSidebar";
 import { useThemeContext } from "@/context/ThemeContext";
-import { useUserSidebar } from "@/hooks/useUserSidebar";
 import { useOutsideClick } from "@/hooks/useOutsideClick";
 import useCombinedRef from "@/hooks/useCombinedRef";
 import { useWindowWidth } from "@/hooks/useWindowWidth";
@@ -17,6 +15,8 @@ import { useWindowWidth } from "@/hooks/useWindowWidth";
 //UI
 import { FaGithub, FaLinkedin, FaRegUserCircle } from "react-icons/fa";
 import { IoMenu, IoMoonOutline, IoSunnyOutline } from "react-icons/io5";
+import { useProjectSidebarContext } from "@/context/ProjectSidebarContext";
+import { useUserSidebarContext } from "@/context/UserSidebarContext";
 
 const contributors = [
   {
@@ -46,14 +46,14 @@ function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
 
   const { toggleProjectSidebar, projectHeaderRef, isProjectSidebarOpen } =
-    useProjectSidebar();
+    useProjectSidebarContext();
 
   const { toggleUserSidebar, userHeaderRef, isUserSidebarOpen } =
-    useUserSidebar();
+    useUserSidebarContext();
 
   const navRef = useRef<HTMLDivElement>(null);
   useOutsideClick(() => setIsOpen(false), navRef);
-  const mergedRefs = useCombinedRef(navRef, projectHeaderRef, userHeaderRef);
+  const combinedRefs = useCombinedRef(navRef, projectHeaderRef, userHeaderRef);
 
   const { width } = useWindowWidth();
 
@@ -66,7 +66,7 @@ function Navbar() {
   return (
     <>
       <nav
-        ref={mergedRefs}
+        ref={combinedRefs}
         className={`sticky top-0 z-40 flex w-full justify-between gap-2 border-b-2 px-6 py-2 ${theme === "light" ? "bg-light text-dark" : "bg-dark text-light"}`}
       >
         {!isOpen && (

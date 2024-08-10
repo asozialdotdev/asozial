@@ -1,6 +1,6 @@
 import { useCallback } from 'react';
 
-function useMergeRefs<T>(...refs: Array<React.Ref<T> | undefined>) {
+function useCombinedRef<T>(...refs: Array<React.Ref<T> | undefined>) {
   return useCallback(
     (node: T) => {
       refs.forEach(ref => {
@@ -15,4 +15,4 @@ function useMergeRefs<T>(...refs: Array<React.Ref<T> | undefined>) {
   );
 }
 
-export default useMergeRefs;
+export default useCombinedRef;

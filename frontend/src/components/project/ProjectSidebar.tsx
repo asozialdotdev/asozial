@@ -1,8 +1,10 @@
 "use client";
-import { useProjectSidebar } from "@/hooks/useProjectSidebar";
+
+import { useProjectSidebarContext } from "@/context/ProjectSidebarContext";
+
 
 function ProjectSidebar() {
-  const { projectSidebarRef, isProjectSidebarOpen } = useProjectSidebar();
+  const { projectSidebarRef, isProjectSidebarOpen } = useProjectSidebarContext();
   console.log("projectSidebarRef", projectSidebarRef);
   return (
     <aside

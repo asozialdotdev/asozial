@@ -3,18 +3,19 @@
 import React from "react";
 
 //Hooks
-import { useProjectSidebar } from "@/hooks/useProjectSidebar";
-import { useUserSidebar } from "@/hooks/useUserSidebar";
+
 
 //Components
 import Main from "@/components/common/Main";
 import Navbar from "@/components/common/Navbar";
 import ProjectSidebar from "@/components/project/ProjectSidebar";
 import UserSidebar from "@/components/user/UserSidebar";
+import { useUserSidebarContext } from "@/context/UserSidebarContext";
+import { useProjectSidebarContext } from "@/context/ProjectSidebarContext";
 
-function layout({ children }: { children: React.ReactNode }) {
-  const { isUserSidebarOpen } = useUserSidebar();
-  const { isProjectSidebarOpen } = useProjectSidebar();
+function AppLayout({ children }: { children: React.ReactNode }) {
+  const { isUserSidebarOpen } = useUserSidebarContext();
+  const { isProjectSidebarOpen } = useProjectSidebarContext();
   const isOverlayVisible = isUserSidebarOpen || isProjectSidebarOpen;
 
   return (
@@ -47,4 +48,4 @@ function layout({ children }: { children: React.ReactNode }) {
   );
 }
 
-export default layout;
+export default AppLayout;
