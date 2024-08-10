@@ -21,7 +21,7 @@ async function Page() {
     <>
       <div className="flex h-fit min-w-[100rem] max-w-[100rem] gap-4">
         {projects.map((project: Project) => (
-          <Card>
+          <Card key={Number(project._id)}>
             <CardHeader>
               <CardTitle>{project.title}</CardTitle>
               <CardDescription>{project.description}</CardDescription>
@@ -47,7 +47,7 @@ async function Page() {
         ))}
 
         {projects.map((project: Project) => (
-          <Card>
+          <Card key={Number(project._id)}>
             <CardHeader>
               <CardTitle>{project.title}</CardTitle>
               <CardDescription>{project.description}</CardDescription>
@@ -73,7 +73,7 @@ async function Page() {
         ))}
 
         {projects.map((project: Project) => (
-          <Card>
+          <Card key={Number(project._id)}>
             <CardHeader>
               <CardTitle>{project.title}</CardTitle>
               <CardDescription>{project.description}</CardDescription>
@@ -99,7 +99,7 @@ async function Page() {
         ))}
 
         {projects.map((project: Project) => (
-          <Card>
+          <Card key={Number(project._id)}>
             <CardHeader>
               <CardTitle>{project.title}</CardTitle>
               <CardDescription>{project.description}</CardDescription>

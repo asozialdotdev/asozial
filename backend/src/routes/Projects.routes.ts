@@ -96,4 +96,41 @@ projectsRouter.get(
   }
 );
 
+// POST request to join a project
+
+projectsRouter.post(
+  "/:projectId/join",
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const project = await Project.findById(req.params.projectId);
+      console.log("Project", project);
+      if (!project) {
+        return res.status(404).json({ error: "Project not found" });
+      }
+
+      const user = await User.findById(req.body.userId);
+      console.log("User", user);
+      if (!user) {
+        return res.status(404).json({ error: "User not found" });
+      }
+
+      if (
+        project.membersJoined.includes(user._id) ||
+        project.membersApplied.includes(user._id)
+      ) {
+        return res
+          .status(400)
+          .json({ error: "User is already a member of this project" });
+      }
+
+      project.membersApplied.push(user._id);
+      await project.save();
+
+      res.json(project);
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
 export default projectsRouter;
