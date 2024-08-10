@@ -1,22 +1,24 @@
 "use client";
 //React
-import React from "react";
+import React, { useEffect } from "react";
 
 //Hooks
-
+import { useSidebarsContext } from "@/context/SidebarsContext";
 
 //Components
 import Main from "@/components/common/Main";
 import Navbar from "@/components/common/Navbar";
 import ProjectSidebar from "@/components/project/ProjectSidebar";
 import UserSidebar from "@/components/user/UserSidebar";
-import { useUserSidebarContext } from "@/context/UserSidebarContext";
-import { useProjectSidebarContext } from "@/context/ProjectSidebarContext";
 
 function AppLayout({ children }: { children: React.ReactNode }) {
-  const { isUserSidebarOpen } = useUserSidebarContext();
-  const { isProjectSidebarOpen } = useProjectSidebarContext();
+  const { isUserSidebarOpen, isProjectSidebarOpen } = useSidebarsContext();
   const isOverlayVisible = isUserSidebarOpen || isProjectSidebarOpen;
+
+  useEffect(() => {
+    console.log("User Sidebar Open:", isUserSidebarOpen);
+    console.log("Project Sidebar Open:", isProjectSidebarOpen);
+  }, [isUserSidebarOpen, isProjectSidebarOpen]);
 
   return (
     <>

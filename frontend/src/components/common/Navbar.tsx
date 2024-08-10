@@ -11,12 +11,11 @@ import { useThemeContext } from "@/context/ThemeContext";
 import { useOutsideClick } from "@/hooks/useOutsideClick";
 import useCombinedRef from "@/hooks/useCombinedRef";
 import { useWindowWidth } from "@/hooks/useWindowWidth";
+import { useSidebarsContext } from "@/context/SidebarsContext";
 
 //UI
 import { FaGithub, FaLinkedin, FaRegUserCircle } from "react-icons/fa";
 import { IoMenu, IoMoonOutline, IoSunnyOutline } from "react-icons/io5";
-import { useProjectSidebarContext } from "@/context/ProjectSidebarContext";
-import { useUserSidebarContext } from "@/context/UserSidebarContext";
 
 const contributors = [
   {
@@ -45,11 +44,14 @@ const contributors = [
 function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
 
-  const { toggleProjectSidebar, projectHeaderRef, isProjectSidebarOpen } =
-    useProjectSidebarContext();
-
-  const { toggleUserSidebar, userHeaderRef, isUserSidebarOpen } =
-    useUserSidebarContext();
+  const {
+    toggleProjectSidebar,
+    projectHeaderRef,
+    isProjectSidebarOpen,
+    toggleUserSidebar,
+    userHeaderRef,
+    isUserSidebarOpen,
+  } = useSidebarsContext();
 
   const navRef = useRef<HTMLDivElement>(null);
   useOutsideClick(() => setIsOpen(false), navRef);
@@ -58,6 +60,7 @@ function Navbar() {
   const { width } = useWindowWidth();
 
   const { toggleTheme, isDarkMode } = useThemeContext();
+  console.log("isDarkMode", isDarkMode);
 
   return (
     <>
@@ -82,7 +85,7 @@ function Navbar() {
               </button>
             </section>
 
-            <section className="flex items-center gap-2">
+            <section className="flex items-center gap-2" ref={combinedRefs}>
               <button onClick={() => setIsOpen(!isOpen)}>Contributors</button>
               <button className="" onClick={toggleTheme}>
                 {!isDarkMode ? (

@@ -1,15 +1,12 @@
-import { ProjectSidebarProvider } from "@/context/ProjectSidebarContext";
+import { SidebarsProviders } from "@/context/SidebarsContext";
 import { ThemeProvider } from "@/context/ThemeContext";
 import { UserProvider } from "@/context/UserContext";
-import { UserSidebarProvider } from "@/context/UserSidebarContext";
 
 function Providers({ children }: { children: React.ReactNode }) {
   return (
     <ThemeProvider>
       <UserProvider>
-        <UserSidebarProvider>
-          <ProjectSidebarProvider>{children}</ProjectSidebarProvider>
-        </UserSidebarProvider>
+        <SidebarsProviders>{children}</SidebarsProviders>
       </UserProvider>
     </ThemeProvider>
   );
