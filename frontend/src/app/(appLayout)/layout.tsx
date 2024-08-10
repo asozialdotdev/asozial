@@ -19,12 +19,13 @@ function AppLayout({ children }: { children: React.ReactNode }) {
     <>
       <Navbar />
 
-      <div className="relative flex h-full w-full overflow-x-hidden">
-        {isOverlayVisible && (
+      <div className="relative flex h-full w-full overflow-x-hidden bg-light dark:bg-dark">
+        {/* {isOverlayVisible && (
           <div className="absolute inset-0 z-40 bg-dark opacity-20"></div>
-        )}
+        )} */}
+        {/* <UserSidebar /> */}
         <aside
-          className={`absolute left-0 top-0 z-40 h-full w-[14rem] bg-white transition-transform duration-300 lg:w-[18rem] ${
+          className={`absolute bottom-0 left-0 top-0 z-40 h-full w-[14rem] bg-neutral-300 transition-transform duration-300 dark:bg-dark lg:w-[18rem] ${
             isUserSidebarOpen ? "translate-x-0" : "-translate-x-full"
           }`}
         >
@@ -33,8 +34,9 @@ function AppLayout({ children }: { children: React.ReactNode }) {
         <main className={`flex-1 overflow-y-auto`}>
           <Main>{children}</Main>
         </main>
+        {/* <ProjectSidebar /> */}
         <aside
-          className={`absolute right-0 top-0 z-40 h-full w-[14rem] bg-white transition-transform duration-300 ease-in-out lg:w-[18rem] ${
+          className={`absolute bottom-0 right-0 top-0 z-50 h-full w-[14rem] border-b-2 bg-neutral-300 transition-transform duration-300 ease-in-out dark:bg-neutral-600 lg:w-[18rem] ${
             isProjectSidebarOpen ? "translate-x-0" : "translate-x-full"
           }`}
         >
