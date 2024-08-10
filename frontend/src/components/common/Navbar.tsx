@@ -57,17 +57,13 @@ function Navbar() {
 
   const { width } = useWindowWidth();
 
-  const { theme, setTheme } = useThemeContext();
-
-  const toggleTheme = () => {
-    setTheme(theme === "light" ? "dark" : "light");
-  };
+  const { toggleTheme, isDarkMode } = useThemeContext();
 
   return (
     <>
       <nav
         ref={combinedRefs}
-        className={`sticky top-0 z-40 flex w-full justify-between gap-2 border-b-2 px-6 py-2 ${theme === "light" ? "bg-light text-dark" : "bg-dark text-light"}`}
+        className={`border-b-1 sticky top-0 z-50 flex w-full justify-between gap-2 bg-light px-6 py-2 text-dark dark:bg-dark dark:text-light`}
       >
         {!isOpen && (
           <>
@@ -89,7 +85,7 @@ function Navbar() {
             <section className="flex items-center gap-2">
               <button onClick={() => setIsOpen(!isOpen)}>Contributors</button>
               <button className="" onClick={toggleTheme}>
-                {theme === "light" ? (
+                {!isDarkMode ? (
                   <IoSunnyOutline size={26} />
                 ) : (
                   <IoMoonOutline size={22} />
@@ -121,7 +117,7 @@ function Navbar() {
                   alt={contributor.name}
                   width={100}
                   height={100}
-                  className={`h-24 w-24 rounded-full border-4 ${theme === "light" ? "border-dark" : "border-light"}`}
+                  className="h-24 w-24 rounded-full border-4 border-dark dark:border-light"
                 />
                 <div className="flex flex-row gap-4">
                   <a

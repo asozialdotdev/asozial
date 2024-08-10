@@ -1,7 +1,6 @@
 "use client";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
-import { useThemeContext } from "@/context/ThemeContext";
 
 function ProjectContainer() {
   const [input, setInput] = useState("");
@@ -20,14 +19,10 @@ function ProjectContainer() {
     console.log(input);
   };
 
-  const { theme } = useThemeContext();
-
   return (
-    <section
-      className={`flex flex-col border-2 p-4 hover:grow lg:order-last lg:min-w-[400px] xl:order-last xl:min-w-[400px] ${theme === "light" ? "bg-light text-dark" : "bg-dark text-light"}`}
-    >
+    <section className="flex flex-col border-2 bg-light p-4 text-dark hover:grow lg:order-last lg:min-w-[400px] xl:order-last xl:min-w-[400px] dark:bg-dark dark:text-light">
       <Link href="/projects">
-      <h1 className="py-6 text-xl">Projects</h1>
+        <h1 className="py-6 text-xl">Projects</h1>
       </Link>
       {/* <form onSubmit={handleSubmit}>
         <input
@@ -38,7 +33,6 @@ function ProjectContainer() {
           onChange={(e) => setInput(e.target.value)}
         />
       </form> */}
-
       Projects Feed
     </section>
   );

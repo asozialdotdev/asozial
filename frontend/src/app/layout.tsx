@@ -23,7 +23,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={`${kanit.className}`}>
-      <body className="h-100vh w-100vw flex flex-col justify-between">
+      <body className="h-screen w-screen flex flex-col justify-between">
         <Providers>
           {children}
           <Footer />
