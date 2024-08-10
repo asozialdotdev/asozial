@@ -1,6 +1,7 @@
 import { Types } from "mongoose";
 
 type Project = {
+  _id: Types.ObjectId;
   title: string;
   description: string;
   githubRepo: string;
