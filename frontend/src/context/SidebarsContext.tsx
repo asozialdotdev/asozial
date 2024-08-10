@@ -64,10 +64,10 @@ function SidebarsProviders({ children }: { children: React.ReactNode }) {
       value={{
         isUserSidebarOpen,
         toggleUserSidebar,
-        userSidebarRef,
-        userHeaderRef,
         isProjectSidebarOpen,
         toggleProjectSidebar,
+        userSidebarRef,
+        userHeaderRef,
         projectSidebarRef,
         projectHeaderRef,
       }}

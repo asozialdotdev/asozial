@@ -15,11 +15,6 @@ function AppLayout({ children }: { children: React.ReactNode }) {
   const { isUserSidebarOpen, isProjectSidebarOpen } = useSidebarsContext();
   const isOverlayVisible = isUserSidebarOpen || isProjectSidebarOpen;
 
-  useEffect(() => {
-    console.log("User Sidebar Open:", isUserSidebarOpen);
-    console.log("Project Sidebar Open:", isProjectSidebarOpen);
-  }, [isUserSidebarOpen, isProjectSidebarOpen]);
-
   return (
     <>
       <Navbar />

@@ -15,11 +15,4 @@ type Project = {
   updatedAt?: Date;
 };
 
-type ProjectSidebarContextTypes = {
-  isProjectSidebarOpen: boolean;
-  toggleProjectSidebar: () => void;
-  projectSidebarRef: React.MutableRefObject<HTMLDivElement | null>;
-  projectHeaderRef: React.MutableRefObject<HTMLDivElement | null>;
-};
-
-export type { Project, ProjectSidebarContextTypes };
+export type { Project };

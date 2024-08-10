@@ -7,7 +7,6 @@ import Image from "next/image";
 import Link from "next/link";
 
 //Hooks
-import { useThemeContext } from "@/context/ThemeContext";
 import { useOutsideClick } from "@/hooks/useOutsideClick";
 import useCombinedRef from "@/hooks/useCombinedRef";
 import { useWindowWidth } from "@/hooks/useWindowWidth";
@@ -16,6 +15,7 @@ import { useSidebarsContext } from "@/context/SidebarsContext";
 //UI
 import { FaGithub, FaLinkedin, FaRegUserCircle } from "react-icons/fa";
 import { IoMenu, IoMoonOutline, IoSunnyOutline } from "react-icons/io5";
+import ToggleTheme from "./ToggleTheme";
 
 const contributors = [
   {
@@ -59,9 +59,6 @@ function Navbar() {
 
   const { width } = useWindowWidth();
 
-  const { toggleTheme, isDarkMode } = useThemeContext();
-  console.log("isDarkMode", isDarkMode);
-
   return (
     <>
       <nav
@@ -87,13 +84,8 @@ function Navbar() {
 
             <section className="flex items-center gap-2" ref={combinedRefs}>
               <button onClick={() => setIsOpen(!isOpen)}>Contributors</button>
-              <button className="" onClick={toggleTheme}>
-                {!isDarkMode ? (
-                  <IoSunnyOutline size={26} />
-                ) : (
-                  <IoMoonOutline size={22} />
-                )}
-              </button>
+
+              <ToggleTheme />
 
               <button
                 onClick={toggleProjectSidebar}
