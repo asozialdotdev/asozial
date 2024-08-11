@@ -29,9 +29,9 @@ function AppLayout({ children }: { children: React.ReactNode }) {
           <UserSidebar />
         </aside>
         <Main>
-          {isOverlayVisible && (
+          {/* {isOverlayVisible && (
             <div className="absolute inset-0 z-40 bg-dark opacity-20 dark:opacity-50"></div>
-          )}
+          )} */}
           {children}
         </Main>
 
@@ -44,7 +44,7 @@ function AppLayout({ children }: { children: React.ReactNode }) {
         </aside>
       </div>
 
-      <AppFooter/>
+      <AppFooter />
     </>
   );
 }

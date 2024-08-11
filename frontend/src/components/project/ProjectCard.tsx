@@ -45,7 +45,7 @@ function ProjectCard({ projects }: { projects: Project[] }) {
       {projects.map((project: Project) => (
         <Card className="min-w-[20rem] max-w-[20rem]" key={Number(project._id)}>
           <CardHeader>
-            <CardTitle className='capitalize'>{project.title}</CardTitle>
+            <CardTitle className='capitalize'>Tinder-Like-App</CardTitle>
             <CardDescription>Recipe-App</CardDescription>
           </CardHeader>
           <CardContent>

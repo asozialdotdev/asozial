@@ -65,10 +65,10 @@ projectsRouter.get(
   }
 );
 
-// GET all projects
+// GET all my projects
 
 projectsRouter.get(
-  "/index",
+  "/my-projects",
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       const project = await Project.find();
@@ -79,14 +79,14 @@ projectsRouter.get(
   }
 );
 
-// GET search for projects
+// GET search for my-projects (not working)
 
 projectsRouter.get(
-  "/search",
+  "/search-my-projects",
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const { query } = req.query; 
-
+      const { query } = req.query;
+      console.log("Query", query);
 
       const projects = await Project.find({
         title: { $regex: query, $options: "i" }, // Case-insensitive search
@@ -98,8 +98,6 @@ projectsRouter.get(
     }
   }
 );
-
-
 
 // GET 1 project
 
@@ -117,6 +115,7 @@ projectsRouter.get(
     }
   }
 );
+
 
 
 
