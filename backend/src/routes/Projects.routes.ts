@@ -65,14 +65,34 @@ projectsRouter.get(
   }
 );
 
-// GET all projects
+// GET all my projects
 
 projectsRouter.get(
-  "/search",
+  "/my-projects",
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       const project = await Project.find();
       res.json(project);
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
+// GET search for my-projects (not working)
+
+projectsRouter.get(
+  "/search-my-projects",
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const { query } = req.query;
+      console.log("Query", query);
+
+      const projects = await Project.find({
+        title: { $regex: query, $options: "i" }, // Case-insensitive search
+      });
+
+      res.json(projects);
     } catch (error) {
       next(error);
     }
@@ -95,5 +115,50 @@ projectsRouter.get(
     }
   }
 );
+
+
+
+
+
+// POST request to join a project
+
+projectsRouter.post(
+  "/:projectId/join",
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const project = await Project.findById(req.params.projectId);
+      console.log("Project", project);
+      if (!project) {
+        return res.status(404).json({ error: "Project not found" });
+      }
+
+      const user = await User.findById(req.body.userId);
+      console.log("User", user);
+      if (!user) {
+        return res.status(404).json({ error: "User not found" });
+      }
+
+      if (
+        project.membersJoined.includes(user._id) ||
+        project.membersApplied.includes(user._id)
+      ) {
+        return res
+          .status(400)
+          .json({ error: "User is already a member of this project" });
+      }
+
+      project.membersApplied.push(user._id);
+      await project.save();
+
+      res.json(project);
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
+// GET all projects that a user is a member of
+
+// GET check if user is a member of a project
 
 export default projectsRouter;

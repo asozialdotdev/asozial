@@ -11,13 +11,12 @@ export function useOutsideClick<T extends HTMLElement>(
   useEffect(() => {
     function handleClick(e: MouseEvent) {
       if (
-        refs.some(
-          (ref) => ref.current && ref.current.contains(e.target as Node),
+        refs.every(
+          (ref) => ref.current && !ref.current.contains(e.target as Node),
         )
       ) {
-        return;
+        handler();
       }
-      handler();
     }
 
     document.addEventListener("click", handleClick);

@@ -2,9 +2,6 @@
 //Next
 import Image from "next/image";
 
-//Hooks
-import { useThemeContext } from "@/context/ThemeContext";
-
 function Footer() {
   const techStack = [
     {
@@ -44,12 +41,8 @@ function Footer() {
     },
   ];
 
-  const { theme } = useThemeContext();
-
   return (
-    <nav
-      className={`h-10vh border-t-1 z-50 flex flex-col items-center gap-2 pb-2 ${theme === "light" ? "bg-light text-dark" : "bg-dark text-light"}`}
-    >
+    <nav className="h-10vh border-t-1 z-50 flex flex-col items-center gap-2 bg-light pb-2 text-dark dark:bg-dark dark:text-light">
       <h1 className="text-base md:text-xl">
         A social app for asozial devs - 2024 ©
       </h1>

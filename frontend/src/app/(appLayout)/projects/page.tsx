@@ -1,12 +1,15 @@
-// all projects user is a part of, searchbar and filter options
+import MyProjects from "@/components/project/MyProjects";
+import { baseUrl } from "@/constants";
 
-function Page() {
+async function MyProjectsPage() {
+  const data = await fetch(`${baseUrl}/projects/my-projects`);
+  const projects = await data.json();
+  console.log(projects[0]._id);
   return (
-    <div>
-      Projects page
-
-    </div>
-  )
+    <>
+      <MyProjects projects={projects} />
+    </>
+  );
 }
 
-export default Page
+export default MyProjectsPage;

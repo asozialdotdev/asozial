@@ -1,17 +1,20 @@
-import { ProjectSidebarProvider } from "@/contexts/ProjectSidebarContext";
-import { UserSidebarProvider } from "@/contexts/UserSidebarContext";
-import { ThemeProvider } from "@/context/ThemeContext";
+import { SidebarsProviders } from "@/context/SidebarsContext";
+// import { ThemeProvider } from "@/context/ThemeContext";
 import { UserProvider } from "@/context/UserContext";
+import { ThemeProvider } from "next-themes";
 
 function Providers({ children }: { children: React.ReactNode }) {
   return (
-    <ThemeProvider>
-      <UserProvider>
-        <UserSidebarProvider>
-          <ProjectSidebarProvider>{children}</ProjectSidebarProvider>
-        </UserSidebarProvider>
-      </UserProvider>
-    </ThemeProvider>
+    <SidebarsProviders>
+      <ThemeProvider
+        attribute="class"
+        defaultTheme="system"
+        enableSystem
+        disableTransitionOnChange
+      >
+        <UserProvider>{children}</UserProvider>
+      </ThemeProvider>
+    </SidebarsProviders>
   );
 }
 

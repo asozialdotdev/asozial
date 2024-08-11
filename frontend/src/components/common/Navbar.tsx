@@ -7,16 +7,15 @@ import Image from "next/image";
 import Link from "next/link";
 
 //Hooks
-import { useProjectSidebar } from "@/hooks/useProjectSidebar";
-import { useThemeContext } from "@/context/ThemeContext";
-import { useUserSidebar } from "@/hooks/useUserSidebar";
 import { useOutsideClick } from "@/hooks/useOutsideClick";
 import useCombinedRef from "@/hooks/useCombinedRef";
 import { useWindowWidth } from "@/hooks/useWindowWidth";
+import { useSidebarsContext } from "@/context/SidebarsContext";
 
 //UI
 import { FaGithub, FaLinkedin, FaRegUserCircle } from "react-icons/fa";
 import { IoMenu, IoMoonOutline, IoSunnyOutline } from "react-icons/io5";
+import ToggleTheme from "./ToggleTheme";
 
 const contributors = [
   {
@@ -45,29 +44,26 @@ const contributors = [
 function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
 
-  const { toggleProjectSidebar, projectHeaderRef, isProjectSidebarOpen } =
-    useProjectSidebar();
-
-  const { toggleUserSidebar, userHeaderRef, isUserSidebarOpen } =
-    useUserSidebar();
+  const {
+    toggleProjectSidebar,
+    projectHeaderRef,
+    isProjectSidebarOpen,
+    toggleUserSidebar,
+    userHeaderRef,
+    isUserSidebarOpen,
+  } = useSidebarsContext();
 
   const navRef = useRef<HTMLDivElement>(null);
   useOutsideClick(() => setIsOpen(false), navRef);
-  const mergedRefs = useCombinedRef(navRef, projectHeaderRef, userHeaderRef);
+  const combinedRefs = useCombinedRef(navRef, projectHeaderRef, userHeaderRef);
 
   const { width } = useWindowWidth();
-
-  const { theme, setTheme } = useThemeContext();
-
-  const toggleTheme = () => {
-    setTheme(theme === "light" ? "dark" : "light");
-  };
 
   return (
     <>
       <nav
-        ref={mergedRefs}
-        className={`sticky top-0 z-40 flex w-full justify-between gap-2 border-b-2 px-6 py-2 ${theme === "light" ? "bg-light text-dark" : "bg-dark text-light"}`}
+        ref={combinedRefs}
+        className={`border-b-1 sticky top-0 z-50 flex w-full justify-between gap-2 bg-light px-6 py-2 text-dark dark:bg-dark dark:text-light`}
       >
         {!isOpen && (
           <>
@@ -86,15 +82,10 @@ function Navbar() {
               </button>
             </section>
 
-            <section className="flex items-center gap-2">
+            <section className="flex items-center gap-2" ref={combinedRefs}>
               <button onClick={() => setIsOpen(!isOpen)}>Contributors</button>
-              <button className="" onClick={toggleTheme}>
-                {theme === "light" ? (
-                  <IoSunnyOutline size={26} />
-                ) : (
-                  <IoMoonOutline size={22} />
-                )}
-              </button>
+
+              <ToggleTheme />
 
               <button
                 onClick={toggleProjectSidebar}
@@ -121,7 +112,7 @@ function Navbar() {
                   alt={contributor.name}
                   width={100}
                   height={100}
-                  className={`h-24 w-24 rounded-full border-4 ${theme === "light" ? "border-dark" : "border-light"}`}
+                  className="h-24 w-24 rounded-full border-4 border-dark dark:border-light"
                 />
                 <div className="flex flex-row gap-4">
                   <a
