@@ -1,4 +1,4 @@
-import { handleJoinProject } from "@/actions";
+import { fetchProjectById, handleJoinProject } from "@/actions";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 const membersJoined = ["Benjamin", "Mirko", "John", "Jane", "José"];
@@ -6,17 +6,14 @@ const membersApplied = ["Alice", "Bob", "Charlie"];
 const membersInvited = ["David", "Eve", "Frank"];
 
 async function Page({ params }: { params: { projectId: string } }) {
-  const data = await fetch(
-    `http://localhost:5005/projects/${params.projectId}`,
-  );
-  const project = await data.json();
+  const project = await fetchProjectById(params.projectId);
 
   const isMember = membersJoined.includes("José"); // hardcoded
   // const isMember = membersJoined.includes(user._id); // dynamic
 
   return (
-    <div className="flex flex-col gap-10">
-      <section className="border-b-2 px-6 py-3 max-w-screen-md">
+    <div className="mx-auto my-0 flex flex-col items-center gap-10">
+      <section className="max-w-screen-md border-b-2 px-6 py-3">
         <div className="flex flex-col gap-2">
           <h2 className="text-3xl font-semibold capitalize tracking-wide">
             {project.title}

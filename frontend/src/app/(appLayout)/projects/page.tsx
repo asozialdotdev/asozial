@@ -1,10 +1,10 @@
+import { fetchAllProjects } from "@/actions";
 import MyProjects from "@/components/project/MyProjects";
 import { baseUrl } from "@/constants";
 
 async function MyProjectsPage() {
-  const data = await fetch(`${baseUrl}/projects/my-projects`);
-  const projects = await data.json();
-  console.log(projects[0]._id);
+  const projects = await fetchAllProjects();
+  console.log("projects:", projects);
   return (
     <>
       <MyProjects projects={projects} />
