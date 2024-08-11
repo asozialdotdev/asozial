@@ -96,6 +96,9 @@ projectsRouter.get(
   }
 );
 
+
+
+
 // POST request to join a project
 
 projectsRouter.post(
@@ -132,5 +135,9 @@ projectsRouter.post(
     }
   }
 );
+
+// GET all projects that a user is a member of
+
+// GET check if user is a member of a project
 
 export default projectsRouter;

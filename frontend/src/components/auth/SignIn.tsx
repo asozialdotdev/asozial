@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 import { FaGithub } from "react-icons/fa";
 import { useSearchParams } from "next/navigation";
-import getUser from "@/app/actions/getUser.server";
+import getUser from "@/actions/getUser.server";
 import Link from "next/link";
 
 function SignIn() {
