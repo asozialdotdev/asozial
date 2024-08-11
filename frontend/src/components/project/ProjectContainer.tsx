@@ -1,20 +1,42 @@
+import { baseUrl } from "@/constants";
+import { Project } from "@/types/Project";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
 
-function ProjectContainer() {
-  const getProject = async (repoUrl: string) => {
-    const response = await fetch(
-      `http://localhost:5005/projects/new/?repoUrl=${repoUrl}`,
-    );
-    const data = await response.json();
-    console.log(data);
-  };
+async function ProjectContainer() {
+  const data = await fetch(`${baseUrl}/projects/search`);
+  const projects = await data.json();
+
+  
 
   return (
-    <section className="hidden w-1/4 flex-col bg-light p-4 text-dark dark:bg-dark dark:text-light lg:flex">
-      <h1 className="py-6 text-xl">Projects</h1>
-      <p className="text-lg">Projects request or any other stuff</p>
-    </section>
+    <div className="hidden w-1/4 flex-col bg-light p-4 text-dark dark:bg-dark dark:text-light lg:flex">
+      <h2 className="py-6 text-xl">Projects</h2>
+
+
+
+      <section className="flex flex-col gap-4">
+        {projects.map((project: Project) => (
+          <>
+            <div key={Number(project._id)}>
+              <Link href={`/projects/${project._id}`}>
+                <h3>{project.title}</h3>
+              </Link>
+            </div>
+            <div key={Number(project._id)}>
+              <Link href={`/projects/${project._id}`}>
+                <h3>Recipe-App</h3>
+              </Link>
+            </div>
+            <div key={Number(project._id)}>
+              <Link href={`/projects/${project._id}`}>
+                <h3>Todo App</h3>
+              </Link>
+            </div>
+          </>
+        ))}
+      </section>
+    </div>
   );
 }
 
