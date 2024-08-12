@@ -8,18 +8,12 @@ import User from "../models/User.models";
 const githubRouter = express.Router();
 
 githubRouter.get("/", (req: Request, res: Response) => {
-  console.log(process.env.GITHUB_CLIENT_ID);
-  console.log(process.env.GITHUB_REDIRECT_URI);
   const githubAuthURL = `https://github.com/login/oauth/authorize?client_id=${process.env.GITHUB_CLIENT_ID}&redirect_uri=${process.env.GITHUB_REDIRECT_URI}&scope=read:user`;
-  console.log("Before redirect");
-  console.log(res.statusCode);
-  console.log("After redirect");
   res.redirect(githubAuthURL);
 });
 
 githubRouter.post("/", async (req: Request, res: Response) => {
   const { code } = req.body;
-  console.log(code);
 
   if (!code) {
     res.status(404).json("code not found");
@@ -37,23 +31,22 @@ githubRouter.post("/", async (req: Request, res: Response) => {
       {
         headers: {
           Accept: "application/json",
+          AccessControlAllowHeaders: "*",
         },
       }
     );
-    console.log(getGithubAccessToken.data);
     const githubAccessToken = getGithubAccessToken.data.access_token;
-    console.log(githubAccessToken);
     if (!githubAccessToken) return;
     const getUserInfo = await axios.get("https://api.github.com/user", {
       headers: {
         Authorization: `Bearer ${githubAccessToken}`,
       },
     });
-    console.log(getUserInfo);
     const { login, id, avatar_url, name } = getUserInfo.data;
     const foundUser = await User.findOne({ githubID: id });
 
     if (foundUser) {
+      console.log("User found");
       const { _id, username, avatarUrl, email } = foundUser;
       const payload = { _id, username, avatarUrl, email };
       const refreshToken = generateJWT(payload, { refresh: true });
@@ -68,6 +61,7 @@ githubRouter.post("/", async (req: Request, res: Response) => {
         .json(payload);
       return;
     }
+    console.log("User not found");
     const createdUser = await User.create({
       username: login,
       githubID: id,
@@ -87,8 +81,8 @@ githubRouter.post("/", async (req: Request, res: Response) => {
       .header("Authorization", `Bearer ${accessToken}`)
       .json(payload);
   } catch (error) {
-    console.error(error);
-    res.status(500).json("Server error");
+    console.error("Failed to authenticate with GitHub");
+    res.status(500).json(error);
   }
 });
 

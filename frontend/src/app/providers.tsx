@@ -1,7 +1,10 @@
 import { SidebarsProviders } from "@/context/SidebarsContext";
 // import { ThemeProvider } from "@/context/ThemeContext";
 import { UserProvider } from "@/context/UserContext";
-import { ThemeProvider, useTheme } from "next-themes";
+
+import { ThemeProvider } from "next-themes";
+import { SignInProvider } from "@/context/SignInContext";
+
 
 function Providers({ children }: { children: React.ReactNode }) {
   return (
@@ -12,7 +15,9 @@ function Providers({ children }: { children: React.ReactNode }) {
         enableSystem
         disableTransitionOnChange
       >
-        <UserProvider>{children}</UserProvider>
+        <SignInProvider>
+          <UserProvider>{children}</UserProvider>
+        </SignInProvider>
       </ThemeProvider>
     </SidebarsProviders>
   );

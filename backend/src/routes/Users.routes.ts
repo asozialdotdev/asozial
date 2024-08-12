@@ -102,6 +102,25 @@ usersRouter.get(
     }
   }
 );
+
+//GET logged in user
+
+usersRouter.get(
+  "/account",
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      //GET CURRENT USER FROM MIDDLEWARE
+      const user = await User.findById(req.params.userId);
+      if (!user) {
+        throw new Error("User not found");
+      }
+      res.json(user);
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
 // GET user to Match (tinderlike)
 
 // GET user's friends and user's activities

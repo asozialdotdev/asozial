@@ -6,7 +6,7 @@ import { ProjectId } from "@/types/Project";
 // Get all projects
 const fetchAllProjects = async () => {
   try {
-    const response = await fetch(`${baseUrl}/projects/my-projects`);
+    const response = await fetch(`${baseUrl}/projects`);
     if (!response.ok) {
       throw new Error(`Failed to fetch projects: ${response.statusText}`);
     }
@@ -41,7 +41,7 @@ const fetchProjectById = async (projectId: ProjectId) => {
 const searchForMyProjects = async (searchTerm: string) => {
   try {
     const response = await fetch(
-      `${baseUrl}/projects/search-my-projects?query=${searchTerm}`,
+      `${baseUrl}/projects/search?query=${searchTerm}`,
     );
     if (!response.ok) {
       throw new Error(`Failed to search for projects: ${response.statusText}`);
