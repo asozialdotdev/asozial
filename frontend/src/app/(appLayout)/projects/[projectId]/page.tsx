@@ -1,4 +1,5 @@
 import { fetchProjectById, handleJoinProject } from "@/actions";
+import PageContainer from "@/components/common/PageContainer";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 const membersJoined = ["Benjamin", "Mirko", "John", "Jane", "José"];
@@ -12,7 +13,7 @@ async function Page({ params }: { params: { projectId: string } }) {
   // const isMember = membersJoined.includes(user._id); // dynamic
 
   return (
-    <div className="mx-auto my-0 flex flex-col items-center gap-10">
+    <PageContainer className="gap-10">
       <section className="max-w-screen-md border-b-2 px-6 py-3">
         <div className="flex flex-col gap-2">
           <h2 className="text-3xl font-semibold capitalize tracking-wide">
@@ -48,7 +49,7 @@ async function Page({ params }: { params: { projectId: string } }) {
       </section>
 
       <section>Thread</section>
-    </div>
+    </PageContainer>
   );
 }
 
