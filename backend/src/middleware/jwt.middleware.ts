@@ -33,7 +33,6 @@ function isAuthenticated(
   try {
     const payload = verifyJWT(accessToken as string);
     (req as any).payload = payload;
-    (req as any).user = (payload as JwtPayload).user;
 
     next();
   } catch (error) {

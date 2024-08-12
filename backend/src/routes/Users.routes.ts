@@ -1,6 +1,7 @@
 import express, { Request, Response, NextFunction } from "express";
 import User from "../models/User.models";
 import Friendship from "../models/Friendship.models";
+import Project from "../models/Project.models";
 
 const usersRouter = express.Router();
 
@@ -124,5 +125,20 @@ usersRouter.get(
 // GET user to Match (tinderlike)
 
 // GET user's friends and user's activities
+
+// GET all projects that a user is a member of
+
+usersRouter.get(
+  "/:userId/projects",
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const user = (req as any).payload.user;
+      const projects = await Project.find({ membersJoined: user._id });
+      res.json(projects);
+    } catch (error) {
+      next(error);
+    }
+  }
+);
 
 export default usersRouter;
