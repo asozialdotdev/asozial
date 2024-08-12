@@ -9,7 +9,6 @@ import axios from "axios";
 import { useSearchParams } from "next/navigation";
 import { useEffect } from "react";
 import getUserFromGithub from "@/actions/getUserFromGithub.server";
-import { get } from "http";
 
 function Page() {
   const { code, setCode } = useSignInContext();
