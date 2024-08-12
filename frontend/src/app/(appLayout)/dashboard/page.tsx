@@ -5,6 +5,7 @@ import DashboardContainer from "@/components/dashboard/DashboardContainer";
 import ProjectContainer from "@/components/project/ProjectContainer";
 import UserContainer from "@/components/user/UserContainer";
 import { useSignInContext } from "@/context/SignInContext";
+import { useUserContext } from "@/context/UserContext";
 import axios from "axios";
 import { useSearchParams } from "next/navigation";
 import { useEffect } from "react";
@@ -24,7 +25,7 @@ function Page() {
         const data = {
           code: githubCode,
         };
-        getUserFromGithub({ data, githubCode });
+        const user = getUserFromGithub({ data, githubCode });
       } catch (error) {
         console.error("Failed to authenticate with GitHub");
         console.log(error);

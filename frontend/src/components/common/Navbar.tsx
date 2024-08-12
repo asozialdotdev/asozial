@@ -87,8 +87,9 @@ function Navbar() {
                 <Link href="/dashboard">
                   <h1 className="cursor-pointer text-2xl">asozial</h1>
                 </Link>
-
-                <TbUserSquareRounded size={26} />
+                <Link href="/account">
+                  <TbUserSquareRounded size={26} />
+                </Link>
               </div>
             </section>
 

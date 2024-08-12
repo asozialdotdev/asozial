@@ -4,7 +4,6 @@ import { generateJWT } from "../middleware/jwt.middleware";
 
 import User from "../models/User.models";
 
-// import middleware
 const githubRouter = express.Router();
 
 githubRouter.get("/", (req: Request, res: Response) => {
@@ -35,20 +34,27 @@ githubRouter.post("/", async (req: Request, res: Response) => {
         },
       }
     );
+    console.log(getGithubAccessToken.data);
     const githubAccessToken = getGithubAccessToken.data.access_token;
+    console.log(githubAccessToken);
     if (!githubAccessToken) return;
     const getUserInfo = await axios.get("https://api.github.com/user", {
       headers: {
         Authorization: `Bearer ${githubAccessToken}`,
       },
     });
-    const { login, id, avatar_url, name } = getUserInfo.data;
+    const { login, id, avatar_url, name, email } = getUserInfo.data;
     const foundUser = await User.findOne({ githubID: id });
 
     if (foundUser) {
       console.log("User found");
-      const { _id, username, avatarUrl, email } = foundUser;
-      const payload = { _id, username, avatarUrl, email };
+      const { _id, username, avatarUrl, email: userEmail } = foundUser;
+      const payload = {
+        _id: _id.toString(),
+        username,
+        avatarUrl,
+        email,
+      };
       const refreshToken = generateJWT(payload, { refresh: true });
       const accessToken = generateJWT(payload, { refresh: false });
       res
@@ -67,9 +73,15 @@ githubRouter.post("/", async (req: Request, res: Response) => {
       githubID: id,
       avatarUrl: avatar_url,
       name: name,
+      email,
     });
-    const { _id, username, avatarUrl, email } = createdUser;
-    const payload = { _id, username, avatarUrl, email };
+    const { _id, username, avatarUrl, email: createdUserEmail } = createdUser;
+    const payload = {
+      _id: _id.toString(),
+      username,
+      avatarUrl,
+      email: createdUserEmail,
+    };
     const refreshToken = generateJWT(payload, { refresh: true });
     const accessToken = generateJWT(payload, { refresh: false });
     res
@@ -81,8 +93,8 @@ githubRouter.post("/", async (req: Request, res: Response) => {
       .header("Authorization", `Bearer ${accessToken}`)
       .json(payload);
   } catch (error) {
-    console.error("Failed to authenticate with GitHub");
-    res.status(500).json(error);
+    console.error(error);
+    res.status(500).json("Server error");
   }
 });
 
