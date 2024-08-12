@@ -16,6 +16,9 @@ import { useSidebarsContext } from "@/context/SidebarsContext";
 import { FaGithub, FaLinkedin, FaRegUserCircle } from "react-icons/fa";
 import { IoMenu, IoMoonOutline, IoSunnyOutline } from "react-icons/io5";
 import ToggleTheme from "./ToggleTheme";
+import { PiUserCircleGearDuotone, PiUserFocusBold } from "react-icons/pi";
+import { TbUserSquareRounded } from "react-icons/tb";
+import { Button } from "../ui/button";
 
 const contributors = [
   {
@@ -67,19 +70,26 @@ function Navbar() {
       >
         {!isOpen && (
           <>
-            <section className="flex items-center gap-2">
-              <Link href="/dashboard">
-                <h1 className="cursor-pointer text-2xl">asozial</h1>
-              </Link>
-
-              <button
+            <section className="flex items-center gap-5">
+              <Button
+                size="icon"
+                variant="outline"
+                className="dark:text-light"
                 onClick={toggleUserSidebar}
                 disabled={
                   width && width <= 640 ? !!isProjectSidebarOpen : undefined
                 }
               >
-                <FaRegUserCircle size={20} />
-              </button>
+                <IoMenu size={26} />
+              </Button>
+
+              <div className="flex items-center gap-1">
+                <Link href="/dashboard">
+                  <h1 className="cursor-pointer text-2xl">asozial</h1>
+                </Link>
+
+                <TbUserSquareRounded size={26} />
+              </div>
             </section>
 
             <section className="flex items-center gap-2" ref={combinedRefs}>
@@ -87,14 +97,17 @@ function Navbar() {
 
               <ToggleTheme />
 
-              <button
+              <Button
+                size="icon"
+                variant="outline"
+                className="dark:text-light"
                 onClick={toggleProjectSidebar}
                 disabled={
                   width && width <= 640 ? !!isUserSidebarOpen : undefined
                 }
               >
                 <IoMenu size={26} />
-              </button>
+              </Button>
             </section>
           </>
         )}

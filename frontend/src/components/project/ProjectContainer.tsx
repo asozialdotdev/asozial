@@ -3,11 +3,11 @@ import { Project } from "@/types/Project";
 import Link from "next/link";
 
 async function ProjectContainer() {
-  const data = await fetch(`${baseUrl}/projects/search`);
+  const data = await fetch(`${baseUrl}/projects/my-projects`);
   const projects = await data.json();
 
   return (
-    <div className="hidden w-1/4 flex-col bg-light p-4 text-dark dark:bg-dark dark:text-light lg:flex">
+    <div className="hidden w-1/4 flex-col bg-light  p-4 text-dark dark:bg-dark dark:text-light lg:flex">
       <Link href="/projects">
         <h2 className="py-6 text-xl">Projects</h2>
       </Link>
