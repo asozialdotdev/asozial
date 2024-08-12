@@ -8,6 +8,26 @@ const projectsRouter = express.Router();
 
 dotenv.config();
 
+projectsRouter.post(
+  "/new",
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const createProject = await Project.create({
+        title: req.body.title,
+        description: req.body.description,
+        pitch: req.body.pitch,
+        techStack: req.body.techStack,
+        mainLanguage: req.body.mainLanguage,
+        createdAt: req.body.createdAt,
+        updatedAt: req.body.updatedAt,
+        // owner: this must be retrieved from the jwt token
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
 // GET request to create a project after retrieving information from github repo
 
 projectsRouter.get(
@@ -115,10 +135,6 @@ projectsRouter.get(
     }
   }
 );
-
-
-
-
 
 // POST request to join a project
 
