@@ -6,22 +6,13 @@ import ProjectCard from "./ProjectCard";
 import { useEffect, useState } from "react";
 import { baseUrl } from "@/constants";
 import Link from "next/link";
+import { searchForMyProjects } from "@/actions";
+import useSearchForMyProjects from "@/hooks/projects/useSearchForMyProjects";
 
 function MyProjects({ projects }: { projects: Project[] }) {
   const [searchTerm, setSearchTerm] = useState("");
-  const [projectsState, setProjectsState] = useState<Project[]>([]);
 
-  useEffect(() => {
-    const fetchProjects = async () => {
-      const response = await fetch(
-        `${baseUrl}/projects/search?query=${searchTerm}`,
-      );
-      const data = await response.json();
-      setProjectsState(data);
-    };
-
-    fetchProjects();
-  }, [searchTerm]);
+  const {projectsState, isLoading, error} = useSearchForMyProjects(searchTerm, projects);
 
   return (
     <>
@@ -36,8 +27,11 @@ function MyProjects({ projects }: { projects: Project[] }) {
         />
       </section>
       <article className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
-        Project cards should be displayed here
-        <ProjectCard projects={projectsState} />
+        <ProjectCard
+          projects={projectsState}
+          isLoading={isLoading}
+          error={error}
+        />
       </article>
     </>
   );

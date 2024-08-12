@@ -5,7 +5,7 @@ import { baseUrl } from "@/constants";
 // Get all projects
 const fetchAllProjects = async () => {
   try {
-    const response = await fetch(`${baseUrl}/my-projects`);
+    const response = await fetch(`${baseUrl}/projects/my-projects`);
     if (!response.ok) {
       throw new Error(`Failed to fetch projects: ${response.statusText}`);
     }
@@ -35,6 +35,25 @@ const fetchProjectById = async (projectId: string) => {
   }
 };
 
+// Search for my-projects
+
+const searchForMyProjects = async (searchTerm: string) => {
+  try {
+    const response = await fetch(
+      `${baseUrl}/projects/search-my-projects?query=${searchTerm}`,
+    );
+    if (!response.ok) {
+      throw new Error(`Failed to search for projects: ${response.statusText}`);
+    }
+    const projects = await response.json();
+    console.log("Searched projects:", projects);
+    return projects;
+  } catch (error) {
+    console.error("Error searching for projects:", error);
+    return "Error searching for projects";
+  }
+};
+
 const handleJoinProject = async (formData: FormData) => {
   const projectId = formData.get("projectId") as string;
 
@@ -53,4 +72,9 @@ const handleJoinProject = async (formData: FormData) => {
   console.log("result:", result);
 };
 
-export { fetchAllProjects, fetchProjectById, handleJoinProject };
+export {
+  fetchAllProjects,
+  fetchProjectById,
+  searchForMyProjects,
+  handleJoinProject,
+};

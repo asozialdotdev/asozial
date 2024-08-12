@@ -71,15 +71,15 @@ projectsRouter.get(
   "/my-projects",
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const project = await Project.find();
-      res.json(project);
+      const projects = await Project.find();
+      res.json(projects);
     } catch (error) {
       next(error);
     }
   }
 );
 
-// GET search for my-projects (not working)
+// GET search for my-projects
 
 projectsRouter.get(
   "/search-my-projects",
@@ -115,10 +115,6 @@ projectsRouter.get(
     }
   }
 );
-
-
-
-
 
 // POST request to join a project
 
