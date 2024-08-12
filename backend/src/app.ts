@@ -6,15 +6,16 @@ import usersRouter from "./routes/Users.routes";
 import projectsRouter from "./routes/Projects.routes";
 import postRouter from "./routes/Post.routes";
 import githubRouter from "./routes/Auth.routes";
+import { isAuthenticated } from "./middleware/jwt.middleware";
 
 const app = express();
 config(app);
 
-app.use("/dashboard", dashboardRouter);
+app.use("/dashboard", isAuthenticated, dashboardRouter);
 
 app.use("/users", usersRouter);
 
-app.use("/projects", projectsRouter);
+app.use("/projects", isAuthenticated, projectsRouter);
 
 app.use("/posts", postRouter);
 

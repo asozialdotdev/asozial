@@ -3,6 +3,7 @@ import express, { Request, Response, NextFunction } from "express";
 import axios from "axios";
 import Project from "../models/Project.models";
 import User from "../models/User.models";
+import { isAuthenticated } from "../middleware/jwt.middleware";
 
 const projectsRouter = express.Router();
 
@@ -12,7 +13,19 @@ projectsRouter.post(
   "/new",
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const createProject = await Project.create({
+      const {
+        title,
+        description,
+        pitch,
+        techStack,
+        mainLanguage,
+        createdAt,
+        updatedAt,
+      } = req.body;
+
+      const ownerId = (req as any).user;
+
+      const newProject = await Project.create({
         title: req.body.title,
         description: req.body.description,
         pitch: req.body.pitch,
@@ -20,8 +33,9 @@ projectsRouter.post(
         mainLanguage: req.body.mainLanguage,
         createdAt: req.body.createdAt,
         updatedAt: req.body.updatedAt,
-        // owner: this must be retrieved from the jwt token
+        owner: ownerId,
       });
+      res.status(201).json(newProject);
     } catch (error) {
       next(error);
     }
