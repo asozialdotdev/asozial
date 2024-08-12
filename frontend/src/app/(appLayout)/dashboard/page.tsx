@@ -37,7 +37,7 @@ function Page() {
     <>
       <UserContainer />
       <DashboardContainer />
-      <ProjectContainer />
+      {/* <ProjectContainer /> */}
     </>
   );
 }
