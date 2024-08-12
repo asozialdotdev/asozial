@@ -101,7 +101,7 @@ projectsRouter.get(
 
 // GET all my projects
 
-projectsRouter.get(
+/* projectsRouter.get(
   "/my-projects",
   async (req: Request, res: Response, next: NextFunction) => {
     try {
@@ -111,7 +111,7 @@ projectsRouter.get(
       next(error);
     }
   }
-);
+); */
 
 // GET search for my-projects
 
