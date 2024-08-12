@@ -29,7 +29,7 @@ function useSearchForMyProjects(searchTerm: string, projects: Project[]) {
       fetchSearchForMyProjects();
     }, 800);
     return () => clearTimeout(debounce);
-  }, [searchTerm]);
+  }, [searchTerm, projects]);
 
   return { projectsState, isLoading, error };
 }

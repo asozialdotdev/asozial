@@ -30,10 +30,11 @@ function ProjectCard({ projects, isLoading, error }: ProjectCardProps) {
   if (projects.length === 0) {
     return <p>No projects found</p>;
   }
+  console.log("Projects:", projects);
   return (
     <>
-      {projects.map((project: Project) => (
-        <Card className="min-w-[20rem] max-w-[20rem]" key={Number(project._id)}>
+      {projects.map((project: Project, i ) => (
+        <Card className="min-w-[20rem] max-w-[20rem]" key={i}>
           <CardHeader>
             <CardTitle className="capitalize">{project.title}</CardTitle>
             <CardDescription>{project.description}</CardDescription>
@@ -58,135 +59,7 @@ function ProjectCard({ projects, isLoading, error }: ProjectCardProps) {
         </Card>
       ))}
 
-      {projects.map((project: Project) => (
-        <Card className="min-w-[20rem] max-w-[20rem]" key={Number(project._id)}>
-          <CardHeader>
-            <CardTitle className="capitalize">Tinder-Like-App</CardTitle>
-            <CardDescription>Recipe-App</CardDescription>
-          </CardHeader>
-          <CardContent>
-            {project.techStack.map((tech) => (
-              <p key={tech}>{tech}</p>
-            ))}
-          </CardContent>
-          <CardContent>
-            {membersJoined.map((member) => (
-              <ul key={member}>
-                <li>{member}</li>
-              </ul>
-            ))}
-          </CardContent>
 
-          <CardContent></CardContent>
-          <CardFooter>
-            <Link href={`/projects/${project._id}`}>Project Details</Link>
-          </CardFooter>
-        </Card>
-      ))}
-
-      {projects.map((project: Project) => (
-        <Card className="min-w-[20rem] max-w-[20rem]" key={Number(project._id)}>
-          <CardHeader>
-            <CardTitle className="capitalize">Todo-App</CardTitle>
-            <CardDescription>{project.description}</CardDescription>
-          </CardHeader>
-          <CardContent>
-            {project.techStack.map((tech) => (
-              <p key={tech}>{tech}</p>
-            ))}
-          </CardContent>
-          <CardContent>
-            {membersJoined.map((member) => (
-              <ul key={member}>
-                <li>{member}</li>
-              </ul>
-            ))}
-          </CardContent>
-
-          <CardContent></CardContent>
-          <CardFooter>
-            <Link href={`/projects/${project._id}`}>Project Details</Link>
-          </CardFooter>
-        </Card>
-      ))}
-
-      {projects.map((project: Project) => (
-        <Card className="min-w-[20rem] max-w-[20rem]" key={Number(project._id)}>
-          <CardHeader>
-            <CardTitle className="capitalize">My-Super-App</CardTitle>
-            <CardDescription>{project.description}</CardDescription>
-          </CardHeader>
-          <CardContent>
-            {project.techStack.map((tech) => (
-              <p key={tech}>{tech}</p>
-            ))}
-          </CardContent>
-          <CardContent>
-            {membersJoined.map((member) => (
-              <ul key={member}>
-                <li>{member}</li>
-              </ul>
-            ))}
-          </CardContent>
-
-          <CardContent></CardContent>
-          <CardFooter>
-            <Link href={`/projects/${project._id}`}>Project Details</Link>
-          </CardFooter>
-        </Card>
-      ))}
-
-      {projects.map((project: Project) => (
-        <Card className="min-w-[20rem] max-w-[20rem]" key={Number(project._id)}>
-          <CardHeader>
-            <CardTitle className="capitalize">We-do</CardTitle>
-            <CardDescription>{project.description}</CardDescription>
-          </CardHeader>
-          <CardContent>
-            {project.techStack.map((tech) => (
-              <p key={tech}>{tech}</p>
-            ))}
-          </CardContent>
-          <CardContent>
-            {membersJoined.map((member) => (
-              <ul key={member}>
-                <li>{member}</li>
-              </ul>
-            ))}
-          </CardContent>
-
-          <CardContent></CardContent>
-          <CardFooter>
-            <Link href={`/projects/${project._id}`}>Project Details</Link>
-          </CardFooter>
-        </Card>
-      ))}
-
-      {projects.map((project: Project) => (
-        <Card className="min-w-[20rem] max-w-[20rem]" key={Number(project._id)}>
-          <CardHeader>
-            <CardTitle className="capitalize">Weather-AI</CardTitle>
-            <CardDescription>{project.description}</CardDescription>
-          </CardHeader>
-          <CardContent>
-            {project.techStack.map((tech) => (
-              <p key={tech}>{tech}</p>
-            ))}
-          </CardContent>
-          <CardContent>
-            {membersJoined.map((member) => (
-              <ul key={member}>
-                <li>{member}</li>
-              </ul>
-            ))}
-          </CardContent>
-
-          <CardContent></CardContent>
-          <CardFooter>
-            <Link href={`/projects/${project._id}`}>Project Details</Link>
-          </CardFooter>
-        </Card>
-      ))}
     </>
   );
 }

@@ -7,9 +7,11 @@ import clsx from "clsx";
 import Link from "next/link";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import github from "/public/github.png";
+import anonymous from "/public/anonymous-user.png";
 import { useState } from "react";
 import ProjectThread from "@/components/project/ProjectThread";
 import Image from "next/image";
+
 import {
   Tooltip,
   TooltipContent,
@@ -62,31 +64,12 @@ async function Page({ params }: { params: { projectId: ProjectId } }) {
         {/* Pitch*/}
         <div className="flex flex-col gap-2">
           <h4 className="text-lg font-semibold">Pitch</h4>
-          <p className="text-base">
-            Lorem Ipsum is simply dummy text of the printing and typesetting
-            industry. Lorem Ipsum has been the industrys standard dummy text
-            ever since the 1500s, when an unknown printer took a galley of type
-            and scrambled it to make a type specimen book. It has survived not
-            only five centuries, but also the leap into electronic typesetting,
-            remaining essentially unchanged. It was popularised in the 1960s
-            with the release of Letraset sheets containing Lorem Ipsum passages,
-            and more recently with desktop publishing software like Aldus
-            PageMaker including versions of Lorem Ipsum. Lorem Ipsum is simply
-            dummy text of the printing and typesetting industry. Lorem Ipsum has
-            been the industrys standard dummy text ever since the 1500s, when an
-            unknown printer took a galley of type and scrambled it to make a
-            type specimen book. It has survived not only five centuries, but
-            also the leap into electronic typesetting, remaining essentially
-            unchanged. It was popularised in the 1960s with the release of
-            Letraset sheets containing Lorem Ipsum passages, and more recently
-            with desktop publishing software like Aldus PageMaker including
-            versions of Lorem Ipsum.
-          </p>
+          <p className="text-base">{project.pitch}</p>
         </div>
 
         {/* Tech stack */}
         <div className="flex gap-4">
-          {languagesTest.map((tech: string) => (
+          {project.techStack.map((tech: string) => (
             <span key={tech} className={techStackClass(tech)}>
               {tech}
             </span>
@@ -99,13 +82,13 @@ async function Page({ params }: { params: { projectId: ProjectId } }) {
           <h4 className="text-lg font-semibold">Members</h4>
           <div className="flex gap-4">
             {membersJoined.map((member: string) => (
-              <TooltipProvider>
+              <TooltipProvider key={member}>
                 <Tooltip>
                   <TooltipTrigger>
                     <Link title={member} href={`/users/${userIdTest}`}>
                       <Avatar>
                         <AvatarImage src="https://github.com/shadcn.png" />
-                        <AvatarFallback>{`Add a fallback image`}</AvatarFallback>
+                        <AvatarFallback>{member}</AvatarFallback>
                       </Avatar>
                     </Link>
                   </TooltipTrigger>
@@ -116,7 +99,7 @@ async function Page({ params }: { params: { projectId: ProjectId } }) {
           </div>
         </div>
 
-        <div className="flex items-center gap-2 mt-4 mb-8">
+        <div className="mb-8 mt-4 flex items-center gap-2">
           <a href={project.githubRepo} target="_blank">
             <Image
               src={github}
@@ -127,7 +110,6 @@ async function Page({ params }: { params: { projectId: ProjectId } }) {
             />
           </a>
         </div>
-
       </section>
 
       {!isMember ? (

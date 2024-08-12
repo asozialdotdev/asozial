@@ -16,12 +16,10 @@ import type { Project } from "@/types/Project";
 function MyProjects({ projects }: { projects: Project[] }) {
   const [searchTerm, setSearchTerm] = useState("");
 
-
   const { projectsState, isLoading, error } = useSearchForMyProjects(
     searchTerm,
     projects,
   );
-
 
   return (
     <>
@@ -36,11 +34,11 @@ function MyProjects({ projects }: { projects: Project[] }) {
         />
       </section>
       <article className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
-        {/* <ProjectCard
+        <ProjectCard
           projects={projectsState}
           isLoading={isLoading}
           error={error}
-        /> */}
+        />
       </article>
     </>
   );

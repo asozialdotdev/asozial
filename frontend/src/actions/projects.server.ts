@@ -1,12 +1,16 @@
 "use server";
 
-import { baseUrl } from "@/constants";
 import { ProjectId } from "@/types/Project";
+const baseUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5005";
+console.log("baseUrl:", baseUrl);
 
 // Get all projects
 const fetchAllProjects = async () => {
   try {
-    const response = await fetch(`${baseUrl}/projects`);
+    console.log("baseUrl:", baseUrl);
+    const response = await fetch(`${baseUrl}/api/projects`, {
+      cache: "no-store",
+    });
     if (!response.ok) {
       throw new Error(`Failed to fetch projects: ${response.statusText}`);
     }
@@ -23,12 +27,12 @@ const fetchAllProjects = async () => {
 
 const fetchProjectById = async (projectId: ProjectId) => {
   try {
-    const response = await fetch(`${baseUrl}/projects/${projectId}`);
+    const response = await fetch(`${baseUrl}/api/projects/${projectId}`);
     if (!response.ok) {
       throw new Error(`Failed to fetch project: ${response.statusText}`);
     }
     const project = await response.json();
-    console.log("Fetched project:", project);
+    console.log("Fetched projects:", project);
     return project;
   } catch (error) {
     console.error("Error fetching project:", error);
@@ -58,16 +62,13 @@ const searchForMyProjects = async (searchTerm: string) => {
 const handleJoinProject = async (formData: FormData) => {
   const projectId = formData.get("projectId") as string;
 
-  const response = await fetch(
-    `http://localhost:5005/projects/${projectId}/join`,
-    {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ userId: "60d4f4d2d243f80015f7b3f9" }),
+  const response = await fetch(`${baseUrl}/projects/${projectId}/join`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
     },
-  );
+    body: JSON.stringify({ userId: "60d4f4d2d243f80015f7b3f9" }),
+  });
 
   const result = await response.json();
   console.log("result:", result);
