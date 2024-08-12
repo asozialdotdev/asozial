@@ -1,11 +1,12 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { FaGithub } from "react-icons/fa";
 import { useSearchParams } from "next/navigation";
 import getUser from "@/actions/getUser.server";
-import Link from "next/link";
+import Image from "next/image";
+import { Button } from "@/components/ui/button";
 
-function SignIn() {
+function SignInForm() {
   const searchParams = useSearchParams();
   console.log(searchParams);
 
@@ -34,16 +35,24 @@ function SignIn() {
 
   return (
     <form
-      className="flex w-1/2 flex-col rounded border-2"
+      className="flex h-[600px] w-[600px] flex-col items-center justify-around rounded border-2 bg-light p-6"
       onSubmit={(e) => onSubmit(e)}
     >
-      <h2>Sign In With Github</h2>
-      <button className="border-2" type="submit">
-        Sign In
+      <h2 className="text-3xl font-bold text-black">Continue with Github</h2>
+      <div className="flex flex-row gap-8">
+        <Image src="/asozial.png" width={100} height={100} alt="asozial" />
+        <Image src="/github.png" width={100} height={100} alt="github" />
+      </div>
+      <Button
+        variant={"secondary"}
+        className="mx-auto flex w-1/2 flex-row justify-center gap-2 rounded-xl border-2 p-2"
+        type="submit"
+      >
+        Continue with
         <FaGithub size={24} />
-      </button>
+      </Button>
     </form>
   );
 }
 
-export default SignIn;
+export default SignInForm;
