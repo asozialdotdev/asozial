@@ -35,16 +35,13 @@ githubRouter.post("/", async (req: Request, res: Response) => {
         },
       }
     );
-    console.log(getGithubAccessToken.data);
     const githubAccessToken = getGithubAccessToken.data.access_token;
-    console.log(githubAccessToken);
     if (!githubAccessToken) return;
     const getUserInfo = await axios.get("https://api.github.com/user", {
       headers: {
         Authorization: `Bearer ${githubAccessToken}`,
       },
     });
-    console.log(getUserInfo);
     const { login, id, avatar_url, name } = getUserInfo.data;
     const foundUser = await User.findOne({ githubID: id });
 
@@ -53,9 +50,7 @@ githubRouter.post("/", async (req: Request, res: Response) => {
       const { _id, username, avatarUrl, email } = foundUser;
       const payload = { _id, username, avatarUrl, email };
       const refreshToken = generateJWT(payload, { refresh: true });
-      console.log(refreshToken);
       const accessToken = generateJWT(payload, { refresh: false });
-      console.log(accessToken);
       res
         .cookie("refreshToken", refreshToken, {
           httpOnly: true,
@@ -86,8 +81,8 @@ githubRouter.post("/", async (req: Request, res: Response) => {
       .header("Authorization", `Bearer ${accessToken}`)
       .json(payload);
   } catch (error) {
-    console.error(error);
-    res.status(500).json("Server error");
+    console.error("Failed to authenticate with GitHub");
+    res.status(500).json(error);
   }
 });
 
