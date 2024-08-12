@@ -13,26 +13,16 @@ projectsRouter.post(
   "/new",
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const {
+      const { title, description, pitch, techStack, mainLanguage } = req.body;
+
+      const ownerId = (req as any).user;
+
+      const newProject = await Project.create({
         title,
         description,
         pitch,
         techStack,
         mainLanguage,
-        createdAt,
-        updatedAt,
-      } = req.body;
-
-      const ownerId = (req as any).user;
-
-      const newProject = await Project.create({
-        title: req.body.title,
-        description: req.body.description,
-        pitch: req.body.pitch,
-        techStack: req.body.techStack,
-        mainLanguage: req.body.mainLanguage,
-        createdAt: req.body.createdAt,
-        updatedAt: req.body.updatedAt,
         owner: ownerId,
       });
       res.status(201).json(newProject);
