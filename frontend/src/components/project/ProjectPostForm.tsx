@@ -4,14 +4,14 @@ import { Textarea } from "../ui/textarea";
 
 function ProjectPostForm() {
   return (
-    <div className="">
+    <div className="flex">
       <h2 className="text-xl font-semibold">Create a new post</h2>
       <form className="mt-2">
         <Input
           type="text"
           name="title"
           placeholder="Title"
-          className="w-full "
+          className="w-full"
         />
 
         <Textarea
