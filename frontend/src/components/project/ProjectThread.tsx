@@ -67,7 +67,7 @@ const projectsPostsTest = [
 function ProjectThread({ project }: { project: Project }) {
   return (
     <>
-      <section className="flex flex-col gap-4">
+      <section className="mt-4 flex flex-col gap-4">
         <h2 className="text-3xl font-semibold capitalize tracking-wide">
           Threads
         </h2>
@@ -75,11 +75,14 @@ function ProjectThread({ project }: { project: Project }) {
         {projectsPostsTest.map((post) => (
           <div
             key={post.id}
-            className="flex flex-col gap-[1px] border-b border-b-neutral-300 dark:border-b-neutral-600"
+            className="flex flex-col gap-1 border-b border-b-neutral-300 dark:border-b-neutral-600"
           >
-            <p className="text-xs">{post.user}</p>
+            <p className="text-sm">{post.user}</p>
             <h3 className="text-base tracking-wide">{post.title}</h3>
-            <p className="mb-4 text-sm">{post.content}</p>
+            <p className="text-sm mb-2">{post.content}</p>
+            <small className="text-xs mb-4">
+              Posted on: <time>01.08.2024 at 15:43</time>
+            </small>
           </div>
         ))}
       </section>

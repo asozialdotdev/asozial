@@ -10,6 +10,12 @@ import github from "/public/github.png";
 import { useState } from "react";
 import ProjectThread from "@/components/project/ProjectThread";
 import Image from "next/image";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 const membersJoined = ["Benjamin", "Mirko", "John", "Jane", "José"];
 const membersApplied = ["Alice", "Bob", "Charlie"];
 const membersInvited = ["David", "Eve", "Frank"];
@@ -41,8 +47,8 @@ async function Page({ params }: { params: { projectId: ProjectId } }) {
     );
   };
   return (
-    <PageContainer className="max-w-screen-md gap-10">
-      <section className="flex flex-col gap-4 border-b border-b-neutral-300 dark:border-b-neutral-600 lg:border-none">
+    <PageContainer className="max-w-screen-md gap-4">
+      <section className="flex flex-col gap-4 border-b border-b-neutral-300 dark:border-b-neutral-600">
         {/* Title and description */}
         <div className="flex flex-col items-center gap-2">
           <h2 className="text-3xl font-semibold capitalize tracking-wide">
@@ -88,31 +94,29 @@ async function Page({ params }: { params: { projectId: ProjectId } }) {
         </div>
 
         {/* Members */}
-        {/* <div className="flex flex-col">
-          <h4 className="text-lg font-semibold">Members</h4>
-          <div className="flex gap-4">
-            {membersJoined.map((member: string) => (
-              <Link href={`/users/${userIdTest}`}>
-                <span key={member}>{member}</span>
-              </Link>
-            ))}
-          </div>
-        </div> */}
+
         <div className="mt-2 flex flex-col gap-4">
           <h4 className="text-lg font-semibold">Members</h4>
           <div className="flex gap-4">
             {membersJoined.map((member: string) => (
-              <Link title={member} href={`/users/${userIdTest}`}>
-                <Avatar>
-                  <AvatarImage src="https://github.com/shadcn.png" />
-                  <AvatarFallback>{`Add a fallback image`}</AvatarFallback>
-                </Avatar>
-              </Link>
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger>
+                    <Link title={member} href={`/users/${userIdTest}`}>
+                      <Avatar>
+                        <AvatarImage src="https://github.com/shadcn.png" />
+                        <AvatarFallback>{`Add a fallback image`}</AvatarFallback>
+                      </Avatar>
+                    </Link>
+                  </TooltipTrigger>
+                  <TooltipContent>{member}</TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
             ))}
           </div>
         </div>
 
-        <div className="my-4 flex items-center gap-2">
+        <div className="flex items-center gap-2 mt-4 mb-8">
           <a href={project.githubRepo} target="_blank">
             <Image
               src={github}
@@ -122,14 +126,14 @@ async function Page({ params }: { params: { projectId: ProjectId } }) {
               className="dark:invert dark:filter"
             />
           </a>
-          <p></p>
         </div>
+
       </section>
 
       {!isMember ? (
         <ProjectThread project={project} />
       ) : (
-        <div className="my-4 flex w-[45rem] flex-col items-center justify-center gap-4">
+        <div className="flex flex-col items-center justify-center gap-4 p-4">
           <h3 className="text-xl font-semibold">
             Join this project to see the threads
           </h3>
