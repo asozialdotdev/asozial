@@ -10,7 +10,7 @@ import { baseUrl } from "@/constants";
 import PageContainer from "@/components/common/PageContainer";
 
 async function ExploreProjectsPage() {
-  const data = await fetch(`${baseUrl}/projects/my-projects`);
+  const data = await fetch(`${baseUrl}/projects`);
   const projects = await data.json();
   console.log(projects[0]._id);
   return (
