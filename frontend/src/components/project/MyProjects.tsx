@@ -1,18 +1,25 @@
 "use client";
-import { Project } from "@/types/Project";
-import { Button } from "../ui/button";
-import { Input } from "../ui/input";
-import ProjectCard from "./ProjectCard";
-import { useEffect, useState } from "react";
-import { baseUrl } from "@/constants";
-import Link from "next/link";
-import { searchForMyProjects } from "@/actions";
+// React
+import { useState } from "react";
+//Hooks
 import useSearchForMyProjects from "@/hooks/projects/useSearchForMyProjects";
+
+//Components
+import ProjectCard from "./ProjectCard";
+
+//UI
+import { Input } from "../ui/input";
+
+//Types
+import type { Project } from "@/types/Project";
 
 function MyProjects({ projects }: { projects: Project[] }) {
   const [searchTerm, setSearchTerm] = useState("");
 
-  const {projectsState, isLoading, error} = useSearchForMyProjects(searchTerm, projects);
+  const { projectsState, isLoading, error } = useSearchForMyProjects(
+    searchTerm,
+    projects,
+  );
 
   return (
     <>
