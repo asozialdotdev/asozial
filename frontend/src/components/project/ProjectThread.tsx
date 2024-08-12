@@ -1,5 +1,6 @@
 import { Project } from "@/types/Project";
 import { Input } from "../ui/input";
+import ProjectPostForm from "./ProjectPostForm";
 
 const projectsPostsTest = [
   {
@@ -71,6 +72,8 @@ function ProjectThread({ project }: { project: Project }) {
         <h2 className="text-3xl font-semibold capitalize tracking-wide">
           Threads
         </h2>
+        
+      <ProjectPostForm />
 
         {projectsPostsTest.map((post) => (
           <div
@@ -79,8 +82,8 @@ function ProjectThread({ project }: { project: Project }) {
           >
             <p className="text-sm">{post.user}</p>
             <h3 className="text-base tracking-wide">{post.title}</h3>
-            <p className="text-sm mb-2">{post.content}</p>
-            <small className="text-xs mb-4">
+            <p className="mb-2 text-sm">{post.content}</p>
+            <small className="mb-4 text-xs">
               Posted on: <time>01.08.2024 at 15:43</time>
             </small>
           </div>
