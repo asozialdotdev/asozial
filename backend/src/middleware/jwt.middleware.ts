@@ -56,7 +56,7 @@ function isAuthenticated(
         sameSite: "strict",
       })
       .header("Authorization", newAccessToken)
-      .send(payload);
+      .json({ user: (payload as JwtPayload).user, token: newAccessToken });
   } catch (error) {
     res.status(401).send("Access Denied. Invalid refresh token.");
     next(error);

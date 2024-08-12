@@ -1,34 +1,41 @@
 "use client";
 
 import { createContext, useContext, useState, ReactNode, FC } from "react";
+import { User } from "@/types/User";
 
-interface User {
-  id: string;
-  name: string;
-}
+const UserContext = createContext({});
 
-interface UserContextType {
-  user: User | null;
-  setUser: React.Dispatch<React.SetStateAction<User | null>>;
-}
-
-const UserContext = createContext<UserContextType | null>(null);
-
-interface UserProviderProps {
-  children: ReactNode;
-}
-
-const UserProvider: FC<UserProviderProps> = ({ children }) => {
-  const [user, setUser] = useState<User | null>(null);
+const UserProvider = ({ children }: { children: React.ReactNode }) => {
+  const [_Id, set_Id] = useState("");
+  const [githubId, setGithubId] = useState("");
+  const [name, setName] = useState("");
+  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
+  const [avatar, setAvatar] = useState("");
 
   return (
-    <UserContext.Provider value={{ user, setUser }}>
+    <UserContext.Provider
+      value={{
+        _Id,
+        set_Id,
+        githubId,
+        setGithubId,
+        name,
+        setName,
+        username,
+        setUsername,
+        email,
+        setEmail,
+        avatar,
+        setAvatar,
+      }}
+    >
       {children}
     </UserContext.Provider>
   );
 };
 
-const useUserContext = (): UserContextType => {
+const useUserContext = () => {
   const context = useContext(UserContext);
   if (context === null) {
     throw new Error("useUserContext must be used within a UserProvider");
