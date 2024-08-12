@@ -6,11 +6,11 @@ import usersRouter from "./routes/Users.routes";
 import projectsRouter from "./routes/Projects.routes";
 import postRouter from "./routes/Post.routes";
 import githubRouter from "./routes/Auth.routes";
-import { isAuthenticated } from "./middleware/jwt.middleware";
+import accountRouter from "./routes/Account.routes";
+import { isAuthenticated, verifyJWT } from "./middleware/jwt.middleware";
 
 const app = express();
 config(app);
-const accountRouter = express.Router();
 
 app.use("/dashboard", dashboardRouter);
 
@@ -22,12 +22,6 @@ app.use("/posts", postRouter);
 
 app.use("/auth", githubRouter);
 
-accountRouter.get(
-  "/account",
-  isAuthenticated,
-  (req: Request, res: Response) => {
-    res.send(req.body);
-  }
-);
+app.use(["/verify", "/account"], isAuthenticated, accountRouter);
 
 export default app;

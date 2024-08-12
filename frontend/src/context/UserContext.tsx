@@ -12,6 +12,7 @@ const UserProvider = ({ children }: { children: React.ReactNode }) => {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [avatar, setAvatar] = useState("");
+  const [accessToken, setAccessToken] = useState("");
 
   return (
     <UserContext.Provider

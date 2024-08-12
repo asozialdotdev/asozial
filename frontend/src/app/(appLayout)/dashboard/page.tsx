@@ -19,13 +19,12 @@ function Page() {
 
   useEffect(() => {
     if (githubCode) {
-      console.log(githubCode);
+      console.log("this is the", githubCode);
       setCode(githubCode);
+      console.log(code);
       try {
-        const data = {
-          code: githubCode,
-        };
-        const user = getUserFromGithub({ data, githubCode });
+        const user = getUserFromGithub(githubCode);
+        console.log(user);
       } catch (error) {
         console.error("Failed to authenticate with GitHub");
         console.log(error);
