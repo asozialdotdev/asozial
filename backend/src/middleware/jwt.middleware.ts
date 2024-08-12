@@ -25,7 +25,7 @@ function isAuthenticated(
   const accessToken = req.headers["authorization"];
   const refreshToken = req.cookies["refreshToken"];
 
-  if (accessToken && refreshToken) {
+  if (!accessToken && !refreshToken) {
     res.status(401).send("Access Denied. No token provided.");
     return;
   }
@@ -33,6 +33,8 @@ function isAuthenticated(
   try {
     const payload = verifyJWT(accessToken as string);
     (req as any).payload = payload;
+    (req as any).user = (payload as JwtPayload).user;
+
     next();
   } catch (error) {
     if (!refreshToken) {
