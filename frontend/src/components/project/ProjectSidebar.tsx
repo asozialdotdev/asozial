@@ -33,7 +33,7 @@ function ProjectSidebar() {
     >
       <ul className="flex flex-col gap-10">
         {links.map((link) => (
-          <li>
+          <li key={link.name}>
             <Button variant="outline">
               <Link href={link.href}>{link.name}</Link>
             </Button>
