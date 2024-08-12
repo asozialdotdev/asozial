@@ -24,7 +24,7 @@ function MyProjects({ projects }: { projects: Project[] }) {
   }, [searchTerm]);
 
   return (
-    <div className="mx-auto my-0 flex flex-col items-center gap-10">
+    <>
       <section className="flex flex-col items-center gap-8">
         <h2 className="text-3xl">My Projects</h2>
         <Input
@@ -39,7 +39,7 @@ function MyProjects({ projects }: { projects: Project[] }) {
         Project cards should be displayed here
         <ProjectCard projects={projectsState} />
       </article>
-    </div>
+    </>
   );
 }
 
