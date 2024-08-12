@@ -1,7 +1,7 @@
 import { SidebarsProviders } from "@/context/SidebarsContext";
 // import { ThemeProvider } from "@/context/ThemeContext";
 import { UserProvider } from "@/context/UserContext";
-import { ThemeProvider } from "next-themes";
+import { ThemeProvider, useTheme } from "next-themes";
 
 function Providers({ children }: { children: React.ReactNode }) {
   return (
