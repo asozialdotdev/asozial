@@ -1,16 +1,14 @@
-//check if user exists
-//if user exists, display user
-//else, create new user using Omar's code
-
-import SignIn from "@/components/auth/SignIn";
-import SignUp from "@/components/auth/SignUp";
-
+import SignInForm from "@/components/auth/SignInForm";
+import PageContainer from "@/components/common/PageContainer";
+import Footer from "@/components/common/Footer";
 function Page() {
   return (
-    <div>
-      <SignIn />
-      <SignUp />
-    </div>
+    <>
+      <PageContainer className="my-auto">
+        <SignInForm />
+      </PageContainer>
+      <Footer />
+    </>
   );
 }
 
