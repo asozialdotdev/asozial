@@ -1,6 +1,7 @@
 "use server";
 
 import { baseUrl } from "@/constants";
+import { ProjectId } from "@/types/Project";
 
 // Get all projects
 const fetchAllProjects = async () => {
@@ -20,7 +21,7 @@ const fetchAllProjects = async () => {
 
 // Get 1 project
 
-const fetchProjectById = async (projectId: string) => {
+const fetchProjectById = async (projectId: ProjectId) => {
   try {
     const response = await fetch(`${baseUrl}/projects/${projectId}`);
     if (!response.ok) {
