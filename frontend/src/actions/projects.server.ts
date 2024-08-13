@@ -83,8 +83,6 @@ const handleJoinProject = async (formData: FormData) => {
   console.log("result:", result);
 };
 
-//Get Posts
-
 export {
   fetchAllProjects,
   fetchProjectById,

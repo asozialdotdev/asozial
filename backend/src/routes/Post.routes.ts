@@ -43,11 +43,11 @@ postRouter.post(
   async (req: Request, res: Response, next: NextFunction) => {
     console.log("POST /api/posts called");
     try {
-      const { title, content, projectId, parentPostId } = req.body;
-      console.log("projectIDDDDDD", projectId, title);
+      const { title, content, projectId, userId, parentPostId } = req.body;
+      console.log("projectIDDDDDD", projectId);
 
-      const userId = (req as any).payload.user;
-      console.log("userIdd", userId)
+      // const userId = (req as any).payload.user;
+      // console.log("userIdd", userId);
 
       // Ensure the project exists
       const project = await Project.findById(projectId);
@@ -75,6 +75,24 @@ postRouter.post(
       }
 
       res.status(201).json(newPost);
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
+// GET 1 post
+postRouter.get(
+  "/:postId",
+  async (req: Request, res: Response, next: NextFunction) => {
+    console.log("GET /api/posts/:postId called");
+    try {
+      const post = await Post.findById(req.params.postId).populate("replies");
+      if (!post) {
+        return res.status(404).json({ message: "Post not found" });
+      }
+
+      res.status(200).json(post);
     } catch (error) {
       next(error);
     }
