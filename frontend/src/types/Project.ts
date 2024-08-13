@@ -1,6 +1,9 @@
 import { Types } from "mongoose";
 
+type ProjectId = Types.ObjectId;
+
 type Project = {
+  _id: ProjectId;
   title: string;
   description: string;
   githubRepo: string;
@@ -15,4 +18,4 @@ type Project = {
   updatedAt?: Date;
 };
 
-export default Project;
+export type { Project, ProjectId };

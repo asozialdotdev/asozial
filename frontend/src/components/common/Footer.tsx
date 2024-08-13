@@ -1,3 +1,5 @@
+"use client";
+//Next
 import Image from "next/image";
 
 function Footer() {
@@ -38,18 +40,33 @@ function Footer() {
       icon: "https://avatars.githubusercontent.com/u/7552965?s=400&v=4",
     },
   ];
+
   return (
-    <nav className="h-10vh flex flex-col items-center gap-2 border-t-2">
-      <h1 className="text-xl">© 2024 asozial</h1>
+    <nav className="h-10vh border-t-1 z-50 flex flex-col items-center gap-2 bg-light pb-2 text-dark dark:bg-dark dark:text-light">
+      <h1 className="text-base md:text-xl">
+        A social app for asozial devs - 2024 ©
+      </h1>
       <ul className="flex flex-row flex-wrap gap-6 font-sans">
         {techStack.map((tech) => (
           <li key={tech.name} className="flex flex-row items-center gap-2">
             <Image
               src={tech.icon}
               alt={tech.name}
-              className="h-auto max-h-6 w-12"
-              width={12}
-              height={12}
+              className="h-auto w-5 sm:h-auto sm:w-8 md:h-auto md:w-10"
+              width={
+                tech.name === "Next.js" ||
+                tech.name === "Express" ||
+                tech.name === "MongoDB"
+                  ? 60
+                  : 30
+              }
+              height={
+                tech.name === "Next.js" ||
+                tech.name === "Express" ||
+                tech.name === "MongoDB"
+                  ? 60
+                  : 30
+              }
             />
             <a title="url" href={tech.url} target="_blank" rel="noreferrer"></a>
           </li>

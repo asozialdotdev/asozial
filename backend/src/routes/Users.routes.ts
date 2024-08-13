@@ -4,36 +4,9 @@ import Friendship from "../models/Friendship.models";
 
 const usersRouter = express.Router();
 
-// GET all users
-
-usersRouter.get(
-  "/search",
-  async (req: Request, res: Response, next: NextFunction) => {
-    try {
-      const foundUser = await User.find();
-      res.json(foundUser);
-    } catch (error) {
-      next(error);
-    }
-  }
-);
-
-// GET 1 user
-
-usersRouter.get(
-  "/:userId",
-  async (req: Request, res: Response, next: NextFunction) => {
-    try {
-      const foundUser = await User.findById(req.params.userId);
-      res.json(foundUser);
-    } catch (error) {
-      next(error);
-    }
-  }
-);
-
 // GET user friends
-// rendered in the /users
+// rendered in the /users route
+// TODO must check also for freindships status
 
 usersRouter.get(
   "/",
@@ -45,9 +18,10 @@ usersRouter.get(
       }
 
       const friendships = await Friendship.find({
+        // TODO the following filters must be reviewed because the logic of it is not really working.
         $or: [
-          { user1: foundUser._id, status: "accepted" },
-          { user2: foundUser._id, status: "accepted" },
+          { senderId: foundUser._id, status: "accepted" },
+          { receiverId: foundUser._id, status: "accepted" },
         ],
       });
 
@@ -69,6 +43,84 @@ usersRouter.get(
     }
   }
 );
+
+// GET all users
+
+usersRouter.get(
+  "/search",
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const foundUser = await User.find();
+      res.json(foundUser);
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
+// GET 1 user
+
+usersRouter.get(
+  "/:userId",
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const currentUserId = req.params._id;
+      const targetUserId = req.params.userId;
+
+      const targetUser = await User.findById(targetUserId);
+      if (!targetUser) {
+        res.status(404).send("User not found");
+        console.error("User not found");
+        return;
+      }
+
+      const friendships = await Friendship.findOne({
+        $or: [
+          { senderId: currentUserId, receiverId: targetUserId },
+          { senderId: targetUserId, receiverId: currentUserId },
+        ],
+        status: "accepted",
+      });
+
+      if (friendships) {
+        res.json({
+          user: targetUser,
+        });
+      } else {
+        res.json({
+          message: "You are not friend with this user",
+          basicInfo: {
+            username: targetUser.username,
+            name: targetUser.name,
+            email: targetUser.email,
+            avatarUrl: targetUser.avatarUrl,
+          },
+        });
+      }
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
+//GET logged in user
+
+usersRouter.get(
+  "/account",
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      //GET CURRENT USER FROM MIDDLEWARE
+      const user = await User.findById(req.params.userId);
+      if (!user) {
+        throw new Error("User not found");
+      }
+      res.json(user);
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
 // GET user to Match (tinderlike)
 
 // GET user's friends and user's activities

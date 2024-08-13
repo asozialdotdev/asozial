@@ -2,9 +2,8 @@ import { Types } from "mongoose";
 
 type User = {
   githubID: string;
-  email: string;
-  password: string;
-  username: string;
+  email?: string;
+  username?: string;
   name?: string;
   avatarUrl?: string;
   githubUrl?: string;
@@ -21,4 +20,4 @@ type User = {
   avoidedProjects?: Types.ObjectId[];
 };
 
-export default User;
+export type { User };

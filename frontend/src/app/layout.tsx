@@ -4,7 +4,7 @@ import { Kanit } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/common/Navbar";
 import Footer from "@/components/common/Footer";
-import Main from "@/components/common/Main";
+import Providers from "./providers";
 
 const kanit = Kanit({
   subsets: ["latin"],
@@ -22,11 +22,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${kanit.className}`}>
-      <body className="h-100vh w-100vw flex flex-col justify-between p-6">
-        <Navbar />
-        <Main>{children}</Main>
-        <Footer />
+    <html lang="en" className={kanit.className} suppressHydrationWarning>
+      <body className="flex h-screen w-screen flex-col justify-between">
+      <Providers>
+        {children}
+        </Providers>
       </body>
     </html>
   );
