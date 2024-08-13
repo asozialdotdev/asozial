@@ -18,8 +18,8 @@ app.use(cors());
 
 app.use("/dashboard", isAuthenticated, dashboardRouter);
 app.use("/users", isAuthenticated, usersRouter);
-app.use("/api/projects", isAuthenticated, projectsRouter);
-app.use("/api/posts", isAuthenticated, postRouter);
+app.use("/api/projects", projectsRouter);
+app.use("/api/posts", postRouter);
 app.use("/auth", githubRouter);
 app.use(["/verify", "/account"], isAuthenticated, accountRouter);
 

@@ -14,7 +14,7 @@ dotenv.config();
 projectsRouter.get(
   "/",
   async (req: Request, res: Response, next: NextFunction) => {
-    console.log("GET /projects called");
+    console.log("GET projects called");
 
     try {
       const projects = await Project.find();
