@@ -1,6 +1,6 @@
 const getUser = async () => {
   const res = await fetch("/auth", {
-    method: "POST",
+    method: "GET",
   });
   if (!res) {
     console.log("User not found");

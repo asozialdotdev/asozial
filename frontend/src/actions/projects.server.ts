@@ -1,5 +1,6 @@
 "use server";
 
+
 import { ProjectId } from "@/types/Project";
 import { baseUrl } from "@/constants";
 
@@ -23,6 +24,7 @@ const fetchAllProjects = async () => {
 
 // Get 1 project
 
+
 const fetchProjectById = async (projectId: ProjectId) => {
   try {
     const response = await fetch(`${baseUrl}/api/projects/${projectId}`);
@@ -30,7 +32,9 @@ const fetchProjectById = async (projectId: ProjectId) => {
       throw new Error(`Failed to fetch project: ${response.statusText}`);
     }
     const project = await response.json();
-    console.log("Fetched projects:", project);
+
+    console.log("Fetched project:", project);
+
     return project;
   } catch (error) {
     console.error("Error fetching project:", error);
@@ -43,7 +47,9 @@ const fetchProjectById = async (projectId: ProjectId) => {
 const searchForMyProjects = async (searchTerm: string) => {
   try {
     const response = await fetch(
+
       `${baseUrl}/projects/search?query=${searchTerm}`,
+
     );
     if (!response.ok) {
       throw new Error(`Failed to search for projects: ${response.statusText}`);
@@ -60,6 +66,7 @@ const searchForMyProjects = async (searchTerm: string) => {
 const handleJoinProject = async (formData: FormData) => {
   const projectId = formData.get("projectId") as string;
 
+
   const response = await fetch(`${baseUrl}/projects/${projectId}/join`, {
     method: "POST",
     headers: {
@@ -68,11 +75,15 @@ const handleJoinProject = async (formData: FormData) => {
     body: JSON.stringify({ userId: "60d4f4d2d243f80015f7b3f9" }),
   });
 
+
   const result = await response.json();
   console.log("result:", result);
 };
 
+
 //Get Posts
+
+
 
 export {
   fetchAllProjects,
