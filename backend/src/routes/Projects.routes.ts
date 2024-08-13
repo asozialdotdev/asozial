@@ -14,7 +14,7 @@ dotenv.config();
 projectsRouter.get(
   "/",
   async (req: Request, res: Response, next: NextFunction) => {
-    console.log("GET projects called");
+    console.log("GET /projects called");
 
     try {
       const projects = await Project.find();
@@ -210,15 +210,30 @@ projectsRouter.get(
     try {
       const actualUser = (req as any).payload.user;
 
-      const filteredProjects = await Project.find({
-        $and: [
-          { _id: { $nin: actualUser.avoidedProjects } },
-          { _id: { $nin: actualUser.joinedProjects } },
-          { _id: { $nin: actualUser.appliedProjects } },
-          { mainLanguage: { $in: actualUser.languagesSpoken } },
-          { techStack: { $elemMatch: { $in: actualUser.techStack } } },
-        ],
-      });
+      const filteredProjects = await Project.aggregate([
+        {
+          $match: {
+            $and: [
+              { _id: { $nin: actualUser.avoidedProjects } },
+              { _id: { $nin: actualUser.joinedProjects } },
+              { _id: { $nin: actualUser.appliedProjects } },
+              { mainLanguage: { $in: actualUser.languagesSpoken } },
+            ],
+          },
+        },
+        {
+          $addFields: {
+            techStackMatches: {
+              $size: {
+                $setIntersection: ["$techStack", actualUser.techStack],
+              },
+            },
+          },
+        },
+        {
+          $sort: { techStackMatches: -1 },
+        },
+      ]);
       res.status(200).json(filteredProjects);
     } catch (error) {
       next(error);
