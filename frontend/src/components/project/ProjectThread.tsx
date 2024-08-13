@@ -1,6 +1,6 @@
 import { Project, ProjectId } from "@/types/Project";
 import { Input } from "../ui/input";
-import ProjectPostForm from "./ProjectPostForm";
+import ProjectPostForm from "../post/ProjectPostForm";
 
 const projectsPostsTest = [
   {

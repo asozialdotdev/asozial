@@ -1,6 +1,9 @@
 import { Types } from "mongoose";
 
+type PostId = Types.ObjectId | string;
+
 type Post = {
+  postId: PostId;
   userId: Types.ObjectId;
   title?: string;
   content?: string;
@@ -8,4 +11,4 @@ type Post = {
   updatedDate?: Date;
 };
 
-export default Post;
+export type { Post, PostId };

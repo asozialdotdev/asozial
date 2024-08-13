@@ -1,4 +1,4 @@
-import { fetchProjectById, handleJoinProject } from "@/actions";
+import { fetchPosts, fetchProjectById, handleJoinProject } from "@/actions";
 import PageContainer from "@/components/common/PageContainer";
 import { Button } from "@/components/ui/button";
 import { languagesWithColors } from "@/constants";
@@ -18,6 +18,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { PostId } from "@/types/Post";
 const membersJoined = ["Benjamin", "Mirko", "John", "Jane", "José"];
 const membersApplied = ["Alice", "Bob", "Charlie"];
 const membersInvited = ["David", "Eve", "Frank"];
@@ -33,8 +34,10 @@ const languagesTest = [
 
 const userIdTest = "1234";
 
-async function Page({ params }: { params: { projectId: ProjectId } }) {
+async function Page({ params }: { params: { projectId: ProjectId; postId: PostId } }) {
+  console.log("Params in project page//////", params);
   const project = await fetchProjectById(params.projectId);
+  const posts = await fetchPosts(params.projectId);
 
   const isMember = membersJoined.includes("Jos"); // hardcoded
   // const isMember = membersJoined.includes(user._id); // dynamic

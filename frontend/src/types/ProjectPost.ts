@@ -9,4 +9,4 @@ type ProjectPost = {
   updatedDate?: Date;
 };
 
-export default ProjectPost;
+export type { ProjectPost };

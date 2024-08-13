@@ -1,1 +1,2 @@
-export * from "./projects/projects.server";
+export * from "./projects.server";
+export * from "./posts.server";
