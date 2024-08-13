@@ -51,7 +51,7 @@ githubRouter.post("/", async (req: Request, res: Response) => {
 
     if (foundUser) {
       console.log("User found");
-      const { _id, username, avatarUrl, email } = foundUser;
+const { _id, username, avatarUrl, email } = foundUser;
       const payload = {
         _id: _id.toString(),
         username,
@@ -79,6 +79,7 @@ githubRouter.post("/", async (req: Request, res: Response) => {
       githubID: id,
       avatarUrl: avatar_url,
       name: name,
+      email,
     });
     const { _id, username, avatarUrl, email } = createdUser;
     const payload = {
