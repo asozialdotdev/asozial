@@ -113,7 +113,7 @@ async function Page({ params }: { params: { projectId: ProjectId } }) {
       </section>
 
       {!isMember ? (
-        <ProjectThread project={project} />
+        <ProjectThread project={project} params={params} />
       ) : (
         <div className="flex flex-col items-center justify-center gap-4 p-4">
           <h3 className="text-xl font-semibold">

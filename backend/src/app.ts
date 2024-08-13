@@ -17,7 +17,7 @@ app.use("/users", usersRouter);
 
 app.use("/api/projects", projectsRouter);
 
-app.use("/posts", postRouter);
+app.use("/api/posts", postRouter);
 
 app.use("/auth", githubRouter);
 

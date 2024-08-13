@@ -74,9 +74,29 @@ const handleJoinProject = async (formData: FormData) => {
   console.log("result:", result);
 };
 
+//Get Posts
+const fetchPosts = async (projectId: ProjectId) => {
+  try {
+    const response = await fetch(
+      `${baseUrl}/api/posts?projectId=${projectId}`,
+      { cache: "no-store" },
+    );
+    if (!response.ok) {
+      throw new Error(`Failed to fetch posts: ${response.statusText}`);
+    }
+    const posts = await response.json();
+    console.log("Fetched posts:", posts);
+    return posts;
+  } catch (error) {
+    console.error("Error fetching posts:", error);
+    return "Error fetching posts";
+  }
+};
+
 export {
   fetchAllProjects,
   fetchProjectById,
   searchForMyProjects,
   handleJoinProject,
+  fetchPosts,
 };
