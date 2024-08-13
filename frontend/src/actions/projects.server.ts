@@ -2,11 +2,20 @@
 
 import { ProjectId } from "@/types/Project";
 import { baseUrl } from "@/constants";
+import { headers } from "next/headers";
 
+// console.log(localStorage.getItem("accessToken"));
 // Get all projects
-const fetchAllProjects = async () => {
+const fetchAllProjects = async (accessToken: string) => {
   try {
+    console.log("accessToken in server function:", accessToken);
+    if (!accessToken) {
+      throw new Error("No access token found");
+    }
     const response = await fetch(`${baseUrl}/api/projects`, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
       cache: "no-store",
     });
     if (!response.ok) {

@@ -23,4 +23,12 @@ app.use("/api/posts", postRouter);
 app.use("/auth", githubRouter);
 app.use(["/verify", "/account"], isAuthenticated, accountRouter);
 
+accountRouter.get(
+  "/account",
+  isAuthenticated,
+  (req: Request, res: Response) => {
+    res.send(req.body);
+  }
+);
+
 export default app;

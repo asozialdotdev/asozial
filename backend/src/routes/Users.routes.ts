@@ -1,6 +1,7 @@
 import express, { Request, Response, NextFunction } from "express";
 import User from "../models/User.models";
 import Friendship from "../models/Friendship.models";
+import Project from "../models/Project.models";
 
 const usersRouter = express.Router();
 
@@ -123,6 +124,80 @@ usersRouter.get(
 
 // GET user to Match (tinderlike)
 
+usersRouter.get(
+  "/match",
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const actualUser = (req as any).payload.user;
+      const avoidedUsers = await User.find({
+        _id: { $in: actualUser.avoidedUsers },
+      });
+
+      const filteredUsers = await User.find({
+        _id: { $nin: avoidedUsers.map((user) => user.id) },
+      });
+
+      res.status(200).json(filteredUsers);
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
+// POST user to Match (tinderlike)
+
+usersRouter.post(
+  "/match",
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const actualUser = (req as any).payload.user;
+      const targetUser = await User.findById(req.body.userId);
+
+      if (!targetUser) {
+        res.status(404).send("User not found");
+        console.error("User not found");
+        return;
+      }
+
+      actualUser.matchedUsers.push(targetUser);
+      await actualUser.save();
+
+      targetUser.matchedUsers.push(actualUser._id);
+      await targetUser.save();
+
+      const populatedActualUser = await User.findById(actualUser._id).populate(
+        "matchedUsers"
+      );
+      const populatedTargetUser = await User.findById(targetUser).populate(
+        "matchedUsers"
+      );
+
+      res.status(200).json({
+        message: "Users matched successfully",
+        actualUser: populatedActualUser,
+        targetUser: populatedTargetUser,
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
 // GET user's friends and user's activities
+
+// GET all projects that a user is a member of
+
+usersRouter.get(
+  "/:userId/projects",
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const user = (req as any).payload.user;
+      const projects = await Project.find({ membersJoined: user._id });
+      res.json(projects);
+    } catch (error) {
+      next(error);
+    }
+  }
+);
 
 export default usersRouter;

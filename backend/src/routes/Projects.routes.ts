@@ -3,7 +3,7 @@ import express, { Request, Response, NextFunction } from "express";
 import axios from "axios";
 import Project from "../models/Project.models";
 import User from "../models/User.models";
-import { isAuthenticated } from "../middleware/jwt.middleware";
+import { isAuthenticated, verifyJWT } from "../middleware/jwt.middleware";
 
 const projectsRouter = express.Router();
 
@@ -35,7 +35,7 @@ projectsRouter.post(
     try {
       const { title, description, pitch, techStack, mainLanguage } = req.body;
 
-      const ownerId = (req as any).user;
+      const ownerId = (req as any).payload.user;
 
       const newProject = await Project.create({
         title,
@@ -129,7 +129,7 @@ projectsRouter.get(
   }
 );
 
-// GET 1 project
+// GET 1 project (detailed information)
 
 projectsRouter.get(
   "/:projectId",
@@ -149,31 +149,25 @@ projectsRouter.get(
 // POST request to join a project
 
 projectsRouter.post(
-  "/:projectId/join",
+  "/:projectId/users",
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       const project = await Project.findById(req.params.projectId);
-      console.log("Project", project);
       if (!project) {
         return res.status(404).json({ error: "Project not found" });
       }
 
-      const user = await User.findById(req.body.userId);
-      console.log("User", user);
-      if (!user) {
-        return res.status(404).json({ error: "User not found" });
-      }
-
+      const actualUser = (req as any).payload.user;
       if (
-        project.membersJoined.includes(user._id) ||
-        project.membersApplied.includes(user._id)
+        project.membersJoined.includes(actualUser) ||
+        project.membersApplied.includes(actualUser)
       ) {
         return res
           .status(400)
           .json({ error: "User is already a member of this project" });
       }
 
-      project.membersApplied.push(user._id);
+      project.membersApplied.push(actualUser._id);
       await project.save();
 
       res.json(project);
@@ -183,8 +177,12 @@ projectsRouter.post(
   }
 );
 
-// GET all projects that a user is a member of
-
 // GET check if user is a member of a project
+
+/* projectsRouter.get(
+  "/:projectId/users/:userId",
+  async (req: Request, res: Response, next: NextFunction) => {
+
+  }); */
 
 export default projectsRouter;

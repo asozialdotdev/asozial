@@ -1,6 +1,7 @@
 import express, { Request, Response, NextFunction } from "express";
 import Post from "../models/Post.models";
 import Project from "../models/Project.models";
+import { isAuthenticated, verifyJWT } from "../middleware/jwt.middleware";
 
 const postRouter = express.Router();
 
