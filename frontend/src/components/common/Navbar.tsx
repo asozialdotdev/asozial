@@ -12,37 +12,17 @@ import useCombinedRef from "@/hooks/useCombinedRef";
 import { useWindowWidth } from "@/hooks/useWindowWidth";
 import { useSidebarsContext } from "@/context/SidebarsContext";
 
+//Components
+import ToggleTheme from "./ToggleTheme";
+
 //UI
 import { FaGithub, FaLinkedin, FaRegUserCircle } from "react-icons/fa";
 import { IoMenu, IoMoonOutline, IoSunnyOutline } from "react-icons/io5";
-import ToggleTheme from "./ToggleTheme";
 import { PiUserCircleGearDuotone, PiUserFocusBold } from "react-icons/pi";
 import { TbUserSquareRounded } from "react-icons/tb";
 import { Button } from "../ui/button";
-
-const contributors = [
-  {
-    name: "José Copeti",
-    email: "jrcopeti@gmail.com",
-    github: "https://github.com/jrcopeti",
-    linkedin: "https://www.linkedin.com/in/josecopeti/",
-    website: "https://jrcopeti.hashnode.dev/",
-  },
-  {
-    name: "Benjamin Elliott",
-    email: "hello@benjamin.dev",
-    github: "https://github.com/benjamindotdev",
-    linkedin: "https://www.linkedin.com/in/benjamindotdev/",
-    website: "https://benjamin.dev",
-  },
-  {
-    name: "Mirko Fede",
-    email: "mirko@asozial.com",
-    github: "https://github.com/mirkoeffe",
-    linkedin: "https://www.linkedin.com/in/mirko-fede/",
-    website: "http://mirkoeffe.shop/",
-  },
-];
+import logo from "/public/logo.png";
+import { contributors } from "@/constants";
 
 function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -80,17 +60,13 @@ function Navbar() {
                   width && width <= 640 ? !!isProjectSidebarOpen : undefined
                 }
               >
-                <IoMenu size={26} />
+                <TbUserSquareRounded size={26} />
               </Button>
 
-              <div className="flex items-center gap-1">
-                <Link href="/dashboard">
-                  <h1 className="cursor-pointer text-2xl">asozial</h1>
-                </Link>
-                <Link href="/account">
-                  <TbUserSquareRounded size={26} />
-                </Link>
-              </div>
+              <Link className="flex items-center gap-2" href="/dashboard">
+                <h1 className="cursor-pointer text-2xl">asozial</h1>
+                <Image src={logo} alt="logo" width={30} height={30} />
+              </Link>
             </section>
 
             <section className="flex items-center gap-2" ref={combinedRefs}>

@@ -71,7 +71,6 @@ githubRouter.post("/", async (req: Request, res: Response) => {
       githubID: id,
       avatarUrl: avatar_url,
       name: name,
-      email,
     });
     const { _id, username, avatarUrl, email } = createdUser;
     const payload = {

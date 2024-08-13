@@ -6,6 +6,7 @@ const postSchema = new Schema(
     userId: { type: Schema.Types.ObjectId, ref: "User", required: true },
     title: { type: String },
     content: { type: String },
+    parentId: { type: Schema.Types.ObjectId, ref: "Post", default: null }, // Reference to the parent post (null if it's not a reply)
     replies: [{ type: Schema.Types.ObjectId, ref: "Post" }], // Array of references to other Posts (replies)
   },
   {
@@ -13,5 +14,9 @@ const postSchema = new Schema(
     timestamps: true,
   }
 );
+// Virtual to get a boolean if the post is a reply or not
+postSchema.virtual("isReply").get(function () {
+  return this.parentId !== null;
+});
 
 export default model("Post", postSchema);
