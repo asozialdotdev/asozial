@@ -9,6 +9,24 @@ const projectsRouter = express.Router();
 
 dotenv.config();
 
+// GET all my projects
+
+projectsRouter.get(
+  "/",
+  async (req: Request, res: Response, next: NextFunction) => {
+    console.log("GET /projects called");
+
+    try {
+      const projects = await Project.find();
+      console.log("Number of Projects Found:", projects.length);
+      console.log("Projects------------", projects);
+      res.json(projects);
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
 // POST to create a new project
 
 projectsRouter.post(
@@ -85,20 +103,6 @@ projectsRouter.get(
       });
 
       res.status(201).json(createProject);
-    } catch (error) {
-      next(error);
-    }
-  }
-);
-
-// GET all my projects
-
-projectsRouter.get(
-  "/",
-  async (req: Request, res: Response, next: NextFunction) => {
-    try {
-      const projects = await Project.find();
-      res.json(projects);
     } catch (error) {
       next(error);
     }

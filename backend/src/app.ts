@@ -15,9 +15,9 @@ app.use("/dashboard", isAuthenticated, dashboardRouter);
 
 app.use("/users", usersRouter);
 
-app.use("/projects", projectsRouter);
+app.use("/api/projects", projectsRouter);
 
-app.use("/posts", postRouter);
+app.use("/api/posts", postRouter);
 
 app.use("/auth", githubRouter);
 

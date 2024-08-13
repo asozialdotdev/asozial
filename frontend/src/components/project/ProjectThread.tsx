@@ -1,4 +1,4 @@
-import { Project } from "@/types/Project";
+import { Project, ProjectId } from "@/types/Project";
 import { Input } from "../ui/input";
 import ProjectPostForm from "./ProjectPostForm";
 
@@ -65,15 +65,20 @@ const projectsPostsTest = [
   },
 ];
 
-function ProjectThread({ project }: { project: Project }) {
+type ProjectThreadProps = {
+  project: Project;
+  params: { projectId: ProjectId };
+};
+
+function ProjectThread({ project, params }: ProjectThreadProps) {
   return (
     <>
       <section className="mt-4 flex flex-col gap-4">
         <h2 className="text-3xl font-semibold capitalize tracking-wide">
           Threads
         </h2>
-        
-      <ProjectPostForm />
+
+        <ProjectPostForm params={params} />
 
         {projectsPostsTest.map((post) => (
           <div
