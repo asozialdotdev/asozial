@@ -63,7 +63,7 @@ postRouter.post(
         projectId,
       });
 
-      // If the post is a reply, add it to the parent post's replies array
+      // If the post is a reply, add it to the parent post's replies arrayy
       if (parentPostId) {
         const parentPost = await Post.findById(parentPostId);
         if (!parentPost) {
