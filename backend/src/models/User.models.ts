@@ -19,6 +19,7 @@ const userSchema = new Schema(
     dashboardPosts: [{ type: Schema.Types.ObjectId, ref: "Post" }],
     avoidedUsers: [{ type: Schema.Types.ObjectId, ref: "User" }],
     avoidedProjects: [{ type: Schema.Types.ObjectId, ref: "Project" }],
+    matchedUsers: [{ type: Schema.Types.ObjectId, ref: "User" }],
   },
   {
     collection: "User",
