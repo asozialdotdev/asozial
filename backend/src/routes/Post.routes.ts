@@ -1,6 +1,7 @@
 import express, { Request, Response, NextFunction } from "express";
 import Post from "../models/Post.models";
 import Project from "../models/Project.models";
+import { AuthenticatedRequest } from "../middleware/jwt.middleware";
 
 const postRouter = express.Router();
 
@@ -39,10 +40,11 @@ postRouter.get("/", async (req: Request, res: Response, next: NextFunction) => {
 
 postRouter.post(
   "/",
-  async (req: Request, res: Response, next: NextFunction) => {
+  async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
     console.log("POST /api/posts called");
     try {
-      const { title, content, projectId, userId, parentPostId } = req.body;
+      const userId = req.payload?.user;
+      const { title, content, projectId, parentPostId } = req.body;
       console.log("projectIDDDDDD", projectId, title);
 
       //NOT WORKING TO GET USER ID
