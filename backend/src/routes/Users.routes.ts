@@ -183,8 +183,6 @@ usersRouter.post(
   }
 );
 
-// GET user's friends and user's activities
-
 // GET all projects that a user is a member of
 
 usersRouter.get(
