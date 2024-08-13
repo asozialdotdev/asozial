@@ -130,7 +130,19 @@ usersRouter.get(
     try {
       const actualUser = (req as any).payload.user;
       const avoidedUsers = await User.find({
-        _id: { $in: actualUser.avoidedUsers },
+        $or: [
+          { _id: { $in: actualUser.avoidedUsers } },
+          {
+            $nor: [
+              { techStack: { $elemMatch: { $in: actualUser.techStack } } },
+              {
+                languagesSpoken: {
+                  $elemMatch: { $in: actualUser.languagesSpoken },
+                },
+              },
+            ],
+          },
+        ],
       });
 
       const filteredUsers = await User.find({
@@ -182,8 +194,6 @@ usersRouter.post(
     }
   }
 );
-
-// GET user's friends and user's activities
 
 // GET all projects that a user is a member of
 

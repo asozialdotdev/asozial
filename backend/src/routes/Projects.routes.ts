@@ -179,10 +179,92 @@ projectsRouter.post(
 
 // GET check if user is a member of a project
 
-/* projectsRouter.get(
-  "/:projectId/users/:userId",
+projectsRouter.get(
+  "/:userId",
   async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const user = await User.findById(req.params.userId);
+      if (!user) {
+        return res.status(404).json({ error: "User not found" });
+      }
 
-  }); */
+      const project = await Project.findById(req.query.projectId);
+      if (!project) {
+        return res.status(404).json({ error: "Project not found" });
+      }
+
+      res.json({
+        isMember: project.membersJoined.includes(user._id),
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
+// GET request to get project (tinderlike)
+
+projectsRouter.get(
+  "/match",
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const actualUser = (req as any).payload.user;
+
+      const filteredProjects = await Project.find({
+        $and: [
+          { _id: { $nin: actualUser.avoidedProjects } },
+          { _id: { $nin: actualUser.joinedProjects } },
+          { _id: { $nin: actualUser.appliedProjects } },
+          { mainLanguage: { $in: actualUser.languagesSpoken } },
+          { techStack: { $elemMatch: { $in: actualUser.techStack } } },
+        ],
+      });
+      res.status(200).json(filteredProjects);
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
+// POST request to match project (tinderlike)
+
+projectsRouter.post(
+  "/match",
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const actualUser = (req as any).payload.user;
+      const { projectId } = req.body;
+      const foundProject = await Project.findById(projectId);
+
+      if (!foundProject) {
+        res.status(404).json({ error: "Project not found" });
+        console.error("Project not found");
+        return;
+      }
+
+      actualUser.projectsApplied.push(foundProject);
+      await actualUser.save();
+
+      foundProject.membersApplied.push(actualUser._id);
+      await foundProject.save();
+
+      const populatedActualUser = await User.findById(actualUser._id).populate(
+        "projectsApplied"
+      );
+
+      const populatedFoundProject = await Project.findById(
+        foundProject._id
+      ).populate("membersApplied");
+
+      res.status(200).json({
+        message: "User have matched with a Project",
+        actualUser: populatedActualUser,
+        foundProject: populatedFoundProject,
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
+);
 
 export default projectsRouter;
