@@ -47,7 +47,7 @@ postRouter.post(
       console.log("projectIDDDDDD", projectId, title);
 
       const userId = (req as any).payload.user;
-      console.log("userIdd", userId)
+      console.log("userIdd", userId);
 
       // Ensure the project exists
       const project = await Project.findById(projectId);

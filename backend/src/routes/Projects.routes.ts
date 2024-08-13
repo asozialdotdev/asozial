@@ -179,10 +179,27 @@ projectsRouter.post(
 
 // GET check if user is a member of a project
 
-/* projectsRouter.get(
-  "/:projectId/users/:userId",
+projectsRouter.get(
+  "/:userId",
   async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const user = await User.findById(req.params.userId);
+      if (!user) {
+        return res.status(404).json({ error: "User not found" });
+      }
 
-  }); */
+      const project = await Project.findById(req.query.projectId);
+      if (!project) {
+        return res.status(404).json({ error: "Project not found" });
+      }
+
+      res.json({
+        isMember: project.membersJoined.includes(user._id),
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
+);
 
 export default projectsRouter;
