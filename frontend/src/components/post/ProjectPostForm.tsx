@@ -1,20 +1,22 @@
-import { createPost } from "@/actions/projects/createPost.server";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { Textarea } from "../ui/textarea";
 import { ProjectId } from "@/types/Project";
+import { createPost } from "@/actions";
 import { fetchPosts } from "@/actions";
+import Link from "next/link";
 
 async function ProjectPostForm({
   params,
 }: {
   params: { projectId: ProjectId };
 }) {
-  const { projectId } = params;
+  const { projectId, postId } = params;
+  console.log("Params in post form", params);
   const posts = await fetchPosts(projectId);
 
   return (
-    <div className="flex">
+    <div className="flex flex-col">
       <h2 className="text-xl font-semibold">Create a new post</h2>
       <form className="mt-2" action={createPost}>
         <Input
@@ -35,14 +37,14 @@ async function ProjectPostForm({
         <Button className="my-2 bg-dark dark:bg-light">Post</Button>
       </form>
 
-      <div>
-        {posts.map((post) => (
-          <div key={post._id}>
-            <h3>{post.title}</h3>
-            <p>{post.content}</p>
+      {posts.map((post) => (
+        <Link key={post.title} href={`${projectId}/${post._id}`}>
+          <div className="flex flex-col" key={post._id}>
+            <h3 className="text-xl">Title: {post.title}</h3>
+            <p className="mb-2">content:{post.content}</p>
           </div>
-        ))}
-      </div>
+        </Link>
+      ))}
     </div>
   );
 }

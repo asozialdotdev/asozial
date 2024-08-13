@@ -42,12 +42,11 @@ postRouter.post(
   async (req: Request, res: Response, next: NextFunction) => {
     console.log("POST /api/posts called");
     try {
-      const { title, content, projectId, userId, parentPostId } = req.body;
+      const { title, content, projectId, parentPostId } = req.body;
       console.log("projectIDDDDDD", projectId, title);
 
-      //NOT WORKING TO GET USER ID
-      // const userId = (req as any).user;
-      // console.log("userIdd", userId)
+      const userId = (req as any).payload.user;
+      console.log("userIdd", userId)
 
       // Ensure the project exists
       const project = await Project.findById(projectId);
@@ -64,7 +63,7 @@ postRouter.post(
         projectId,
       });
 
-      // If the post is a reply, add it to the parent post's replies array
+      // If the post is a reply, add it to the parent post's replies arrayy
       if (parentPostId) {
         const parentPost = await Post.findById(parentPostId);
         if (!parentPost) {

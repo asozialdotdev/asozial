@@ -1,4 +1,5 @@
-const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
+const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:5005";
+console.log("baseUrl in CONSTANTS:", baseUrl);
 
 const languagesWithColors = [
   { language: "TypeScript", color: "bg-blue-500" },
@@ -46,6 +47,7 @@ const languagesWithColors = [
   { language: "Lua", color: "bg-blue-600" },
   { language: "HLSL", color: "bg-gray-600" },
   { language: "Hack", color: "bg-gray-400" },
+  {language: "Laravel", color: "bg-red-500"},
 ];
 
 export { baseUrl, languagesWithColors };
