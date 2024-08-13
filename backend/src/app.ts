@@ -7,21 +7,20 @@ import projectsRouter from "./routes/Projects.routes";
 import postRouter from "./routes/Post.routes";
 import githubRouter from "./routes/Auth.routes";
 import accountRouter from "./routes/Account.routes";
-import { isAuthenticated, verifyJWT } from "./middleware/jwt.middleware";
+import { isAuthenticated } from "./middleware/jwt.middleware";
+import cookieParser from "cookie-parser";
+import cors from "cors";
 
 const app = express();
 config(app);
+app.use(cookieParser());
+app.use(cors());
 
-app.use("/dashboard", dashboardRouter);
-
+app.use("/dashboard", isAuthenticated, dashboardRouter);
 app.use("/users", isAuthenticated, usersRouter);
-
 app.use("/projects", isAuthenticated, projectsRouter);
-
 app.use("/posts", postRouter);
-
 app.use("/auth", githubRouter);
-
 app.use(["/verify", "/account"], isAuthenticated, accountRouter);
 
 export default app;

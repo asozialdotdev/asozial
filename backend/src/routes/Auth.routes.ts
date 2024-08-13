@@ -13,11 +13,13 @@ githubRouter.get("/", (req: Request, res: Response) => {
 
 githubRouter.post("/", async (req: Request, res: Response) => {
   const { code } = req.body;
+  console.log(code);
 
   if (!code) {
     res.status(404).json("code not found");
     return;
   }
+
   try {
     const getGithubAccessToken = await axios.post(
       "https://github.com/login/oauth/access_token",
@@ -43,7 +45,7 @@ githubRouter.post("/", async (req: Request, res: Response) => {
         Authorization: `Bearer ${githubAccessToken}`,
       },
     });
-    console.log(getUserInfo);
+    console.log("get user info =", getUserInfo);
     const { login, id, avatar_url, name } = getUserInfo.data;
     const foundUser = await User.findOne({ githubID: id });
 
@@ -58,9 +60,9 @@ githubRouter.post("/", async (req: Request, res: Response) => {
       };
       console.log("Payload", payload);
       const refreshToken = generateJWT(payload, { refresh: true });
-      console.log("Refresh Token", refreshToken);
+      console.log("Refresh Token in auth", refreshToken);
       const accessToken = generateJWT(payload, { refresh: false });
-      console.log("Access Token", accessToken);
+      console.log("Access Token in auth", accessToken);
       res
         .cookie("refreshToken", refreshToken, {
           httpOnly: true,
@@ -86,7 +88,9 @@ githubRouter.post("/", async (req: Request, res: Response) => {
       email,
     };
     const refreshToken = generateJWT(payload, { refresh: true });
+
     const accessToken = generateJWT(payload, { refresh: false });
+    console.log("Access Token in auth", accessToken);
     res
       .cookie("refreshToken", refreshToken, {
         httpOnly: true,

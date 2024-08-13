@@ -60,7 +60,7 @@ function isAuthenticated(
     return;
   }
 
-  //NO REFRESH TOKEN, PERHAPS NEED TO MAKE LOGOUT ROUTE TO TEST THIS
+  //NO REFRESH TOKEN,
 
   console.log("about to try");
 

@@ -10,21 +10,29 @@ import axios from "axios";
 import { useSearchParams } from "next/navigation";
 import { useEffect } from "react";
 import getUserFromGithub from "@/actions/getUserFromGithub.server";
+import { cookies } from "next/headers";
 
 function Page() {
-  const { code, setCode } = useSignInContext();
   const searchParams = useSearchParams();
-
   const githubCode = searchParams.get("code");
+
+  const { id, setId, avatar, setAvatar, username, setUsername } =
+    useUserContext();
 
   useEffect(() => {
     if (githubCode) {
-      console.log("this is the", githubCode);
-      setCode(githubCode);
-      console.log(code);
       try {
-        const user = getUserFromGithub(githubCode);
-        console.log(user);
+        const response = axios
+          .post("http://localhost:5005/auth", {
+            code: githubCode,
+          })
+          .then((res) => {
+            console.log(res);
+            setId(res.data._id);
+            setAvatar(res.data.avatarUrl);
+            setUsername(res.data.username);
+          });
+        console.log(response);
       } catch (error) {
         console.error("Failed to authenticate with GitHub");
         console.log(error);
@@ -36,6 +44,9 @@ function Page() {
     <>
       <UserContainer />
       <DashboardContainer />
+      {id && JSON.stringify(id)}
+      {avatar && <img src={avatar} alt="avatar" />}
+      {username && JSON.stringify(username)}
     </>
   );
 }

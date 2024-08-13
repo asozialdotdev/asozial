@@ -73,7 +73,7 @@ const handleJoinProject = async (formData: FormData) => {
 };
 
 export {
-  fetchAllProjects,
+  // fetchAllProjects,
   fetchProjectById,
   searchForMyProjects,
   handleJoinProject,
