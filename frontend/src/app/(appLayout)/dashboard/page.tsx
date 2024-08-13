@@ -16,8 +16,16 @@ function Page() {
   const searchParams = useSearchParams();
   const githubCode = searchParams.get("code");
 
-  const { id, setId, avatar, setAvatar, username, setUsername } =
-    useUserContext();
+  const {
+    id,
+    setId,
+    avatar,
+    setAvatar,
+    username,
+    setUsername,
+    isLoggedIn,
+    setIsLoggedIn,
+  } = useUserContext();
 
   useEffect(() => {
     if (githubCode) {
@@ -27,22 +35,24 @@ function Page() {
             code: githubCode,
           })
           .then((res) => {
+            console.log("just before res");
             console.log(res);
+            setIsLoggedIn(true);
             setId(res.data._id);
             setAvatar(res.data.avatarUrl);
             setUsername(res.data.username);
           });
-        console.log(response);
       } catch (error) {
         console.error("Failed to authenticate with GitHub");
         console.log(error);
+        setIsLoggedIn(false);
       }
     }
   }, []);
 
   return (
     <>
-      <UserContainer />
+      {isLoggedIn && <UserContainer />}
       <DashboardContainer />
       {/* <ProjectContainer /> */}
     </>
