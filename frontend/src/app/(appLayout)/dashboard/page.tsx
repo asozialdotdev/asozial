@@ -44,9 +44,7 @@ function Page() {
     <>
       <UserContainer />
       <DashboardContainer />
-      {id && JSON.stringify(id)}
-      {avatar && <img src={avatar} alt="avatar" />}
-      {username && JSON.stringify(username)}
+      {/* <ProjectContainer /> */}
     </>
   );
 }

@@ -22,9 +22,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${kanit.className}`}>
+    <html lang="en" className={kanit.className} suppressHydrationWarning>
       <body className="flex h-screen w-screen flex-col justify-between">
-        <Providers>{children}</Providers>
+      <Providers>
+        {children}
+        </Providers>
       </body>
     </html>
   );

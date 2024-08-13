@@ -5,7 +5,7 @@ import { baseUrl } from "@/constants";
 
 async function MyProjectsPage() {
   const projects = await fetchAllProjects();
-  console.log("projects:", projects);
+  console.log("projectsssssss:", projects);
   return (
     <PageContainer className="gap-10">
       <MyProjects projects={projects} />

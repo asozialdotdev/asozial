@@ -1,11 +1,14 @@
 //user can create a new project, ownerId is user's id
 
-function Page() {
-    return (
-      <div>
-        THIS IS NEW PROJECT
-      </div>
-    )
-  }
+import PageContainer from "@/components/common/PageContainer";
+import NewProject from "@/components/project/NewProject";
 
-export default Page
+function Page() {
+  return (
+    <PageContainer className="">
+      <NewProject />
+    </PageContainer>
+  );
+}
+
+export default Page;
