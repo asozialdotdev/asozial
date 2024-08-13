@@ -2,16 +2,13 @@
 
 import { ProjectId } from "@/types/Project";
 import { baseUrl } from "@/constants";
-import { cookies } from "next/headers";
+import { headers } from "next/headers";
 
 // console.log(localStorage.getItem("accessToken"));
 // Get all projects
-const fetchAllProjects = async () => {
+const fetchAllProjects = async (accessToken: string) => {
   try {
-    const cookieStore = cookies();
-    console.log("cookieStore", cookieStore);
-    const accessToken = cookieStore.get("accessToken")?.value;
-    console.log("accessToken", accessToken);
+    console.log("accessToken in server function:", accessToken);
     if (!accessToken) {
       throw new Error("No access token found");
     }

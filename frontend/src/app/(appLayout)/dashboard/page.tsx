@@ -10,7 +10,6 @@ import axios from "axios";
 import { useSearchParams } from "next/navigation";
 import { useEffect } from "react";
 import getUserFromGithub from "@/actions/getUserFromGithub.server";
-import { cookies } from "next/headers";
 
 function Page() {
   const searchParams = useSearchParams();
@@ -25,11 +24,12 @@ function Page() {
     setUsername,
     isLoggedIn,
     setIsLoggedIn,
+    storeToken,
   } = useUserContext();
 
   useEffect(() => {
-    if (githubCode) {
-      try {
+    try {
+      if (githubCode) {
         const response = axios
           .post("http://localhost:5005/auth", {
             code: githubCode,
@@ -37,16 +37,24 @@ function Page() {
           .then((res) => {
             console.log("just before res");
             console.log(res);
+            storeToken(res.headers.authorization.split(" ")[1]);
             setIsLoggedIn(true);
             setId(res.data._id);
             setAvatar(res.data.avatarUrl);
             setUsername(res.data.username);
+            console.log("just after res");
+            console.log(
+              id,
+              username,
+              avatar,
+              localStorage.getItem("accessToken"),
+            );
           });
-      } catch (error) {
-        console.error("Failed to authenticate with GitHub");
-        console.log(error);
-        setIsLoggedIn(false);
       }
+    } catch (error) {
+      console.error("Failed to authenticate with GitHub");
+      console.log(error);
+      setIsLoggedIn(false);
     }
   }, []);
 

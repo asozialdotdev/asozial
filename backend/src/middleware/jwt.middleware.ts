@@ -34,8 +34,8 @@ function isAuthenticated(
 ): void {
   const accessToken = req.headers["authorization"]?.split(" ")[1];
   const refreshToken = req.cookies["refreshToken"];
-  console.log("Access Token in middleware:", accessToken);
-  console.log("Refresh Token in middleware:", refreshToken);
+  console.log("Access Token in middleware:", accessToken, "/n");
+  console.log("Refresh Token in middleware:", refreshToken, "/n");
 
   try {
     const payload = verifyJWT(accessToken as string);
@@ -67,15 +67,8 @@ function isAuthenticated(
     const newAccessToken = generateJWT(payload as JwtPayload, {
       refresh: true,
     });
-
-    console.log(newAccessToken);
-
     res
       .cookie("refreshToken", refreshToken, {
-        httpOnly: true,
-        sameSite: "lax",
-      })
-      .cookie("accessToken", newAccessToken, {
         httpOnly: true,
         sameSite: "lax",
       })

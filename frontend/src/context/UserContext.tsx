@@ -11,6 +11,7 @@ interface UserContextType {
   setUsername: (username: string) => void;
   isLoggedIn: boolean;
   setIsLoggedIn: (isLoggedIn: boolean) => void;
+  storeToken: (token: string) => void;
 }
 
 const UserContext = createContext<UserContextType | undefined>(undefined);
@@ -20,6 +21,10 @@ const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [avatar, setAvatar] = useState<string>("");
   const [username, setUsername] = useState<string>("");
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
+
+  function storeToken(token: string) {
+    localStorage.setItem("accessToken", token);
+  }
 
   return (
     <UserContext.Provider
@@ -32,6 +37,7 @@ const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
         setUsername,
         isLoggedIn,
         setIsLoggedIn,
+        storeToken,
       }}
     >
       {children}

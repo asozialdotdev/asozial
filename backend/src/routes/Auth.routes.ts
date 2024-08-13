@@ -44,7 +44,6 @@ githubRouter.post("/", async (req: Request, res: Response) => {
         contentType: "application/json",
       },
     });
-    console.log(getUserInfo.data);
     const { login, id, avatar_url, name } = getUserInfo.data;
     const foundUser = await User.findOne({ githubID: id });
     if (foundUser) {
@@ -60,7 +59,7 @@ githubRouter.post("/", async (req: Request, res: Response) => {
       res
         .cookie("refreshToken", refreshToken, {
           httpOnly: true,
-          sameSite: "lax",
+          sameSite: "strict",
         })
         .set("Access-Control-Expose-Headers", "Authorization")
         .header("Authorization", `Bearer ${accessToken}`)
@@ -81,7 +80,6 @@ githubRouter.post("/", async (req: Request, res: Response) => {
       email,
     };
     const refreshToken = generateJWT(payload, { refresh: true });
-
     const accessToken = generateJWT(payload, { refresh: false });
     res
       .cookie("refreshToken", refreshToken, {
@@ -92,7 +90,8 @@ githubRouter.post("/", async (req: Request, res: Response) => {
       .header("Authorization", `Bearer ${accessToken}`)
       .json(payload);
   } catch (error) {
-    console.error(error);
+    // @ts-ignore: Unreachable code error
+    console.error("auth middleware:", error);
     res.status(500).json("Server error");
   }
 });
