@@ -1,13 +1,21 @@
 "use server";
 
-
 import { ProjectId } from "@/types/Project";
 import { baseUrl } from "@/constants";
+import { headers } from "next/headers";
 
+// console.log(localStorage.getItem("accessToken"));
 // Get all projects
-const fetchAllProjects = async () => {
+const fetchAllProjects = async (accessToken: string) => {
   try {
+    console.log("accessToken in server function:", accessToken);
+    if (!accessToken) {
+      throw new Error("No access token found");
+    }
     const response = await fetch(`${baseUrl}/api/projects`, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
       cache: "no-store",
     });
     if (!response.ok) {
@@ -23,7 +31,6 @@ const fetchAllProjects = async () => {
 };
 
 // Get 1 project
-
 
 const fetchProjectById = async (projectId: ProjectId) => {
   try {
@@ -47,9 +54,7 @@ const fetchProjectById = async (projectId: ProjectId) => {
 const searchForMyProjects = async (searchTerm: string) => {
   try {
     const response = await fetch(
-
       `${baseUrl}/projects/search?query=${searchTerm}`,
-
     );
     if (!response.ok) {
       throw new Error(`Failed to search for projects: ${response.statusText}`);
@@ -66,7 +71,6 @@ const searchForMyProjects = async (searchTerm: string) => {
 const handleJoinProject = async (formData: FormData) => {
   const projectId = formData.get("projectId") as string;
 
-
   const response = await fetch(`${baseUrl}/projects/${projectId}/join`, {
     method: "POST",
     headers: {
@@ -75,15 +79,11 @@ const handleJoinProject = async (formData: FormData) => {
     body: JSON.stringify({ userId: "60d4f4d2d243f80015f7b3f9" }),
   });
 
-
   const result = await response.json();
   console.log("result:", result);
 };
 
-
 //Get Posts
-
-
 
 export {
   fetchAllProjects,

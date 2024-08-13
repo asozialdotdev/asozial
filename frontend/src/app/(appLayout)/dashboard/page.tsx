@@ -10,39 +10,57 @@ import axios from "axios";
 import { useSearchParams } from "next/navigation";
 import { useEffect } from "react";
 import getUserFromGithub from "@/actions/getUserFromGithub.server";
-import { cookies } from "next/headers";
 
 function Page() {
   const searchParams = useSearchParams();
   const githubCode = searchParams.get("code");
 
-  const { id, setId, avatar, setAvatar, username, setUsername } =
-    useUserContext();
+  const {
+    id,
+    setId,
+    avatar,
+    setAvatar,
+    username,
+    setUsername,
+    isLoggedIn,
+    setIsLoggedIn,
+    storeToken,
+  } = useUserContext();
 
   useEffect(() => {
-    if (githubCode) {
-      try {
+    try {
+      if (githubCode) {
         const response = axios
           .post("http://localhost:5005/auth", {
             code: githubCode,
           })
           .then((res) => {
+            console.log("just before res");
             console.log(res);
+            storeToken(res.headers.authorization.split(" ")[1]);
+            setIsLoggedIn(true);
             setId(res.data._id);
             setAvatar(res.data.avatarUrl);
             setUsername(res.data.username);
+            console.log("just after res");
+            console.log(
+              id,
+              username,
+              avatar,
+              localStorage.getItem("accessToken"),
+            );
           });
-        console.log(response);
-      } catch (error) {
-        console.error("Failed to authenticate with GitHub");
-        console.log(error);
       }
+    } catch (error) {
+      console.error("Failed to authenticate with GitHub");
+      console.log(error);
+      setIsLoggedIn(false);
     }
   }, []);
 
   return (
     <>
-      <UserContainer />
+      {isLoggedIn && <UserContainer />}
       <DashboardContainer />
       {/* <ProjectContainer /> */}
     </>
