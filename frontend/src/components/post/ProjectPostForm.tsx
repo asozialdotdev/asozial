@@ -38,7 +38,7 @@ async function ProjectPostForm({
       </form>
 
       {posts.map((post) => (
-        <Link key={post.title} href={`${projectId}/posts/${postId}`}>
+        <Link key={post.title} href={`${projectId}/${post._id}`}>
           <div className="flex flex-col" key={post._id}>
             <h3 className="text-xl">Title: {post.title}</h3>
             <p className="mb-2">content:{post.content}</p>
