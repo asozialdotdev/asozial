@@ -124,6 +124,28 @@ usersRouter.get(
 
 // GET user to Match (tinderlike)
 
+usersRouter.get(
+  "/match",
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const actualUser = (req as any).payload.user;
+      const avoidedUsers = await User.find({
+        _id: { $in: actualUser.avoidedUsers },
+      });
+
+      const filteredUsers = await User.find({
+        _id: { $nin: avoidedUsers.map((user) => user.id) },
+      });
+
+      res.status(200).json(filteredUsers);
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
+// POST user to Match (tinderlike)
+
 // GET user's friends and user's activities
 
 // GET all projects that a user is a member of

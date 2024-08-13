@@ -181,7 +181,8 @@ projectsRouter.post(
 
 /* projectsRouter.get(
   "/:projectId/users/:userId",
-  async (req: Request, res: Response, next: NextFunction) => {})
-); */
+  async (req: Request, res: Response, next: NextFunction) => {
+
+  }); */
 
 export default projectsRouter;

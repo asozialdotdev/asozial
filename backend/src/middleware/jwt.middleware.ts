@@ -1,10 +1,6 @@
 import jwt, { JwtPayload, SignOptions } from "jsonwebtoken";
 import { Request, Response, NextFunction } from "express";
 
-interface AuthenticatedRequest extends Request {
-  payload?: JwtPayload & { user: string };
-}
-
 type State = {
   refresh?: boolean;
 };
@@ -66,4 +62,4 @@ function isAuthenticated(
   }
 }
 
-export { isAuthenticated, generateJWT, verifyJWT, AuthenticatedRequest };
+export { isAuthenticated, generateJWT, verifyJWT };
