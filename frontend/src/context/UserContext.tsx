@@ -1,46 +1,40 @@
 "use client";
 
-import { createContext, useContext, useState, ReactNode, FC } from "react";
-import { User } from "@/types/User";
+import React, { createContext, useContext, useState, ReactNode } from "react";
 
-const UserContext = createContext({});
+interface UserContextType {
+  id: string;
+  setId: (id: string) => void;
+  avatar: string;
+  setAvatar: (avatarUrl: string) => void;
+  username: string;
+  setUsername: (username: string) => void;
+}
 
-const UserProvider = ({ children }: { children: React.ReactNode }) => {
-  const [_Id, set_Id] = useState("");
-  const [githubId, setGithubId] = useState("");
-  const [name, setName] = useState("");
-  const [username, setUsername] = useState("");
-  const [email, setEmail] = useState("");
-  const [avatar, setAvatar] = useState("");
+const UserContext = createContext<UserContextType | undefined>(undefined);
+
+const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
+  const [id, setId] = useState<string>("");
+  const [avatar, setAvatar] = useState<string>("");
+  const [username, setUsername] = useState<string>("");
 
   return (
     <UserContext.Provider
-      value={{
-        _Id,
-        set_Id,
-        githubId,
-        setGithubId,
-        name,
-        setName,
-        username,
-        setUsername,
-        email,
-        setEmail,
-        avatar,
-        setAvatar,
-      }}
+      value={{ id, setId, avatar, setAvatar, username, setUsername }}
     >
       {children}
     </UserContext.Provider>
   );
 };
 
-const useUserContext = () => {
+
+export const useUserContext = () => {
+
   const context = useContext(UserContext);
-  if (context === null) {
+  if (!context) {
     throw new Error("useUserContext must be used within a UserProvider");
   }
   return context;
 };
 
-export { UserProvider, useUserContext };
+export { UserProvider, UserContext };

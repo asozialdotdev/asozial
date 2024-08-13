@@ -1,6 +1,8 @@
 "use server";
-const baseUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5005";
 import { revalidatePath } from "next/cache";
+import { baseUrl } from "@/constants";
+import { ProjectId } from "@/types/Project";
+
 const createPost = async (formData: FormData) => {
   const title = formData.get("title");
   const content = formData.get("content");
@@ -17,7 +19,6 @@ const createPost = async (formData: FormData) => {
         title,
         content,
         projectId,
-        userId: "66ba4cb189ed3084ede59fa5"
       }),
     });
     if (!response.ok) {
@@ -34,4 +35,22 @@ const createPost = async (formData: FormData) => {
   }
 };
 
-export { createPost };
+const fetchPosts = async (projectId: ProjectId) => {
+  try {
+    const response = await fetch(
+      `${baseUrl}/api/posts?projectId=${projectId}`,
+      { cache: "no-store" },
+    );
+    if (!response.ok) {
+      throw new Error(`Failed to fetch posts: ${response.statusText}`);
+    }
+    const posts = await response.json();
+    console.log("Fetched posts:", posts);
+    return posts;
+  } catch (error) {
+    console.error("Error fetching posts:", error);
+    return "Error fetching posts";
+  }
+};
+
+export { createPost, fetchPosts };

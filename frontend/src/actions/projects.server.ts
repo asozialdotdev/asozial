@@ -1,13 +1,12 @@
 "use server";
 
+
 import { ProjectId } from "@/types/Project";
-const baseUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5005";
-console.log("baseUrl:", baseUrl);
+import { baseUrl } from "@/constants";
 
 // Get all projects
 const fetchAllProjects = async () => {
   try {
-    console.log("baseUrl:", baseUrl);
     const response = await fetch(`${baseUrl}/api/projects`, {
       cache: "no-store",
     });
@@ -25,6 +24,7 @@ const fetchAllProjects = async () => {
 
 // Get 1 project
 
+
 const fetchProjectById = async (projectId: ProjectId) => {
   try {
     const response = await fetch(`${baseUrl}/api/projects/${projectId}`);
@@ -32,7 +32,9 @@ const fetchProjectById = async (projectId: ProjectId) => {
       throw new Error(`Failed to fetch project: ${response.statusText}`);
     }
     const project = await response.json();
-    console.log("Fetched projects:", project);
+
+    console.log("Fetched project:", project);
+
     return project;
   } catch (error) {
     console.error("Error fetching project:", error);
@@ -45,7 +47,9 @@ const fetchProjectById = async (projectId: ProjectId) => {
 const searchForMyProjects = async (searchTerm: string) => {
   try {
     const response = await fetch(
+
       `${baseUrl}/projects/search?query=${searchTerm}`,
+
     );
     if (!response.ok) {
       throw new Error(`Failed to search for projects: ${response.statusText}`);
@@ -62,6 +66,7 @@ const searchForMyProjects = async (searchTerm: string) => {
 const handleJoinProject = async (formData: FormData) => {
   const projectId = formData.get("projectId") as string;
 
+
   const response = await fetch(`${baseUrl}/projects/${projectId}/join`, {
     method: "POST",
     headers: {
@@ -70,33 +75,19 @@ const handleJoinProject = async (formData: FormData) => {
     body: JSON.stringify({ userId: "60d4f4d2d243f80015f7b3f9" }),
   });
 
+
   const result = await response.json();
   console.log("result:", result);
 };
 
+
 //Get Posts
-const fetchPosts = async (projectId: ProjectId) => {
-  try {
-    const response = await fetch(
-      `${baseUrl}/api/posts?projectId=${projectId}`,
-      { cache: "no-store" },
-    );
-    if (!response.ok) {
-      throw new Error(`Failed to fetch posts: ${response.statusText}`);
-    }
-    const posts = await response.json();
-    console.log("Fetched posts:", posts);
-    return posts;
-  } catch (error) {
-    console.error("Error fetching posts:", error);
-    return "Error fetching posts";
-  }
-};
+
+
 
 export {
   fetchAllProjects,
   fetchProjectById,
   searchForMyProjects,
   handleJoinProject,
-  fetchPosts,
 };

@@ -13,11 +13,13 @@ githubRouter.get("/", (req: Request, res: Response) => {
 
 githubRouter.post("/", async (req: Request, res: Response) => {
   const { code } = req.body;
+  console.log(code);
 
   if (!code) {
     res.status(404).json("code not found");
     return;
   }
+
   try {
     const getGithubAccessToken = await axios.post(
       "https://github.com/login/oauth/access_token",
@@ -43,20 +45,24 @@ githubRouter.post("/", async (req: Request, res: Response) => {
         Authorization: `Bearer ${githubAccessToken}`,
       },
     });
-    const { login, id, avatar_url, name, email } = getUserInfo.data;
+    console.log("get user info =", getUserInfo);
+    const { login, id, avatar_url, name } = getUserInfo.data;
     const foundUser = await User.findOne({ githubID: id });
 
     if (foundUser) {
       console.log("User found");
-      const { _id, username, avatarUrl, email: userEmail } = foundUser;
+const { _id, username, avatarUrl, email } = foundUser;
       const payload = {
         _id: _id.toString(),
         username,
         avatarUrl,
         email,
       };
+      console.log("Payload", payload);
       const refreshToken = generateJWT(payload, { refresh: true });
+      console.log("Refresh Token in auth", refreshToken);
       const accessToken = generateJWT(payload, { refresh: false });
+      console.log("Access Token in auth", accessToken);
       res
         .cookie("refreshToken", refreshToken, {
           httpOnly: true,
@@ -75,15 +81,17 @@ githubRouter.post("/", async (req: Request, res: Response) => {
       name: name,
       email,
     });
-    const { _id, username, avatarUrl, email: createdUserEmail } = createdUser;
+    const { _id, username, avatarUrl, email } = createdUser;
     const payload = {
       _id: _id.toString(),
       username,
       avatarUrl,
-      email: createdUserEmail,
+      email,
     };
     const refreshToken = generateJWT(payload, { refresh: true });
+
     const accessToken = generateJWT(payload, { refresh: false });
+    console.log("Access Token in auth", accessToken);
     res
       .cookie("refreshToken", refreshToken, {
         httpOnly: true,
@@ -92,10 +100,13 @@ githubRouter.post("/", async (req: Request, res: Response) => {
       .set("Access-Control-Expose-Headers", "Authorization")
       .header("Authorization", `Bearer ${accessToken}`)
       .json(payload);
+    console.log("User created");
+    console.log(res.header);
   } catch (error) {
     console.error(error);
     res.status(500).json("Server error");
   }
+  console.log("End of the function");
 });
 
 export default githubRouter;
