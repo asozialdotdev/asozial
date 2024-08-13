@@ -11,7 +11,7 @@ async function ProjectPostForm({
 }: {
   params: { projectId: ProjectId };
 }) {
-  const { projectId, postId } = params;
+  const { projectId } = params;
   console.log("Params in post form", params);
   const posts = await fetchPosts(projectId);
 

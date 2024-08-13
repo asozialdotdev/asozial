@@ -3,12 +3,24 @@ import { Types } from "mongoose";
 type PostId = Types.ObjectId | string;
 
 type Post = {
-  postId: PostId;
+  _id: PostId;
   userId: Types.ObjectId;
+  projectId: Types.ObjectId;
   title?: string;
-  content?: string;
-  createdDate?: Date;
-  updatedDate?: Date;
+  content: string;
+  replies: Reply[];
+  createdAt: Date;
+  updatedAt: Date;
 };
 
-export type { Post, PostId };
+type Reply = {
+  _id: PostId;
+  userId: Types.ObjectId;
+  projectId: Types.ObjectId;
+  title?: string;
+  content: string;
+  createdAt: Date;
+  updatedAt: Date;
+};
+
+export type { Post, PostId, Reply };

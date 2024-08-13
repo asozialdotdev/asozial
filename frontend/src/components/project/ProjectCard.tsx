@@ -33,7 +33,7 @@ function ProjectCard({ projects, isLoading, error }: ProjectCardProps) {
   console.log("Projects:", projects);
   return (
     <>
-      {projects.map((project: Project, i ) => (
+      {projects && projects.map((project: Project, i ) => (
         <Card className="min-w-[20rem] max-w-[20rem]" key={i}>
           <CardHeader>
             <CardTitle className="capitalize">{project.title}</CardTitle>
