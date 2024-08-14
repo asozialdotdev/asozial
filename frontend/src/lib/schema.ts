@@ -17,4 +17,8 @@ const createPostSchema = z.object({
   projectId: z.string().min(1, "Project is required"),
 });
 
-export { createProjectSchema, createPostSchema };
+const createReplySchema = z.object({
+  content: z.string().min(1, "Content is required"),
+});
+
+export { createProjectSchema, createPostSchema, createReplySchema };

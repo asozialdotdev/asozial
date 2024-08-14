@@ -2,18 +2,11 @@
 import { createPost } from "@/actions";
 import { Input } from "../ui/input";
 import { Textarea } from "../ui/textarea";
-import { Button } from "../ui/button";
 import { ProjectId } from "@/types/Project";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
+
 import ButtonProjectPostForm from "./ButtonProjectPostForm";
-import { useFormState, useFormStatus } from "react-dom";
+import { useFormState } from "react-dom";
 import { useRef } from "react";
-// import { useFormStatus } from "react-dom";
 
 function PostForm({ projectId }: { projectId: ProjectId }) {
   const [formState, action] = useFormState(createPost, { errors: {} });
