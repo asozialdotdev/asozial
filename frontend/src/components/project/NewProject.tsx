@@ -21,10 +21,10 @@ function NewProject() {
     <>
       <div className="flex max-w-screen-md flex-col items-center gap-12 lg:grid lg:grid-cols-2">
         <Button onClick={handleExistingProject} size="lg">
-          existing projects
+          Existing project
         </Button>
         <Button onClick={handleNewProjectForm} size="lg">
-          new project form
+          New project form
         </Button>
       </div>
 
