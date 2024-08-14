@@ -36,11 +36,12 @@ postRouter.post(
   async (req: Request, res: Response, next: NextFunction) => {
     console.log("POST /api/posts called");
     try {
-      const { title, content, projectId, userId, parentId } = req.body;
-      console.log("projectIDDDDDD", projectId);
-
+      // this must then replace the userId in the request body params
       // const userId = (req as any).payload.user;
       // console.log("userIdd", userId);
+
+      const { title, content, projectId, userId, parentId } = req.body;
+      console.log("projectIDDDDDD", projectId);
 
       // Ensure the project exists
       const project = await Project.findById(projectId);

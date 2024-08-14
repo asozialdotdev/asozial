@@ -12,6 +12,7 @@ import postRouter from "./routes/Post.routes";
 import githubRouter from "./routes/Auth.routes";
 import accountRouter from "./routes/Account.routes";
 import friendshipsRouter from "./routes/Friendships.routes";
+import userPostsRouter from "./routes/UserPosts.routes";
 
 import { isAuthenticated } from "./middleware/jwt.middleware";
 
@@ -26,6 +27,7 @@ app.use("/api/projects", projectsRouter);
 app.use("/api/posts", postRouter);
 app.use("/auth", githubRouter);
 app.use("/api/friends", friendshipsRouter);
+app.use("/api/user-posts", userPostsRouter);
 app.use(["/verify", "/account"], isAuthenticated, accountRouter);
 
 accountRouter.get(
