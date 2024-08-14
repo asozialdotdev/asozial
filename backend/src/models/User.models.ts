@@ -11,7 +11,7 @@ const userSchema = new Schema(
     website: { type: String },
     city: { type: String },
     country: { type: String },
-    social: [{ type: String }],
+    socials: [{ type: String }],
     languagesSpoken: [{ type: String }],
     techStack: [{ type: String }],
     projectsJoined: [{ type: Schema.Types.ObjectId, ref: "Project" }],
