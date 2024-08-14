@@ -8,6 +8,8 @@ function NewProject() {
   const [isExistingProject, setIsExistingProject] = useState(false);
   const [isNewProjectForm, setIsNewProjectForm] = useState(false);
 
+  console.log(isNewProjectForm, isExistingProject);
+
   const handleExistingProject = () => {
     setIsExistingProject(true);
     setIsNewProjectForm(false);
