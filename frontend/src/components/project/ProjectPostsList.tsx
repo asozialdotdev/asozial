@@ -18,7 +18,7 @@ type ProjectPostsListProps = {
 function ProjectPostsList({ posts, projectId }: ProjectPostsListProps) {
   return (
     <>
-      <section className="mt-4 flex flex-col gap-4 pb-6">
+      <section className="mt-4 flex flex-col gap-4 pb-6 w-full">
         <PageTitle>Threads</PageTitle>
 
         <ProjectPostForm projectId={projectId} />

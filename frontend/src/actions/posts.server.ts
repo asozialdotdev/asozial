@@ -3,12 +3,38 @@ import { revalidatePath } from "next/cache";
 import { baseUrl } from "@/constants";
 import { ProjectId } from "@/types/Project";
 import { PostId } from "@/types/Post";
+import { createPostSchema, createReplySchema } from "@/lib/schema";
 
-const createPost = async (formData: FormData) => {
-  const title = formData.get("title");
-  const content = formData.get("content");
-  const projectId = formData.get("projectId");
-  console.log("Creating post:", { title, content, projectId });
+type CreatePostFormState = {
+  errors: {
+    title?: string[];
+    content?: string[];
+    projectId?: string[];
+  };
+};
+
+type CreateReplyFormState = {
+  errors: {
+    content?: string[];
+  };
+};
+
+const createPost = async (
+  formState: CreatePostFormState,
+  formData: FormData,
+): Promise<CreatePostFormState> => {
+  const result = createPostSchema.safeParse({
+    title: formData.get("title"),
+    content: formData.get("content"),
+    projectId: formData.get("projectId"),
+  });
+
+  if (!result.success) {
+    console.error("Validation error:", result.error.flatten().fieldErrors);
+    return {
+      errors: result.error.flatten().fieldErrors,
+    };
+  }
 
   try {
     const response = await fetch(`${baseUrl}/api/posts`, {
@@ -17,9 +43,9 @@ const createPost = async (formData: FormData) => {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        title,
-        content,
-        projectId,
+        title: result.data.title,
+        content: result.data.content,
+        projectId: result.data.projectId,
         userId: "66ba4cb189ed3084ede59fa5",
       }),
     });
@@ -28,21 +54,37 @@ const createPost = async (formData: FormData) => {
     }
     const post = await response.json();
     console.log("Created post:", post);
-    const projectPath = `/projects/${projectId}`;
+    const projectPath = `/projects/${result.data.projectId}`;
     revalidatePath(projectPath);
     return post;
   } catch (error) {
     console.error("Error creating postttttttt:", error);
-    return "Error creating post";
+    return {
+      errors: {
+        title: ["Failed to create post"],
+        content: ["Failed to create post"],
+        projectId: ["Failed to create post"],
+      },
+    };
   }
 };
 
-const createReply = async (formData: FormData) => {
-  const content = formData.get("content");
+const createReply = async (
+  formState: CreateReplyFormState,
+  formData: FormData,
+): Promise<CreateReplyFormState> => {
+  const result = createReplySchema.safeParse({
+    content: formData.get("content"),
+  });
+
   const projectId = formData.get("projectId");
   const parentId = formData.get("parentId");
-  console.log("Creating reply:", { content, projectId, parentId });
-
+  if (!result.success) {
+    console.error("Validation error:", result.error.flatten().fieldErrors);
+    return {
+      errors: result.error.flatten().fieldErrors,
+    };
+  }
   try {
     const response = await fetch(`${baseUrl}/api/posts`, {
       method: "POST",
@@ -50,10 +92,10 @@ const createReply = async (formData: FormData) => {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        content,
+        content: result.data.content,
         projectId,
-        userId: "66ba4cb189ed3084ede59fa5",
         parentId,
+        userId: "66ba4cb189ed3084ede59fa5",
       }),
     });
     if (!response.ok) {
@@ -66,7 +108,11 @@ const createReply = async (formData: FormData) => {
     return post;
   } catch (error) {
     console.error("Error creating postttttttt:", error);
-    return "Error creating post";
+    return {
+      errors: {
+        content: ["Failed to create reply"],
+      },
+    };
   }
 };
 

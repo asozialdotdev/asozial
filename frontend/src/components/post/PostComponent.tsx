@@ -26,7 +26,10 @@ function PostComponent({ post }: { post: Post }) {
       {/* Replies */}
       <section className="w-full">
         {post.replies.map((reply) => (
-          <div className="mt-6 flex items-start gap-4 border-b border-b-neutral-300 pl-14">
+          <div
+            key={reply._id.toString()}
+            className="mt-6 flex items-start gap-4 border-b border-b-neutral-300 pl-14"
+          >
             {/* Avatar on the left side */}
             <Avatar className="flex-shrink-0">
               <AvatarImage
