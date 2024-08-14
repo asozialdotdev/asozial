@@ -24,70 +24,192 @@ import gitlab from "/public/socials/gitlab.png";
 import useSpokenLanguages from "@/hooks/useSpokenLanguages";
 import { languagesWithColors } from "@/constants";
 import Image from "next/image";
+import { Controller, SubmitHandler, useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { createProjectSchema } from "@/lib/schema";
+import { z } from "zod";
+import PageTitle from "../common/PageTitle";
+
+type Inputs = z.infer<typeof createProjectSchema>;
+
+const socialsData = [
+  {
+    placeholder: "https://app.slack.com/...",
+    imageSrc: slack,
+    alt: "Slack",
+  },
+  {
+    placeholder: "https://discord.com/...",
+    imageSrc: discord,
+    alt: "Discord",
+  },
+  {
+    placeholder: "http://notion.so/...",
+    imageSrc: notion,
+    alt: "Notion",
+  },
+  {
+    placeholder: "https://gitlab.com/...",
+    imageSrc: gitlab,
+    alt: "Gitlab",
+  },
+];
 
 function NewProjectForm() {
   const { spokenLanguages, isLoadingSpokenLanguages, errorSpokenLanguages } =
     useSpokenLanguages();
-  function handleSubmit(event) {
-    event.preventDefault();
-    console.log("Form submission prevented");
-    // Your form submission logic here
-  }
+  const {
+    handleSubmit,
+    control,
+    watch,
+    setValue,
+    getValues,
+    reset,
+    formState: { errors, isValid },
+  } = useForm<Inputs>({
+    resolver: zodResolver(createProjectSchema),
+    defaultValues: {
+      title: "",
+      description: "",
+      pitch: "",
+      githubRepo: "",
+      techStack: [],
+      mainLanguage: "",
+      socials: ["", "", "", ""] as string[],
+    },
+  });
+
+  const values = getValues();
+  console.log(values);
+
+  const techStackValues = watch("techStack");
+  const socialsValues = watch("socials");
+  const mainLanguageValue = watch("mainLanguage");
+  console.log("mainLanguage", mainLanguageValue);
+  console.log("socials", socialsValues);
+
+  const handleCheckedChange = (checked: boolean, field, language: string) => {
+    const newValue = [...field.value];
+    if (checked) {
+      newValue.push(language);
+    } else {
+      const index = newValue.indexOf(language);
+      if (index > -1) {
+        newValue.splice(index, 1);
+      }
+    }
+    field.onChange(newValue);
+    setValue("techStack", newValue);
+  };
+
+  const processForm: SubmitHandler<Inputs> = (data) => {
+    console.log("form data");
+    const { title, description, pitch, techStack, mainLanguage, socials } =
+      data;
+
+    const formattedTitle = title.trim();
+    const formattedDescription = description.trim();
+    const formattedPitch = pitch.trim();
+    const formattedSocials = socials?.map((social) => social.trim());
+
+    const finalData = {
+      ...data,
+      title: formattedTitle,
+      description: formattedDescription,
+      pitch: formattedPitch,
+      socials: formattedSocials,
+    };
+    console.log("finalData", finalData);
+    reset();
+  };
+
   return (
-    <div className="mt-4 w-full">
-      <h2 className="text-xl font-semibold">Create a new project</h2>
-      <form onSubmit={handleSubmit} className="mt-2 flex w-full flex-col gap-4">
+    <div className="mt-8 w-full">
+      <PageTitle className="text-center">Create a new project</PageTitle>
+      <form
+        onSubmit={handleSubmit(processForm)}
+        className="mt-2 flex w-full flex-col gap-2"
+      >
         {/* Title */}
         <div className="mt-6 flex flex-col gap-2">
-          <label htmlFor="title"></label>
-          <TooltipProvider delayDuration={200}>
-            <Tooltip>
-              <TooltipTrigger>
-                <Input
-                  type="text"
-                  name="title"
-                  placeholder="The title of your project"
-                  className="h-12 w-full border-zinc-300 bg-white hover:bg-zinc-50 focus:bg-zinc-50 dark:border-zinc-700 dark:hover:bg-zinc-800 dark:focus:bg-zinc-800"
-                />
-              </TooltipTrigger>
-              <TooltipContent align="start">Title</TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
+          <label htmlFor="title" className="text-lg font-semibold">
+            Title <span className="text-xl text-red-400">*</span>
+          </label>
+
+          <Controller
+            name="title"
+            control={control}
+            render={({ field }) => (
+              <Input
+                {...field}
+                type="text"
+                id="title"
+                name="title"
+                placeholder="The title of your project"
+                className="h-12 w-full border-zinc-300 bg-white hover:bg-zinc-50 focus:bg-zinc-50 dark:border-zinc-700 dark:hover:bg-zinc-800 dark:focus:bg-zinc-800"
+              />
+            )}
+          />
+
+          {errors.title && (
+            <span className="text-sm font-light text-red-500">
+              {errors.title.message}
+            </span>
+          )}
         </div>
 
         {/* Description */}
         <div className="mt-6 flex flex-col gap-2">
-          <label htmlFor="description" className="text-sm font-light"></label>
-          <TooltipProvider delayDuration={200}>
-            <Tooltip>
-              <TooltipTrigger>
-                <Input
-                  type="text"
-                  name="description"
-                  placeholder="What is your project about?"
-                  className="h-12 w-full border-zinc-300 bg-white hover:bg-zinc-50 focus:bg-zinc-50 dark:border-zinc-700 dark:hover:bg-zinc-800 dark:focus:bg-zinc-800"
-                />
-              </TooltipTrigger>
-              <TooltipContent align="start">Description</TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
+          <label htmlFor="description" className="font-semibold">
+            Description
+          </label>
+          <Controller
+            name="description"
+            control={control}
+            render={({ field }) => (
+              <Input
+                {...field}
+                type="text"
+                id="description"
+                name="description"
+                placeholder="What is your project about?"
+                className="h-12 w-full border-zinc-300 bg-white hover:bg-zinc-50 focus:bg-zinc-50 dark:border-zinc-700 dark:hover:bg-zinc-800 dark:focus:bg-zinc-800"
+              />
+            )}
+          />
+
+          {errors.description && (
+            <span className="text-sm font-light text-red-500">
+              {errors.description.message}
+            </span>
+          )}
         </div>
 
         {/* Pitch */}
         <div className="mt-6 flex flex-col gap-2">
-          <label htmlFor="pitch" className="text-sm font-light"></label>
-          <TooltipProvider delayDuration={200}>
-            <Tooltip>
-              <TooltipTrigger>
-                <Textarea
-                  name="pitch"
-                  placeholder="Describe what is your project about and why other members should join it..."
-                  className="h-32 w-full border-zinc-300 bg-white hover:bg-zinc-50 focus:bg-zinc-50 dark:border-zinc-700 dark:hover:bg-zinc-800 dark:focus:bg-zinc-800"
-                />
-              </TooltipTrigger>
-              <TooltipContent align="start">Pitch</TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
+          <label htmlFor="pitch" className="font-semibold">
+            Pitch
+          </label>
+
+          <Controller
+            name="pitch"
+            control={control}
+            render={({ field }) => (
+              <Textarea
+                {...field}
+                id="pitch"
+                name="pitch"
+                placeholder="Describe what is your project about and why other members should join it..."
+                className="h-32 w-full border-zinc-300 bg-white hover:bg-zinc-50 focus:bg-zinc-50 dark:border-zinc-700 dark:hover:bg-zinc-800 dark:focus:bg-zinc-800"
+              />
+            )}
+          />
+
+          {errors.pitch && (
+            <span className="text-sm font-light text-red-500">
+              {errors.pitch.message}
+            </span>
+          )}
         </div>
 
         {/* TechStack */}
@@ -95,20 +217,35 @@ function NewProjectForm() {
           <label htmlFor="mainLanguage" className="font-semibold">
             Language
           </label>
+          <Controller
+            name="mainLanguage"
+            control={control}
+            render={({ field }) => (
+              <Select
+                onValueChange={field.onChange}
+                value={field.value}
+                name="mainLanguage"
+              >
+                <SelectTrigger className="w-[180px]">
+                  <SelectValue placeholder="Language" />
+                </SelectTrigger>
 
-          <Select>
-            <SelectTrigger className="w-[180px]">
-              <SelectValue placeholder="Language" />
-            </SelectTrigger>
+                <SelectContent id="mainLanguage">
+                  {spokenLanguages.map((language) => (
+                    <SelectItem key={language} value={language}>
+                      {language}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            )}
+          />
 
-            <SelectContent>
-              {spokenLanguages.map((language) => (
-                <SelectItem key={language} value={language}>
-                  {language}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+          {errors.mainLanguage && (
+            <span className="text-sm font-light text-red-500">
+              {errors.mainLanguage.message}
+            </span>
+          )}
         </div>
 
         <div className="flex flex-col gap-2">
@@ -118,7 +255,19 @@ function NewProjectForm() {
           <div className="grid grid-cols-3 items-center gap-3">
             {languagesWithColors.map((stack) => (
               <div key={stack.language} className="flex items-center gap-2">
-                <Checkbox id={stack.language} />
+                <Controller
+                  name="techStack"
+                  control={control}
+                  render={({ field }) => (
+                    <Checkbox
+                      id={stack.language}
+                      checked={techStackValues.includes(stack.language)}
+                      onCheckedChange={(checked) =>
+                        handleCheckedChange(checked, field, stack.language)
+                      }
+                    />
+                  )}
+                />
                 <label
                   htmlFor={stack.language}
                   className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
@@ -128,116 +277,48 @@ function NewProjectForm() {
               </div>
             ))}
           </div>
+
+          {errors.techStack && (
+            <span className="text-sm font-light text-red-500">
+              {errors.techStack.message}
+            </span>
+          )}
         </div>
 
         {/* Socials */}
 
-        <div>
+        <div className="flex flex-col gap-2">
           <label htmlFor="socials" className="font-semibold">
             Socials
           </label>
-          <div className="mt-6 flex flex-col gap-2">
-            <label htmlFor="socials"></label>
-            <TooltipProvider delayDuration={200}>
-              <Tooltip>
-                <TooltipTrigger>
-                  <Input
-                    type="text"
-                    name="socials"
-                    placeholder="https://app.slack.com/..."
-                    className="h-12 w-full border-zinc-300 bg-white hover:bg-zinc-50 focus:bg-zinc-50 dark:border-zinc-700 dark:hover:bg-zinc-800 dark:focus:bg-zinc-800"
-                  />
-                </TooltipTrigger>
-                <TooltipContent align="start">
-                  <Image
-                    src={slack}
-                    alt="Slack"
-                    width={50}
-                    height={50}
-                    className="inline"
-                  />
-                </TooltipContent>
-              </Tooltip>
-            </TooltipProvider>
-          </div>
 
-          <div className="mt-6 flex flex-col gap-2">
-            <label htmlFor="socials"></label>
-            <TooltipProvider delayDuration={200}>
-              <Tooltip>
-                <TooltipTrigger>
+          {socialsData.map((social, index) => (
+            <div key={index} className="mt-6 flex flex-col gap-2">
+              <Image
+                src={social.imageSrc}
+                alt={social.alt}
+                width={social.alt === "Notion" ? 25 : 60}
+                height={social.alt === "Notion" ? 25 : 60}
+                className="inline"
+              />
+              <Controller
+                name={`socials.${index}`}
+                control={control}
+                render={({ field }) => (
                   <Input
+                    {...field}
                     type="text"
-                    name="socials"
-                    placeholder="https://discord.com/..."
+                    id={`socials.${index}`}
+                    placeholder={social.placeholder}
                     className="h-12 w-full border-zinc-300 bg-white hover:bg-zinc-50 focus:bg-zinc-50 dark:border-zinc-700 dark:hover:bg-zinc-800 dark:focus:bg-zinc-800"
                   />
-                </TooltipTrigger>
-                <TooltipContent align="start">
-                  <Image
-                    src={discord}
-                    alt="Discord"
-                    width={60}
-                    height={60}
-                    className="inline"
-                  />
-                </TooltipContent>
-              </Tooltip>
-            </TooltipProvider>
-          </div>
-
-          <div className="mt-6 flex flex-col gap-2">
-            <label htmlFor="socials"></label>
-            <TooltipProvider delayDuration={200}>
-              <Tooltip>
-                <TooltipTrigger>
-                  <Input
-                    type="text"
-                    name="socials"
-                    placeholder="http://notion.so/..."
-                    className="h-12 w-full border-zinc-300 bg-white hover:bg-zinc-50 focus:bg-zinc-50 dark:border-zinc-700 dark:hover:bg-zinc-800 dark:focus:bg-zinc-800"
-                  />
-                </TooltipTrigger>
-                <TooltipContent align="start">
-                  <Image
-                    src={notion}
-                    alt="Notion"
-                    width={20}
-                    height={20}
-                    className="inline"
-                  />
-                </TooltipContent>
-              </Tooltip>
-            </TooltipProvider>
-          </div>
-
-          <div className="mt-6 flex flex-col gap-2">
-            <label htmlFor="socials"></label>
-            <TooltipProvider delayDuration={200}>
-              <Tooltip>
-                <TooltipTrigger>
-                  <Input
-                    type="text"
-                    name="socials"
-                    placeholder="https://gitlab.com/..."
-                    className="h-12 w-full border-zinc-300 bg-white hover:bg-zinc-50 focus:bg-zinc-50 dark:border-zinc-700 dark:hover:bg-zinc-800 dark:focus:bg-zinc-800"
-                  />
-                </TooltipTrigger>
-                <TooltipContent align="start">
-                  <Image
-                    src={gitlab}
-                    alt="Gitlab"
-                    width={50}
-                    height={50}
-                    className="inline"
-                  />
-                </TooltipContent>
-              </Tooltip>
-            </TooltipProvider>
-          </div>
+                )}
+              />
+            </div>
+          ))}
         </div>
 
-        <Button type="button" className="my-2 bg-dark dark:bg-light">
+        <Button type="submit" className="my-2 bg-dark dark:bg-light">
           Create
         </Button>
       </form>
