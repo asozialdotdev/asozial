@@ -19,7 +19,6 @@ const projectSchema = new Schema(
         default: "active",
       },
     ],
-    posts: [{ type: Schema.Types.ObjectId, ref: "Post" }],
   },
   {
     collection: "Project",

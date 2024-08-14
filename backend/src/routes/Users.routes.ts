@@ -5,6 +5,45 @@ import Project from "../models/Project.models";
 
 const usersRouter = express.Router();
 
+// POST user to Match (tinderlike)
+
+usersRouter.post(
+  "/match",
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const actualUser = (req as any).payload.user;
+      const targetUser = await User.findById(req.body.userId);
+
+      if (!targetUser) {
+        res.status(404).send("User not found");
+        console.error("User not found");
+        return;
+      }
+
+      actualUser.matchedUsers.push(targetUser);
+      await actualUser.save();
+
+      targetUser.matchedUsers.push(actualUser._id);
+      await targetUser.save();
+
+      const populatedActualUser = await User.findById(actualUser._id).populate(
+        "matchedUsers"
+      );
+      const populatedTargetUser = await User.findById(targetUser).populate(
+        "matchedUsers"
+      );
+
+      res.status(200).json({
+        message: "Users matched successfully",
+        actualUser: populatedActualUser,
+        targetUser: populatedTargetUser,
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
 // GET user friends
 // rendered in the /users route
 
@@ -18,7 +57,6 @@ usersRouter.get(
       }
 
       const friendships = await Friendship.find({
-        // TODO the following filters must be reviewed because the logic of it is not really working.
         $or: [
           { senderId: foundUser._id, status: "accepted" },
           { receiverId: foundUser._id, status: "accepted" },
@@ -44,7 +82,7 @@ usersRouter.get(
   }
 );
 
-// GET all users for the globa search
+// GET all users for the global search
 
 usersRouter.get(
   "/search",
@@ -58,7 +96,7 @@ usersRouter.get(
   }
 );
 
-// GET 1 user to display rendered with friendship condition
+// GET 1 user to display with friendship condition
 
 usersRouter.get(
   "/:userId",
@@ -103,7 +141,7 @@ usersRouter.get(
   }
 );
 
-// GET logged in user for user profile use
+// GET logged in user for user profile
 
 usersRouter.get(
   "/account",
@@ -177,45 +215,6 @@ usersRouter.get(
       ]);
 
       res.status(200).json(filteredUsers);
-    } catch (error) {
-      next(error);
-    }
-  }
-);
-
-// POST user to Match (tinderlike)
-
-usersRouter.post(
-  "/match",
-  async (req: Request, res: Response, next: NextFunction) => {
-    try {
-      const actualUser = (req as any).payload.user;
-      const targetUser = await User.findById(req.body.userId);
-
-      if (!targetUser) {
-        res.status(404).send("User not found");
-        console.error("User not found");
-        return;
-      }
-
-      actualUser.matchedUsers.push(targetUser);
-      await actualUser.save();
-
-      targetUser.matchedUsers.push(actualUser._id);
-      await targetUser.save();
-
-      const populatedActualUser = await User.findById(actualUser._id).populate(
-        "matchedUsers"
-      );
-      const populatedTargetUser = await User.findById(targetUser).populate(
-        "matchedUsers"
-      );
-
-      res.status(200).json({
-        message: "Users matched successfully",
-        actualUser: populatedActualUser,
-        targetUser: populatedTargetUser,
-      });
     } catch (error) {
       next(error);
     }
