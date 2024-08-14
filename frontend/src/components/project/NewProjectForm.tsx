@@ -1,3 +1,5 @@
+"use client";
+
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { Textarea } from "../ui/textarea";
@@ -103,6 +105,8 @@ function NewProjectForm() {
     setValue("techStack", newValue);
   };
 
+  const accessToken = localStorage.getItem("accessToken");
+
   const processForm: SubmitHandler<Inputs> = (data) => {
     console.log("form data");
     const { title, description, pitch, socials } = data;
@@ -120,7 +124,7 @@ function NewProjectForm() {
       socials: formattedSocials,
     };
     console.log("finalData", finalData);
-    createProject(finalData);
+    createProject(finalData, accessToken);
     // reset();
   };
 

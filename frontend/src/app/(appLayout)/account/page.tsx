@@ -4,7 +4,7 @@ import PageCard from "@/components/common/PageCard";
 import PageContainer from "@/components/common/PageContainer";
 import PageTitle from "@/components/common/PageTitle";
 import { User } from "@/types/User";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useUserContext } from "@/context/UserContext";
 import Image from "next/image";
 

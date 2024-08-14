@@ -3,6 +3,18 @@ import express, { Request, Response, NextFunction } from "express";
 import axios from "axios";
 import Project from "../models/Project.models";
 import User from "../models/User.models";
+import { verifyJWT } from "../middleware/jwt.middleware";
+import { ObjectId } from "mongodb";
+
+interface JwtPayload {
+  _id: string;
+  username: string;
+  // other properties if any
+}
+
+function isJwtPayload(payload: any): payload is JwtPayload {
+  return (payload as JwtPayload)._id !== undefined;
+}
 
 const projectsRouter = express.Router();
 
@@ -33,8 +45,29 @@ projectsRouter.post(
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { title, description, pitch, techStack, mainLanguage } = req.body;
+      console.log(req.body);
+      const encodedUserId = (req as any).body.userId;
 
-      const actualUser = (req as any).payload.user;
+      console.log(req.body);
+      console.log(req.body.userId);
+
+      console.log("Encoded User ID", encodedUserId, typeof encodedUserId);
+
+      const verifiedUser = verifyJWT(encodedUserId);
+
+      console.log("Verified User", verifiedUser, typeof verifiedUser);
+
+      if (typeof verifiedUser !== "object") {
+        throw new Error("Invalid token payload");
+      }
+
+      const verifiedId = verifiedUser._id;
+
+      console.log("Verified ID", verifiedId, typeof verifiedId);
+
+      const user = new ObjectId(verifiedId).toString();
+
+      console.log("User", user);
 
       const newProject = await Project.create({
         title,
@@ -42,8 +75,9 @@ projectsRouter.post(
         pitch,
         techStack,
         mainLanguage,
-        owner: actualUser._id,
+        owner: user,
       });
+
       res.status(201).json(newProject);
     } catch (error) {
       next(error);

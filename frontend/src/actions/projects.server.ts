@@ -70,15 +70,16 @@ const searchForMyProjects = async (searchTerm: string) => {
 
 // POST create a new project
 
-const createProject = async (data) => {
+const createProject = async (data, accessToken) => {
   console.log("data:", data);
   try {
-    const response = await fetch(`${baseUrl}/projects/new`, {
+    const response = await fetch(`${baseUrl}/api/projects/new`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        authorization: `Bearer ${accessToken}`,
       },
-      body: JSON.stringify({ ...data, userId: "66ba4cb189ed3084ede59fa5" }),
+      body: JSON.stringify({ ...data, userId: accessToken }),
     });
 
     const result = await response.json();
