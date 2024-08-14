@@ -2,7 +2,7 @@
 import Link from "next/link";
 
 //Components
-import ProjectPostForm from "../post/ProjectPostForm";
+import ProjectPostForm from "./ProjectPostForm";
 import PageTitle from "../common/PageTitle";
 import ProjectPost from "./ProjectPost";
 

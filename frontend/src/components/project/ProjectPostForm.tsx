@@ -1,10 +1,9 @@
 import { ProjectId } from "@/types/Project";
 import { fetchPosts } from "@/actions";
 
-import PostForm from "../project/PostForm";
+import PostForm from "./PostForm";
 
 async function ProjectPostForm({ projectId }: { projectId: ProjectId }) {
-
   return (
     <div className="flex flex-col">
       <h2 className="text-xl font-semibold">Create a new post</h2>
