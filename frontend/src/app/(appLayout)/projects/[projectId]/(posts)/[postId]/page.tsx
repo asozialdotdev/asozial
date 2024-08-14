@@ -1,13 +1,17 @@
+import PageContainer from "@/components/common/PageContainer";
 import { PostId } from "@/types/Post";
-import { ProjectId } from "@/types/Project";
+import { fetchPostById } from "@/actions";
+import PostComponent from "@/components/post/PostComponent";
 
-function page({
-  params,
-}: {
-  params: { projectId: ProjectId; postId: PostId };
-}) {
-  console.log("Params in post page", params);
-  return <div>This is project's posts page</div>;
+async function PostPage({ params }: { params: { postId: PostId } }) {
+  const { postId } = params;
+  const post = await fetchPostById(postId);
+  console.log("Post in post page", post);
+  return (
+    <PageContainer className="max-w-screen-md">
+      <PostComponent post={post} />
+    </PageContainer>
+  );
 }
 
-export default page;
+export default PostPage;

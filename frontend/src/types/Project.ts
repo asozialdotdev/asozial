@@ -9,6 +9,7 @@ type Project = {
   githubRepo: string;
   techStack: string[];
   owner: Types.ObjectId;
+  pitch: string;
   membersJoined: Types.ObjectId[];
   membersApplied: Types.ObjectId[];
   membersInvited: Types.ObjectId[];
