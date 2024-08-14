@@ -26,7 +26,7 @@ app.use("/api/projects", isAuthenticated, projectsRouter);
 app.use("/api/posts", isAuthenticated, postRouter);
 app.use("/account", isAuthenticated, accountRouter);
 app.use("/verify", isAuthenticated, verifyRouter);
-app.use("/api/user-posts", userPostsRouter);
-app.use("/api/friends", friendshipsRouter);
+app.use("/api/user-posts", isAuthenticated, userPostsRouter);
+app.use("/api/friends", isAuthenticated, friendshipsRouter);
 
 export default app;

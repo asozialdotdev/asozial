@@ -40,6 +40,8 @@ postRouter.post(
       // const userId = (req as any).payload.user;
       // console.log("userIdd", userId);
 
+      const actualUser = (req as any).payload.user;
+
       const { title, content, projectId, userId, parentId } = req.body;
       console.log("projectIDDDDDD", projectId);
 

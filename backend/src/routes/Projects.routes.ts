@@ -13,17 +13,12 @@ dotenv.config();
 projectsRouter.get(
   "/",
   async (req: Request, res: Response, next: NextFunction) => {
-    console.log("GET /projects called");
-    console.log(req.headers);
-    const _id = (req as any).payload._id;
-    console.log((req as any).payload);
+    const actualUser = (req as any).payload.user;
     try {
       const projects = await Project.find({
-        owner: _id,
+        owner: actualUser._id,
       });
       console.log("Number of Projects Found:", projects.length);
-      console.log("Projects------------", projects);
-      console.log(res.status);
       res.json(projects);
     } catch (error: any) {
       console.log("Error:", error.message);
@@ -39,7 +34,7 @@ projectsRouter.post(
     try {
       const { title, description, pitch, techStack, mainLanguage } = req.body;
 
-      const ownerId = (req as any).payload.user;
+      const actualUser = (req as any).payload.user;
 
       const newProject = await Project.create({
         title,
@@ -47,7 +42,7 @@ projectsRouter.post(
         pitch,
         techStack,
         mainLanguage,
-        owner: ownerId,
+        owner: actualUser._id,
       });
       res.status(201).json(newProject);
     } catch (error) {
@@ -62,6 +57,7 @@ projectsRouter.get(
   "/new",
   async (req: Request, res: Response, next: NextFunction) => {
     try {
+      const actualUser = (req as any).payload.user;
       const repoUrl = req.query.repoUrl as string;
       const ownerId = repoUrl.split("/")[0];
       console.log("Request Query", req.query.repoUrl);
@@ -119,6 +115,7 @@ projectsRouter.get(
   "/search",
   async (req: Request, res: Response, next: NextFunction) => {
     try {
+      const actualUser = (req as any).payload.user;
       const { query } = req.query;
       console.log("Query", query);
 
@@ -139,6 +136,7 @@ projectsRouter.get(
   "/:projectId",
   async (req: Request, res: Response, next: NextFunction) => {
     try {
+      const actualUser = (req as any).payload.user;
       const project = await Project.findById(req.params.projectId);
       if (!project) {
         return res.status(404).json({ error: "Project not found" });
@@ -187,6 +185,7 @@ projectsRouter.get(
   "/:userId",
   async (req: Request, res: Response, next: NextFunction) => {
     try {
+      const actualUser = (req as any).payload.user;
       const user = await User.findById(req.params.userId);
       if (!user) {
         return res.status(404).json({ error: "User not found" });
