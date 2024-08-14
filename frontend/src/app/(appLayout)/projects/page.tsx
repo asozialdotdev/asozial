@@ -13,26 +13,21 @@ function MyProjectsPage() {
     const accessToken = localStorage.getItem("accessToken");
     const fetchProjects = async () => {
       try {
-        const projects = await fetch("http://localhost:5005/api/projects", {
+        const response = await fetch("http://localhost:5005/api/projects", {
           method: "GET",
           headers: {
             Authorization: `Bearer ${accessToken}`,
           },
         });
-
-        if (projects) {
-          setProjects(projects);
-        } else {
-          setProjects([]); // Handle the case where projects is undefined
-        }
-      } catch (error) {
-        console.error("Failed to fetch projects:", error);
-        setProjects([]); // Handle the error case
+        setProjects(projects);
+      } catch (error: any) {
+        console.log("Failed to fetch projects:", error.message);
+        setProjects([]);
       }
     };
 
     fetchProjects();
-  }, [id]);
+  }, []);
 
   return (
     <PageContainer className="gap-10">
