@@ -129,6 +129,7 @@ usersRouter.get(
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       const actualUser = (req as any).payload.user;
+
       const avoidedUsers = await User.find({
         $or: [
           { _id: { $in: actualUser.avoidedUsers } },
@@ -145,9 +146,36 @@ usersRouter.get(
         ],
       });
 
-      const filteredUsers = await User.find({
-        _id: { $nin: avoidedUsers.map((user) => user.id) },
-      });
+      const filteredUsers = await User.aggregate([
+        {
+          $match: {
+            _id: { $nin: avoidedUsers.map((user) => user._id) },
+          },
+        },
+        {
+          $addFields: {
+            techStackMatches: {
+              $size: {
+                $setIntersection: ["$techStack", actualUser.techStack],
+              },
+            },
+            languagesSpokenMatches: {
+              $size: {
+                $setIntersection: [
+                  "$languagesSpoken",
+                  actualUser.languagesSpoken,
+                ],
+              },
+            },
+            totalMatches: {
+              $add: ["$techStackMatches", "$languagesSpokenMatches"],
+            },
+          },
+        },
+        {
+          $sort: { totalMatches: -1 },
+        },
+      ]);
 
       res.status(200).json(filteredUsers);
     } catch (error) {
