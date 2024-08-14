@@ -1,31 +1,44 @@
 "use client";
 
-import { fetchAllProjects } from "@/actions";
-import PageContainer from "@/components/common/PageContainer";
 import MyProjects from "@/components/project/MyProjects";
-import { baseUrl } from "@/constants";
-import { useState, useEffect } from "react";
+import PageContainer from "@/components/common/PageContainer";
+import { useUserContext } from "@/context/UserContext";
+import { useEffect, useState } from "react";
 
 function MyProjectsPage() {
+  const { id } = useUserContext();
   const [projects, setProjects] = useState([]);
+
   useEffect(() => {
     const accessToken = localStorage.getItem("accessToken");
-    if (accessToken) {
+    const fetchProjects = async () => {
       try {
-        const foundProjects = fetchAllProjects(accessToken);
-        if (foundProjects) {
-          setProjects(foundProjects);
+        const projects = await fetch("http://localhost:5005/api/projects", {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        });
+
+        if (projects) {
+          setProjects(projects);
+        } else {
+          setProjects([]); // Handle the case where projects is undefined
         }
       } catch (error) {
-        console.error("Failed to fetch projects");
-        console.log(error);
+        console.error("Failed to fetch projects:", error);
+        setProjects([]); // Handle the error case
       }
-    }
-  }, []);
+    };
+
+    fetchProjects();
+  }, [id]);
 
   return (
     <PageContainer className="gap-10">
-      {projects && <MyProjects projects={projects} />}
+      <h1>My Projects</h1>
+      {projects.length === 0 && <p>No projects found</p>}
+      {projects.length > 0 && <MyProjects projects={projects} />}
     </PageContainer>
   );
 }

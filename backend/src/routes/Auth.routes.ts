@@ -1,15 +1,27 @@
-import express, { Request, Response, NextFunction } from "express";
+import express, { Request, Response } from "express";
 import axios from "axios";
 import { generateJWT } from "../middleware/jwt.middleware";
-
 import User from "../models/User.models";
-import { ChartNetwork } from "lucide-react";
 
 const githubRouter = express.Router();
 
 githubRouter.get("/", (req: Request, res: Response) => {
-  const githubAuthURL = `https://github.com/login/oauth/authorize?client_id=${process.env.GITHUB_CLIENT_ID}&redirect_uri=${process.env.GITHUB_REDIRECT_URI}&scope=read:user`;
-  res.redirect(githubAuthURL);
+  try {
+    if (!process.env.GITHUB_CLIENT_ID) {
+      throw new Error("GITHUB_CLIENT_ID is not defined");
+    } else if (!process.env.GITHUB_REDIRECT_URI) {
+      throw new Error("GITHUB_REDIRECT_URI is not defined");
+    } else {
+      const githubAuthURL = `https://github.com/login/oauth/authorize?client_id=${process.env.GITHUB_CLIENT_ID}&redirect_uri=${process.env.GITHUB_REDIRECT_URI}&scope=read:user`;
+      req.headers["Content-Type"] = "application/json";
+      req.headers["AccessControlAllowHeaders"] = "*";
+      req.headers["AccessControlAllowOrigin"] = "*";
+      res.redirect(githubAuthURL);
+    }
+  } catch (error: any) {
+    console.error("/GET auth middleware:", error.message);
+    res.status(500).json("Server error");
+  }
 });
 
 githubRouter.post("/", async (req: Request, res: Response) => {
@@ -17,37 +29,43 @@ githubRouter.post("/", async (req: Request, res: Response) => {
 
   if (!code) {
     res.status(404).json("code not found");
-    return;
-  }
-
-  try {
-    const getGithubAccessToken = await axios.post(
-      "https://github.com/login/oauth/access_token",
-      {
-        code,
-        client_id: process.env.GITHUB_CLIENT_ID,
-        client_secret: process.env.GITHUB_CLIENT_SECRET,
-        redirect_uri: process.env.GITHUB_REDIRECT_URI,
-      },
-      {
-        headers: {
-          Accept: "application/json",
-          AccessControlAllowHeaders: "*",
+  } else {
+    try {
+      const getGithubAccessToken = await axios.post(
+        "https://github.com/login/oauth/access_token",
+        {
+          code,
+          client_id: process.env.GITHUB_CLIENT_ID,
+          client_secret: process.env.GITHUB_CLIENT_SECRET,
+          redirect_uri: process.env.GITHUB_REDIRECT_URI,
         },
-      }
-    );
-    const githubAccessToken = getGithubAccessToken.data.access_token;
-    if (!githubAccessToken) return;
-    const getUserInfo = await axios.get("https://api.github.com/user", {
-      headers: {
-        Authorization: `Bearer ${githubAccessToken}`,
-        contentType: "application/json",
-      },
-    });
-    const { login, id, avatar_url, name } = getUserInfo.data;
-    const foundUser = await User.findOne({ githubID: id });
-    if (foundUser) {
-      const { _id, username, avatarUrl, email } = foundUser;
+        {
+          headers: {
+            Accept: "application/json",
+            AccessControlAllowHeaders: "*",
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      const githubAccessToken = getGithubAccessToken.data.access_token;
+      if (!githubAccessToken) return;
+
+      const getUserInfo = await axios.get("https://api.github.com/user", {
+        headers: {
+          Authorization: `Bearer ${githubAccessToken}`,
+          "Content-Type": "application/json",
+        },
+      });
+      const { login, id, avatar_url, name } = getUserInfo.data;
+      const user =
+        (await User.findOne({ githubID: id })) ||
+        (await User.create({
+          username: login,
+          githubID: id,
+          avatarUrl: avatar_url,
+          name: name,
+        }));
+      const { _id, username, avatarUrl, email } = user;
       const payload = {
         _id: _id.toString(),
         username,
@@ -56,7 +74,18 @@ githubRouter.post("/", async (req: Request, res: Response) => {
       };
       const refreshToken = generateJWT(payload, { refresh: true });
       const accessToken = generateJWT(payload, { refresh: false });
+      const sendUserToNext = await axios.post(
+        "http://localhost:3000/api/verify",
+        {
+          headers: {
+            authorization: `Bearer ${accessToken}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(payload),
+        }
+      );
       res
+        .status(200)
         .cookie("refreshToken", refreshToken, {
           httpOnly: true,
           sameSite: "strict",
@@ -64,35 +93,12 @@ githubRouter.post("/", async (req: Request, res: Response) => {
         .set("Access-Control-Expose-Headers", "Authorization")
         .header("Authorization", `Bearer ${accessToken}`)
         .json(payload);
-      return;
+      console.log(res.statusMessage, res.statusCode);
+    } catch (error: any) {
+      // @ts-ignore: Unreachable code error
+      console.log("/POST auth middleware:", error.message);
+      res.status(500).json("Server error");
     }
-    const createdUser = await User.create({
-      username: login,
-      githubID: id,
-      avatarUrl: avatar_url,
-      name: name,
-    });
-    const { _id, username, avatarUrl, email } = createdUser;
-    const payload = {
-      _id: _id.toString(),
-      username,
-      avatarUrl,
-      email,
-    };
-    const refreshToken = generateJWT(payload, { refresh: true });
-    const accessToken = generateJWT(payload, { refresh: false });
-    res
-      .cookie("refreshToken", refreshToken, {
-        httpOnly: true,
-        sameSite: "lax",
-      })
-      .set("Access-Control-Expose-Headers", "Authorization")
-      .header("Authorization", `Bearer ${accessToken}`)
-      .json(payload);
-  } catch (error) {
-    // @ts-ignore: Unreachable code error
-    console.error("auth middleware:", error);
-    res.status(500).json("Server error");
   }
 });
 

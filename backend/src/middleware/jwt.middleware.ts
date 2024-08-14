@@ -35,6 +35,7 @@ function isAuthenticated(
   const accessToken = req.headers["authorization"]?.split(" ")[1];
   const refreshToken = req.cookies["refreshToken"];
   console.log("Access Token in middleware:", accessToken, "/n");
+  console.log(typeof accessToken);
   console.log("Refresh Token in middleware:", refreshToken, "/n");
 
   try {

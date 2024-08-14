@@ -3,7 +3,6 @@ import express, { Request, Response, NextFunction } from "express";
 import axios from "axios";
 import Project from "../models/Project.models";
 import User from "../models/User.models";
-import { isAuthenticated, verifyJWT } from "../middleware/jwt.middleware";
 
 const projectsRouter = express.Router();
 
@@ -15,14 +14,19 @@ projectsRouter.get(
   "/",
   async (req: Request, res: Response, next: NextFunction) => {
     console.log("GET /projects called");
-
+    console.log(req.headers);
+    const _id = (req as any).payload._id;
+    console.log((req as any).payload);
     try {
-      const projects = await Project.find();
+      const projects = await Project.find({
+        owner: _id,
+      });
       console.log("Number of Projects Found:", projects.length);
       console.log("Projects------------", projects);
+      console.log(res.status);
       res.json(projects);
-    } catch (error) {
-      next(error);
+    } catch (error: any) {
+      console.log("Error:", error.message);
     }
   }
 );

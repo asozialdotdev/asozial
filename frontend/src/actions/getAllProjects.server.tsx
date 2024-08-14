@@ -1,6 +1,6 @@
 const getAllProjects = async () => {
   "use server";
-  const projects = await fetch("/projects/search", {
+  const projects = await fetch("/api/projects", {
     method: "GET",
   });
   if (!projects) {
