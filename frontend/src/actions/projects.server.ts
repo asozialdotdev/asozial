@@ -68,6 +68,27 @@ const searchForMyProjects = async (searchTerm: string) => {
   }
 };
 
+// POST create a new project
+
+const createProject = async (data) => {
+  console.log("data:", data);
+  try {
+    const response = await fetch(`${baseUrl}/projects/new`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ ...data, userId: "66ba4cb189ed3084ede59fa5" }),
+    });
+
+    const result = await response.json();
+    console.log("result:", result);
+  } catch (error) {
+    console.error("Error creating project:", error);
+    return "Error creating project";
+  }
+};
+
 const handleJoinProject = async (formData: FormData) => {
   const projectId = formData.get("projectId") as string;
 
@@ -88,4 +109,5 @@ export {
   fetchProjectById,
   searchForMyProjects,
   handleJoinProject,
+  createProject,
 };

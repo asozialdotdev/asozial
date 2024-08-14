@@ -1,12 +1,7 @@
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { Textarea } from "../ui/textarea";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
+
 import {
   Select,
   SelectContent,
@@ -15,6 +10,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
+import { ControllerRenderProps } from "react-hook-form";
 
 import discord from "/public/socials/discord.png";
 import slack from "/public/socials/slack.png";
@@ -29,6 +25,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { createProjectSchema } from "@/lib/schema";
 import { z } from "zod";
 import PageTitle from "../common/PageTitle";
+import { createProject } from "@/actions";
 
 type Inputs = z.infer<typeof createProjectSchema>;
 
@@ -75,7 +72,7 @@ function NewProjectForm() {
       githubRepo: "",
       techStack: [],
       mainLanguage: "",
-      socials: ["", "", "", ""] as string[],
+      socials: ["", "", "", ""],
     },
   });
 
@@ -88,7 +85,11 @@ function NewProjectForm() {
   console.log("mainLanguage", mainLanguageValue);
   console.log("socials", socialsValues);
 
-  const handleCheckedChange = (checked: boolean, field, language: string) => {
+  const handleCheckedChange = (
+    checked: boolean | string,
+    field: ControllerRenderProps<Inputs, "techStack">,
+    language: string,
+  ) => {
     const newValue = [...field.value];
     if (checked) {
       newValue.push(language);
@@ -104,8 +105,7 @@ function NewProjectForm() {
 
   const processForm: SubmitHandler<Inputs> = (data) => {
     console.log("form data");
-    const { title, description, pitch, techStack, mainLanguage, socials } =
-      data;
+    const { title, description, pitch, socials } = data;
 
     const formattedTitle = title.trim();
     const formattedDescription = description.trim();
@@ -120,7 +120,8 @@ function NewProjectForm() {
       socials: formattedSocials,
     };
     console.log("finalData", finalData);
-    reset();
+    createProject(finalData);
+    // reset();
   };
 
   return (
@@ -161,7 +162,7 @@ function NewProjectForm() {
         {/* Description */}
         <div className="mt-6 flex flex-col gap-2">
           <label htmlFor="description" className="font-semibold">
-            Description
+            Description <span className="text-xl text-red-400">*</span>
           </label>
           <Controller
             name="description"
@@ -188,7 +189,7 @@ function NewProjectForm() {
         {/* Pitch */}
         <div className="mt-6 flex flex-col gap-2">
           <label htmlFor="pitch" className="font-semibold">
-            Pitch
+            Pitch <span className="text-xl text-red-400">*</span>
           </label>
 
           <Controller
@@ -215,7 +216,7 @@ function NewProjectForm() {
         {/* TechStack */}
         <div className="flex flex-col gap-2">
           <label htmlFor="mainLanguage" className="font-semibold">
-            Language
+            Language <span className="text-xl text-red-400">*</span>
           </label>
           <Controller
             name="mainLanguage"
@@ -250,7 +251,7 @@ function NewProjectForm() {
 
         <div className="flex flex-col gap-2">
           <label htmlFor="techStack" className="font-semibold">
-            Tech Stack
+            Tech Stack <span className="text-xl text-red-400">*</span>
           </label>
           <div className="grid grid-cols-3 items-center gap-3">
             {languagesWithColors.map((stack) => (
@@ -318,7 +319,11 @@ function NewProjectForm() {
           ))}
         </div>
 
-        <Button type="submit" className="my-2 bg-dark dark:bg-light">
+        <Button
+          disabled={!isValid}
+          type="submit"
+          className="my-2 bg-dark dark:bg-light"
+        >
           Create
         </Button>
       </form>
