@@ -12,6 +12,7 @@ const projectSchema = new Schema(
     membersJoined: [{ type: Schema.Types.ObjectId, ref: "User" }],
     membersApplied: [{ type: Schema.Types.ObjectId, ref: "User" }],
     membersInvited: [{ type: Schema.Types.ObjectId, ref: "User" }],
+    socials: [{ type: String }],
     status: [
       {
         type: String,
