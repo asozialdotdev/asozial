@@ -49,7 +49,7 @@ function isAuthenticated(
     const payload = verifyJWT(accessToken as string);
     (req as any).payload = payload;
     (req as any).user = (payload as JwtPayload).user;
-    next();
+    //next();
   } catch (error) {
     if (!refreshToken) {
       res.status(401).send("Access Denied. No refresh token provided.");

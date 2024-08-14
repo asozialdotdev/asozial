@@ -27,9 +27,7 @@ function DashboardContainer() {
         const response = await axios.post("http://localhost:5005/auth", {
           code: githubCode,
         });
-
         storeToken(response.headers.authorization.split(" ")[1]);
-
         setIsLoggedIn(true);
         setId(response.data._id);
         setAvatar(response.data.avatarUrl);
