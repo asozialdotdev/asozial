@@ -129,13 +129,53 @@ usersRouter.get(
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       const actualUser = (req as any).payload.user;
+
       const avoidedUsers = await User.find({
-        _id: { $in: actualUser.avoidedUsers },
+        $or: [
+          { _id: { $in: actualUser.avoidedUsers } },
+          {
+            $nor: [
+              { techStack: { $elemMatch: { $in: actualUser.techStack } } },
+              {
+                languagesSpoken: {
+                  $elemMatch: { $in: actualUser.languagesSpoken },
+                },
+              },
+            ],
+          },
+        ],
       });
 
-      const filteredUsers = await User.find({
-        _id: { $nin: avoidedUsers.map((user) => user.id) },
-      });
+      const filteredUsers = await User.aggregate([
+        {
+          $match: {
+            _id: { $nin: avoidedUsers.map((user) => user._id) },
+          },
+        },
+        {
+          $addFields: {
+            techStackMatches: {
+              $size: {
+                $setIntersection: ["$techStack", actualUser.techStack],
+              },
+            },
+            languagesSpokenMatches: {
+              $size: {
+                $setIntersection: [
+                  "$languagesSpoken",
+                  actualUser.languagesSpoken,
+                ],
+              },
+            },
+            totalMatches: {
+              $add: ["$techStackMatches", "$languagesSpokenMatches"],
+            },
+          },
+        },
+        {
+          $sort: { totalMatches: -1 },
+        },
+      ]);
 
       res.status(200).json(filteredUsers);
     } catch (error) {
@@ -182,8 +222,6 @@ usersRouter.post(
     }
   }
 );
-
-// GET user's friends and user's activities
 
 // GET all projects that a user is a member of
 
