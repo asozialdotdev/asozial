@@ -73,7 +73,7 @@ const searchForMyProjects = async (searchTerm: string) => {
 const createProject = async (data) => {
   console.log("data:", data);
   try {
-    const response = await fetch(`${baseUrl}/projects/new`, {
+    const response = await fetch(`${baseUrl}/api/projects/new`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

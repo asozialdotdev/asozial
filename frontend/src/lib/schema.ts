@@ -11,4 +11,10 @@ const createProjectSchema = z.object({
   socials: z.array(z.string()).optional(),
 });
 
-export { createProjectSchema };
+const createPostSchema = z.object({
+  title: z.string().min(1, "Title is required"),
+  content: z.string().min(1, "Content is required"),
+  projectId: z.string().min(1, "Project is required"),
+});
+
+export { createProjectSchema, createPostSchema };
