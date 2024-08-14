@@ -71,8 +71,6 @@ githubRouter.post("/", async (req: Request, res: Response) => {
       githubID: id,
       avatarUrl: avatar_url,
       name: name,
-
-      // check aabout the email becasue it was crashing the server
     });
     const { _id, username, avatarUrl, email } = createdUser;
     const payload = {

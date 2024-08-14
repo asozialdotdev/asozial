@@ -6,6 +6,7 @@ type Post = {
   _id: PostId;
   userId: Types.ObjectId;
   projectId: Types.ObjectId;
+  parentId?: Types.ObjectId;
   title?: string;
   content: string;
   replies: Reply[];
@@ -17,6 +18,7 @@ type Reply = {
   _id: PostId;
   userId: Types.ObjectId;
   projectId: Types.ObjectId;
+  parentId: Types.ObjectId;
   title?: string;
   content: string;
   createdAt: Date;

@@ -47,7 +47,31 @@ const languagesWithColors = [
   { language: "Lua", color: "bg-blue-600" },
   { language: "HLSL", color: "bg-gray-600" },
   { language: "Hack", color: "bg-gray-400" },
-  {language: "Laravel", color: "bg-red-500"},
+  { language: "Laravel", color: "bg-red-500" },
 ];
 
-export { baseUrl, languagesWithColors };
+const contributors = [
+  {
+    name: "José Copeti",
+    email: "jrcopeti@gmail.com",
+    github: "https://github.com/jrcopeti",
+    linkedin: "https://www.linkedin.com/in/josecopeti/",
+    website: "https://jrcopeti.hashnode.dev/",
+  },
+  {
+    name: "Benjamin Elliott",
+    email: "hello@benjamin.dev",
+    github: "https://github.com/benjamindotdev",
+    linkedin: "https://www.linkedin.com/in/benjamindotdev/",
+    website: "https://benjamin.dev",
+  },
+  {
+    name: "Mirko Fede",
+    email: "mirko@asozial.com",
+    github: "https://github.com/mirkoeffe",
+    linkedin: "https://www.linkedin.com/in/mirko-fede/",
+    website: "http://mirkoeffe.shop/",
+  },
+];
+
+export { baseUrl, languagesWithColors, contributors };

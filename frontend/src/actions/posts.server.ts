@@ -20,6 +20,7 @@ const createPost = async (formData: FormData) => {
         title,
         content,
         projectId,
+        userId: "66ba4cb189ed3084ede59fa5",
       }),
     });
     if (!response.ok) {
@@ -39,8 +40,8 @@ const createPost = async (formData: FormData) => {
 const createReply = async (formData: FormData) => {
   const content = formData.get("content");
   const projectId = formData.get("projectId");
-  const parentPostId = formData.get("parentPostId");
-  console.log("Creating reply:", { content, projectId, parentPostId });
+  const parentId = formData.get("parentId");
+  console.log("Creating reply:", { content, projectId, parentId });
 
   try {
     const response = await fetch(`${baseUrl}/api/posts`, {
@@ -52,7 +53,7 @@ const createReply = async (formData: FormData) => {
         content,
         projectId,
         userId: "66ba4cb189ed3084ede59fa5",
-        parentPostId,
+        parentId,
       }),
     });
     if (!response.ok) {
@@ -60,7 +61,7 @@ const createReply = async (formData: FormData) => {
     }
     const post = await response.json();
     console.log("Created post:", post);
-    const postPath = `/projects/${parentPostId}`;
+    const postPath = `/projects/${parentId}`;
     revalidatePath(postPath);
     return post;
   } catch (error) {
@@ -89,7 +90,9 @@ const fetchPosts = async (projectId: ProjectId) => {
 
 const fetchPostById = async (postId: PostId) => {
   try {
-    const response = await fetch(`${baseUrl}/api/posts/${postId}`);
+    const response = await fetch(`${baseUrl}/api/posts/${postId}`, {
+      cache: "no-store",
+    });
     if (!response.ok) {
       throw new Error(`Failed to fetch post: ${response.statusText}`);
     }
