@@ -7,7 +7,6 @@ const usersRouter = express.Router();
 
 // GET user friends
 // rendered in the /users route
-// TODO must check also for freindships status
 
 usersRouter.get(
   "/",
@@ -45,7 +44,7 @@ usersRouter.get(
   }
 );
 
-// GET all users
+// GET all users for the globa search
 
 usersRouter.get(
   "/search",
@@ -59,7 +58,7 @@ usersRouter.get(
   }
 );
 
-// GET 1 user
+// GET 1 user to display rendered with friendship condition
 
 usersRouter.get(
   "/:userId",
@@ -104,14 +103,14 @@ usersRouter.get(
   }
 );
 
-//GET logged in user
+// GET logged in user for user profile use
 
 usersRouter.get(
   "/account",
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       //GET CURRENT USER FROM MIDDLEWARE
-      const user = await User.findById(req.params.userId);
+      const user = (req as any).payload.user;
       if (!user) {
         throw new Error("User not found");
       }
