@@ -2,27 +2,32 @@
 
 import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
+import { encrypt } from "@/lib/lib";
 
 export async function POST(req: NextRequest) {
-  const request = await req.json();
-  const body = JSON.parse(request.body);
-  const { _id, username, avatarUrl } = body;
-  const accessToken = request.headers["authorization"]?.split(" ")[1];
+  const request = await fetch("http://localhost:5005/auth", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Cookie: cookies().toString(),
+    },
+  });
 
-  try {
-    cookies().set("accessToken", accessToken, {
-      httpOnly: true,
-      sameSite: "lax",
-    });
-    cookies().set("user", _id, {
-      httpOnly: true,
-      sameSite: "lax",
-      secure: true,
-    });
-    return NextResponse.json({ message: "Cookies set" });
-  } catch (error: any) {
-    console.error("Failed to set cookies");
-    console.log(error.message);
-    return NextResponse.json({ message: "Failed to set cookies" });
-  }
+  const { _id, username, avatarUrl } = await request.json();
+  console.log("User details//////:", _id, username, avatarUrl);
+
+  const expires = new Date(Date.now() + 3600 * 1000);
+  const session = await encrypt({ _id, expires });
+  const response = NextResponse.json({ _id });
+  response.cookies.set("session", session, {
+    expires,
+    httpOnly: true,
+    sameSite: "none",
+    secure: false,
+    path: "/", // Set cookie for the entire site
+  });
+  // console.log("Session cookie set:", session);
+  console.log("Cookie", response.cookies);
+  console.log("Response:", response);
+  return response;
 }

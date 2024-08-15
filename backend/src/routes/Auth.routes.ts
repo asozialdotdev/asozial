@@ -72,27 +72,21 @@ githubRouter.post("/", async (req: Request, res: Response) => {
         avatarUrl,
         email,
       };
-      const refreshToken = generateJWT(payload, { refresh: true });
-      const accessToken = generateJWT(payload, { refresh: false });
+      //post payload to nextjs server and it handles the token generation
+      //       const refreshToken = generateJWT(payload, { refresh: true });
+      // const accessToken = generateJWT(payload, { refresh: false });
+      console.log("Payload:", payload);
       const sendUserToNext = await axios.post(
         "http://localhost:3000/api/verify",
+
         {
           headers: {
-            authorization: `Bearer ${accessToken}`,
             "Content-Type": "application/json",
           },
           body: JSON.stringify(payload),
         }
       );
-      res
-        .status(200)
-        .cookie("refreshToken", refreshToken, {
-          httpOnly: true,
-          sameSite: "strict",
-        })
-        .set("Access-Control-Expose-Headers", "Authorization")
-        .header("Authorization", `Bearer ${accessToken}`)
-        .json(payload);
+      res.status(200).json(payload);
       console.log(res.statusMessage, res.statusCode);
     } catch (error: any) {
       // @ts-ignore: Unreachable code error

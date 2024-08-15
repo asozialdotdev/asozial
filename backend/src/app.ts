@@ -20,13 +20,13 @@ const app = express();
 config(app);
 
 app.use("/auth", githubRouter);
-app.use("/dashboard", isAuthenticated, dashboardRouter);
-app.use("/users", isAuthenticated, usersRouter);
-app.use("/api/projects", isAuthenticated, projectsRouter);
-app.use("/api/posts", isAuthenticated, postRouter);
-app.use("/account", isAuthenticated, accountRouter);
-app.use("/verify", isAuthenticated, verifyRouter);
-app.use("/api/user-posts", isAuthenticated, userPostsRouter);
-app.use("/api/friends", isAuthenticated, friendshipsRouter);
+app.use("/dashboard", dashboardRouter);
+app.use("/users", usersRouter);
+app.use("/api/projects", projectsRouter);
+app.use("/api/posts", postRouter);
+app.use("/account", accountRouter);
+app.use("/verify", verifyRouter);
+app.use("/api/user-posts", userPostsRouter);
+app.use("/api/friends", friendshipsRouter);
 
 export default app;

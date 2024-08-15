@@ -23,7 +23,7 @@ const verifyJWT = (token: string) => {
     const verified = jwt.verify(token, secret);
     return verified;
   } catch (error: any) {
-    console.log("verification error:", error.message);
+    throw error;
   }
 };
 
@@ -34,42 +34,50 @@ function isAuthenticated(
 ): void {
   const accessToken = req.headers["authorization"]?.split(" ")[1];
   const refreshToken = req.cookies["refreshToken"];
-
-  if (!process.env.JWT_TOKEN_SECRET) {
-    res.status(401).send("Access Denied. JWT secret is not defined.");
-    return;
-  }
-
-  if (!accessToken) {
-    res.status(401).send("Access Denied. No access token provided.");
-    return;
-  }
+  console.log("Access Token in middleware:", accessToken, "/n");
+  console.log(typeof accessToken);
+  console.log("Refresh Token in middleware:", refreshToken, "/n");
 
   try {
     const payload = verifyJWT(accessToken as string);
     (req as any).payload = payload;
     (req as any).user = (payload as JwtPayload).user;
-    //next();
+    next();
   } catch (error) {
-    if (!refreshToken) {
-      res.status(401).send("Access Denied. No refresh token provided.");
+    if (!accessToken) {
+      res.status(401).send("Access Denied. No access token provided.");
+      next(error);
       return;
     }
-    try {
-      const payload = verifyJWT(refreshToken);
-      const newAccessToken = generateJWT(payload as JwtPayload, {
-        refresh: true,
-      });
-      res
-        .cookie("refreshToken", refreshToken, {
-          httpOnly: true,
-          sameSite: "lax",
-        })
-        .header("Authorization", newAccessToken)
-        .json({ user: (payload as JwtPayload).user, token: newAccessToken });
-    } catch (error) {
-      res.status(401).send("Access Denied. Invalid refresh token.");
+
+    if (!refreshToken) {
+      res.status(401).send("Access Denied. No refresh token provided.");
+      next(error);
+      return;
     }
+
+    if (!process.env.JWT_TOKEN_SECRET) {
+      res.status(401).send("Access Denied. JWT secret is not defined.");
+      next(error);
+      return;
+    }
+  }
+
+  try {
+    const payload = verifyJWT(refreshToken);
+    const newAccessToken = generateJWT(payload as JwtPayload, {
+      refresh: true,
+    });
+    res
+      .cookie("refreshToken", refreshToken, {
+        httpOnly: true,
+        sameSite: "lax",
+      })
+      .header("Authorization", newAccessToken)
+      .json({ user: (payload as JwtPayload).user, token: newAccessToken });
+  } catch (error) {
+    res.status(401).send("Access Denied. Invalid refresh token.");
+    next(error);
   }
 }
 
