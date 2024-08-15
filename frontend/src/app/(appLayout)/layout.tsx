@@ -11,10 +11,18 @@ import Navbar from "@/components/common/Navbar";
 import ProjectSidebar from "@/components/project/ProjectSidebar";
 import UserSidebar from "@/components/user/UserSidebar";
 import AppFooter from "@/components/common/AppFooter";
+import { auth } from "@/auth";
+import { useSession } from "next-auth/react";
 
 function AppLayout({ children }: { children: React.ReactNode }) {
+  const session = useSession();
+  console.log ("session:", session);
   const { isUserSidebarOpen, isProjectSidebarOpen } = useSidebarsContext();
   const isOverlayVisible = isUserSidebarOpen || isProjectSidebarOpen;
+
+  if (!session.data) {
+    return <div>must be logged in</div>;
+  }
 
   return (
     <>

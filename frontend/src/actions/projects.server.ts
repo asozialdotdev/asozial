@@ -6,7 +6,7 @@ import { headers } from "next/headers";
 
 // console.log(localStorage.getItem("accessToken"));
 // Get all projects
-const fetchAllProjects = async (accessToken: string) => {
+const fetchAllProjects = async () => {
   try {
     console.log("accessToken in server function:", accessToken);
     if (!accessToken) {

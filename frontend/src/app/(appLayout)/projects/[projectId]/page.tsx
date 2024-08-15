@@ -1,7 +1,8 @@
 "use server";
 
+import { fetchPosts } from "@/actions/posts.server";
+import { fetchProjectById, handleJoinProject } from "@/actions/projects.server";
 //Actions
-import { fetchPosts, fetchProjectById, handleJoinProject } from "@/actions";
 
 //Components
 import PageContainer from "@/components/common/PageContainer";

@@ -40,8 +40,10 @@
   },
   "homepage": "https://github.com/jrcopeti/asozial#readme",
   "dependencies": {
+    "@auth/core": "^0.34.2",
     "concurrently": "^8.2.2",
     "cookie-parser": "^1.4.6",
-    "jsonwebtoken": "^9.0.2"
+    "jsonwebtoken": "^9.0.2",
+    "next-auth": "^5.0.0-beta.20"
   }
 }
