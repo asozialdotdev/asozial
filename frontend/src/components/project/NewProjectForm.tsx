@@ -28,6 +28,8 @@ import { createProjectSchema } from "@/lib/schema";
 import { z } from "zod";
 import PageTitle from "../common/PageTitle";
 import { createProject } from "@/actions";
+import { Project } from "@/types/Project";
+import { useRouter } from "next/navigation";
 
 type Inputs = z.infer<typeof createProjectSchema>;
 
@@ -57,6 +59,7 @@ const socialsData = [
 function NewProjectForm() {
   const { spokenLanguages, isLoadingSpokenLanguages, errorSpokenLanguages } =
     useSpokenLanguages();
+  const router = useRouter();
   const {
     handleSubmit,
     control,
@@ -84,8 +87,7 @@ function NewProjectForm() {
   const techStackValues = watch("techStack");
   const socialsValues = watch("socials");
   const mainLanguageValue = watch("mainLanguage");
-  console.log("mainLanguage", mainLanguageValue);
-  console.log("socials", socialsValues);
+
 
   const handleCheckedChange = (
     checked: boolean | string,
@@ -105,8 +107,6 @@ function NewProjectForm() {
     setValue("techStack", newValue);
   };
 
-  const accessToken = localStorage.getItem("accessToken");
-
   const processForm: SubmitHandler<Inputs> = (data) => {
     console.log("form data");
     const { title, description, pitch, socials } = data;
@@ -116,7 +116,7 @@ function NewProjectForm() {
     const formattedPitch = pitch.trim();
     const formattedSocials = socials?.map((social) => social.trim());
 
-    const finalData = {
+    const finalData: Project = {
       ...data,
       title: formattedTitle,
       description: formattedDescription,
@@ -124,8 +124,8 @@ function NewProjectForm() {
       socials: formattedSocials,
     };
     console.log("finalData", finalData);
-    createProject(finalData, accessToken);
-    // reset();
+    createProject(finalData);
+    reset();
   };
 
   return (

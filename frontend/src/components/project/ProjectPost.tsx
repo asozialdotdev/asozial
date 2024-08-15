@@ -23,15 +23,15 @@ function ProjectPost({ post }: { post: Post }) {
       <div className="flex items-start gap-4">
         {/* Avatar  */}
         <Avatar className="flex-shrink-0">
-          <AvatarImage src="https://github.com/shadcn.png" alt="User Avatar" />
-          <AvatarFallback>{post.userId.toString().charAt(0)}</AvatarFallback>
+          <AvatarImage src={post.userId.avatarUrl} alt="User Avatar" />
+          <AvatarFallback>{post.userId.name.charAt(0)}</AvatarFallback>
         </Avatar>
         <div className="flex-grow">
           {/* Content */}
-          <h3 className="text-lg font-semibold tracking-wide">{post.title}</h3>
           <p className="font-medium text-neutral-500 dark:text-neutral-400">
-            {post.userId.toString()}
+            {post.userId.name}
           </p>
+          <h3 className="text-lg font-semibold tracking-wide">{post.title}</h3>
           <p className="mt-2 text-justify font-light text-dark dark:text-light">
             {post.content}
           </p>

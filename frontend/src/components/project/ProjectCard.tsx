@@ -27,13 +27,13 @@ function ProjectCard({ projects, isLoading, error }: ProjectCardProps) {
   if (error) {
     return <p>{error}</p>;
   }
-  if (projects.length === 0) {
+  if (projects.length === 0 || !projects) {
     return <p>No projects found</p>;
   }
   console.log("Projects:", projects);
   return (
     <>
-      {projects && projects.map((project: Project, i ) => (
+      {projects.map((project: Project, i) => (
         <Card className="min-w-[20rem] max-w-[20rem]" key={i}>
           <CardHeader>
             <CardTitle className="capitalize">{project.title}</CardTitle>
@@ -58,8 +58,6 @@ function ProjectCard({ projects, isLoading, error }: ProjectCardProps) {
           </CardFooter>
         </Card>
       ))}
-
-
     </>
   );
 }

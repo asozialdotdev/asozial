@@ -17,9 +17,23 @@ postRouter.get("/", async (req: Request, res: Response, next: NextFunction) => {
     const parentPosts = await Post.find({ projectId, parentId: null })
       .populate({
         path: "replies",
-        populate: {
-          path: "replies",
-        },
+        populate: [
+          {
+            path: "userId",
+            select: "name email avatarUrl",
+          },
+          {
+            path: "replies",
+            populate: {
+              path: "userId",
+              select: "name email avatarUrl",
+            },
+          },
+        ],
+      })
+      .populate({
+        path: "userId",
+        select: "name email avatarUrl",
       })
       .exec();
 
@@ -82,7 +96,18 @@ postRouter.get(
   async (req: Request, res: Response, next: NextFunction) => {
     console.log("GET /api/posts/:postId called");
     try {
-      const post = await Post.findById(req.params.postId).populate("replies");
+      const post = await Post.findById(req.params.postId)
+        .populate({
+          path: "userId",
+          select: "name avatarUrl",
+        })
+        .populate({
+          path: "replies",
+          populate: {
+            path: "userId",
+            select: "name avatarUrl",
+          },
+        });
       if (!post) {
         return res.status(404).json({ message: "Post not found" });
       }

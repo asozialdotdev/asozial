@@ -4,6 +4,7 @@ import { baseUrl } from "@/constants";
 import { ProjectId } from "@/types/Project";
 import { PostId } from "@/types/Post";
 import { createPostSchema, createReplySchema } from "@/lib/schema";
+import { auth } from "@/auth";
 
 type CreatePostFormState = {
   errors: {
@@ -23,6 +24,7 @@ const createPost = async (
   formState: CreatePostFormState,
   formData: FormData,
 ): Promise<CreatePostFormState> => {
+  const session = await auth();
   const result = createPostSchema.safeParse({
     title: formData.get("title"),
     content: formData.get("content"),
@@ -46,7 +48,7 @@ const createPost = async (
         title: result.data.title,
         content: result.data.content,
         projectId: result.data.projectId,
-        userId: "66ba4cb189ed3084ede59fa5",
+        userId: session?.user?.id,
       }),
     });
     if (!response.ok) {
@@ -73,6 +75,8 @@ const createReply = async (
   formState: CreateReplyFormState,
   formData: FormData,
 ): Promise<CreateReplyFormState> => {
+  const session = await auth();
+
   const result = createReplySchema.safeParse({
     content: formData.get("content"),
   });
@@ -95,7 +99,7 @@ const createReply = async (
         content: result.data.content,
         projectId,
         parentId,
-        userId: "66ba4cb189ed3084ede59fa5",
+        userId: session?.user?.id,
       }),
     });
     if (!response.ok) {

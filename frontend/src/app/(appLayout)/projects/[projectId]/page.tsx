@@ -28,7 +28,7 @@ async function Page({ params }: { params: { projectId: ProjectId } }) {
   // const isMember = membersJoined.includes(user._id); // dynamic
 
   return (
-    <PageContainer className="max-w-screen-md gap-4">
+    <PageContainer className="max-w-screen-md gap-4 w-full">
       <ProjectComponent project={project} />
 
       {!isMember ? (
