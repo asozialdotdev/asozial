@@ -18,12 +18,15 @@ type ProjectPostsListProps = {
 function ProjectPostsList({ posts, projectId }: ProjectPostsListProps) {
   return (
     <>
-      <section className="mt-4 flex flex-col gap-4 pb-6 w-full">
-
-
+      <section className="mt-4 flex w-full flex-col gap-4 pb-6">
         <ProjectPostForm projectId={projectId} />
 
         <PageTitle>Threads</PageTitle>
+        {posts.length === 0 && (
+          <p className="text-lg text-neutral-500 dark:text-neutral-400">
+            No threads yet. Be the first to start one!
+          </p>
+        )}
         {posts.map((post) => (
           <Link
             key={post._id.toString()}
