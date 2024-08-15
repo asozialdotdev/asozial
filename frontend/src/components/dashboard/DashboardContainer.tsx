@@ -5,6 +5,7 @@ import axios from "axios";
 import { useSearchParams } from "next/navigation";
 import { useEffect } from "react";
 
+
 function DashboardContainer() {
   const searchParams = useSearchParams();
   const githubCode = searchParams.get("code");
@@ -26,6 +27,7 @@ function DashboardContainer() {
       try {
         const response = await axios.post("http://localhost:5005/auth", {
           code: githubCode,
+          withCredentials: true,
         });
         storeToken(response.headers.authorization.split(" ")[1]);
         setIsLoggedIn(true);
