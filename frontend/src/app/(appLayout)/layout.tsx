@@ -16,13 +16,13 @@ import { useSession } from "next-auth/react";
 
 function AppLayout({ children }: { children: React.ReactNode }) {
   const session = useSession();
-  console.log ("session:", session);
+  console.log("session:", session);
   const { isUserSidebarOpen, isProjectSidebarOpen } = useSidebarsContext();
   const isOverlayVisible = isUserSidebarOpen || isProjectSidebarOpen;
 
-  if (!session.data) {
-    return <div>must be logged in</div>;
-  }
+  // if (!session.data) {
+  //   return <div>must be logged in</div>;
+  // }
 
   return (
     <>

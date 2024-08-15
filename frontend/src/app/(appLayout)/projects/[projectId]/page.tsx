@@ -19,7 +19,9 @@ const membersJoined = ["Benjamin", "Mirko", "John", "Jane", "José"];
 
 async function Page({ params }: { params: { projectId: ProjectId } }) {
   const { projectId } = params;
+  console.log("projectId:///////////////", projectId);
   const project = await fetchProjectById(projectId);
+  console.log("project:///////////////", project);
   const posts = await fetchPosts(projectId);
 
   const isMember = membersJoined.includes("Jos"); // hardcoded

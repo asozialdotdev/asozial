@@ -6,7 +6,6 @@ import PostComponent from "@/components/post/PostComponent";
 async function PostPage({ params }: { params: { postId: PostId } }) {
   const { postId } = params;
   const post = await fetchPostById(postId);
-  console.log("Post in post page", post);
   return (
     <PageContainer className="max-w-screen-md">
       <PostComponent post={post} />

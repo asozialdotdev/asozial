@@ -1,21 +1,17 @@
 "use server";
 
-import { ProjectId } from "@/types/Project";
+import { Project, ProjectId } from "@/types/Project";
 import { baseUrl } from "@/constants";
 import { headers } from "next/headers";
+import { auth } from "@/auth";
 
 // console.log(localStorage.getItem("accessToken"));
 // Get all projects
 const fetchAllProjects = async () => {
+  const session = await auth();
+  console.log("session:", session);
   try {
-    console.log("accessToken in server function:", accessToken);
-    if (!accessToken) {
-      throw new Error("No access token found");
-    }
     const response = await fetch(`${baseUrl}/api/projects`, {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
       cache: "no-store",
     });
     if (!response.ok) {
@@ -33,8 +29,11 @@ const fetchAllProjects = async () => {
 // Get 1 project
 
 const fetchProjectById = async (projectId: ProjectId) => {
+  console.log("THIS FUNCTION IS BEING CALLED");
   try {
-    const response = await fetch(`${baseUrl}/api/projects/${projectId}`);
+    const response = await fetch(`${baseUrl}/api/projects/${projectId}`, {
+      cache: "no-store",
+    });
     if (!response.ok) {
       throw new Error(`Failed to fetch project: ${response.statusText}`);
     }
@@ -70,16 +69,16 @@ const searchForMyProjects = async (searchTerm: string) => {
 
 // POST create a new project
 
-const createProject = async (data, accessToken) => {
+const createProject = async (data: Project) => {
   console.log("data:", data);
+
   try {
     const response = await fetch(`${baseUrl}/api/projects/new`, {
       method: "POST",
       headers: {
-        "Content-Type": "application/json",
-        authorization: `Bearer ${accessToken}`,
+        "Content-Type": "application/json", // Ensure this header is set
       },
-      body: JSON.stringify({ ...data, userId: accessToken }),
+      body: JSON.stringify({ ...data, userId: "66ba4cb189ed3084ede59fa5" }),
     });
 
     const result = await response.json();

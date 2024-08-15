@@ -68,7 +68,7 @@ const createPost = async (
     };
   }
 };
-
+// Create Reply
 const createReply = async (
   formState: CreateReplyFormState,
   formData: FormData,
@@ -126,7 +126,6 @@ const fetchPosts = async (projectId: ProjectId) => {
       throw new Error(`Failed to fetch posts: ${response.statusText}`);
     }
     const posts = await response.json();
-    console.log("Fetched posts:", posts);
     return posts;
   } catch (error) {
     console.error("Error fetching posts:", error);
@@ -143,7 +142,6 @@ const fetchPostById = async (postId: PostId) => {
       throw new Error(`Failed to fetch post: ${response.statusText}`);
     }
     const post = await response.json();
-    console.log("Fetched post:", post);
     return post;
   } catch (error) {
     console.error("Error fetching post:", error);
