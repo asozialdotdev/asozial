@@ -1,6 +1,6 @@
 import { Types } from "mongoose";
 
-type ProjectId = Types.ObjectId;
+type ProjectId = Types.ObjectId | string;
 
 type Project = {
   _id: ProjectId;

@@ -25,10 +25,10 @@ dotenv.config();
 projectsRouter.get(
   "/",
   async (req: Request, res: Response, next: NextFunction) => {
-    const actualUser = (req as any).payload.user;
+    // const actualUser = (req as any).payload.user;
     try {
       const projects = await Project.find({
-        owner: actualUser._id,
+        owner: "66ba4cb189ed3084ede59fa5",
       });
       console.log("Number of Projects Found:", projects.length);
       res.json(projects);
@@ -44,30 +44,8 @@ projectsRouter.post(
   "/new",
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const { title, description, pitch, techStack, mainLanguage } = req.body;
-      console.log(req.body);
-      const encodedUserId = (req as any).body.userId;
-
-      console.log(req.body);
-      console.log(req.body.userId);
-
-      console.log("Encoded User ID", encodedUserId, typeof encodedUserId);
-
-      const verifiedUser = verifyJWT(encodedUserId);
-
-      console.log("Verified User", verifiedUser, typeof verifiedUser);
-
-      if (typeof verifiedUser !== "object") {
-        throw new Error("Invalid token payload");
-      }
-
-      const verifiedId = verifiedUser._id;
-
-      console.log("Verified ID", verifiedId, typeof verifiedId);
-
-      const user = new ObjectId(verifiedId).toString();
-
-      console.log("User", user);
+      const { title, description, pitch, techStack, mainLanguage, userId } =
+        req.body;
 
       const newProject = await Project.create({
         title,
@@ -75,7 +53,7 @@ projectsRouter.post(
         pitch,
         techStack,
         mainLanguage,
-        owner: user,
+        owner: userId,
       });
 
       res.status(201).json(newProject);
@@ -170,7 +148,6 @@ projectsRouter.get(
   "/:projectId",
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const actualUser = (req as any).payload.user;
       const project = await Project.findById(req.params.projectId);
       if (!project) {
         return res.status(404).json({ error: "Project not found" });
