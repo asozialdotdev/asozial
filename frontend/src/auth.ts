@@ -5,6 +5,7 @@ import client from "./lib/db";
 import authConfig from "../auth.config";
 import { baseUrl } from "@/constants";
 import axios from "axios";
+import { redirect } from "next/navigation";
 
 const GITHUB_CLIENT_ID = process.env.GITHUB_CLIENT_ID;
 const GITHUB_CLIENT_SECRET = process.env.GITHUB_CLIENT_SECRET;
@@ -20,7 +21,7 @@ export const {
   signIn,
 } = NextAuth({
   ...authConfig,
-  // adapter: MongoDBAdapter(client),
+  adapter: MongoDBAdapter(client),
   session: { strategy: "jwt" },
   providers: [
     Github({
@@ -82,6 +83,15 @@ export const {
         token.sub = user.id;
       }
       return token;
+    },
+    async redirect({ url, baseUrl }) {
+      if (url === "/" || url === baseUrl) {
+        return `${baseUrl}/dashboard`;
+      }
+      if (url.startsWith("/")) {
+        return `${baseUrl}${url}`;
+      }
+      return baseUrl;
     },
   },
 });

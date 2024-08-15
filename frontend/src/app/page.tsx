@@ -4,12 +4,11 @@ import Link from "next/link";
 import PageContainer from "@/components/common/PageContainer";
 
 import { auth } from "@/auth";
-import { signIn, signOut } from "@/actions/auth.server";
+import { signIn, signInWithRedirect, signOut } from "@/actions/auth.server";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { AvatarImage } from "@radix-ui/react-avatar";
 
 async function LandingPage() {
-  
   const session = await auth();
   return (
     <>
