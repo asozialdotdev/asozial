@@ -9,8 +9,9 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import Link from "next/link";
+import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 
-const membersJoined = ["Benjamin", "Mirko", "John", "Jane"];
+// const membersJoined = ["Benjamin", "Mirko", "John", "Jane"];
 const membersApplied = ["Alice", "Bob", "Charlie"];
 const membersInvited = ["David", "Eve", "Frank"];
 
@@ -45,11 +46,17 @@ function ProjectCard({ projects, isLoading, error }: ProjectCardProps) {
             ))}
           </CardContent>
           <CardContent>
-            {membersJoined.map((member) => (
-              <ul key={member}>
-                <li>{member}</li>
-              </ul>
-            ))}
+            {project.membersJoined.map((member) => {
+              console.log("Member:", member);
+              return (
+                <ul key={member.name}>
+                  <Avatar className="flex-shrink-0">
+                    <AvatarImage src={member.avatarUrl} alt={member.name} />
+                    <AvatarFallback>{member.name.charAt(0)}</AvatarFallback>
+                  </Avatar>
+                </ul>
+              );
+            })}
           </CardContent>
 
           <CardContent></CardContent>

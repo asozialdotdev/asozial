@@ -23,7 +23,7 @@ function MyProjects({ projects }: { projects: Project[] }) {
 
   return (
     <>
-      <section className="flex flex-col items-center gap-8">
+      <section className="flex flex-col items-center gap-8 w-full">
         <h2 className="text-3xl">My Projects</h2>
         <Input
           type="text"
@@ -33,7 +33,7 @@ function MyProjects({ projects }: { projects: Project[] }) {
           className="w-[25rem]"
         />
       </section>
-      <article className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+      <article className="grid grid-cols-1 gap-4 lg:grid-cols-2 2xl:grid-cols-3">
         <ProjectCard
           projects={projectsState}
           isLoading={isLoading}
