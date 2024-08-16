@@ -95,6 +95,23 @@ function ProjectComponent({ project }: { project: Project }) {
             </TooltipProvider>
           ))}
         </div>
+        <div className="flex gap-4">
+          {project.membersJoined.map((member) => (
+            <TooltipProvider key={member.name}>
+              <Tooltip>
+                <TooltipTrigger>
+                  <Link title={member.name} href={`/users/${userIdTest}`}>
+                    <Avatar>
+                      <AvatarImage src={member.avatarUrl} />
+                      <AvatarFallback>{member.name}</AvatarFallback>
+                    </Avatar>
+                  </Link>
+                </TooltipTrigger>
+                <TooltipContent>{member.name}</TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+          ))}
+        </div>
       </div>
 
       <div className="mb-8 mt-4 flex items-center gap-2">

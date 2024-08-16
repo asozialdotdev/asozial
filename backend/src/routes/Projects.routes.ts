@@ -27,9 +27,9 @@ projectsRouter.get(
   async (req: Request, res: Response, next: NextFunction) => {
     const { userId } = req.query;
     try {
-      const projects = await Project.find({
-        owner: userId,
-      });
+      const projects = await Project.find({ owner: userId })
+        .populate("membersJoined", "name avatarUrl")
+        .exec();
       console.log("Number of Projects Found:", projects.length);
       res.json(projects);
     } catch (error: any) {
@@ -130,8 +130,10 @@ projectsRouter.get(
       console.log("Query", query);
 
       const projects = await Project.find({
-        title: { $regex: query, $options: "i" }, // Case-insensitive search
-      });
+        title: { $regex: query, $options: "i" },
+      })
+        .populate("membersJoined", "name avatarUrl")
+        .exec();
 
       res.json(projects);
     } catch (error) {
@@ -146,7 +148,9 @@ projectsRouter.get(
   "/:projectId",
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const project = await Project.findById(req.params.projectId);
+      const project = await Project.findById(req.params.projectId)
+        .populate("membersJoined", "name avatarUrl")
+        .exec();
       if (!project) {
         return res.status(404).json({ error: "Project not found" });
       }
