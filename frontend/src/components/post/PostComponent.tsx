@@ -9,10 +9,11 @@ import { useState } from "react";
 
 import ReplyForm from "./ReplyForm";
 import ParentPost from "./ParentPost";
+import { useSession } from "next-auth/react";
 
 function PostComponent({ post }: { post: Post }) {
   const [isReplying, setIsReplying] = useState(false);
-
+  console.log("POSTJJJJJJJJJJJJJJJJ", post)
   const handleReply = () => {
     setIsReplying((prev) => !prev);
   };
@@ -32,21 +33,18 @@ function PostComponent({ post }: { post: Post }) {
           >
             {/* Avatar on the left side */}
             <Avatar className="flex-shrink-0">
-              <AvatarImage
-                src="https://github.com/shadcn.png"
-                alt="User Avatar"
-              />
+              <AvatarImage src={reply.userId.avatarUrl} alt="User Avatar" />
               <AvatarFallback>
-                {reply.userId.toString().charAt(0)}
+                {reply.userId.name.toString().charAt(0)}
               </AvatarFallback>
             </Avatar>
 
             {/* Content on the right side */}
             <div className="flex-grow">
-              <PageTitle>{reply.title}</PageTitle>
               <p className="font-medium text-neutral-500 dark:text-neutral-400">
-                {reply.userId.toString()}
+                {reply.userId.name}
               </p>
+              <PageTitle>{reply.title}</PageTitle>
               <p className="mt-2 text-justify font-light text-dark dark:text-light">
                 {reply.content}
               </p>

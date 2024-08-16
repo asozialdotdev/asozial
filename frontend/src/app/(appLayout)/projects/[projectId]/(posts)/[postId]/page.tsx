@@ -7,7 +7,7 @@ async function PostPage({ params }: { params: { postId: PostId } }) {
   const { postId } = params;
   const post = await fetchPostById(postId);
   return (
-    <PageContainer className="max-w-screen-md">
+    <PageContainer className="max-w-screen-md w-full">
       <PostComponent post={post} />
     </PageContainer>
   );

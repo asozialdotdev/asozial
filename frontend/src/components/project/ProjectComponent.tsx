@@ -50,7 +50,7 @@ function ProjectComponent({ project }: { project: Project }) {
 
   console.log("project:", project);
   return (
-    <section className="flex flex-col gap-4 border-b border-b-neutral-300 px-4 dark:border-b-neutral-600">
+    <section className="flex flex-col gap-4 border-b border-b-neutral-300 px-4 dark:border-b-neutral-600 w-full">
       {/* Title and description */}
       <div className="flex flex-col items-center gap-2">
         <PageTitle className="capitalize">{project.title}</PageTitle>

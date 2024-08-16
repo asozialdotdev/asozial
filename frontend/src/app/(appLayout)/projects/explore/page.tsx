@@ -8,11 +8,10 @@ import { Button } from "@/components/ui/button";
 //Constants
 import { baseUrl } from "@/constants";
 import PageContainer from "@/components/common/PageContainer";
+import { fetchAllProjects } from "@/actions";
 
 async function ExploreProjectsPage() {
-  const data = await fetch(`${baseUrl}/projects`);
-  const projects = await data.json();
-  console.log(projects[0]._id);
+  // const projects = await fetchAllProjects()
   return (
     <PageContainer className="gap-10">
       <section className="flex flex-col items-center gap-8">
@@ -27,7 +26,7 @@ async function ExploreProjectsPage() {
         </form>
       </section>
       <article className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
-        <ProjectCard projects={projects} />
+        {/* <ProjectCard projects={projects} /> */}
       </article>
     </PageContainer>
   );

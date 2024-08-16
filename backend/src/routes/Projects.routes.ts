@@ -25,10 +25,10 @@ dotenv.config();
 projectsRouter.get(
   "/",
   async (req: Request, res: Response, next: NextFunction) => {
-    // const actualUser = (req as any).payload.user;
+    const { userId } = req.query;
     try {
       const projects = await Project.find({
-        owner: "66ba4cb189ed3084ede59fa5",
+        owner: userId,
       });
       console.log("Number of Projects Found:", projects.length);
       res.json(projects);
@@ -69,7 +69,6 @@ projectsRouter.get(
   "/new",
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const actualUser = (req as any).payload.user;
       const repoUrl = req.query.repoUrl as string;
       const ownerId = repoUrl.split("/")[0];
       console.log("Request Query", req.query.repoUrl);
@@ -127,7 +126,6 @@ projectsRouter.get(
   "/search",
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const actualUser = (req as any).payload.user;
       const { query } = req.query;
       console.log("Query", query);
 
@@ -196,7 +194,6 @@ projectsRouter.get(
   "/:userId",
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const actualUser = (req as any).payload.user;
       const user = await User.findById(req.params.userId);
       if (!user) {
         return res.status(404).json({ error: "User not found" });

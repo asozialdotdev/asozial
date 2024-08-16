@@ -5,38 +5,35 @@ import PageContainer from "@/components/common/PageContainer";
 
 import { auth } from "@/auth";
 import { signIn, signOut } from "@/actions/auth.server";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { AvatarImage } from "@radix-ui/react-avatar";
+import bearlogo from "/public/bearlogo.webp";
+import Image from "next/image";
 
 async function LandingPage() {
-  
   const session = await auth();
   return (
     <>
-      <PageContainer className="my-auto gap-10">
-        <h1>This is the Landing Page</h1>
-        <Avatar className="flex-shrink-0">
-          <AvatarImage src={session?.user?.image || ""} alt="User Avatar" />
-          <AvatarFallback>
-            {session?.user?.name?.toString().charAt(0)}
-          </AvatarFallback>
-        </Avatar>
-        <form action={signIn}>
-          <Button type="submit">Sign In</Button>
-        </form>
-        <form action={signOut}>
-          <Button type="submit">Sign Out</Button>
-        </form>
+      <PageContainer>
+        <div className="flex flex-col items-center gap-4">
+          <h1 className="text-7xl">asozial</h1>
 
-        <div>
-          {session?.user ? (
-            <div>
-              Sign In
-              <p>{JSON.stringify(session.user)}</p>
-            </div>
-          ) : (
-            <div>Sign Out</div>
-          )}
+          <Image width={450} height={450} src={bearlogo} alt="bear-logo" />
+          <form action={signIn}>
+            <Button className="px-8" type="submit">
+              {session?.user ? "Enter" : "Sign In"}
+            </Button>
+          </form>
+          {/* <form action={signOut}>
+          <Button type="submit">Sign Out</Button>
+          </form> */}
+
+          <div>
+            {session?.user ? (
+              <div>You are logged in</div>
+            ) : (
+              <div>Sign in to continue</div>
+            )}
+          </div>
         </div>
       </PageContainer>
       <Footer />

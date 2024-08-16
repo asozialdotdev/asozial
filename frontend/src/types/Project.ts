@@ -15,6 +15,7 @@ type Project = {
   membersInvited: Types.ObjectId[];
   status: "active" | "inactive" | "completed";
   posts: Types.ObjectId[];
+  socials: string[] | undefined;
   createdAt?: Date;
   updatedAt?: Date;
 };

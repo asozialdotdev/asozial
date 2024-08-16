@@ -3,6 +3,9 @@ import Github from "next-auth/providers/github";
 import { MongoDBAdapter } from "@auth/mongodb-adapter";
 import client from "./lib/db";
 import authConfig from "../auth.config";
+import { baseUrl } from "@/constants";
+import axios from "axios";
+import { redirect } from "next/navigation";
 
 const GITHUB_CLIENT_ID = process.env.GITHUB_CLIENT_ID;
 const GITHUB_CLIENT_SECRET = process.env.GITHUB_CLIENT_SECRET;
@@ -27,15 +30,68 @@ export const {
     }),
   ],
   callbacks: {
-    async session({ session, user }: any) {
-      if (session && user) {
-        session.user.id = user.id;
+    async signIn({ user }) {
+      const db = client.db();
+
+      const existingUser = await db
+        .collection("User")
+        .findOne({ email: user.email });
+
+      if (!existingUser) {
+        try {
+          //create user in database
+          const response = await axios.post(`${baseUrl}/api/auth`, {
+            name: user.name,
+            email: user.email,
+            image: user.image,
+            id: user.id,
+          });
+          console.log("Response from /api/auth:", response.data);
+          user.id = response.data._id; // Assign the custom user ID to NextAuth's user object
+        } catch (error) {
+          console.error("Error creating user in database", error);
+          return false;
+        }
+      } else {
+        // update user information if they already exist
+        await db.collection("User").updateOne(
+          { email: user.email },
+          {
+            $set: {
+              name: user.name,
+              image: user.image,
+              updatedAt: new Date(),
+            },
+          },
+        );
+        user.id = existingUser._id.toString();
       }
+
+      return true;
+    },
+    async session({ session, user, token }) {
+      // Attach the user's ID to the session object
+      if (session && token) {
+        session.user.id = token.sub ?? "";
+      }
+      console.log("Session in auth.ts:", session);
       return session;
     },
-    authorized: async ({ auth }) => {
-      // Logged in users are authenticated, otherwise redirect to login page
-      return !!auth;
+    async jwt({ token, user }) {
+      // Add the user ID to the token for session callback
+      if (user) {
+        token.sub = user.id;
+      }
+      return token;
+    },
+    async redirect({ url, baseUrl }) {
+      if (url === "/" || url === baseUrl) {
+        return `${baseUrl}/dashboard`;
+      }
+      if (url.startsWith("/")) {
+        return `${baseUrl}${url}`;
+      }
+      return baseUrl;
     },
   },
 });

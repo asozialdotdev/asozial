@@ -19,7 +19,7 @@ import { isAuthenticated } from "./middleware/jwt.middleware";
 const app = express();
 config(app);
 
-app.use("/auth", githubRouter);
+app.use("/api/auth", githubRouter);
 app.use("/dashboard", dashboardRouter);
 app.use("/users", usersRouter);
 app.use("/api/projects", projectsRouter);

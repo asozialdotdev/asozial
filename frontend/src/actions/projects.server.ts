@@ -4,16 +4,19 @@ import { Project, ProjectId } from "@/types/Project";
 import { baseUrl } from "@/constants";
 import { headers } from "next/headers";
 import { auth } from "@/auth";
+import { redirect } from "next/navigation";
 
-// console.log(localStorage.getItem("accessToken"));
 // Get all projects
 const fetchAllProjects = async () => {
   const session = await auth();
   console.log("session:", session);
   try {
-    const response = await fetch(`${baseUrl}/api/projects`, {
-      cache: "no-store",
-    });
+    const response = await fetch(
+      `${baseUrl}/api/projects?userId=${session?.user?.id}`,
+      {
+        cache: "no-store",
+      },
+    );
     if (!response.ok) {
       throw new Error(`Failed to fetch projects: ${response.statusText}`);
     }
@@ -53,7 +56,7 @@ const fetchProjectById = async (projectId: ProjectId) => {
 const searchForMyProjects = async (searchTerm: string) => {
   try {
     const response = await fetch(
-      `${baseUrl}/projects/search?query=${searchTerm}`,
+      `${baseUrl}/api/projects/search?query=${searchTerm}`,
     );
     if (!response.ok) {
       throw new Error(`Failed to search for projects: ${response.statusText}`);
@@ -70,23 +73,24 @@ const searchForMyProjects = async (searchTerm: string) => {
 // POST create a new project
 
 const createProject = async (data: Project) => {
-  console.log("data:", data);
-
+  const session = await auth();
+  let project;
   try {
     const response = await fetch(`${baseUrl}/api/projects/new`, {
       method: "POST",
       headers: {
-        "Content-Type": "application/json", // Ensure this header is set
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify({ ...data, userId: "66ba4cb189ed3084ede59fa5" }),
+      body: JSON.stringify({ ...data, userId: session?.user?.id }),
     });
 
-    const result = await response.json();
-    console.log("result:", result);
+    project = await response.json();
+    console.log("project", project);
   } catch (error) {
     console.error("Error creating project:", error);
     return "Error creating project";
   }
+  redirect(`/projects/${project._id}`);
 };
 
 const handleJoinProject = async (formData: FormData) => {
