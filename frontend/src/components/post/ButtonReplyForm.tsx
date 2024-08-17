@@ -15,7 +15,7 @@ function ButtonReplyForm({
       <Button
         type="submit"
         disabled={pending}
-        className="my-6 bg-dark px-8 text-lg dark:bg-light hover:dark:bg-zinc-300 dark:focus:bg-zinc-300"
+        className={`${startOpen ? "px-8" : "px-3"} my-6 bg-dark text-lg dark:bg-light hover:dark:bg-zinc-300 dark:focus:bg-zinc-300`}
       >
         {pending ? "Commenting" : "Comment"}
       </Button>
@@ -25,7 +25,7 @@ function ButtonReplyForm({
           disabled={pending}
           variant="outline"
           onClick={toggleOpen}
-          className="my-6 px-8 text-lg hover:dark:bg-zinc-300 dark:focus:bg-zinc-300"
+          className={` ${startOpen ? "px-8" : "px-3"} my-6 text-lg hover:dark:bg-zinc-300 dark:focus:bg-zinc-300`}
         >
           Cancel
         </Button>

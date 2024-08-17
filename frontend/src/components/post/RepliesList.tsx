@@ -8,11 +8,15 @@ import PageTitle from "../common/PageTitle";
 import { format } from "date-fns";
 
 //Types
-import type { Post, Reply } from "@/types/Post";
+import type { Post, ProjectPostId, Reply, ReplyId } from "@/types/Post";
 import ReplyShow from "./ReplyShow";
 import { fetchPostByIdAndReplies } from "@/actions";
 
-async function RepliesList({ projectPostId }) {
+async function RepliesList({
+  projectPostId,
+}: {
+  projectPostId: ProjectPostId;
+}) {
   const { replies } = await fetchPostByIdAndReplies(projectPostId);
   console.log("Replies:>>>>>>>>>> ", replies.length);
 
@@ -20,13 +24,15 @@ async function RepliesList({ projectPostId }) {
     return null;
   }
 
-  const topLevelReplies = replies.filter((reply) => reply.parentId === null);
+  const topLevelReplies = replies.filter(
+    (reply: Reply) => reply.parentId === null,
+  );
   // console.log("Top Level Replies: ", topLevelReplies);
 
   // const createdAt = format(new Date(post.createdAt), "dd, MMM yyyy - HH:mm");
 
   return (
-    <section className="w-full">
+    <section className="w-full p-4">
       <h2 className="text-xl font-semibold">{replies.length} replies</h2>
 
       {topLevelReplies.map((reply: Reply) => (

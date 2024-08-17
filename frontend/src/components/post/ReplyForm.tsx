@@ -48,7 +48,7 @@ function ReplyForm({ projectPostId, parentId, startOpen }: ReplyFormProps) {
   };
 
   return (
-    <section className={`${startOpen ? "w-full py-4" : "w-[70%] -mt-4 last:pb-4"}`}>
+    <section className={`${startOpen ? "w-full py-4" : "w-[120%] -mt-4"}`}>
       {!open ? (
         <Button variant="outline" className="text-base" onClick={toggleOpen}>
           Reply

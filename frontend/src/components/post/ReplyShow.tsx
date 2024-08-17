@@ -26,11 +26,11 @@ async function ReplyShow({ replyId, projectPostId, children }: ReplyShowProps) {
   return (
     <div
       key={reply._id.toString()}
-      className={`mt-6 flex w-full max-w-[95%] flex-col items-start gap-4 pb-4 px-1 ${
+      className={`mt-6 flex w-full max-w-[95%] flex-col items-start divide-dashed gap-4 px-1 pb-4 ${
         !isTopLevel
           ? "border-l border-neutral-400 pl-4"
-          : "border-l-2 border-neutral-500 pl-4"
-      } ${isLastChild ? "border-b border-neutral-400 pb-4" : ""} `}
+          : "rounded-md border border-dashed border-neutral-500 pl-4 pt-4  dark:border-neutral-400 dark:shadow-neutral-700/30"
+      } ${isLastChild ? "border-dashed border-neutral-400 pb-4" : ""} `}
     >
       <section className="flex items-start gap-2">
         {/* Avatar on the left side */}
