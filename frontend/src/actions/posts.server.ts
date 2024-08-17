@@ -21,6 +21,7 @@ type CreateReplyFormState = {
 };
 
 const createPost = async (
+  projectId: ProjectId,
   formState: CreatePostFormState,
   formData: FormData,
 ): Promise<CreatePostFormState> => {
@@ -28,7 +29,6 @@ const createPost = async (
   const result = createPostSchema.safeParse({
     title: formData.get("title"),
     content: formData.get("content"),
-    projectId: formData.get("projectId"),
   });
 
   if (!result.success) {
@@ -47,7 +47,7 @@ const createPost = async (
       body: JSON.stringify({
         title: result.data.title,
         content: result.data.content,
-        projectId: result.data.projectId,
+        projectId,
         userId: session?.user?.id,
       }),
     });
@@ -56,8 +56,7 @@ const createPost = async (
     }
     const post = await response.json();
     console.log("Created post:", post);
-    const projectPath = `/projects/${result.data.projectId}`;
-    revalidatePath(projectPath);
+    revalidatePath(`/projects/${projectId}`);
     return post;
   } catch (error) {
     console.error("Error creating postttttttt:", error);
@@ -72,6 +71,7 @@ const createPost = async (
 };
 // Create Reply
 const createReply = async (
+  { projectId, parentId }: { projectId: ProjectId; parentId: PostId },
   formState: CreateReplyFormState,
   formData: FormData,
 ): Promise<CreateReplyFormState> => {
@@ -81,8 +81,6 @@ const createReply = async (
     content: formData.get("content"),
   });
 
-  const projectId = formData.get("projectId");
-  const parentId = formData.get("parentId");
   if (!result.success) {
     console.error("Validation error:", result.error.flatten().fieldErrors);
     return {
@@ -107,8 +105,7 @@ const createReply = async (
     }
     const post = await response.json();
     console.log("Created post:", post);
-    const postPath = `/projects/${parentId}`;
-    revalidatePath(postPath);
+    revalidatePath(`/projects/${parentId}`);
     return post;
   } catch (error) {
     console.error("Error creating postttttttt:", error);

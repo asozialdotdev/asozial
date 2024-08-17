@@ -1,15 +1,23 @@
 "use client";
-import { createPost } from "@/actions";
-import { Input } from "../ui/input";
-import { Textarea } from "../ui/textarea";
-import { ProjectId } from "@/types/Project";
 
-import ButtonProjectPostForm from "./ButtonProjectPostForm";
+//Actions
+import { createPost } from "@/actions";
+//Hooks
 import { useFormState } from "react-dom";
 import { useRef } from "react";
 
+//Components
+import ButtonProjectPostForm from "./ButtonProjectPostForm";
+
+//Ui
+import { Input } from "../ui/input";
+import { Textarea } from "../ui/textarea";
+import type { ProjectId } from "@/types/Project";
+
 function PostForm({ projectId }: { projectId: ProjectId }) {
-  const [formState, action] = useFormState(createPost, { errors: {} });
+  const [formState, action] = useFormState(createPost.bind(null, projectId), {
+    errors: {},
+  });
   const formRef = useRef<HTMLFormElement>(null);
 
   return (

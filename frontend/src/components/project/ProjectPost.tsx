@@ -3,17 +3,13 @@ import { format } from "date-fns";
 
 //Ui
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
 
 //Types
 import type { Post } from "@/types/Post";
+
 function ProjectPost({ post }: { post: Post }) {
   const createdAt = format(new Date(post.createdAt), "dd, MMM yyyy - HH:mm");
+  console.log("Post.............", post);
 
   return (
     <div
@@ -36,7 +32,7 @@ function ProjectPost({ post }: { post: Post }) {
             {post.content}
           </p>
           <p className="mb-4 mt-1 text-sm text-neutral-500 dark:text-neutral-400">
-            <small>Posted at </small>
+            <small>Posted </small>
             {createdAt}
           </p>
         </div>

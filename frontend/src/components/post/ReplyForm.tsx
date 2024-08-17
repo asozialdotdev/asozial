@@ -1,10 +1,19 @@
-import { Post } from "@/types/Post";
-import { Button } from "../ui/button";
+//Actions
 import { createReply } from "@/actions";
-import { Textarea } from "../ui/textarea";
+
+//Hooks
 import { useFormState } from "react-dom";
+
+//Components
 import ButtonReplyForm from "./ButtonReplyForm";
+
+//Ui
+import { Button } from "../ui/button";
+import { Textarea } from "../ui/textarea";
 import { useRef } from "react";
+
+//Types
+import type { Post } from "@/types/Post";
 
 type ReplyFormProps = {
   isReplying: boolean;
@@ -13,9 +22,14 @@ type ReplyFormProps = {
 };
 
 function ReplyForm({ isReplying, handleReply, post }: ReplyFormProps) {
-  const [formState, action] = useFormState(createReply, {
-    errors: {},
-  });
+  const projectId = post.projectId;
+  const parentId = post._id;
+  const [formState, action] = useFormState(
+    createReply.bind(null, { projectId, parentId }),
+    {
+      errors: {},
+    },
+  );
   const formRef = useRef<HTMLFormElement>(null);
 
   return (
@@ -44,12 +58,7 @@ function ReplyForm({ isReplying, handleReply, post }: ReplyFormProps) {
               {formState.errors?.content.join(", ")}
             </span>
           )}
-          <input
-            type="hidden"
-            name="projectId"
-            value={post.projectId.toString()}
-          />
-          <input type="hidden" name="parentId" value={post._id.toString()} />
+
           <ButtonReplyForm handleReply={handleReply} />
         </form>
       )}

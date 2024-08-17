@@ -1,61 +1,29 @@
 "use client";
 
-import PageTitle from "@/components/common/PageTitle";
-import { Post } from "@/types/Post";
-
-import { format } from "date-fns";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+//React
 import { useState } from "react";
 
+//Components
 import ReplyForm from "./ReplyForm";
 import ParentPost from "./ParentPost";
-import { useSession } from "next-auth/react";
+import Replies from "./Replies";
+
+//Types
+import type { Post } from "@/types/Post";
 
 function PostComponent({ post }: { post: Post }) {
   const [isReplying, setIsReplying] = useState(false);
-  console.log("POSTJJJJJJJJJJJJJJJJ", post)
   const handleReply = () => {
     setIsReplying((prev) => !prev);
   };
 
-  const createdAt = format(new Date(post.createdAt), "dd, MMM yyyy - HH:mm");
   return (
     <>
       {/* Parent Post */}
       <ParentPost post={post} />
 
       {/* Replies */}
-      <section className="w-full">
-        {post.replies.map((reply) => (
-          <div
-            key={reply._id.toString()}
-            className="mt-6 flex items-start gap-4 border-b border-b-neutral-300 pl-14"
-          >
-            {/* Avatar on the left side */}
-            <Avatar className="flex-shrink-0">
-              <AvatarImage src={reply.userId.avatarUrl} alt="User Avatar" />
-              <AvatarFallback>
-                {reply.userId.name.toString().charAt(0)}
-              </AvatarFallback>
-            </Avatar>
-
-            {/* Content on the right side */}
-            <div className="flex-grow">
-              <p className="font-medium text-neutral-500 dark:text-neutral-400">
-                {reply.userId.name}
-              </p>
-              <PageTitle>{reply.title}</PageTitle>
-              <p className="mt-2 text-justify font-light text-dark dark:text-light">
-                {reply.content}
-              </p>
-              <p className="mb-6 mt-1 text-sm text-neutral-500 dark:text-neutral-400">
-                <small>Posted at </small>
-                {createdAt}
-              </p>
-            </div>
-          </div>
-        ))}
-      </section>
+      <Replies post={post} />
 
       {/* Reply Form */}
       <ReplyForm

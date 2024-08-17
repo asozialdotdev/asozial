@@ -25,7 +25,7 @@ function ParentPost({ post }: { post: Post }) {
             {post.content}
           </p>
           <p className="mb-4 mt-1 text-sm text-neutral-500 dark:text-neutral-400">
-            <small>Posted at </small>
+            <small>Posted </small>
             {createdAt}
           </p>
         </div>

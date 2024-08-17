@@ -50,7 +50,7 @@ function ProjectComponent({ project }: { project: Project }) {
 
   console.log("project:", project);
   return (
-    <section className="flex flex-col gap-4 border-b border-b-neutral-300 px-4 dark:border-b-neutral-600 w-full">
+    <section className="flex w-full flex-col gap-4 border-b border-b-neutral-300 px-4 dark:border-b-neutral-600">
       {/* Title and description */}
       <div className="flex flex-col items-center gap-2">
         <PageTitle className="capitalize">{project.title}</PageTitle>
@@ -79,38 +79,25 @@ function ProjectComponent({ project }: { project: Project }) {
       <div className="flex flex-col gap-4">
         <h4 className="text-lg font-semibold">Members</h4>
         <div className="flex gap-4">
-          {membersJoined.map((member: string) => (
-            <TooltipProvider key={member}>
-              <Tooltip>
-                <TooltipTrigger>
-                  <Link title={member} href={`/users/${userIdTest}`}>
-                    <Avatar>
-                      <AvatarImage src="https://github.com/shadcn.png" />
-                      <AvatarFallback>{member}</AvatarFallback>
-                    </Avatar>
-                  </Link>
-                </TooltipTrigger>
-                <TooltipContent>{member}</TooltipContent>
-              </Tooltip>
-            </TooltipProvider>
-          ))}
-        </div>
-        <div className="flex gap-4">
-          {project.membersJoined.map((member) => (
-            <TooltipProvider key={member.name}>
-              <Tooltip>
-                <TooltipTrigger>
-                  <Link title={member.name} href={`/users/${userIdTest}`}>
-                    <Avatar>
-                      <AvatarImage src={member.avatarUrl} />
-                      <AvatarFallback>{member.name}</AvatarFallback>
-                    </Avatar>
-                  </Link>
-                </TooltipTrigger>
-                <TooltipContent>{member.name}</TooltipContent>
-              </Tooltip>
-            </TooltipProvider>
-          ))}
+          {project.membersJoined.length !== 0 ? (
+            project.membersJoined.map((member) => (
+              <TooltipProvider key={member.name}>
+                <Tooltip>
+                  <TooltipTrigger>
+                    <Link title={member.name} href={`/users/${userIdTest}`}>
+                      <Avatar>
+                        <AvatarImage src={member.avatarUrl} />
+                        <AvatarFallback>{member.name}</AvatarFallback>
+                      </Avatar>
+                    </Link>
+                  </TooltipTrigger>
+                  <TooltipContent>{member.name}</TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+            ))
+          ) : (
+            <p>No members joined yet</p>
+          )}
         </div>
       </div>
 

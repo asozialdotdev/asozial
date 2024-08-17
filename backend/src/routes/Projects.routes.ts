@@ -3,18 +3,6 @@ import express, { Request, Response, NextFunction } from "express";
 import axios from "axios";
 import Project from "../models/Project.models";
 import User from "../models/User.models";
-import { verifyJWT } from "../middleware/jwt.middleware";
-import { ObjectId } from "mongodb";
-
-interface JwtPayload {
-  _id: string;
-  username: string;
-  // other properties if any
-}
-
-function isJwtPayload(payload: any): payload is JwtPayload {
-  return (payload as JwtPayload)._id !== undefined;
-}
 
 const projectsRouter = express.Router();
 
@@ -29,6 +17,7 @@ projectsRouter.get(
     try {
       const projects = await Project.find({ owner: userId })
         .populate("membersJoined", "name avatarUrl")
+        .populate("owner", "name avatarUrl")
         .exec();
       console.log("Number of Projects Found:", projects.length);
       res.json(projects);
@@ -148,9 +137,12 @@ projectsRouter.get(
   "/:projectId",
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const project = await Project.findById(req.params.projectId)
-        .populate("membersJoined", "name avatarUrl")
-        .exec();
+      const project = await Project.findById(req.params.projectId).populate(
+        "membersJoined",
+        "name avatarUrl"
+      )
+      .populate("owner", "name avatarUrl")
+      .exec();
       if (!project) {
         return res.status(404).json({ error: "Project not found" });
       }

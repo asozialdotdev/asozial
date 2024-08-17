@@ -2,12 +2,18 @@ import { Types } from "mongoose";
 
 type PostId = Types.ObjectId | string;
 
+type Member = {
+  _id: Types.ObjectId;
+  avatarUrl: string;
+  name: string;
+};
+
 type Post = {
   _id: PostId;
-  userId: Types.ObjectId;
+  userId: Member;
   projectId: Types.ObjectId;
   parentId?: Types.ObjectId;
-  title?: string;
+  title: string;
   content: string;
   replies: Reply[];
   createdAt: Date;
@@ -16,7 +22,7 @@ type Post = {
 
 type Reply = {
   _id: PostId;
-  userId: Types.ObjectId;
+  userId: Member
   projectId: Types.ObjectId;
   parentId: Types.ObjectId;
   title?: string;

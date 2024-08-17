@@ -8,6 +8,7 @@ import { signIn, signOut } from "@/actions/auth.server";
 import { AvatarImage } from "@radix-ui/react-avatar";
 import bearlogo from "/public/bearlogo.webp";
 import Image from "next/image";
+import { FaGithub } from "react-icons/fa";
 
 async function LandingPage() {
   const session = await auth();
@@ -19,13 +20,12 @@ async function LandingPage() {
 
           <Image width={450} height={450} src={bearlogo} alt="bear-logo" />
           <form action={signIn}>
-            <Button className="px-8" type="submit">
+            <Button className="px-8 flex gap-3" type="submit">
               {session?.user ? "Enter" : "Sign In"}
+              <FaGithub size={24} />
+
             </Button>
           </form>
-          {/* <form action={signOut}>
-          <Button type="submit">Sign Out</Button>
-          </form> */}
 
           <div>
             {session?.user ? (

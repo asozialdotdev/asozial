@@ -9,7 +9,6 @@ import { redirect } from "next/navigation";
 // Get all projects
 const fetchAllProjects = async () => {
   const session = await auth();
-  console.log("session:", session);
   try {
     const response = await fetch(
       `${baseUrl}/api/projects?userId=${session?.user?.id}`,
@@ -21,7 +20,6 @@ const fetchAllProjects = async () => {
       throw new Error(`Failed to fetch projects: ${response.statusText}`);
     }
     const projects = await response.json();
-    console.log("Fetched projects:", projects);
     return projects;
   } catch (error) {
     console.error("Error fetching projects:", error);

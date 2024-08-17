@@ -14,7 +14,6 @@ const createProjectSchema = z.object({
 const createPostSchema = z.object({
   title: z.string().min(1, "Title is required"),
   content: z.string().min(1, "Content is required"),
-  projectId: z.string().min(1, "Project is required"),
 });
 
 const createReplySchema = z.object({
