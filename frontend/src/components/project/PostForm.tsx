@@ -1,7 +1,7 @@
 "use client";
 
 //Actions
-import { createPost } from "@/actions";
+import { createProjectPost } from "@/actions";
 //Hooks
 import { useFormState } from "react-dom";
 import { useRef } from "react";
@@ -15,7 +15,7 @@ import { Textarea } from "../ui/textarea";
 import type { ProjectId } from "@/types/Project";
 
 function PostForm({ projectId }: { projectId: ProjectId }) {
-  const [formState, action] = useFormState(createPost.bind(null, projectId), {
+  const [formState, action] = useFormState(createProjectPost.bind(null, projectId), {
     errors: {},
   });
   const formRef = useRef<HTMLFormElement>(null);

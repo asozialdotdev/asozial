@@ -1,36 +1,29 @@
-"use client";
-
 //React
 import { useState } from "react";
 
 //Components
 import ReplyForm from "./ReplyForm";
 import ParentPost from "./ParentPost";
-import Replies from "./Replies";
+import Replies from "./RepliesList";
 
 //Types
 import type { Post } from "@/types/Post";
+import RepliesList from "./RepliesList";
+import { fetchPostByIdAndReplies } from "@/actions";
 
-function PostComponent({ post }: { post: Post }) {
-  const [isReplying, setIsReplying] = useState(false);
-  const handleReply = () => {
-    setIsReplying((prev) => !prev);
-  };
+async function PostComponent({ projectPostId }) {
+  const { post } = await fetchPostByIdAndReplies(projectPostId);
 
   return (
     <>
       {/* Parent Post */}
-      <ParentPost post={post} />
+       <ParentPost post={post} />
 
       {/* Replies */}
-      <Replies post={post} />
+      {/* <RepliesList post={post} /> */}
 
       {/* Reply Form */}
-      <ReplyForm
-        isReplying={isReplying}
-        handleReply={handleReply}
-        post={post}
-      />
+      {/* <ReplyForm post={post} /> */}
     </>
   );
 }

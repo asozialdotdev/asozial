@@ -1,5 +1,6 @@
+"use client";
 //Actions
-import { createReply } from "@/actions";
+import { createProjectPostReply } from "@/actions";
 
 //Hooks
 import { useFormState } from "react-dom";
@@ -10,41 +11,49 @@ import ButtonReplyForm from "./ButtonReplyForm";
 //Ui
 import { Button } from "../ui/button";
 import { Textarea } from "../ui/textarea";
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 //Types
 import type { Post } from "@/types/Post";
 
 type ReplyFormProps = {
-  isReplying: boolean;
-  handleReply: () => void;
   post: Post;
 };
 
-function ReplyForm({ isReplying, handleReply, post }: ReplyFormProps) {
-  const projectId = post.projectId;
-  const parentId = post._id;
+function ReplyForm({ projectPostId, parentId, startOpen }: ReplyFormProps) {
+  const [open, setOpen] = useState(startOpen);
+
   const [formState, action] = useFormState(
-    createReply.bind(null, { projectId, parentId }),
+    createProjectPostReply.bind(null, { projectPostId, parentId }),
     {
       errors: {},
     },
   );
   const formRef = useRef<HTMLFormElement>(null);
 
+  useEffect(() => {
+    if (formState.success) {
+      formRef.current?.reset();
+
+      if (!startOpen) {
+        setOpen(false);
+      }
+    }
+  }, [formState, startOpen]);
+
   return (
     <section className="w-full py-4">
-      {!isReplying ? (
-        <Button className="text-base font-semibold" onClick={handleReply}>
+      {!open ? (
+        <Button
+          className="text-base font-semibold"
+          onClick={() => setOpen(!open)}
+        >
           Reply
         </Button>
       ) : (
         <form
           ref={formRef}
-          action={async (formData) => {
-            formRef.current?.reset();
-            action(formData);
-          }}
+          action={action}
           className="mt-4 flex flex-col gap-4"
         >
           <label htmlFor="content"></label>
@@ -59,7 +68,7 @@ function ReplyForm({ isReplying, handleReply, post }: ReplyFormProps) {
             </span>
           )}
 
-          <ButtonReplyForm handleReply={handleReply} />
+          <ButtonReplyForm setOpen={setOpen} />
         </form>
       )}
     </section>

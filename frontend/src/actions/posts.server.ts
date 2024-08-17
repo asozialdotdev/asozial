@@ -18,9 +18,28 @@ type CreateReplyFormState = {
   errors: {
     content?: string[];
   };
+  success?: boolean;
+
 };
 
-const createPost = async (
+const fetchProjectPosts = async (projectId: ProjectId) => {
+  try {
+    const response = await fetch(
+      `${baseUrl}/api/project-posts?projectId=${projectId}`,
+      { cache: "no-store" },
+    );
+    if (!response.ok) {
+      throw new Error(`Failed to fetch posts: ${response.statusText}`);
+    }
+    const posts = await response.json();
+    return posts;
+  } catch (error) {
+    console.error("Error fetching projectPosts:", error);
+    return "Error fetching projectPosts";
+  }
+};
+// POST Create a new Project Post
+const createProjectPost = async (
   projectId: ProjectId,
   formState: CreatePostFormState,
   formData: FormData,
@@ -39,7 +58,7 @@ const createPost = async (
   }
 
   try {
-    const response = await fetch(`${baseUrl}/api/posts`, {
+    const response = await fetch(`${baseUrl}/api/project-posts`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -47,8 +66,8 @@ const createPost = async (
       body: JSON.stringify({
         title: result.data.title,
         content: result.data.content,
-        projectId,
         userId: session?.user?.id,
+        projectId,
       }),
     });
     if (!response.ok) {
@@ -59,7 +78,7 @@ const createPost = async (
     revalidatePath(`/projects/${projectId}`);
     return post;
   } catch (error) {
-    console.error("Error creating postttttttt:", error);
+    console.error("Error creating project post:", error);
     return {
       errors: {
         title: ["Failed to create post"],
@@ -69,9 +88,29 @@ const createPost = async (
     };
   }
 };
-// Create Reply
-const createReply = async (
-  { projectId, parentId }: { projectId: ProjectId; parentId: PostId },
+// GET Fetch a post by ID and its replies
+const fetchPostByIdAndReplies = async (projectPostId: PostId) => {
+  try {
+    const response = await fetch(
+      `${baseUrl}/api/project-posts/${projectPostId}`,
+      {
+        cache: "no-store",
+      },
+    );
+    if (!response.ok) {
+      throw new Error(`Failed to fetch post: ${response.statusText}`);
+    }
+    const postData = await response.json();
+    return postData;
+  } catch (error) {
+    console.error("Error fetching projectPost:", error);
+    return "Error fetching post";
+  }
+};
+
+// POST Create Reply
+const createProjectPostReply = async (
+  { projectPostId, parentId }: { projectPostId: ProjectId; parentId: PostId },
   formState: CreateReplyFormState,
   formData: FormData,
 ): Promise<CreateReplyFormState> => {
@@ -88,25 +127,28 @@ const createReply = async (
     };
   }
   try {
-    const response = await fetch(`${baseUrl}/api/posts`, {
+    const response = await fetch(`${baseUrl}/api/project-posts/reply`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
         content: result.data.content,
-        projectId,
-        parentId,
+        projectPostId,
         userId: session?.user?.id,
+        parentId: parentId || null,
       }),
     });
     if (!response.ok) {
       throw new Error(`Failed to create post: ${response.statusText}`);
     }
-    const post = await response.json();
-    console.log("Created post:", post);
-    revalidatePath(`/projects/${parentId}`);
-    return post;
+    const reply = await response.json();
+    console.log("Created reply:", reply);
+    revalidatePath(`/projects/${projectPostId}`);
+    return {
+      errors: {},
+      success: true,
+    }
   } catch (error) {
     console.error("Error creating postttttttt:", error);
     return {
@@ -117,37 +159,9 @@ const createReply = async (
   }
 };
 
-const fetchPosts = async (projectId: ProjectId) => {
-  try {
-    const response = await fetch(
-      `${baseUrl}/api/posts?projectId=${projectId}`,
-      { cache: "no-store" },
-    );
-    if (!response.ok) {
-      throw new Error(`Failed to fetch posts: ${response.statusText}`);
-    }
-    const posts = await response.json();
-    return posts;
-  } catch (error) {
-    console.error("Error fetching posts:", error);
-    return "Error fetching posts";
-  }
+export {
+  createProjectPost,
+  createProjectPostReply,
+  fetchProjectPosts,
+  fetchPostByIdAndReplies,
 };
-
-const fetchPostById = async (postId: PostId) => {
-  try {
-    const response = await fetch(`${baseUrl}/api/posts/${postId}`, {
-      cache: "no-store",
-    });
-    if (!response.ok) {
-      throw new Error(`Failed to fetch post: ${response.statusText}`);
-    }
-    const post = await response.json();
-    return post;
-  } catch (error) {
-    console.error("Error fetching post:", error);
-    return "Error fetching post";
-  }
-};
-
-export { createPost, createReply, fetchPosts, fetchPostById };

@@ -81,7 +81,6 @@ export const {
       if (user) {
         token.sub = user.id;
       }
-      console.log("JWT token:", token);
       return token;
     },
     async redirect({ url, baseUrl }) {

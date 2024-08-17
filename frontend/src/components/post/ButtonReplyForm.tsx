@@ -1,7 +1,7 @@
 import { useFormStatus } from "react-dom";
 import { Button } from "../ui/button";
 
-function ButtonReplyForm({ handleReply }: { handleReply: () => void }) {
+function ButtonReplyForm({ setOpen }: { setOpen: (startOpen: boolean) => void }) {
   const { pending } = useFormStatus();
 
   return (
@@ -17,7 +17,7 @@ function ButtonReplyForm({ handleReply }: { handleReply: () => void }) {
         type="button"
         disabled={pending}
         variant="outline"
-        onClick={handleReply}
+        onClick={()=> setOpen(false)}
         className="my-6 px-8 text-lg hover:dark:bg-zinc-300 dark:focus:bg-zinc-300"
       >
         Cancel

@@ -1,6 +1,6 @@
 "use server";
 
-import { fetchPosts } from "@/actions/posts.server";
+import {fetchProjectPosts } from "@/actions/posts.server";
 import { fetchProjectById, handleJoinProject } from "@/actions/projects.server";
 //Actions
 
@@ -19,10 +19,10 @@ const membersJoined = ["Benjamin", "Mirko", "John", "Jane", "José"];
 
 async function Page({ params }: { params: { projectId: ProjectId } }) {
   const { projectId } = params;
-  console.log("projectId:////////////////", projectId);
   const project = await fetchProjectById(projectId);
   console.log("project:///////////////", project);
-  const posts = await fetchPosts(projectId);
+  const posts = await fetchProjectPosts(projectId);
+  console.log("fetchProjectPosts:////////////////", posts);
 
   const isMember = membersJoined.includes("Jos"); // hardcoded
   // const isMember = membersJoined.includes(user._id); // dynamic

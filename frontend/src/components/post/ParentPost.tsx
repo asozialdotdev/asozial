@@ -4,6 +4,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { Post } from "@/types/Post";
 
 function ParentPost({ post }: { post: Post }) {
+
   const createdAt = format(new Date(post.createdAt), "dd, MMM yyyy - HH:mm");
 
   return (
@@ -26,7 +27,7 @@ function ParentPost({ post }: { post: Post }) {
           </p>
           <p className="mb-4 mt-1 text-sm text-neutral-500 dark:text-neutral-400">
             <small>Posted </small>
-            {createdAt}
+            {/* {createdAt} */}
           </p>
         </div>
       </div>

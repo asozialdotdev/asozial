@@ -16,7 +16,11 @@ projectPostRouter.get(
         return res.status(400).json({ message: "projectId is required" });
       }
 
-      const projectPosts = await ProjectPost.find({ projectId });
+      const projectPosts = await ProjectPost.find({ projectId }).populate({
+        path: "userId",
+        select: "name avatarUrl",
+      });
+
       res.status(200).json(projectPosts);
     } catch (error) {
       next(error);
@@ -62,7 +66,7 @@ projectPostRouter.post(
   }
 );
 
-// GET 1 project post by ID
+// GET 1 project post by ID and its replies
 projectPostRouter.get(
   "/:projectPostId",
   async (req: Request, res: Response, next: NextFunction) => {
@@ -93,7 +97,8 @@ projectPostRouter.get(
             path: "userId",
             select: "name avatarUrl",
           },
-        });
+        })
+        .exec();
 
       res.status(200).json({ post, replies });
     } catch (error) {
@@ -108,6 +113,7 @@ projectPostRouter.post(
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { projectPostId, userId, content, parentId } = req.body;
+      console.log("request.body;;;;;;;;", req.body);
 
       // Ensure the post exists (you may want to validate this)
       if (!projectPostId || !userId || !content) {
