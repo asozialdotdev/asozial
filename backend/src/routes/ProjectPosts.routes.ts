@@ -31,10 +31,6 @@ projectPostRouter.post(
   async (req: Request, res: Response, next: NextFunction) => {
     console.log("POST /api/posts called");
     try {
-      // this must then replace the userId in the request body params
-      // const userId = (req as any).payload.user;
-      // console.log("userIdd", userId);
-
       const { title, content, projectId, userId } = req.body;
       console.log("projectIDDDDDD", projectId);
 
@@ -100,6 +96,47 @@ projectPostRouter.get(
         });
 
       res.status(200).json({ post, replies });
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
+// POST Create a new reply to a project post
+projectPostRouter.post(
+  "/reply",
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const { projectPostId, userId, content, parentId } = req.body;
+
+      // Ensure the post exists (you may want to validate this)
+      if (!projectPostId || !userId || !content) {
+        return res
+          .status(400)
+          .json({ message: "projectPostId, userId and content are required" });
+      }
+
+      const projectPost = await ProjectPost.findById(projectPostId);
+      if (!projectPost) {
+        return res.status(404).json({ message: "Project post not found" });
+      }
+
+      // Create the new reply
+      const newReply = await ProjectPostReply.create({
+        content,
+        projectPostId,
+        userId,
+        parentId: parentId || null,
+      });
+
+      // If it's a nested reply, add it to the parent's children array
+      if (parentId) {
+        await ProjectPostReply.findByIdAndUpdate(parentId, {
+          $push: { children: newReply._id },
+        });
+      }
+
+      res.status(201).json(newReply);
     } catch (error) {
       next(error);
     }
