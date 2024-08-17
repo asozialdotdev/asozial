@@ -40,7 +40,6 @@ async function RepliesList({
           key={reply._id.toString()}
           replyId={reply._id}
           projectPostId={projectPostId}
-          children={false}
         />
       ))}
     </section>

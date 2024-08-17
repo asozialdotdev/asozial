@@ -10,7 +10,7 @@ async function ParentPost({ projectPostId }) {
   const createdAt = format(new Date(post.createdAt), "dd, MMM yyyy - HH:mm");
 
   return (
-    <section className="flex w-full flex-col gap-1 rounded-md border-b border-b-neutral-300 px-8 py-10 shadow-md dark:border-b-neutral-600 dark:shadow-neutral-700/30">
+    <section className="flex w-full flex-col rounded-md gap-1 border border-dashed border-zinc-300 px-8 py-10 hover:bg-zinc-100 dark:border-zinc-600 dark:shadow-neutral-700/30 dark:hover:bg-zinc-800">
       <div className="flex items-start gap-4">
         {/* Avatar on the left side */}
         <Avatar className="flex-shrink-0">

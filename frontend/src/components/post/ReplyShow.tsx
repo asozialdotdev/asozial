@@ -7,30 +7,31 @@ import { format } from "date-fns";
 type ReplyShowProps = {
   replyId: ReplyId;
   projectPostId: ProjectPostId;
-  children?: boolean;
+  isTopLevel?: boolean; // Add a flag to identify the top-level reply
 };
 
-async function ReplyShow({ replyId, projectPostId, children }: ReplyShowProps) {
+async function ReplyShow({ replyId, projectPostId }: ReplyShowProps) {
   const { replies } = await fetchPostByIdAndReplies(projectPostId);
 
   const reply = replies.find((r: Reply) => r._id === replyId);
 
   if (!reply) {
-    return;
+    return null;
   }
 
   const childrenArr = replies.filter((r: Reply) => r.parentId === replyId);
   const isLastChild = childrenArr.length === 0;
   const isTopLevel = !reply.parentId;
   const createdAt = format(new Date(reply.createdAt), "dd, MMM yyyy - HH:mm");
+
   return (
     <div
       key={reply._id.toString()}
-      className={`mt-6 flex w-full max-w-[95%] flex-col items-start divide-dashed gap-4 px-1 pb-4 ${
+      className={`mt-6 flex w-full max-w-full flex-col items-start gap-4 px-1 lg:space-x-4 ${
         !isTopLevel
-          ? "border-l border-neutral-400 pl-4"
-          : "rounded-md border border-dashed border-neutral-500 pl-4 pt-4  dark:border-neutral-400 dark:shadow-neutral-700/30"
-      } ${isLastChild ? "border-dashed border-neutral-400 pb-4" : ""} `}
+          ? "border-dashed border-zinc-300 pl-2 dark:border-zinc-600"
+          : "border border-dashed border-zinc-300 pl-4 pt-4 dark:border-zinc-600"
+      } ${isLastChild ? "px-4 pb-4" : ""} `}
     >
       <section className="flex items-start gap-2">
         {/* Avatar on the left side */}
@@ -59,7 +60,6 @@ async function ReplyShow({ replyId, projectPostId, children }: ReplyShowProps) {
           </p>
         </div>
       </section>
-
       <section>
         <ReplyForm
           projectPostId={reply.projectPostId}
@@ -67,13 +67,11 @@ async function ReplyShow({ replyId, projectPostId, children }: ReplyShowProps) {
           startOpen={false}
         />
       </section>
-
       {childrenArr.map((child: Reply) => (
         <ReplyShow
           key={child._id.toString()}
           replyId={child._id}
           projectPostId={projectPostId}
-          children
         />
       ))}
     </div>
