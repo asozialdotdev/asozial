@@ -1,7 +1,13 @@
 import { useFormStatus } from "react-dom";
 import { Button } from "../ui/button";
 
-function ButtonReplyForm({ setOpen }: { setOpen: (startOpen: boolean) => void }) {
+function ButtonReplyForm({
+  toggleOpen,
+  startOpen,
+}: {
+  toggleOpen: () => void;
+  startOpen?: boolean;
+}) {
   const { pending } = useFormStatus();
 
   return (
@@ -13,15 +19,17 @@ function ButtonReplyForm({ setOpen }: { setOpen: (startOpen: boolean) => void })
       >
         {pending ? "Commenting" : "Comment"}
       </Button>
-      <Button
-        type="button"
-        disabled={pending}
-        variant="outline"
-        onClick={()=> setOpen(false)}
-        className="my-6 px-8 text-lg hover:dark:bg-zinc-300 dark:focus:bg-zinc-300"
-      >
-        Cancel
-      </Button>
+      {!startOpen && (
+        <Button
+          type="button"
+          disabled={pending}
+          variant="outline"
+          onClick={toggleOpen}
+          className="my-6 px-8 text-lg hover:dark:bg-zinc-300 dark:focus:bg-zinc-300"
+        >
+          Cancel
+        </Button>
+      )}
     </div>
   );
 }

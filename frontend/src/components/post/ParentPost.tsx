@@ -2,8 +2,10 @@ import { format } from "date-fns";
 import PageTitle from "../common/PageTitle";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { Post } from "@/types/Post";
+import { fetchPostByIdAndReplies } from "@/actions";
 
-function ParentPost({ post }: { post: Post }) {
+async function ParentPost({ projectPostId }) {
+  const { post } = await fetchPostByIdAndReplies(projectPostId);
 
   const createdAt = format(new Date(post.createdAt), "dd, MMM yyyy - HH:mm");
 
@@ -27,7 +29,7 @@ function ParentPost({ post }: { post: Post }) {
           </p>
           <p className="mb-4 mt-1 text-sm text-neutral-500 dark:text-neutral-400">
             <small>Posted </small>
-            {/* {createdAt} */}
+            {createdAt}
           </p>
         </div>
       </div>

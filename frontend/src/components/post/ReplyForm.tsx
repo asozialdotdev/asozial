@@ -14,14 +14,16 @@ import { Textarea } from "../ui/textarea";
 import { useEffect, useRef, useState } from "react";
 
 //Types
-import type { Post } from "@/types/Post";
+import type { ProjectPost, ProjectPostId, ReplyId } from "@/types/Post";
 
 type ReplyFormProps = {
-  post: Post;
+  projectPostId: ProjectPostId;
+  parentId?: ReplyId;
+  startOpen: boolean;
 };
 
 function ReplyForm({ projectPostId, parentId, startOpen }: ReplyFormProps) {
-  const [open, setOpen] = useState(startOpen);
+  const [open, setOpen] = useState<boolean>(startOpen);
 
   const [formState, action] = useFormState(
     createProjectPostReply.bind(null, { projectPostId, parentId }),
@@ -41,13 +43,14 @@ function ReplyForm({ projectPostId, parentId, startOpen }: ReplyFormProps) {
     }
   }, [formState, startOpen]);
 
+  const toggleOpen = () => {
+    setOpen((prev: boolean) => !prev);
+  };
+
   return (
-    <section className="w-full py-4">
+    <section className={`${startOpen ? "w-full py-4" : "w-[70%] -mt-4 last:pb-4"}`}>
       {!open ? (
-        <Button
-          className="text-base font-semibold"
-          onClick={() => setOpen(!open)}
-        >
+        <Button variant="outline" className="text-base" onClick={toggleOpen}>
           Reply
         </Button>
       ) : (
@@ -68,7 +71,7 @@ function ReplyForm({ projectPostId, parentId, startOpen }: ReplyFormProps) {
             </span>
           )}
 
-          <ButtonReplyForm setOpen={setOpen} />
+          <ButtonReplyForm toggleOpen={toggleOpen} startOpen={startOpen} />
         </form>
       )}
     </section>
