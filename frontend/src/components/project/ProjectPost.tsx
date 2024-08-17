@@ -5,9 +5,10 @@ import { format } from "date-fns";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 
 //Types
-import type { Post } from "@/types/Post";
+import type { ProjectPost } from "@/types/Post";
 
-function ProjectPost({ post }: { post: Post }) {
+function ProjectPost({ projectPost }: { projectPost: ProjectPost }) {
+  const post = projectPost;
   const createdAt = format(new Date(post.createdAt), "dd, MMM yyyy - HH:mm");
   console.log("Post.............", post);
 

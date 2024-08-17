@@ -7,15 +7,16 @@ import PageTitle from "../common/PageTitle";
 import ProjectPost from "./ProjectPost";
 
 //Types
-import type { Post } from "@/types/Post";
+import type { ProjectPost as TProjectPost } from "@/types/Post";
 import type { ProjectId } from "@/types/Project";
 
 type ProjectPostsListProps = {
-  posts: Post[];
+  projectPosts: TProjectPost[];
   projectId: ProjectId;
 };
 
-function ProjectPostsList({ posts, projectId }: ProjectPostsListProps) {
+function ProjectPostsList({ projectPosts, projectId }: ProjectPostsListProps) {
+  const posts = projectPosts;
   return (
     <>
       <section className="mt-4 flex w-full flex-col gap-4 pb-6">
@@ -32,7 +33,7 @@ function ProjectPostsList({ posts, projectId }: ProjectPostsListProps) {
             key={post._id.toString()}
             href={`/projects/${projectId}/${post._id}`}
           >
-            <ProjectPost post={post} />
+            <ProjectPost projectPost={post} />
           </Link>
         ))}
       </section>

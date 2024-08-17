@@ -2,7 +2,7 @@
 import { revalidatePath } from "next/cache";
 import { baseUrl } from "@/constants";
 import { ProjectId } from "@/types/Project";
-import { PostId } from "@/types/Post";
+import { ProjectPostId, ReplyId } from "@/types/Post";
 import { createPostSchema, createReplySchema } from "@/lib/schema";
 import { auth } from "@/auth";
 
@@ -19,7 +19,6 @@ type CreateReplyFormState = {
     content?: string[];
   };
   success?: boolean;
-
 };
 
 const fetchProjectPosts = async (projectId: ProjectId) => {
@@ -89,7 +88,7 @@ const createProjectPost = async (
   }
 };
 // GET Fetch a post by ID and its replies
-const fetchPostByIdAndReplies = async (projectPostId: PostId) => {
+const fetchPostByIdAndReplies = async (projectPostId: ProjectPostId) => {
   try {
     const response = await fetch(
       `${baseUrl}/api/project-posts/${projectPostId}`,
@@ -110,7 +109,10 @@ const fetchPostByIdAndReplies = async (projectPostId: PostId) => {
 
 // POST Create Reply
 const createProjectPostReply = async (
-  { projectPostId, parentId }: { projectPostId: ProjectId; parentId: PostId },
+  {
+    projectPostId,
+    parentId,
+  }: { projectPostId: ProjectPostId; parentId: ReplyId },
   formState: CreateReplyFormState,
   formData: FormData,
 ): Promise<CreateReplyFormState> => {
@@ -148,7 +150,7 @@ const createProjectPostReply = async (
     return {
       errors: {},
       success: true,
-    }
+    };
   } catch (error) {
     console.error("Error creating postttttttt:", error);
     return {

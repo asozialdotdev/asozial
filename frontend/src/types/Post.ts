@@ -1,7 +1,7 @@
 import { Types } from "mongoose";
 
 type ProjectPostId = Types.ObjectId | string;
-type ReplyId = Types.ObjectId | string;
+type ReplyId = Types.ObjectId | string | null | undefined;
 
 type User = {
   _id: Types.ObjectId;

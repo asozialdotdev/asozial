@@ -1,5 +1,4 @@
 import { ProjectId } from "@/types/Project";
-import { fetchPosts } from "@/actions";
 
 import PostForm from "./PostForm";
 import PageTitle from "../common/PageTitle";

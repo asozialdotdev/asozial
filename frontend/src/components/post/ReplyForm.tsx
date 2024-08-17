@@ -18,7 +18,7 @@ import type { ProjectPost, ProjectPostId, ReplyId } from "@/types/Post";
 
 type ReplyFormProps = {
   projectPostId: ProjectPostId;
-  parentId?: ReplyId;
+  parentId?: ReplyId | null;
   startOpen: boolean;
 };
 

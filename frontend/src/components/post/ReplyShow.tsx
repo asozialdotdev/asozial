@@ -27,7 +27,7 @@ async function ReplyShow({ replyId, projectPostId }: ReplyShowProps) {
   return (
     <div
       key={reply._id.toString()}
-      className={`mt-6 flex w-full max-w-full flex-col items-start gap-4 px-1 lg:space-x-4 ${
+      className={`mt-6 flex w-full max-w-[96%] flex-col items-start gap-4 px-1 lg:space-x-4 ${
         !isTopLevel
           ? "border-dashed border-zinc-300 pl-2 dark:border-zinc-600"
           : "border border-dashed border-zinc-300 pl-4 pt-4 dark:border-zinc-600"
@@ -69,7 +69,7 @@ async function ReplyShow({ replyId, projectPostId }: ReplyShowProps) {
       </section>
       {childrenArr.map((child: Reply) => (
         <ReplyShow
-          key={child._id.toString()}
+          key={child._id?.toString()}
           replyId={child._id}
           projectPostId={projectPostId}
         />
