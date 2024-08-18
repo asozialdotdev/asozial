@@ -12,6 +12,7 @@ type CreatePostFormState = {
     content?: string[];
     projectId?: string[];
   };
+  success?: boolean;
 };
 
 type CreateReplyFormState = {
@@ -75,7 +76,10 @@ const createProjectPost = async (
     const post = await response.json();
     console.log("Created post:", post);
     revalidatePath(`/projects/${projectId}`);
-    return post;
+    return {
+      errors: {},
+      success: true,
+    };
   } catch (error) {
     console.error("Error creating project post:", error);
     return {

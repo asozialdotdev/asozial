@@ -1,4 +1,4 @@
 
 export * from "./projects.server";
-export * from "./posts.server";
+export * from "./projectPosts.server";
 export * from "./auth.server";

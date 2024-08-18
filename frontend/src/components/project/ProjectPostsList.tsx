@@ -31,7 +31,7 @@ function ProjectPostsList({ projectPosts, projectId }: ProjectPostsListProps) {
         {posts.map((post) => (
           <Link
             key={post._id.toString()}
-            href={`/projects/${projectId}/${post._id}`}
+            href={`/projects/${projectId}/posts/${post._id}`}
           >
             <ProjectPost projectPost={post} />
           </Link>

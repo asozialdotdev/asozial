@@ -1,6 +1,6 @@
 "use server";
 
-import {fetchProjectPosts } from "@/actions/posts.server";
+import {fetchProjectPosts } from "@/actions";
 import { fetchProjectById, handleJoinProject } from "@/actions/projects.server";
 //Actions
 

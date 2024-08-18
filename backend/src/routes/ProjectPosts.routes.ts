@@ -82,7 +82,6 @@ projectPostRouter.get(
       if (!post) {
         return res.status(404).json({ message: "Post not found" });
       }
-
       // Fetch the replies for this post
       const replies = await ProjectPostReply.find({
         projectPostId: req.params.projectPostId,
