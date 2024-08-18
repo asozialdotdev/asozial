@@ -1,13 +1,13 @@
 import { fetchPostByIdAndReplies } from "@/actions";
-import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import ReplyForm from "./ReplyForm";
-import { ProjectPostId, Reply, ReplyId } from "@/types/Post";
+import { ProjectPostId, Reply, ReplyId } from "@/types/ProjectPost";
 import { format } from "date-fns";
+import UserAvatar from "../common/UserAvatar";
+import ProjectPostButtons from "./ProjectPostButtons";
 
 type ReplyShowProps = {
   replyId: ReplyId;
   projectPostId: ProjectPostId;
-  isTopLevel?: boolean; // Add a flag to identify the top-level reply
 };
 
 async function ReplyShow({ replyId, projectPostId }: ReplyShowProps) {
@@ -30,36 +30,29 @@ async function ReplyShow({ replyId, projectPostId }: ReplyShowProps) {
       className={`mt-6 flex w-full max-w-[96%] flex-col items-start gap-4 px-1 lg:space-x-4 ${
         !isTopLevel
           ? "border-dashed border-zinc-300 pl-2 dark:border-zinc-600"
-          : "border border-dashed border-zinc-300 pl-4 pt-4 dark:border-zinc-600"
+          : "border border-dashed border-zinc-300 pl-6 pt-6 dark:border-zinc-600"
       } ${isLastChild ? "px-4 pb-4" : ""} `}
     >
       <section className="flex items-start gap-2">
         {/* Avatar on the left side */}
-        <Avatar className="flex-shrink-0">
-          <AvatarImage src={reply.userId.avatarUrl} alt="User Avatar" />
-          <AvatarFallback>
-            {reply.userId.name.toString().charAt(0)}
-          </AvatarFallback>
-        </Avatar>
+
+        <UserAvatar src={reply.userId.avatarUrl} name={reply.userId.name} />
 
         {/* Content on the right side */}
         <div className="flex-grow">
-          <p
-            className={`font-medium ${isTopLevel ? "text-lg text-neutral-700 dark:text-neutral-300" : "text-neutral-500 dark:text-neutral-400"}`}
-          >
+          <p className="font-medium text-neutral-500 dark:text-neutral-400">
             {reply.userId.name}
           </p>
-          <p
-            className={`mt-2 text-justify font-light ${isTopLevel ? "text-dark dark:text-light" : "text-sm text-dark dark:text-light"}`}
-          >
+          <p className="mt-2 text-justify text-sm font-light text-dark dark:text-light">
             {reply.content}
           </p>
-          <p className="mb-4 mt-1 text-sm text-neutral-500 dark:text-neutral-400">
+          <p className="mt-1 text-sm text-neutral-500 dark:text-neutral-400">
             <small>Posted </small>
             {createdAt}
           </p>
         </div>
       </section>
+      <ProjectPostButtons />
       <section>
         <ReplyForm
           projectPostId={reply.projectPostId}

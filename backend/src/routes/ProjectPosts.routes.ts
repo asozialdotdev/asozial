@@ -16,11 +16,13 @@ projectPostRouter.get(
         return res.status(400).json({ message: "projectId is required" });
       }
 
-      const projectPosts = await ProjectPost.find({ projectId }).populate({
-        path: "userId",
-        select: "name avatarUrl",
-      });
-
+      const projectPosts = await ProjectPost.find({ projectId })
+        .populate({
+          path: "userId",
+          select: "name avatarUrl",
+        })
+        .populate("replyCount");
+      console.log("Projects with reply counts >>>>><<<<>>>><<<<", projectPosts);
       res.status(200).json(projectPosts);
     } catch (error) {
       next(error);

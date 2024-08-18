@@ -2,7 +2,7 @@
 import { revalidatePath } from "next/cache";
 import { baseUrl } from "@/constants";
 import { ProjectId } from "@/types/Project";
-import { ProjectPostId, ReplyId } from "@/types/Post";
+import { ProjectPostId, ReplyId } from "@/types/ProjectPost";
 import { createPostSchema, createReplySchema } from "@/lib/schema";
 import { auth } from "@/auth";
 

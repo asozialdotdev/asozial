@@ -14,7 +14,7 @@ import { Textarea } from "../ui/textarea";
 import { useEffect, useRef, useState } from "react";
 
 //Types
-import type { ProjectPost, ProjectPostId, ReplyId } from "@/types/Post";
+import type {  ProjectPostId, ReplyId } from "@/types/ProjectPost";
 
 type ReplyFormProps = {
   projectPostId: ProjectPostId;

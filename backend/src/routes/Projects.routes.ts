@@ -18,6 +18,7 @@ projectsRouter.get(
       const projects = await Project.find({ owner: userId })
         .populate("membersJoined", "name avatarUrl")
         .populate("owner", "name avatarUrl")
+
         .exec();
       console.log("Number of Projects Found:", projects.length);
       res.json(projects);
@@ -137,12 +138,11 @@ projectsRouter.get(
   "/:projectId",
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const project = await Project.findById(req.params.projectId).populate(
-        "membersJoined",
-        "name avatarUrl"
-      )
-      .populate("owner", "name avatarUrl")
-      .exec();
+      const project = await Project.findById(req.params.projectId)
+        .populate("membersJoined", "name avatarUrl")
+        .populate("owner", "name avatarUrl")
+        .exec();
+      console.log("Project Found>>>>>>>>:", project);
       if (!project) {
         return res.status(404).json({ error: "Project not found" });
       }

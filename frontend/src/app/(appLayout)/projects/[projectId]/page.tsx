@@ -1,13 +1,13 @@
 "use server";
 
-import {fetchProjectPosts } from "@/actions";
+import { fetchProjectPosts } from "@/actions";
 import { fetchProjectById, handleJoinProject } from "@/actions/projects.server";
 //Actions
 
 //Components
 import PageContainer from "@/components/common/PageContainer";
 import ProjectComponent from "@/components/project/ProjectComponent";
-import ProjectPostsList from "@/components/project/ProjectPostsList";
+import ProjectPostsList from "@/components/projectPost/ProjectPostsList";
 
 //Ui
 import { Button } from "@/components/ui/button";
@@ -28,7 +28,7 @@ async function Page({ params }: { params: { projectId: ProjectId } }) {
   // const isMember = membersJoined.includes(user._id); // dynamic
 
   return (
-    <PageContainer className="max-w-screen-md gap-4 w-full">
+    <PageContainer className="w-full max-w-screen-md gap-4">
       <ProjectComponent project={project} />
 
       {!isMember ? (

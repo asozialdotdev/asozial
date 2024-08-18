@@ -13,4 +13,14 @@ const projectPostSchema = new Schema(
   }
 );
 
+projectPostSchema.virtual("replyCount", {
+  ref: "ProjectPostReply", // The model to use
+  localField: "_id", // Find replies where `localField`
+  foreignField: "projectPostId", // is equal to `foreignField`
+  count: true, // Only get the number of replies
+});
+
+projectPostSchema.set("toJSON", { virtuals: true });
+projectPostSchema.set("toObject", { virtuals: true });
+
 export default model("ProjectPost", projectPostSchema);

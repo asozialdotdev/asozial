@@ -1,13 +1,12 @@
-
 //Components
 import PageContainer from "@/components/common/PageContainer";
-import ParentPost from "@/components/post/ParentPost";
-import ParentPostLoading from "@/components/post/ParentPostLoading";
-import RepliesList from "@/components/post/RepliesList";
-import ReplyForm from "@/components/post/ReplyForm";
+import ParentPost from "@/components/projectPost/ParentPost";
+import ParentPostLoading from "@/components/projectPost/ParentPostLoading";
+import RepliesList from "@/components/projectPost/RepliesList";
+import ReplyForm from "@/components/projectPost/ReplyForm";
 
 //Types
-import type { ProjectPostId } from "@/types/Post";
+import type { ProjectPostId } from "@/types/ProjectPost";
 import { Suspense } from "react";
 
 async function PostPage({
@@ -20,10 +19,7 @@ async function PostPage({
   return (
     <PageContainer className="w-full max-w-screen-md">
       {/* PostShow */}
-
-        <ParentPost projectPostId={projectPostId} />
-      {/* <Suspense fallback={<ParentPostLoading />}>
-
+      <ParentPost projectPostId={projectPostId} />
       {/* Reply Form */}
       <ReplyForm projectPostId={projectPostId} startOpen />
       {/* Replies */}
