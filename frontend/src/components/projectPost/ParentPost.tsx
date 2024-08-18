@@ -7,13 +7,14 @@ import UserAvatar from "../common/UserAvatar";
 import ProjectPostContent from "./ProjectPostContent";
 import ProjectPostButtons from "./ProjectPostButtons";
 import ReplyCount from "./ReplyCount";
+import ProjectPostContainer from "./ProjectPostContainer";
 
 async function ParentPost({ projectPostId }: { projectPostId: ProjectPostId }) {
   const { post, replies } = await fetchPostByIdAndReplies(projectPostId);
   console.log("ParentPost:||||||||||||||||||", post);
 
   return (
-    <section className="flex w-full flex-col gap-1 rounded-md border border-dashed border-zinc-300 px-8 py-10 hover:bg-zinc-100 dark:border-zinc-600 dark:shadow-neutral-700/30 dark:hover:bg-zinc-800">
+    <ProjectPostContainer>
       <div className="flex items-start gap-4">
         {/* Avatar on the left side */}
 
@@ -32,7 +33,7 @@ async function ParentPost({ projectPostId }: { projectPostId: ProjectPostId }) {
         <ReplyCount replies={replies.length} />
         <ProjectPostButtons projectPost={post} />
       </div>
-    </section>
+    </ProjectPostContainer>
   );
 }
 
