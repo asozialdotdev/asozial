@@ -1,18 +1,10 @@
 //Next
-import Link from "next/link";
 import Image from "next/image";
 
 //Components
 import PageTitle from "../common/PageTitle";
 
 //UI
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import github from "/public/github.png";
 
 //Utils
@@ -21,19 +13,11 @@ import clsx from "clsx";
 
 //Types
 import type { Project } from "@/types/Project";
+import UserAvatar from "../common/UserAvatar";
 
 const membersJoined = ["Benjamin", "Mirko", "John", "Jane", "José"];
 const membersApplied = ["Alice", "Bob", "Charlie"];
 const membersInvited = ["David", "Eve", "Frank"];
-
-const languagesTest = [
-  "TypeScript",
-  "JavaScript",
-  "CSS",
-  "Rust",
-  "HTML",
-  "Java",
-];
 
 const userIdTest = "1234567890";
 
@@ -75,25 +59,17 @@ function ProjectComponent({ project }: { project: Project }) {
       </div>
 
       {/* Members */}
-
       <div className="flex flex-col gap-4">
         <h4 className="text-lg font-semibold">Members</h4>
         <div className="flex gap-4">
           {project.membersJoined.length !== 0 ? (
             project.membersJoined.map((member) => (
-              <TooltipProvider key={member.name}>
-                <Tooltip>
-                  <TooltipTrigger>
-                    <Link title={member.name} href={`/users/${userIdTest}`}>
-                      <Avatar>
-                        <AvatarImage src={member.avatarUrl} />
-                        <AvatarFallback>{member.name}</AvatarFallback>
-                      </Avatar>
-                    </Link>
-                  </TooltipTrigger>
-                  <TooltipContent>{member.name}</TooltipContent>
-                </Tooltip>
-              </TooltipProvider>
+              <UserAvatar
+                key={member.name}
+                src={member.avatarUrl}
+                name={member.name}
+                userId={userIdTest}
+              />
             ))
           ) : (
             <p>No members joined yet</p>

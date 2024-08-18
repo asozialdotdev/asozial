@@ -2,7 +2,7 @@
 import { useFormStatus } from "react-dom";
 import { Button } from "../ui/button";
 
-function ButtonProjectPostForm() {
+function ProjectPostFormButton() {
   const { pending } = useFormStatus();
   console.log("pending:", pending);
   return (
@@ -16,4 +16,4 @@ function ButtonProjectPostForm() {
   );
 }
 
-export default ButtonProjectPostForm;
+export default ProjectPostFormButton;

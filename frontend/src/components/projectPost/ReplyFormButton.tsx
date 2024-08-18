@@ -1,7 +1,7 @@
 import { useFormStatus } from "react-dom";
 import { Button } from "../ui/button";
 
-function ButtonReplyForm({
+function ReplyFormButton({
   toggleOpen,
   startOpen,
 }: {
@@ -34,4 +34,4 @@ function ButtonReplyForm({
   );
 }
 
-export default ButtonReplyForm;
+export default ReplyFormButton;

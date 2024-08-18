@@ -1,15 +1,17 @@
 "use client";
-import {
-  createDislikePost,
-  createDislikeReply,
-  createLikePost,
-  createLikeReply,
-} from "@/actions";
-import { Reply } from "@/types/ProjectPost";
-import { useEffect, useState } from "react";
-import { GoCommentDiscussion, GoThumbsdown, GoThumbsup } from "react-icons/go";
-import { Button } from "../ui/button";
+//Actions
+import { createDislikeReply, createLikeReply } from "@/actions";
+//React
+import { useEffect, useMemo, useState } from "react";
+
+//Ui
+import { GoThumbsdown, GoThumbsup } from "react-icons/go";
+
+//Lib
 import FlipNumbers from "react-flip-numbers";
+
+//Types
+import { Reply } from "@/types/ProjectPost";
 
 function ReplyLikeButtons({ reply }: { reply: Reply }) {
   const [likes, setLikes] = useState(reply.likes.length ?? 0);
@@ -17,12 +19,23 @@ function ReplyLikeButtons({ reply }: { reply: Reply }) {
   const [userLiked, setUserLiked] = useState(false);
   const [userDisliked, setUserDisliked] = useState(false);
 
-  const userId = reply.userId._id.toString();
+  //useMemo for performance
+  const userId = useMemo(() => reply.userId._id.toString(), [reply.userId._id]);
+
+  const hasUserLiked = useMemo(
+    () => reply.likes.some((id) => id.toString() === userId),
+    [reply.likes, userId],
+  );
+
+  const hasUserDisliked = useMemo(
+    () => reply.dislikes.some((id) => id.toString() === userId),
+    [reply.dislikes, userId],
+  );
 
   // Check if the user has already liked or disliked the post
   useEffect(() => {
-    setUserLiked(reply.likes.some((id) => id.toString() === userId));
-    setUserDisliked(reply.dislikes.some((id) => id.toString() === userId));
+    setUserLiked(hasUserLiked);
+    setUserDisliked(hasUserDisliked);
   }, [reply.likes, reply.dislikes, userId]);
 
   const handleLike = async () => {
@@ -35,7 +48,7 @@ function ReplyLikeButtons({ reply }: { reply: Reply }) {
         setUserDisliked(false);
       }
 
-      setUserLiked(!userLiked);
+      setUserLiked(true);
     } catch (error) {
       console.error("Error liking post");
     }
@@ -51,7 +64,7 @@ function ReplyLikeButtons({ reply }: { reply: Reply }) {
         setUserLiked(false);
       }
 
-      setUserDisliked(!userDisliked);
+      setUserDisliked(true);
     } catch (error) {
       console.error("Error disliking post");
     }

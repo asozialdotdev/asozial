@@ -1,11 +1,19 @@
 "use client";
+//Actions
 import { createDislikePost, createLikePost } from "@/actions";
-import { ProjectPost } from "@/types/ProjectPost";
-import { useEffect, useState } from "react";
-import { GoCommentDiscussion, GoThumbsdown, GoThumbsup } from "react-icons/go";
-import { Button } from "../ui/button";
+
+//React
+import { useEffect, useMemo, useState } from "react";
+
+//Ui
+import { GoThumbsdown, GoThumbsup } from "react-icons/go";
+
+//Lib
 import FlipNumbers from "react-flip-numbers";
 import { useTheme } from "next-themes";
+
+//Types
+import { ProjectPost } from "@/types/ProjectPost";
 
 function ProjectPostLikeButtons({ projectPost }: { projectPost: ProjectPost }) {
   const [likes, setLikes] = useState(projectPost.likes.length ?? 0);
@@ -16,14 +24,26 @@ function ProjectPostLikeButtons({ projectPost }: { projectPost: ProjectPost }) {
   const { theme } = useTheme();
   console.log("theme", theme);
 
-  const userId = projectPost.userId._id.toString();
+  //useMemo for performance
+  const userId = useMemo(
+    () => projectPost.userId._id.toString(),
+    [projectPost.userId._id],
+  );
+
+  const hasUserLiked = useMemo(
+    () => projectPost.likes.some((id) => id.toString() === userId),
+    [projectPost.likes, userId],
+  );
+
+  const hasUserDisliked = useMemo(
+    () => projectPost.dislikes.some((id) => id.toString() === userId),
+    [projectPost.dislikes, userId],
+  );
 
   // Check if the user has already liked or disliked the post
   useEffect(() => {
-    setUserLiked(projectPost.likes.some((id) => id.toString() === userId));
-    setUserDisliked(
-      projectPost.dislikes.some((id) => id.toString() === userId),
-    );
+    setUserLiked(hasUserLiked);
+    setUserDisliked(hasUserDisliked);
   }, [projectPost.likes, projectPost.dislikes, userId]);
 
   const handleLike = async () => {
@@ -36,7 +56,7 @@ function ProjectPostLikeButtons({ projectPost }: { projectPost: ProjectPost }) {
         setUserDisliked(false);
       }
 
-      setUserLiked(!userLiked);
+      setUserLiked(true);
     } catch (error) {
       console.error("Error liking post");
     }
@@ -52,7 +72,7 @@ function ProjectPostLikeButtons({ projectPost }: { projectPost: ProjectPost }) {
         setUserLiked(false);
       }
 
-      setUserDisliked(!userDisliked);
+      setUserDisliked(true);
     } catch (error) {
       console.error("Error disliking post");
     }

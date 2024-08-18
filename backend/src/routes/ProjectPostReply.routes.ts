@@ -15,20 +15,20 @@ projectPostReplyRouter.post("/:replyId/like", async (req, res, next) => {
       return res.status(404).json({ error: "Reply not found" });
     }
 
-    // Ensure no null values in the arrays
+    // no null values in the arrays
     reply.likes = reply.likes.filter((id) => id && id.toString() !== null);
     reply.dislikes = reply.dislikes.filter(
       (id) => id && id.toString() !== null
     );
 
-    // If user already liked the post, remove the like (toggle off)
+    // If user already liked the post, remove the like
     if (reply.likes.includes(userId)) {
       reply.likes = reply.likes.filter((id) => id.toString() !== userId);
     } else {
       // Otherwise, add the like
       reply.likes.push(userId);
 
-      // If the user had previously disliked the post, remove the dislike
+      // If the user had disliked the post, remove the dislike
       reply.dislikes = reply.dislikes.filter((id) => id.toString() !== userId);
     }
 
@@ -51,7 +51,7 @@ projectPostReplyRouter.post("/:replyId/dislike", async (req, res, next) => {
       return res.status(404).json({ error: "Reply not found" });
     }
 
-    // Ensure no null values in the arrays
+    // no null values in the arrays
     reply.likes = reply.likes.filter((id) => id && id.toString() !== null);
     reply.dislikes = reply.dislikes.filter(
       (id) => id && id.toString() !== null
@@ -64,7 +64,7 @@ projectPostReplyRouter.post("/:replyId/dislike", async (req, res, next) => {
       // Otherwise, add the dislike
       reply.dislikes.push(userId);
 
-      // If the user had previously liked the post, remove the like
+      // If the user had liked the post, remove the like
       reply.likes = reply.likes.filter((id) => id.toString() !== userId);
     }
 

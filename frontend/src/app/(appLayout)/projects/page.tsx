@@ -1,8 +1,9 @@
+//Actions
+import { fetchAllProjects } from "@/actions";
+
+//Components
 import MyProjects from "@/components/project/MyProjects";
 import PageContainer from "@/components/common/PageContainer";
-import { useUserContext } from "@/context/UserContext";
-import { useEffect, useState } from "react";
-import { fetchAllProjects } from "@/actions";
 
 async function MyProjectsPage() {
   const projects = await fetchAllProjects();

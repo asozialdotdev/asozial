@@ -1,11 +1,16 @@
 "use server";
-
-import { Project, ProjectId } from "@/types/Project";
-import { baseUrl } from "@/constants";
-import { headers } from "next/headers";
-import { auth } from "@/auth";
-import { redirect } from "next/navigation";
+//Next
 import { revalidatePath } from "next/cache";
+import { redirect } from "next/navigation";
+
+//Constants
+import { baseUrl } from "@/constants";
+
+//Lib
+import { auth } from "@/auth";
+
+//Types
+import { Project, ProjectId } from "@/types/Project";
 
 // Get all projects
 const fetchAllProjects = async () => {

@@ -6,17 +6,16 @@ import { createProjectPostReply } from "@/actions";
 import { useFormState } from "react-dom";
 
 //Components
-import ButtonReplyForm from "./ButtonReplyForm";
+import ReplyFormButton from "./ReplyFormButton";
+import ReplyLikeButtons from "./ReplyLikeButtons";
 
 //Ui
-import { Button } from "../ui/button";
 import { Textarea } from "../ui/textarea";
 import { useEffect, useRef, useState } from "react";
+import { GoComment } from "react-icons/go";
 
 //Types
 import type { ProjectPostId, Reply, ReplyId } from "@/types/ProjectPost";
-import { GoComment } from "react-icons/go";
-import ReplyLikeButtons from "./ReplyLikeButtons";
 
 type ReplyFormProps = {
   projectPostId: ProjectPostId;
@@ -58,7 +57,7 @@ function ReplyForm({
   return (
     <section className={`${startOpen ? "w-full py-4" : "-mt-4 w-[120%]"}`}>
       {!open ? (
-        <div className='flex items-baseline gap-4 mt-4'>
+        <div className="mt-4 flex items-baseline gap-4">
           <ReplyLikeButtons reply={reply} />
           <button
             className="flex items-center gap-2 text-sm"
@@ -88,7 +87,7 @@ function ReplyForm({
             </span>
           )}
 
-          <ButtonReplyForm toggleOpen={toggleOpen} startOpen={startOpen} />
+          <ReplyFormButton toggleOpen={toggleOpen} startOpen={startOpen} />
         </form>
       )}
     </section>
