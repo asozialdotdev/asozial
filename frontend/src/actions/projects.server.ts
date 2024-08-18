@@ -5,6 +5,7 @@ import { baseUrl } from "@/constants";
 import { headers } from "next/headers";
 import { auth } from "@/auth";
 import { redirect } from "next/navigation";
+import { revalidatePath } from "next/cache";
 
 // Get all projects
 const fetchAllProjects = async () => {
@@ -92,18 +93,45 @@ const createProject = async (data: Project) => {
 };
 
 const handleJoinProject = async (formData: FormData) => {
-  const projectId = formData.get("projectId") as string;
+  const session = await auth();
+  try {
+    const projectId = formData.get("projectId") as string;
 
-  const response = await fetch(`${baseUrl}/projects/${projectId}/join`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({ userId: "60d4f4d2d243f80015f7b3f9" }),
-  });
+    const response = await fetch(`${baseUrl}/api/projects/${projectId}/join`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ userId: session?.user?.id }),
+    });
 
-  const result = await response.json();
-  console.log("result:", result);
+    const result = await response.json();
+    revalidatePath(`/projects/${projectId}`);
+    console.log("result:", result);
+  } catch (error) {
+    console.error("Error joining project:", error);
+    return "Error joining project";
+  }
+};
+
+const checkIsMember = async (projectId: ProjectId) => {
+  const session = await auth();
+  try {
+    const response = await fetch(
+      `${baseUrl}/api/projects/${projectId}/is-member?userId=${session?.user?.id}`,
+    );
+    if (!response.ok) {
+      throw new Error(
+        `Failed to check if user is a member: ${response.statusText}`,
+      );
+    }
+    const data = await response.json();
+    console.log("Is member:", data);
+    return data.isMember;
+  } catch (error) {
+    console.error("Error checking if user is a member:", error);
+    return "Error checking if user is a member";
+  }
 };
 
 export {
@@ -112,4 +140,5 @@ export {
   searchForMyProjects,
   handleJoinProject,
   createProject,
+  checkIsMember,
 };

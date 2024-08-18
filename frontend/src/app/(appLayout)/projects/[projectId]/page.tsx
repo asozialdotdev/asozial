@@ -1,7 +1,11 @@
 "use server";
 
 import { fetchProjectPosts } from "@/actions";
-import { fetchProjectById, handleJoinProject } from "@/actions/projects.server";
+import {
+  checkIsMember,
+  fetchProjectById,
+  handleJoinProject,
+} from "@/actions/projects.server";
 //Actions
 
 //Components
@@ -24,9 +28,7 @@ async function Page({ params }: { params: { projectId: ProjectId } }) {
 
   const posts = await fetchProjectPosts(projectId);
 
-
-  const isMember = membersJoined.includes("Jos"); // hardcoded
-  // const isMember = membersJoined.includes(user._id); // dynamic
+  const isMember = await checkIsMember(projectId);
   if (!project) {
     notFound();
   }
@@ -34,7 +36,7 @@ async function Page({ params }: { params: { projectId: ProjectId } }) {
     <PageContainer className="w-full max-w-screen-md gap-4">
       <ProjectComponent project={project} />
 
-      {!isMember ? (
+      {isMember ? (
         <ProjectPostsList projectPosts={posts} projectId={projectId} />
       ) : (
         <div className="flex flex-col items-center justify-center gap-4 p-4">
