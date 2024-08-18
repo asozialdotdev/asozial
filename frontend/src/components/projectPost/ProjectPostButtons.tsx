@@ -4,12 +4,17 @@ import { ProjectPost } from "@/types/ProjectPost";
 import { useEffect, useState } from "react";
 import { GoCommentDiscussion, GoThumbsdown, GoThumbsup } from "react-icons/go";
 import { Button } from "../ui/button";
+import FlipNumbers from "react-flip-numbers";
+import { useTheme } from "next-themes";
 
 function ProjectPostLikeButtons({ projectPost }: { projectPost: ProjectPost }) {
   const [likes, setLikes] = useState(projectPost.likes.length ?? 0);
   const [dislikes, setDislikes] = useState(projectPost.dislikes.length ?? 0);
   const [userLiked, setUserLiked] = useState(false);
   const [userDisliked, setUserDisliked] = useState(false);
+
+  const { theme } = useTheme();
+  console.log("theme", theme);
 
   const userId = projectPost.userId._id.toString();
 
@@ -60,17 +65,35 @@ function ProjectPostLikeButtons({ projectPost }: { projectPost: ProjectPost }) {
           <button onClick={handleLike}>
             <GoThumbsup size={20} />
           </button>
-          <p className="w-[10px] text-lg text-neutral-500 dark:text-neutral-400">
+          {/* <p className="w-[10px] text-lg text-neutral-500 dark:text-neutral-400">
             {likes}
-          </p>
+          </p> */}
+          <FlipNumbers
+            height={16}
+            width={16}
+            color="green"
+            background=""
+            play
+            perspective={100}
+            numbers={likes.toString()}
+          />
         </div>
         <div className="flex items-center gap-1">
           <button onClick={handleDislike}>
             <GoThumbsdown size={20} />
           </button>
-          <p className="w-[10px] text-lg text-neutral-500 dark:text-neutral-400">
+          {/* <p className="w-[10px] text-lg text-neutral-500 dark:text-neutral-400">
             {dislikes}
-          </p>
+          </p> */}
+          <FlipNumbers
+            height={16}
+            width={16}
+            color="red"
+            background=""
+            play
+            perspective={100}
+            numbers={dislikes.toString()}
+          />
         </div>
       </div>
     </>
