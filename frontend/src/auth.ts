@@ -74,7 +74,6 @@ export const {
       if (session && token) {
         session.user.id = token.sub ?? "";
       }
-      console.log("Session in auth.ts:", session);
       return session;
     },
     async jwt({ token, user }) {

@@ -3,18 +3,6 @@ import express, { Request, Response, NextFunction } from "express";
 import axios from "axios";
 import Project from "../models/Project.models";
 import User from "../models/User.models";
-import { verifyJWT } from "../middleware/jwt.middleware";
-import { ObjectId } from "mongodb";
-
-interface JwtPayload {
-  _id: string;
-  username: string;
-  // other properties if any
-}
-
-function isJwtPayload(payload: any): payload is JwtPayload {
-  return (payload as JwtPayload)._id !== undefined;
-}
 
 const projectsRouter = express.Router();
 
@@ -29,6 +17,8 @@ projectsRouter.get(
     try {
       const projects = await Project.find({ owner: userId })
         .populate("membersJoined", "name avatarUrl")
+        .populate("owner", "name avatarUrl")
+
         .exec();
       console.log("Number of Projects Found:", projects.length);
       res.json(projects);
@@ -150,7 +140,9 @@ projectsRouter.get(
     try {
       const project = await Project.findById(req.params.projectId)
         .populate("membersJoined", "name avatarUrl")
+        .populate("owner", "name avatarUrl")
         .exec();
+      console.log("Project Found>>>>>>>>:", project);
       if (!project) {
         return res.status(404).json({ error: "Project not found" });
       }
@@ -162,27 +154,29 @@ projectsRouter.get(
 );
 
 // POST request to join a project
-
+// Change from from users to join to test
 projectsRouter.post(
-  "/:projectId/users",
+  ///:projectId/users,
+  "/:projectId/join",
   async (req: Request, res: Response, next: NextFunction) => {
     try {
+      const { userId } = req.body;
       const project = await Project.findById(req.params.projectId);
       if (!project) {
         return res.status(404).json({ error: "Project not found" });
       }
 
-      const actualUser = (req as any).payload.user;
       if (
-        project.membersJoined.includes(actualUser) ||
-        project.membersApplied.includes(actualUser)
+        project.membersJoined.includes(userId) ||
+        project.membersApplied.includes(userId)
       ) {
         return res
           .status(400)
           .json({ error: "User is already a member of this project" });
       }
 
-      project.membersApplied.push(actualUser._id);
+      // project.membersApplied.push(userId);
+      project.membersJoined.push(userId); // Change from membersApplied to membersJoined to test
       await project.save();
 
       res.json(project);
@@ -195,17 +189,17 @@ projectsRouter.post(
 // GET check if user is a member of a project
 
 projectsRouter.get(
-  "/:userId",
+  "/:projectId/is-member",
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const user = await User.findById(req.params.userId);
-      if (!user) {
-        return res.status(404).json({ error: "User not found" });
-      }
-
-      const project = await Project.findById(req.query.projectId);
+      const project = await Project.findById(req.params.projectId);
       if (!project) {
         return res.status(404).json({ error: "Project not found" });
+      }
+      const {userId} = req.query;
+      const user = await User.findById(userId);
+      if (!user) {
+        return res.status(404).json({ error: "User not found" });
       }
 
       res.json({

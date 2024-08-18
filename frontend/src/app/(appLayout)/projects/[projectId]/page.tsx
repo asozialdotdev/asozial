@@ -1,38 +1,43 @@
 "use server";
 
-import { fetchPosts } from "@/actions/posts.server";
-import { fetchProjectById, handleJoinProject } from "@/actions/projects.server";
+import { fetchProjectPosts } from "@/actions";
+import {
+  checkIsMember,
+  fetchProjectById,
+  handleJoinProject,
+} from "@/actions/projects.server";
 //Actions
 
 //Components
 import PageContainer from "@/components/common/PageContainer";
 import ProjectComponent from "@/components/project/ProjectComponent";
-import ProjectPostsList from "@/components/project/ProjectPostsList";
+import ProjectPostsList from "@/components/projectPost/ProjectPostsList";
 
 //Ui
 import { Button } from "@/components/ui/button";
 
 //Types
 import type { ProjectId } from "@/types/Project";
+import { notFound } from "next/navigation";
 
 const membersJoined = ["Benjamin", "Mirko", "John", "Jane", "José"];
 
 async function Page({ params }: { params: { projectId: ProjectId } }) {
   const { projectId } = params;
-  console.log("projectId:///////////////", projectId);
   const project = await fetchProjectById(projectId);
-  console.log("project:///////////////", project);
-  const posts = await fetchPosts(projectId);
 
-  const isMember = membersJoined.includes("Jos"); // hardcoded
-  // const isMember = membersJoined.includes(user._id); // dynamic
+  const posts = await fetchProjectPosts(projectId);
 
+  const isMember = await checkIsMember(projectId);
+  if (!project) {
+    notFound();
+  }
   return (
-    <PageContainer className="max-w-screen-md gap-4 w-full">
+    <PageContainer className="w-full max-w-screen-md gap-4">
       <ProjectComponent project={project} />
 
-      {!isMember ? (
-        <ProjectPostsList posts={posts} projectId={projectId} />
+      {isMember ? (
+        <ProjectPostsList projectPosts={posts} projectId={projectId} />
       ) : (
         <div className="flex flex-col items-center justify-center gap-4 p-4">
           <h3 className="text-xl font-semibold">

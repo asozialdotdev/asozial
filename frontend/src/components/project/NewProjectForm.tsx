@@ -1,9 +1,19 @@
 "use client";
+//Next
+import { useRouter } from "next/navigation";
+import Image from "next/image";
 
+//Actions
+import { createProject } from "@/actions";
+
+//Hooks
+import { ControllerRenderProps } from "react-hook-form";
+import useSpokenLanguages from "@/hooks/useSpokenLanguages";
+
+//Ui
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { Textarea } from "../ui/textarea";
-
 import {
   Select,
   SelectContent,
@@ -12,24 +22,21 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
-import { ControllerRenderProps } from "react-hook-form";
-
 import discord from "/public/socials/discord.png";
 import slack from "/public/socials/slack.png";
 import notion from "/public/socials/notion.png";
 import gitlab from "/public/socials/gitlab.png";
 
-import useSpokenLanguages from "@/hooks/useSpokenLanguages";
-import { languagesWithColors } from "@/constants";
-import Image from "next/image";
+//Lib
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { createProjectSchema } from "@/lib/schema";
 import { z } from "zod";
+import { languagesWithColors } from "@/constants";
+
+//Components
 import PageTitle from "../common/PageTitle";
-import { createProject } from "@/actions";
-import { Project } from "@/types/Project";
-import { useRouter } from "next/navigation";
+import type { Project } from "@/types/Project";
 
 type Inputs = z.infer<typeof createProjectSchema>;
 
@@ -87,7 +94,6 @@ function NewProjectForm() {
   const techStackValues = watch("techStack");
   const socialsValues = watch("socials");
   const mainLanguageValue = watch("mainLanguage");
-
 
   const handleCheckedChange = (
     checked: boolean | string,

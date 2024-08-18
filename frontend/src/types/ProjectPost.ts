@@ -1,12 +1,39 @@
 import { Types } from "mongoose";
 
-type ProjectPost = {
-  userId: Types.ObjectId;
-  projectId: Types.ObjectId;
-  title?: string;
-  content?: string;
-  createdDate?: Date;
-  updatedDate?: Date;
+type ProjectPostId = Types.ObjectId | string;
+type ReplyId = Types.ObjectId | string | null | undefined;
+
+type User = {
+  _id: Types.ObjectId;
+  avatarUrl: string;
+  name: string;
 };
 
-export type { ProjectPost };
+type ProjectPost = {
+  _id: ProjectPostId;
+  title: string;
+  content: string;
+  userId: User;
+  projectId: Types.ObjectId;
+  replies: Reply[];
+  likes: User[];
+  dislikes: User[];
+  createdAt: Date;
+  updatedAt: Date;
+  replyCount: number;
+};
+
+type Reply = {
+  _id: ReplyId;
+  content: string;
+  userId: User;
+  projectPostId: ProjectPostId;
+  parentId?: Types.ObjectId;
+  children: Reply[];
+  likes: User[];
+  dislikes: User[];
+  createdAt: Date;
+  updatedAt: Date;
+};
+
+export type { ProjectPost, ProjectPostId, Reply, ReplyId, User };
