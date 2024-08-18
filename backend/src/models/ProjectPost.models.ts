@@ -4,6 +4,8 @@ const projectPostSchema = new Schema(
   {
     title: { type: String, required: true },
     content: { type: String, required: true },
+    likes: [{ type: Schema.Types.ObjectId, ref: "User" }], // Array of user IDs who liked the post
+    dislikes: [{ type: Schema.Types.ObjectId, ref: "User" }],
     userId: { type: Schema.Types.ObjectId, ref: "User", required: true },
     projectId: { type: Schema.Types.ObjectId, ref: "Project", required: true }, // Assuming there's a Topic model
   },
@@ -19,6 +21,9 @@ projectPostSchema.virtual("replyCount", {
   foreignField: "projectPostId", // is equal to `foreignField`
   count: true, // Only get the number of replies
 });
+
+projectPostSchema.index({ likes: 1 });
+projectPostSchema.index({ dislikes: 1 });
 
 projectPostSchema.set("toJSON", { virtuals: true });
 projectPostSchema.set("toObject", { virtuals: true });

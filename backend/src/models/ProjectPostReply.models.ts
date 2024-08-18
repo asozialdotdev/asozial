@@ -3,9 +3,19 @@ import { Schema, model } from "mongoose";
 const projectPostReplySchema = new Schema(
   {
     content: { type: String, required: true },
-    projectPostId: { type: Schema.Types.ObjectId, ref: "ProjectPost", required: true }, // Reference to the post being replied to
+    likes: [{ type: Schema.Types.ObjectId, ref: "User" }], // Array of user IDs who liked the reply
+    dislikes: [{ type: Schema.Types.ObjectId, ref: "User" }],
+    projectPostId: {
+      type: Schema.Types.ObjectId,
+      ref: "ProjectPost",
+      required: true,
+    },
     userId: { type: Schema.Types.ObjectId, ref: "User", required: true },
-    parentId: { type: Schema.Types.ObjectId, ref: "ProjectPostReply", default: null }, // Reference to another reply if this is a nested reply
+    parentId: {
+      type: Schema.Types.ObjectId,
+      ref: "ProjectPostReply",
+      default: null,
+    },
     children: [{ type: Schema.Types.ObjectId, ref: "ProjectPostReply" }], // References to nested replies
   },
   {
@@ -13,5 +23,8 @@ const projectPostReplySchema = new Schema(
     timestamps: true,
   }
 );
+
+projectPostReplySchema.index({ likes: 1 });
+projectPostReplySchema.index({ dislikes: 1 });
 
 export default model("ProjectPostReply", projectPostReplySchema);
