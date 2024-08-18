@@ -14,19 +14,22 @@ import { Button } from "@/components/ui/button";
 
 //Types
 import type { ProjectId } from "@/types/Project";
+import { notFound } from "next/navigation";
 
 const membersJoined = ["Benjamin", "Mirko", "John", "Jane", "José"];
 
 async function Page({ params }: { params: { projectId: ProjectId } }) {
   const { projectId } = params;
   const project = await fetchProjectById(projectId);
-  console.log("project:///////////////", project);
+
   const posts = await fetchProjectPosts(projectId);
-  console.log("fetchProjectPosts:////////////////", posts);
+
 
   const isMember = membersJoined.includes("Jos"); // hardcoded
   // const isMember = membersJoined.includes(user._id); // dynamic
-
+  if (!project) {
+    notFound();
+  }
   return (
     <PageContainer className="w-full max-w-screen-md gap-4">
       <ProjectComponent project={project} />

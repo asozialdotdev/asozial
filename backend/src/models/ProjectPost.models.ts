@@ -4,8 +4,8 @@ const projectPostSchema = new Schema(
   {
     title: { type: String, required: true },
     content: { type: String, required: true },
-    likes: [{ type: Schema.Types.ObjectId, ref: "User" }], // Array of user IDs who liked the post
-    dislikes: [{ type: Schema.Types.ObjectId, ref: "User" }],
+    likes: [{ type: Schema.Types.ObjectId, ref: "User", default: [] }], // Array of user IDs who liked the post
+    dislikes: [{ type: Schema.Types.ObjectId, ref: "User", default: [] }],
     userId: { type: Schema.Types.ObjectId, ref: "User", required: true },
     projectId: { type: Schema.Types.ObjectId, ref: "Project", required: true }, // Assuming there's a Topic model
   },

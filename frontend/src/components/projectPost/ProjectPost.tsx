@@ -1,19 +1,9 @@
-//Utils
-import { format } from "date-fns";
-
-//Ui
-import {
-  GoArrowUp,
-  GoCommentDiscussion,
-  GoThumbsdown,
-  GoThumbsup,
-} from "react-icons/go";
-
 //Types
 import type { ProjectPost } from "@/types/ProjectPost";
 import UserAvatar from "../common/UserAvatar";
 import ProjectPostContent from "./ProjectPostContent";
 import ProjectPostButtons from "./ProjectPostButtons";
+import ReplyCount from "./ReplyCount";
 
 function ProjectPost({ projectPost }: { projectPost: ProjectPost }) {
   const post = projectPost;
@@ -35,7 +25,12 @@ function ProjectPost({ projectPost }: { projectPost: ProjectPost }) {
           createdAt={post.createdAt}
         />
       </div>
-      <ProjectPostButtons projectPost={post} />
+      <div>
+        <div className="flex items-center gap-4">
+          <ReplyCount replies={post.replyCount} />
+          <ProjectPostButtons projectPost={post} />
+        </div>
+      </div>
     </div>
   );
 }

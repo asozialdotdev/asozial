@@ -1,33 +1,51 @@
+"use client";
+import { createDislikePost, createLikePost } from "@/actions";
 import { ProjectPost } from "@/types/ProjectPost";
+import { useEffect, useState } from "react";
 import { GoCommentDiscussion, GoThumbsdown, GoThumbsup } from "react-icons/go";
+import { Button } from "../ui/button";
 
-function ProjectPostButtons({
-  projectPost = undefined,
-}: {
-  projectPost?: ProjectPost;
-}) {
+function ProjectPostLikeButtons({ projectPost }: { projectPost: ProjectPost }) {
+  console.log("ProjectPostLikeButtons:||||||||||||||||||", projectPost.title);
+  const [likes, setLikes] = useState(projectPost.likes.length ?? 0);
+  const [dislikes, setDislikes] = useState(projectPost.dislikes.length ?? 0);
+
+
+
+  console.log("deslikes>>>>>>", dislikes);
+  console.log("likes>>>>>>", likes);
+  const handleLike = async () => {
+    const likes = await createLikePost(projectPost._id);
+    setLikes(likes);
+  };
+
+  const handleDislike = async () => {
+    const dislikes = await createDislikePost(projectPost._id);
+    setDislikes(dislikes);
+  };
+
   return (
     <>
-      <div className="ml-14 flex items-center gap-4 mb-4">
-        {projectPost && (
-          <div className="flex items-center gap-1">
-            <GoCommentDiscussion size={22} />
-            <p className="text-lg text-neutral-500 dark:text-neutral-400">
-              {projectPost.replyCount}
-            </p>
-          </div>
-        )}
+      <div className="mb-4 flex items-center gap-4">
         <div className="flex items-center gap-1">
-          <GoThumbsup size={20} />
-          <p className="text-lg text-neutral-500 dark:text-neutral-400">10</p>
+          <button onClick={handleLike}>
+            <GoThumbsup size={20} />
+          </button>
+          <p className="text-lg text-neutral-500 dark:text-neutral-400">
+            {likes}
+          </p>
         </div>
         <div className="flex items-center gap-1">
-          <GoThumbsdown size={20} />
-          <p className="text-lg text-neutral-500 dark:text-neutral-400">10</p>
+          <button onClick={handleDislike}>
+            <GoThumbsdown size={20} />
+          </button>
+          <p className="text-lg text-neutral-500 dark:text-neutral-400">
+            {dislikes}
+          </p>
         </div>
       </div>
     </>
   );
 }
 
-export default ProjectPostButtons;
+export default ProjectPostLikeButtons;
