@@ -6,22 +6,51 @@ import { GoCommentDiscussion, GoThumbsdown, GoThumbsup } from "react-icons/go";
 import { Button } from "../ui/button";
 
 function ProjectPostLikeButtons({ projectPost }: { projectPost: ProjectPost }) {
-  console.log("ProjectPostLikeButtons:||||||||||||||||||", projectPost.title);
   const [likes, setLikes] = useState(projectPost.likes.length ?? 0);
   const [dislikes, setDislikes] = useState(projectPost.dislikes.length ?? 0);
+  const [userLiked, setUserLiked] = useState(false);
+  const [userDisliked, setUserDisliked] = useState(false);
 
+  const userId = projectPost.userId._id.toString();
 
+  // Check if the user has already liked or disliked the post
+  useEffect(() => {
+    setUserLiked(projectPost.likes.some((id) => id.toString() === userId));
+    setUserDisliked(
+      projectPost.dislikes.some((id) => id.toString() === userId),
+    );
+  }, [projectPost.likes, projectPost.dislikes, userId]);
 
-  console.log("deslikes>>>>>>", dislikes);
-  console.log("likes>>>>>>", likes);
   const handleLike = async () => {
-    const likes = await createLikePost(projectPost._id);
-    setLikes(likes);
+    try {
+      const updatedLikes = await createLikePost(projectPost._id);
+      setLikes(updatedLikes);
+
+      if (userDisliked) {
+        setDislikes((prev) => prev - 1);
+        setUserDisliked(false);
+      }
+
+      setUserLiked(!userLiked);
+    } catch (error) {
+      console.error("Error liking post");
+    }
   };
 
   const handleDislike = async () => {
-    const dislikes = await createDislikePost(projectPost._id);
-    setDislikes(dislikes);
+    try {
+      const updatedDislikes = await createDislikePost(projectPost._id);
+      setDislikes(updatedDislikes);
+
+      if (userLiked) {
+        setLikes((prev) => prev - 1);
+        setUserLiked(false);
+      }
+
+      setUserDisliked(!userDisliked);
+    } catch (error) {
+      console.error("Error disliking post");
+    }
   };
 
   return (

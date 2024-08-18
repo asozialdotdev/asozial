@@ -4,6 +4,8 @@ import UserAvatar from "../common/UserAvatar";
 import ProjectPostContent from "./ProjectPostContent";
 import ProjectPostButtons from "./ProjectPostButtons";
 import ReplyCount from "./ReplyCount";
+import Link from "next/link";
+import { FaRegArrowAltCircleRight } from "react-icons/fa";
 
 function ProjectPost({ projectPost }: { projectPost: ProjectPost }) {
   const post = projectPost;
@@ -30,6 +32,16 @@ function ProjectPost({ projectPost }: { projectPost: ProjectPost }) {
           <ReplyCount replies={post.replyCount} />
           <ProjectPostButtons projectPost={post} />
         </div>
+        <Link
+          className="ml-14 flex items-center gap-2 font-semibold"
+          key={post._id.toString()}
+          href={`/projects/${post.projectId}/posts/${post._id}`}
+        >
+          Check the thread
+          <span>
+            <FaRegArrowAltCircleRight size={25} />
+          </span>
+        </Link>
       </div>
     </div>
   );
