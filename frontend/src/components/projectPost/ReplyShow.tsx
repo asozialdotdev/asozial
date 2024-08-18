@@ -1,7 +1,7 @@
 import { fetchPostByIdAndReplies } from "@/actions";
 import ReplyForm from "./ReplyForm";
 import { ProjectPostId, Reply, ReplyId } from "@/types/ProjectPost";
-import { format } from "date-fns";
+import { format, formatDistance } from "date-fns";
 import UserAvatar from "../common/UserAvatar";
 import ProjectPostButtons from "./ProjectPostButtons";
 
@@ -22,8 +22,15 @@ async function ReplyShow({ replyId, projectPostId }: ReplyShowProps) {
   const childrenArr = replies.filter((r: Reply) => r.parentId === replyId);
   const isLastChild = childrenArr.length === 0;
   const isTopLevel = !reply.parentId;
-  const createdAt = format(new Date(reply.createdAt), "dd, MMM yyyy - HH:mm");
-
+  const formattedCreatedAt = formatDistance(
+    new Date(reply.createdAt),
+    new Date(),
+    {
+      addSuffix: true,
+    },
+  )
+    .replace("about", "")
+    .replace("minutes", "min");
   return (
     <div
       key={reply._id.toString()}
@@ -48,7 +55,7 @@ async function ReplyShow({ replyId, projectPostId }: ReplyShowProps) {
           </p>
           <p className="mt-1 text-sm text-neutral-500 dark:text-neutral-400">
             <small>Posted </small>
-            {createdAt}
+            {formattedCreatedAt}
           </p>
         </div>
       </section>
