@@ -4,6 +4,7 @@ import { ProjectPostId, Reply, ReplyId } from "@/types/ProjectPost";
 import { format, formatDistance } from "date-fns";
 import UserAvatar from "../common/UserAvatar";
 import ProjectPostButtons from "./ProjectPostButtons";
+import ReplyLikeButtons from "./ReplyLikeButtons";
 
 type ReplyShowProps = {
   replyId: ReplyId;
@@ -59,11 +60,12 @@ async function ReplyShow({ replyId, projectPostId }: ReplyShowProps) {
           </p>
         </div>
       </section>
-      <ProjectPostButtons />
-      <section>
+      <section className='flex items-center gap-4'>
+      {/* <ReplyLikeButtons reply={reply} /> */}
         <ReplyForm
           projectPostId={reply.projectPostId}
           parentId={reply._id}
+          reply={reply}
           startOpen={false}
         />
       </section>

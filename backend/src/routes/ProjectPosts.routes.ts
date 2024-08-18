@@ -151,7 +151,7 @@ projectPostRouter.post(
 );
 
 // POST Toggle Like a project post
-projectPostRouter.post("/:projectPostId/like", async (req, res) => {
+projectPostRouter.post("/:projectPostId/like", async (req, res, next) => {
   const { userId } = req.body;
 
   try {
@@ -180,12 +180,12 @@ projectPostRouter.post("/:projectPostId/like", async (req, res) => {
     res.json({ likes: post.likes.length, dislikes: post.dislikes.length });
   } catch (error) {
     console.error("Error liking post:", error);
-    res.status(500).json({ error: "An error occurred" });
+    next(error);
   }
 });
 
 // POST Toggle Dislike a project post
-projectPostRouter.post("/:projectPostId/dislike", async (req, res) => {
+projectPostRouter.post("/:projectPostId/dislike", async (req, res, next) => {
   const { userId } = req.body;
 
   try {
@@ -214,12 +214,12 @@ projectPostRouter.post("/:projectPostId/dislike", async (req, res) => {
     res.json({ likes: post.likes.length, dislikes: post.dislikes.length });
   } catch (error) {
     console.error("Error disliking post:", error);
-    res.status(500).json({ error: "An error occurred" });
+    next(error);
   }
 });
 
 // POST Like a reply
-projectPostRouter.post("/:replyId/like", async (req, res) => {
+projectPostRouter.post("/:replyId/like", async (req, res, next) => {
   const { userId } = req.body;
 
   try {
@@ -229,44 +229,64 @@ projectPostRouter.post("/:replyId/like", async (req, res) => {
       return res.status(404).json({ error: "Reply not found" });
     }
 
-    // Remove from dislikes if exists
-    reply.dislikes = reply.dislikes.filter((id) => id.toString() !== userId);
+    // Ensure no null values in the arrays
+    reply.likes = reply.likes.filter((id) => id && id.toString() !== null);
+    reply.dislikes = reply.dislikes.filter(
+      (id) => id && id.toString() !== null
+    );
 
-    // Add to likes if not already liked
-    if (!reply.likes.includes(userId)) {
+    // If user already liked the post, remove the like (toggle off)
+    if (reply.likes.includes(userId)) {
+      reply.likes = reply.likes.filter((id) => id.toString() !== userId);
+    } else {
+      // Otherwise, add the like
       reply.likes.push(userId);
+
+      // If the user had previously disliked the post, remove the dislike
+      reply.dislikes = reply.dislikes.filter((id) => id.toString() !== userId);
     }
 
     await reply.save();
     res.json({ likes: reply.likes.length, dislikes: reply.dislikes.length });
   } catch (error) {
-    res.status(500).json({ error: "An error occurred" });
+    console.error("Error liking reply:", error);
+    next(error);
   }
 });
 
 // POST Dislike a reply
-projectPostRouter.post("/:replyId/dislike", async (req, res) => {
+projectPostRouter.post("/:replyId/dislike", async (req, res, next) => {
   const { userId } = req.body;
 
   try {
-    const reply = await ProjectPostReply.findById(req.params.replyId);
+    const reply = await ProjectPost.findById(req.params.replyId);
 
     if (!reply) {
       return res.status(404).json({ error: "Reply not found" });
     }
 
-    // Remove from likes if exists
-    reply.likes = reply.likes.filter((id) => id.toString() !== userId);
+    // Ensure no null values in the arrays
+    reply.likes = reply.likes.filter((id) => id && id.toString() !== null);
+    reply.dislikes = reply.dislikes.filter(
+      (id) => id && id.toString() !== null
+    );
 
-    // Add to dislikes if not already disliked
-    if (!reply.dislikes.includes(userId)) {
+    // If user already disliked the post, remove the dislike (toggle off)
+    if (reply.dislikes.includes(userId)) {
+      reply.dislikes = reply.dislikes.filter((id) => id.toString() !== userId);
+    } else {
+      // Otherwise, add the dislike
       reply.dislikes.push(userId);
+
+      // If the user had previously liked the post, remove the like
+      reply.likes = reply.likes.filter((id) => id.toString() !== userId);
     }
 
     await reply.save();
     res.json({ likes: reply.likes.length, dislikes: reply.dislikes.length });
   } catch (error) {
-    res.status(500).json({ error: "An error occurred" });
+    console.error("Error disliking post:", error);
+    next(error);
   }
 });
 

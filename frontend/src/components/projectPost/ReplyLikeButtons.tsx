@@ -1,29 +1,32 @@
 "use client";
-import { createDislikePost, createLikePost } from "@/actions";
-import { ProjectPost } from "@/types/ProjectPost";
+import {
+  createDislikePost,
+  createDislikeReply,
+  createLikePost,
+  createLikeReply,
+} from "@/actions";
+import { Reply } from "@/types/ProjectPost";
 import { useEffect, useState } from "react";
 import { GoCommentDiscussion, GoThumbsdown, GoThumbsup } from "react-icons/go";
 import { Button } from "../ui/button";
 
-function ProjectPostLikeButtons({ projectPost }: { projectPost: ProjectPost }) {
-  const [likes, setLikes] = useState(projectPost.likes.length ?? 0);
-  const [dislikes, setDislikes] = useState(projectPost.dislikes.length ?? 0);
+function ReplyLikeButtons({ reply }: { reply: Reply }) {
+  const [likes, setLikes] = useState(reply.likes.length ?? 0);
+  const [dislikes, setDislikes] = useState(reply.dislikes.length ?? 0);
   const [userLiked, setUserLiked] = useState(false);
   const [userDisliked, setUserDisliked] = useState(false);
 
-  const userId = projectPost.userId._id.toString();
+  const userId = reply.userId._id.toString();
 
   // Check if the user has already liked or disliked the post
   useEffect(() => {
-    setUserLiked(projectPost.likes.some((id) => id.toString() === userId));
-    setUserDisliked(
-      projectPost.dislikes.some((id) => id.toString() === userId),
-    );
-  }, [projectPost.likes, projectPost.dislikes, userId]);
+    setUserLiked(reply.likes.some((id) => id.toString() === userId));
+    setUserDisliked(reply.dislikes.some((id) => id.toString() === userId));
+  }, [reply.likes, reply.dislikes, userId]);
 
   const handleLike = async () => {
     try {
-      const updatedLikes = await createLikePost(projectPost._id);
+      const updatedLikes = await createLikeReply(reply._id);
       setLikes(updatedLikes);
 
       if (userDisliked) {
@@ -39,7 +42,7 @@ function ProjectPostLikeButtons({ projectPost }: { projectPost: ProjectPost }) {
 
   const handleDislike = async () => {
     try {
-      const updatedDislikes = await createDislikePost(projectPost._id);
+      const updatedDislikes = await createDislikeReply(reply._id);
       setDislikes(updatedDislikes);
 
       if (userLiked) {
@@ -55,8 +58,8 @@ function ProjectPostLikeButtons({ projectPost }: { projectPost: ProjectPost }) {
 
   return (
     <>
-      <div className="mb-4 flex items-center gap-4">
-        <div className="flex items-center gap-1">
+      <div className="mb-4 flex w-full items-center gap-4">
+        <div className="flex items-center gap-2 ml-8">
           <button onClick={handleLike}>
             <GoThumbsup size={20} />
           </button>
@@ -77,4 +80,4 @@ function ProjectPostLikeButtons({ projectPost }: { projectPost: ProjectPost }) {
   );
 }
 
-export default ProjectPostLikeButtons;
+export default ReplyLikeButtons;

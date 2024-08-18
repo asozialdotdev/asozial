@@ -14,15 +14,23 @@ import { Textarea } from "../ui/textarea";
 import { useEffect, useRef, useState } from "react";
 
 //Types
-import type {  ProjectPostId, ReplyId } from "@/types/ProjectPost";
+import type { ProjectPostId, Reply, ReplyId } from "@/types/ProjectPost";
+import { GoComment } from "react-icons/go";
+import ReplyLikeButtons from "./ReplyLikeButtons";
 
 type ReplyFormProps = {
   projectPostId: ProjectPostId;
   parentId?: ReplyId | null;
+  reply: Reply;
   startOpen: boolean;
 };
 
-function ReplyForm({ projectPostId, parentId, startOpen }: ReplyFormProps) {
+function ReplyForm({
+  projectPostId,
+  parentId,
+  reply,
+  startOpen,
+}: ReplyFormProps) {
   const [open, setOpen] = useState<boolean>(startOpen);
 
   const [formState, action] = useFormState(
@@ -48,11 +56,20 @@ function ReplyForm({ projectPostId, parentId, startOpen }: ReplyFormProps) {
   };
 
   return (
-    <section className={`${startOpen ? "w-full py-4" : "w-[120%] -mt-4"}`}>
+    <section className={`${startOpen ? "w-full py-4" : "-mt-4 w-[120%]"}`}>
       {!open ? (
-        <Button variant="outline" className="text-base" onClick={toggleOpen}>
-          Reply
-        </Button>
+        <div className='flex items-baseline gap-4 mt-4'>
+          <ReplyLikeButtons reply={reply} />
+          <button
+            className="flex items-center gap-2 text-sm"
+            onClick={toggleOpen}
+          >
+            <span>
+              <GoComment size={20} />
+            </span>
+            Reply
+          </button>
+        </div>
       ) : (
         <form
           ref={formRef}

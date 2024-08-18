@@ -165,6 +165,7 @@ const createProjectPostReply = async (
   }
 };
 
+// POST Like a post
 const createLikePost = async (projectPostId: ProjectPostId) => {
   const session = await auth();
   try {
@@ -192,6 +193,7 @@ const createLikePost = async (projectPostId: ProjectPostId) => {
   }
 };
 
+// POST Dislike a post
 const createDislikePost = async (projectPostId: ProjectPostId) => {
   const session = await auth();
   try {
@@ -219,6 +221,54 @@ const createDislikePost = async (projectPostId: ProjectPostId) => {
   }
 };
 
+// POST Like a reply
+const createLikeReply = async (replyId: ReplyId) => {
+  const session = await auth();
+  try {
+    const response = await fetch(`${baseUrl}/api/replies/${replyId}/like`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        userId: session?.user?.id,
+      }),
+    });
+    if (!response.ok) {
+      throw new Error(`Failed to like post: ${response.statusText}`);
+    }
+    const data = await response.json();
+    console.log("REPLY LIKE:", data);
+    return data.likes;
+  } catch (error) {
+    console.error("Error liking reply:", error);
+  }
+};
+
+// POST Dislike a reply
+const createDislikeReply = async (replyId: ReplyId) => {
+  const session = await auth();
+  try {
+    const response = await fetch(`${baseUrl}/api/replies/${replyId}/dislike`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        userId: session?.user?.id,
+      }),
+    });
+    if (!response.ok) {
+      throw new Error(`Failed to dislike post: ${response.statusText}`);
+    }
+    const data = await response.json();
+    console.log("REPLY DISLIKE:", data);
+    return data.dislikes;
+  } catch (error) {
+    console.error("Error disliking reply:", error);
+  }
+};
+
 export {
   createProjectPost,
   createProjectPostReply,
@@ -226,4 +276,6 @@ export {
   fetchPostByIdAndReplies,
   createLikePost,
   createDislikePost,
+  createLikeReply,
+  createDislikeReply,
 };
