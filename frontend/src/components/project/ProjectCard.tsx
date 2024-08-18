@@ -9,7 +9,9 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import Link from "next/link";
-import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
+import UserAvatar from "../common/UserAvatar";
+import { techStackClass } from "@/utils";
+import MyProjectsLoading from "./MyProjectsLoading";
 
 // const membersJoined = ["Benjamin", "Mirko", "John", "Jane"];
 const membersApplied = ["Alice", "Bob", "Charlie"];
@@ -23,7 +25,7 @@ type ProjectCardProps = {
 
 function ProjectCard({ projects, isLoading, error }: ProjectCardProps) {
   if (isLoading) {
-    return <p>Loading...</p>;
+    return <MyProjectsLoading />;
   }
   if (error) {
     return <p>{error}</p>;
@@ -35,33 +37,59 @@ function ProjectCard({ projects, isLoading, error }: ProjectCardProps) {
   return (
     <>
       {projects.map((project: Project, i) => (
-        <Card className="min-w-[20rem] max-w-[20rem]" key={i}>
+        <Card
+          className="max-h-[25rem] min-h-[25rem] min-w-[20rem] max-w-[20rem] overflow-y-auto border-dashed border-zinc-300 bg-zinc-100 pl-1 hover:bg-zinc-100 dark:border-zinc-600 dark:bg-zinc-800 dark:shadow-neutral-700/30 dark:hover:bg-zinc-800 md:bg-inherit md:dark:bg-inherit"
+          key={project._id.toString()}
+        >
           <CardHeader>
-            <CardTitle className="capitalize">{project.title}</CardTitle>
+            <Link href={`/projects/${project._id}`}>
+              <CardTitle className="capitalize">{project.title}</CardTitle>
+            </Link>
             <CardDescription>{project.description}</CardDescription>
           </CardHeader>
-          <CardContent>
+          <CardContent className="flex w-full gap-2">
             {project.techStack.map((tech) => (
-              <p key={tech}>{tech}</p>
+              <p key={tech} className={techStackClass(tech)}>
+                {tech}
+              </p>
             ))}
           </CardContent>
-          <CardContent>
-            {project.membersJoined.map((member) => {
-              console.log("Member:", member);
-              return (
-                <ul key={member.name}>
-                  <Avatar className="flex-shrink-0">
-                    <AvatarImage src={member.avatarUrl} alt={member.name} />
-                    <AvatarFallback>{member.name.charAt(0)}</AvatarFallback>
-                  </Avatar>
-                </ul>
-              );
-            })}
-          </CardContent>
+          <div>
+            <CardContent>
+              <h4 className="flex gap-2 text-base font-semibold">
+                Members
+                <span className="font-normal">
+                  {`(${project.membersJoined.length})`}
+                </span>
+              </h4>
+            </CardContent>
 
-          <CardContent></CardContent>
+            <CardContent className="flex gap-4">
+              {project.membersJoined.map((member) => (
+                <UserAvatar
+                  key={member._id.toString()}
+                  src={member.avatarUrl}
+                  name={member.name}
+                  userId={member._id.toString()}
+                />
+              ))}
+            </CardContent>
+          </div>
+
+          <CardContent>
+            <div className="flex flex-col gap-2">
+              <p className="text-base font-semibold">Owner</p>
+              <UserAvatar
+                src={project.owner.avatarUrl}
+                name={project.owner.name}
+                userId={project.owner._id}
+              />
+            </div>
+          </CardContent>
           <CardFooter>
-            <Link href={`/projects/${project._id}`}>Project Details</Link>
+            <p className="text-base font-semibold capitalize text-neutral-500 dark:text-neutral-400">
+              {project.status}
+            </p>
           </CardFooter>
         </Card>
       ))}

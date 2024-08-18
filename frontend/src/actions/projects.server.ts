@@ -29,7 +29,7 @@ const fetchAllProjects = async () => {
     return projects;
   } catch (error) {
     console.error("Error fetching projects:", error);
-    return "Error fetching projects";
+    return null;
   }
 };
 
@@ -51,7 +51,7 @@ const fetchProjectById = async (projectId: ProjectId) => {
     return project;
   } catch (error) {
     console.error("Error fetching project:", error);
-    return "Error fetching project";
+    return null;
   }
 };
 

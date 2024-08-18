@@ -3,17 +3,16 @@ import Image from "next/image";
 
 //Components
 import PageTitle from "../common/PageTitle";
+import UserAvatar from "../common/UserAvatar";
 
 //UI
 import github from "/public/github.png";
 
 //Utils
-import { languagesWithColors } from "@/constants";
-import clsx from "clsx";
+import { techStackClass } from "@/utils";
 
 //Types
 import type { Project } from "@/types/Project";
-import UserAvatar from "../common/UserAvatar";
 
 const membersJoined = ["Benjamin", "Mirko", "John", "Jane", "José"];
 const membersApplied = ["Alice", "Bob", "Charlie"];
@@ -22,17 +21,6 @@ const membersInvited = ["David", "Eve", "Frank"];
 const userIdTest = "1234567890";
 
 function ProjectComponent({ project }: { project: Project }) {
-  const techStackClass = (language: string) => {
-    const stackColor = languagesWithColors.find(
-      (lang) => lang.language === language,
-    );
-    return clsx(
-      "rounded-full px-2 py-1 text-sm text-light ",
-      stackColor ? stackColor.color : "bg-gray-300",
-    );
-  };
-
-  console.log("project:", project);
   return (
     <section className="flex w-full flex-col gap-4 border-b border-b-neutral-300 px-4 dark:border-b-neutral-600">
       {/* Title and description */}
