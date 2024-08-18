@@ -20,9 +20,9 @@ async function PostPage({
   return (
     <PageContainer className="w-full max-w-screen-md">
       {/* PostShow */}
-      <Suspense fallback={<ParentPostLoading />}>
+
         <ParentPost projectPostId={projectPostId} />
-      </Suspense>
+      {/* <Suspense fallback={<ParentPostLoading />}>
 
       {/* Reply Form */}
       <ReplyForm projectPostId={projectPostId} startOpen />

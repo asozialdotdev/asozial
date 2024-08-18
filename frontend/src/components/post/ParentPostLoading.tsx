@@ -2,12 +2,15 @@ import { Skeleton } from "@/components/ui/skeleton";
 
 function ParentPostLoading() {
   return (
-    <div className="flex items-center space-x-4">
-      <Skeleton className="h-12 w-12 rounded-full" />
-      <div className="space-y-2">
-        <Skeleton className="h-4 w-[250px]" />
-        <Skeleton className="h-4 w-[200px]" />
-        <Skeleton className="h-4 w-[150px]" />
+    <div className="flex w-full items-center space-x-4">
+      <Skeleton className="h-12 w-12 rounded-full bg-zinc-300 dark:bg-zinc-600" />
+      <div className="w-full space-y-2">
+        <Skeleton className="h-4 w-[150px] bg-zinc-300 dark:bg-zinc-600" />
+        <Skeleton className="h-4 w-full bg-zinc-300 dark:bg-zinc-600" />
+        <Skeleton className="h-4 w-full bg-zinc-300 dark:bg-zinc-600" />
+        <Skeleton className="h-4 w-full bg-zinc-300 dark:bg-zinc-600" />
+        <Skeleton className="mt-4 h-4 w-[150px] bg-zinc-300 dark:bg-zinc-600" />
+        <Skeleton className="h-4 w-[120px] bg-zinc-300 dark:bg-zinc-600" />
       </div>
     </div>
   );
