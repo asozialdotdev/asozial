@@ -3,10 +3,8 @@
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 
-//React
-import { useState } from "react";
 //Actions
-import { createProject } from "@/actions";
+import { updateProject } from "@/actions";
 
 //Hooks
 import { ControllerRenderProps } from "react-hook-form";
@@ -31,42 +29,39 @@ import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { createProjectSchema } from "@/lib/schema";
 import { z } from "zod";
-import { languagesWithColors } from "@/constants";
+import { languagesWithColors, socialsData } from "@/constants";
 
 //Components
 import PageTitle from "../common/PageTitle";
-
-//Constants
-import { socialsData } from "@/constants";
-
-//Types
-import type { CreateUpdateProject } from "@/types/Project";
+import type { CreateUpdateProject, Project } from "@/types/Project";
+import { useState } from "react";
 
 type Inputs = z.infer<typeof createProjectSchema>;
 
-function NewProjectForm() {
+function EditProjectForm({ project }: { project: Project }) {
   const [error, setError] = useState<string | null>(null);
 
   const { spokenLanguages, isLoadingSpokenLanguages, errorSpokenLanguages } =
     useSpokenLanguages();
+
+  const router = useRouter();
 
   const {
     handleSubmit,
     control,
     watch,
     setValue,
-    reset,
     formState: { errors, isValid, isSubmitting },
   } = useForm<Inputs>({
     resolver: zodResolver(createProjectSchema),
     defaultValues: {
-      title: "",
-      description: "",
-      pitch: "",
-      githubRepo: "",
-      techStack: [],
-      mainLanguage: "",
-      socials: ["", "", "", ""],
+      title: project.title,
+      description: project.description,
+      pitch: project.pitch,
+      githubRepo: project.githubRepo,
+      techStack: project.techStack,
+      mainLanguage: project.mainLanguage,
+      socials: project.socials,
     },
   });
 
@@ -106,19 +101,21 @@ function NewProjectForm() {
       pitch: formattedPitch,
       socials: formattedSocials,
     };
-    console.log("finalData", finalData);
-    const result = await createProject(finalData);
-    if (result === "Error creating project") {
-      console.error("Error creating project");
-      setError("Error creating project. Please try again");
+    const result = await updateProject(project._id, finalData);
+
+    if (result === "Error updating project") {
+      console.error("Error updating project");
+      setError("Error updating project. Please try again");
     } else {
-      reset();
+      router.push(`/projects/${project._id}`);
     }
   };
 
   return (
-    <div className="mt-8 w-full">
-      <PageTitle className="text-center">Create a new project</PageTitle>
+    <div className="w-full">
+      <PageTitle className="text-center">
+        Edit Project {project.title}
+      </PageTitle>
       <form
         onSubmit={handleSubmit(processForm)}
         className="mt-2 flex w-full flex-col gap-2"
@@ -335,17 +332,16 @@ function NewProjectForm() {
         {error && (
           <span className="text-base font-light text-red-500">{error}</span>
         )}
-
         <Button
           disabled={!isValid || isSubmitting}
           type="submit"
           className="my-2 bg-dark dark:bg-light"
         >
-          {isSubmitting ? "Creating project..." : "Create"}
+          {isSubmitting ? "Updating" : "Update"}
         </Button>
       </form>
     </div>
   );
 }
 
-export default NewProjectForm;
+export default EditProjectForm;

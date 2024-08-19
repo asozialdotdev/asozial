@@ -33,6 +33,7 @@ export const {
     async signIn({ user, account, profile }) {
       console.log("Profile>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>", profile);
       console.log("Profile>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>", profile?.login);
+      console.log("Profile>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>", profile?.id);
       const db = client.db();
 
       const existingUser = await db

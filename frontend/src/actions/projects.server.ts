@@ -10,7 +10,7 @@ import { baseUrl } from "@/constants";
 import { auth } from "@/auth";
 
 //Types
-import { Project, ProjectId } from "@/types/Project";
+import { CreateUpdateProject, Project, ProjectId } from "@/types/Project";
 
 // Get all projects
 const fetchAllProjects = async () => {
@@ -76,11 +76,11 @@ const searchForMyProjects = async (searchTerm: string) => {
 
 // POST create a new project
 
-const createProject = async (data: Project) => {
+const createProject = async (data: CreateUpdateProject) => {
   const session = await auth();
-  let project;
+
   try {
-    const response = await fetch(`${baseUrl}/api/projects/new`, {
+    const response = await fetch(`${baseUrl}/api/projectss/new`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -88,13 +88,13 @@ const createProject = async (data: Project) => {
       body: JSON.stringify({ ...data, userId: session?.user?.id }),
     });
 
-    project = await response.json();
+    const project = await response.json();
     console.log("project", project);
+    redirect(`/projects/${project._id}`);
   } catch (error) {
     console.error("Error creating project:", error);
     return "Error creating project";
   }
-  redirect(`/projects/${project._id}`);
 };
 
 // POST join a project
@@ -143,7 +143,7 @@ const checkIsMember = async (projectId: ProjectId) => {
 
 // PUT update a project
 
-const updateProject = async (projectId: ProjectId, data: Project) => {
+const updateProject = async (projectId: ProjectId, data: CreateUpdateProject) => {
   const session = await auth();
 
   try {
@@ -162,6 +162,7 @@ const updateProject = async (projectId: ProjectId, data: Project) => {
 
     const updateProject = await response.json();
     console.log("Updated updateProject:", updateProject);
+    revalidatePath(`/projects/${projectId}`);
     return "Project updated";
   } catch (error) {
     console.error("Error updating project:", error);
@@ -176,4 +177,5 @@ export {
   handleJoinProject,
   createProject,
   checkIsMember,
+  updateProject,
 };

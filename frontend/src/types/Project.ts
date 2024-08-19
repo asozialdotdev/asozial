@@ -2,7 +2,7 @@ import { Types } from "mongoose";
 
 type ProjectId = Types.ObjectId | string;
 type Member = {
-  _id: Types.ObjectId;
+  _id: Types.ObjectId | string;
   avatarUrl: string;
   name: string;
 };
@@ -15,6 +15,7 @@ type Project = {
   techStack: string[];
   owner: Member;
   pitch: string;
+  mainLanguage: string;
   membersJoined: Member[];
   membersApplied: Member[];
   membersInvited: Member[];
@@ -24,4 +25,14 @@ type Project = {
   updatedAt?: Date;
 };
 
-export type { Project, ProjectId };
+type CreateUpdateProject = {
+  title: string;
+  description: string;
+  pitch: string;
+  mainLanguage: string;
+  githubRepo?: string;
+  techStack: string[];
+  socials?: string[];
+};
+
+export type { Project, ProjectId, Member, CreateUpdateProject };

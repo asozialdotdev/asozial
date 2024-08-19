@@ -3,7 +3,6 @@ import express, { Request, Response, NextFunction } from "express";
 import axios from "axios";
 import Project from "../models/Project.models";
 import User from "../models/User.models";
-import { getToken } from "@auth/core/jwt";
 
 const projectsRouter = express.Router();
 
@@ -35,8 +34,15 @@ projectsRouter.post(
   "/new",
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const { title, description, pitch, techStack, mainLanguage, userId } =
-        req.body;
+      const {
+        title,
+        description,
+        pitch,
+        techStack,
+        mainLanguage,
+        socials,
+        userId,
+      } = req.body;
 
       const newProject = await Project.create({
         title,
@@ -45,6 +51,7 @@ projectsRouter.post(
         techStack,
         mainLanguage,
         owner: userId,
+        socials,
       });
 
       res.status(201).json(newProject);
@@ -217,7 +224,6 @@ projectsRouter.get(
 projectsRouter.put(
   "/:projectId",
   async (req: Request, res: Response, next: NextFunction) => {
-    
     try {
       const {
         title,
