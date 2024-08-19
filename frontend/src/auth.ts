@@ -70,7 +70,11 @@ export const {
             githubUpdatedAt: profile?.updated_at,
             githubCollaboratorsNumber: profile?.collaborators,
           };
-          const response = await axios.post(`${baseUrl}/api/auth`, newUser);
+          const response = await axios.post(`${baseUrl}/api/auth`, newUser, {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          });
 
           user.id = response.data._id; // Assign the custom user ID to NextAuth's user object
         } catch (error) {
@@ -94,20 +98,24 @@ export const {
 
       return true;
     },
+    async jwt({ token, account, profile }) {
+      // Add the user ID to the token for session callback
+      if (account) {
+        token.accessToken = account.access_token;
+        token.id = profile?.id;
+      }
+      console.log("Token>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>", token);
+      return token;
+    },
     async session({ session, user, token }) {
       // Attach the user's ID to the session object
       if (session && token) {
+        //session.accessToken = token.accessToken;
         session.user.id = token.sub ?? "";
       }
       console.log("Session>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>", session);
+      console.log("Token>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>", token);
       return session;
-    },
-    async jwt({ token, user }) {
-      // Add the user ID to the token for session callback
-      if (user) {
-        token.sub = user.id;
-      }
-      return token;
     },
     async redirect({ url, baseUrl }) {
       if (url === "/" || url === baseUrl) {
