@@ -1,3 +1,8 @@
+import discord from "/public/socials/discord.png";
+import slack from "/public/socials/slack.png";
+import notion from "/public/socials/notion.png";
+import gitlab from "/public/socials/gitlab.png";
+
 const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:5005";
 console.log("baseUrl in CONSTANTS:", baseUrl);
 
@@ -74,4 +79,27 @@ const contributors = [
   },
 ];
 
-export { baseUrl, languagesWithColors, contributors };
+const socialsData = [
+  {
+    placeholder: "https://app.slack.com/...",
+    imageSrc: slack,
+    alt: "Slack",
+  },
+  {
+    placeholder: "https://discord.com/...",
+    imageSrc: discord,
+    alt: "Discord",
+  },
+  {
+    placeholder: "http://notion.so/...",
+    imageSrc: notion,
+    alt: "Notion",
+  },
+  {
+    placeholder: "https://gitlab.com/...",
+    imageSrc: gitlab,
+    alt: "Gitlab",
+  },
+];
+
+export { baseUrl, languagesWithColors, contributors, socialsData };

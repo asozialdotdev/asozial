@@ -5,7 +5,7 @@ import NewProject from "@/components/project/NewProject";
 
 function Page() {
   return (
-    <PageContainer className="">
+    <PageContainer className="px-4">
       <NewProject />
     </PageContainer>
   );

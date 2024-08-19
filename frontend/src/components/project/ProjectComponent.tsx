@@ -6,13 +6,16 @@ import PageTitle from "../common/PageTitle";
 import UserAvatar from "../common/UserAvatar";
 
 //UI
-import github from "/public/github.png";
+import github from "/public/socials/github.png";
 
 //Utils
 import { techStackClass } from "@/utils";
 
 //Types
 import type { Project } from "@/types/Project";
+import Link from "next/link";
+import { auth } from "@/auth";
+import { Button } from "../ui/button";
 
 const membersJoined = ["Benjamin", "Mirko", "John", "Jane", "José"];
 const membersApplied = ["Alice", "Bob", "Charlie"];
@@ -20,7 +23,11 @@ const membersInvited = ["David", "Eve", "Frank"];
 
 const userIdTest = "1234567890";
 
-function ProjectComponent({ project }: { project: Project }) {
+async function ProjectComponent({ project }: { project: Project }) {
+  const session = await auth();
+  const isOwner = project.owner._id === session?.user?.id;
+  console.log("IS OWNER", isOwner);
+
   return (
     <section className="flex w-full flex-col gap-4 border-b border-b-neutral-300 px-4 dark:border-b-neutral-600">
       {/* Title and description */}
@@ -75,6 +82,11 @@ function ProjectComponent({ project }: { project: Project }) {
             className="dark:invert dark:filter"
           />
         </a>
+        {isOwner && (
+          <Link href={`/projects/${project._id}/edit`}>
+            <Button>Edit project</Button>
+          </Link>
+        )}
       </div>
     </section>
   );

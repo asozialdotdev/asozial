@@ -1,5 +1,4 @@
 "use server";
-
 //Actions
 import { fetchProjectPosts } from "@/actions";
 import {
@@ -29,6 +28,7 @@ async function Page({ params }: { params: { projectId: ProjectId } }) {
   const posts = await fetchProjectPosts(projectId);
 
   const isMember = await checkIsMember(projectId);
+
   if (!project) {
     notFound();
   }

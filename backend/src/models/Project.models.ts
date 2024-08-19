@@ -13,13 +13,11 @@ const projectSchema = new Schema(
     membersApplied: [{ type: Schema.Types.ObjectId, ref: "User" }],
     membersInvited: [{ type: Schema.Types.ObjectId, ref: "User" }],
     socials: [{ type: String }],
-    status: [
-      {
-        type: String,
-        enum: ["active", "inactive", "completed"],
-        default: "active",
-      },
-    ],
+    status: {
+      type: String,
+      enum: ["active", "inactive", "completed"],
+      default: "active",
+    },
   },
   {
     collection: "Project",

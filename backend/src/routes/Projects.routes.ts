@@ -33,8 +33,15 @@ projectsRouter.post(
   "/new",
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const { title, description, pitch, techStack, mainLanguage, userId } =
-        req.body;
+      const {
+        title,
+        description,
+        pitch,
+        techStack,
+        mainLanguage,
+        socials,
+        userId,
+      } = req.body;
 
       const newProject = await Project.create({
         title,
@@ -43,6 +50,7 @@ projectsRouter.post(
         techStack,
         mainLanguage,
         owner: userId,
+        socials,
       });
 
       res.status(201).json(newProject);
