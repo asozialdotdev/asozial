@@ -68,7 +68,7 @@ function ProjectCard({ projects, isLoading, error }: ProjectCardProps) {
               {project.membersJoined.map((member) => (
                 <UserAvatar
                   key={member._id.toString()}
-                  src={member.avatarUrl}
+                  src={member.image}
                   name={member.name}
                   userId={member._id.toString()}
                 />
@@ -80,7 +80,7 @@ function ProjectCard({ projects, isLoading, error }: ProjectCardProps) {
             <div className="flex flex-col gap-2">
               <p className="text-base font-semibold">Owner</p>
               <UserAvatar
-                src={project.owner.avatarUrl}
+                src={project.owner.image}
                 name={project.owner.name}
                 userId={project.owner._id}
               />

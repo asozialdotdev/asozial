@@ -50,7 +50,7 @@ async function ReplyShow({ replyId, projectPostId }: ReplyShowProps) {
         <div className="flex flex-col gap-3 lg:contents">
           {/* Avatar on the left side */}
           <UserAvatar
-            src={reply.userId.avatarUrl}
+            src={reply.userId.image}
             name={reply.userId.name}
             userId={reply.userId._id}
           />

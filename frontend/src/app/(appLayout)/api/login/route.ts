@@ -2,7 +2,7 @@
 
 import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
-import { encrypt } from "@/lib/lib";
+import { encrypt } from "@/lib";
 
 export async function POST(req: NextRequest) {
   const request = await fetch("http://localhost:5005/auth", {
@@ -13,8 +13,8 @@ export async function POST(req: NextRequest) {
     },
   });
 
-  const { _id, username, avatarUrl } = await request.json();
-  console.log("User details//////:", _id, username, avatarUrl);
+  const { _id, username, image } = await request.json();
+  console.log("User details//////:", _id, username, image);
 
   const expires = new Date(Date.now() + 3600 * 1000);
   const session = await encrypt({ _id, expires });

@@ -54,7 +54,7 @@ function ProjectComponent({ project }: { project: Project }) {
             project.membersJoined.map((member) => (
               <UserAvatar
                 key={member.name}
-                src={member.avatarUrl}
+                src={member.image}
                 name={member.name}
                 userId={userIdTest}
               />

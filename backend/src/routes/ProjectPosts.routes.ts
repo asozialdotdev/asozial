@@ -19,7 +19,7 @@ projectPostRouter.get(
       const projectPosts = await ProjectPost.find({ projectId })
         .populate({
           path: "userId",
-          select: "name avatarUrl",
+          select: "name image",
         })
         .populate("replyCount");
       console.log("Projects with reply counts >>>>><<<<>>>><<<<", projectPosts);
@@ -78,7 +78,7 @@ projectPostRouter.get(
         req.params.projectPostId
       ).populate({
         path: "userId",
-        select: "name avatarUrl",
+        select: "name image",
       });
 
       if (!post) {
@@ -90,13 +90,13 @@ projectPostRouter.get(
       })
         .populate({
           path: "userId",
-          select: "name avatarUrl",
+          select: "name image",
         })
         .populate({
           path: "children",
           populate: {
             path: "userId",
-            select: "name avatarUrl",
+            select: "name image",
           },
         })
         .exec();

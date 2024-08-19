@@ -56,20 +56,20 @@ githubRouter.get("/", (req: Request, res: Response) => {
 //           "Content-Type": "application/json",
 //         },
 //       });
-//       const { login, id, avatar_url, name } = getUserInfo.data;
+//       const { login, id, image, name } = getUserInfo.data;
 //       const user =
 //         (await User.findOne({ githubID: id })) ||
 //         (await User.create({
 //           username: login,
 //           githubID: id,
-//           avatarUrl: avatar_url,
+//           image: image,
 //           name: name,
 //         }));
-//       const { _id, username, avatarUrl, email } = user;
+//       const { _id, username, image, email } = user;
 //       const payload = {
 //         _id: _id.toString(),
 //         username,
-//         avatarUrl,
+//         image,
 //         email,
 //       };
 //       //post payload to nextjs server and it handles the token generation
@@ -100,15 +100,8 @@ githubRouter.get("/", (req: Request, res: Response) => {
 
 githubRouter.post("/", async (req: Request, res: Response) => {
   try {
-    const { name, email, image, id, username } = req.body;
-
-    const newUser = await User.create({
-      githubID: id,
-      avatarUrl: image,
-      name: name,
-      email,
-      username,
-    });
+    console.log(req.body);
+    const newUser = await User.create(req.body);
     res.status(200).json(newUser);
   } catch (error: any) {
     console.error(error.message);

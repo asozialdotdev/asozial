@@ -131,7 +131,7 @@ usersRouter.get(
             username: targetUser.username,
             name: targetUser.name,
             email: targetUser.email,
-            avatarUrl: targetUser.avatarUrl,
+            image: targetUser.image,
           },
         });
       }
