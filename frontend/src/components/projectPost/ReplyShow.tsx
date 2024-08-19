@@ -1,10 +1,15 @@
+//Actions
 import { fetchPostByIdAndReplies } from "@/actions";
+
+//Components
 import ReplyForm from "./ReplyForm";
-import { ProjectPostId, Reply, ReplyId } from "@/types/ProjectPost";
-import { format, formatDistance } from "date-fns";
 import UserAvatar from "../common/UserAvatar";
-import ProjectPostButtons from "./ProjectPostButtons";
-import ReplyLikeButtons from "./ReplyLikeButtons";
+
+//Lib
+import { formatDistance } from "date-fns";
+
+//Types
+import type { ProjectPostId, Reply, ReplyId } from "@/types/ProjectPost";
 
 type ReplyShowProps = {
   replyId: ReplyId;
@@ -35,33 +40,38 @@ async function ReplyShow({ replyId, projectPostId }: ReplyShowProps) {
   return (
     <div
       key={reply._id.toString()}
-      className={`mt-6 flex w-full max-w-[96%] flex-col items-start gap-4 px-1 lg:space-x-4 ${
+      className={`mt-6 flex w-full flex-col items-start gap-4 pr-1 lg:max-w-[96%] lg:space-x-4 ${
         !isTopLevel
           ? "border-dashed border-zinc-300 pl-2 dark:border-zinc-600"
-          : "border border-dashed border-zinc-300 pl-6 pt-6 dark:border-zinc-600"
+          : "border border-dashed border-zinc-300 pl-2 pt-6 dark:border-zinc-600 lg:pl-6"
       } ${isLastChild ? "px-4 pb-4" : ""} `}
     >
       <section className="flex items-start gap-2">
-        {/* Avatar on the left side */}
+        <div className="flex flex-col gap-3 lg:contents">
+          {/* Avatar on the left side */}
+          <UserAvatar
+            src={reply.userId.avatarUrl}
+            name={reply.userId.name}
+            userId={reply.userId._id}
+          />
 
-        <UserAvatar src={reply.userId.avatarUrl} name={reply.userId.name} />
-
-        {/* Content on the right side */}
-        <div className="flex-grow">
-          <p className="font-medium text-neutral-500 dark:text-neutral-400">
-            {reply.userId.name}
-          </p>
-          <p className="mt-2 text-justify text-sm font-light text-dark dark:text-light">
-            {reply.content}
-          </p>
-          <p className="mt-1 text-sm text-neutral-500 dark:text-neutral-400">
-            <small>Posted </small>
-            {formattedCreatedAt}
-          </p>
+          {/* Content on the right side */}
+          <div className="flex-grow">
+            <p className="font-medium text-neutral-500 dark:text-neutral-400">
+              {reply.userId.name}
+            </p>
+            <p className="mt-2 text-justify text-sm font-light text-dark dark:text-light">
+              {reply.content}
+            </p>
+            <p className="mt-1 text-sm text-neutral-500 dark:text-neutral-400">
+              <small>Posted </small>
+              {formattedCreatedAt}
+            </p>
+          </div>
         </div>
       </section>
-      <section className='flex items-center gap-4'>
-      {/* <ReplyLikeButtons reply={reply} /> */}
+      <section className="flex items-center gap-4">
+        {/* <ReplyLikeButtons reply={reply} /> */}
         <ReplyForm
           projectPostId={reply.projectPostId}
           parentId={reply._id}

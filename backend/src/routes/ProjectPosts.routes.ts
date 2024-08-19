@@ -114,9 +114,7 @@ projectPostRouter.post(
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { projectPostId, userId, content, parentId } = req.body;
-      console.log("request.body;;;;;;;;", req.body);
 
-      // Ensure the post exists (you may want to validate this)
       if (!projectPostId || !userId || !content) {
         return res
           .status(400)
@@ -136,7 +134,7 @@ projectPostRouter.post(
         parentId: parentId || null,
       });
 
-      // If it's a nested reply, add it to the parent's children array
+      // If it's a nested reply parentId !== null, add it to the parent's children array
       if (parentId) {
         await ProjectPostReply.findByIdAndUpdate(parentId, {
           $push: { children: newReply._id },
@@ -150,7 +148,7 @@ projectPostRouter.post(
   }
 );
 
-// POST Toggle Like a project post
+// POST Toggle Like projectPost
 projectPostRouter.post("/:projectPostId/like", async (req, res, next) => {
   const { userId } = req.body;
 
@@ -161,18 +159,18 @@ projectPostRouter.post("/:projectPostId/like", async (req, res, next) => {
       return res.status(404).json({ error: "Post not found" });
     }
 
-    // Ensure no null values in the arrays
+    // no null values in the arrays
     post.likes = post.likes.filter((id) => id && id.toString() !== null);
     post.dislikes = post.dislikes.filter((id) => id && id.toString() !== null);
 
-    // If user already liked the post, remove the like (toggle off)
+    // If user already liked the post, remove the like
     if (post.likes.includes(userId)) {
       post.likes = post.likes.filter((id) => id.toString() !== userId);
     } else {
       // Otherwise, add the like
       post.likes.push(userId);
 
-      // If the user had previously disliked the post, remove the dislike
+      // If the user had already disliked the post, remove the dislike
       post.dislikes = post.dislikes.filter((id) => id.toString() !== userId);
     }
 
@@ -195,95 +193,23 @@ projectPostRouter.post("/:projectPostId/dislike", async (req, res, next) => {
       return res.status(404).json({ error: "Post not found" });
     }
 
-    // Ensure no null values in the arrays
+    //  no null values in the arrays
     post.likes = post.likes.filter((id) => id && id.toString() !== null);
     post.dislikes = post.dislikes.filter((id) => id && id.toString() !== null);
 
-    // If user already disliked the post, remove the dislike (toggle off)
+    // If user already disliked the post, remove the dislike
     if (post.dislikes.includes(userId)) {
       post.dislikes = post.dislikes.filter((id) => id.toString() !== userId);
     } else {
       // Otherwise, add the dislike
       post.dislikes.push(userId);
 
-      // If the user had previously liked the post, remove the like
+      // If the user had already liked the post, remove the like
       post.likes = post.likes.filter((id) => id.toString() !== userId);
     }
 
     await post.save();
     res.json({ likes: post.likes.length, dislikes: post.dislikes.length });
-  } catch (error) {
-    console.error("Error disliking post:", error);
-    next(error);
-  }
-});
-
-// POST Like a reply
-projectPostRouter.post("/:replyId/like", async (req, res, next) => {
-  const { userId } = req.body;
-
-  try {
-    const reply = await ProjectPostReply.findById(req.params.replyId);
-
-    if (!reply) {
-      return res.status(404).json({ error: "Reply not found" });
-    }
-
-    // Ensure no null values in the arrays
-    reply.likes = reply.likes.filter((id) => id && id.toString() !== null);
-    reply.dislikes = reply.dislikes.filter(
-      (id) => id && id.toString() !== null
-    );
-
-    // If user already liked the post, remove the like (toggle off)
-    if (reply.likes.includes(userId)) {
-      reply.likes = reply.likes.filter((id) => id.toString() !== userId);
-    } else {
-      // Otherwise, add the like
-      reply.likes.push(userId);
-
-      // If the user had previously disliked the post, remove the dislike
-      reply.dislikes = reply.dislikes.filter((id) => id.toString() !== userId);
-    }
-
-    await reply.save();
-    res.json({ likes: reply.likes.length, dislikes: reply.dislikes.length });
-  } catch (error) {
-    console.error("Error liking reply:", error);
-    next(error);
-  }
-});
-
-// POST Dislike a reply
-projectPostRouter.post("/:replyId/dislike", async (req, res, next) => {
-  const { userId } = req.body;
-
-  try {
-    const reply = await ProjectPost.findById(req.params.replyId);
-
-    if (!reply) {
-      return res.status(404).json({ error: "Reply not found" });
-    }
-
-    // Ensure no null values in the arrays
-    reply.likes = reply.likes.filter((id) => id && id.toString() !== null);
-    reply.dislikes = reply.dislikes.filter(
-      (id) => id && id.toString() !== null
-    );
-
-    // If user already disliked the post, remove the dislike (toggle off)
-    if (reply.dislikes.includes(userId)) {
-      reply.dislikes = reply.dislikes.filter((id) => id.toString() !== userId);
-    } else {
-      // Otherwise, add the dislike
-      reply.dislikes.push(userId);
-
-      // If the user had previously liked the post, remove the like
-      reply.likes = reply.likes.filter((id) => id.toString() !== userId);
-    }
-
-    await reply.save();
-    res.json({ likes: reply.likes.length, dislikes: reply.dislikes.length });
   } catch (error) {
     console.error("Error disliking post:", error);
     next(error);

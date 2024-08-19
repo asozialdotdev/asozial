@@ -1,5 +1,5 @@
 //Next
-import Link from "next/link";
+import { notFound } from "next/navigation";
 
 //Components
 import ProjectPostForm from "./ProjectPostForm";
@@ -9,7 +9,6 @@ import ProjectPost from "./ProjectPost";
 //Types
 import type { ProjectPost as TProjectPost } from "@/types/ProjectPost";
 import type { ProjectId } from "@/types/Project";
-import { notFound } from "next/navigation";
 
 type ProjectPostsListProps = {
   projectPosts: TProjectPost[];

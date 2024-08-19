@@ -3,7 +3,7 @@ import { Schema, model } from "mongoose";
 const projectPostReplySchema = new Schema(
   {
     content: { type: String, required: true },
-    likes: [{ type: Schema.Types.ObjectId, ref: "User" }], // Array of user IDs who liked the reply
+    likes: [{ type: Schema.Types.ObjectId, ref: "User" }],
     dislikes: [{ type: Schema.Types.ObjectId, ref: "User" }],
     projectPostId: {
       type: Schema.Types.ObjectId,

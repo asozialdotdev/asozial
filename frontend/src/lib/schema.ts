@@ -1,23 +1,22 @@
 import { z } from "zod";
 
 const createProjectSchema = z.object({
-  title: z.string().min(1, "Title is required"),
-  description: z.string().min(1, "Description is required"),
-  pitch: z.string().min(1, "Pitch is required"),
+  title: z.string().min(1, "Project with no name?"),
+  description: z.string().min(1, "They need to know what your project is about"),
+  pitch: z.string().min(1, "Pitch your project"),
   githubRepo: z.string().optional(),
-  techStack: z.array(z.string()).min(1, "At least one tech stack is required"),
-  mainLanguage: z.string().min(1, "Main language is required"),
-  // owner: z.object({ userId: z.string().min(1, "Owner is required") }),
+  techStack: z.array(z.string()).min(1, "Pick at least one tech stack"),
+  mainLanguage: z.string().min(1, "Specify the main language"),
   socials: z.array(z.string()).optional(),
 });
 
 const createPostSchema = z.object({
-  title: z.string().min(1, "Title is required"),
-  content: z.string().min(1, "Content is required"),
+  title: z.string().min(1, "Your thread needs a title"),
+  content: z.string().min(1, "At least try to write something"),
 });
 
 const createReplySchema = z.object({
-  content: z.string().min(1, "Content is required"),
+  content: z.string().min(1, "At least try to write something"),
 });
 
 export { createProjectSchema, createPostSchema, createReplySchema };

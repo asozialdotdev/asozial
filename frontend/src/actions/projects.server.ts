@@ -1,11 +1,16 @@
 "use server";
-
-import { Project, ProjectId } from "@/types/Project";
-import { baseUrl } from "@/constants";
-import { headers } from "next/headers";
-import { auth } from "@/auth";
-import { redirect } from "next/navigation";
+//Next
 import { revalidatePath } from "next/cache";
+import { redirect } from "next/navigation";
+
+//Constants
+import { baseUrl } from "@/constants";
+
+//Lib
+import { auth } from "@/auth";
+
+//Types
+import { Project, ProjectId } from "@/types/Project";
 
 // Get all projects
 const fetchAllProjects = async () => {
@@ -24,7 +29,7 @@ const fetchAllProjects = async () => {
     return projects;
   } catch (error) {
     console.error("Error fetching projects:", error);
-    return "Error fetching projects";
+    return null;
   }
 };
 
@@ -46,7 +51,7 @@ const fetchProjectById = async (projectId: ProjectId) => {
     return project;
   } catch (error) {
     console.error("Error fetching project:", error);
-    return "Error fetching project";
+    return null;
   }
 };
 

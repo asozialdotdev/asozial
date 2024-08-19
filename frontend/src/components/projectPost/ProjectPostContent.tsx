@@ -13,16 +13,11 @@ function ProjectPostContent({
   content,
   createdAt,
 }: ProjectPostContentProps) {
-  const formattedCreatedAt2 = formatDistance(new Date(createdAt), new Date(), {
+  const formattedCreatedAt = formatDistance(new Date(createdAt), new Date(), {
     addSuffix: true,
   })
     .replace("about", "")
     .replace("minutes", "min");
-
-  const formattedCreatedAt = format(
-    new Date(createdAt),
-    "dd, MMM yyyy - HH:mm",
-  );
 
   return (
     <div className="flex-grow">
@@ -36,7 +31,7 @@ function ProjectPostContent({
       </p>
       <p className="mb-4 mt-1 text-sm text-neutral-500 dark:text-neutral-400">
         <small>Posted </small>
-        {formattedCreatedAt2}
+        {formattedCreatedAt}
       </p>
     </div>
   );

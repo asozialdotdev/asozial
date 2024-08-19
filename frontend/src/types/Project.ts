@@ -1,7 +1,7 @@
 import { Types } from "mongoose";
 
 type ProjectId = Types.ObjectId | string;
-type Members = {
+type Member = {
   _id: Types.ObjectId;
   avatarUrl: string;
   name: string;
@@ -13,11 +13,11 @@ type Project = {
   description: string;
   githubRepo: string;
   techStack: string[];
-  owner: Types.ObjectId;
+  owner: Member;
   pitch: string;
-  membersJoined: Members[];
-  membersApplied: Members[];
-  membersInvited: Members[];
+  membersJoined: Member[];
+  membersApplied: Member[];
+  membersInvited: Member[];
   status: "active" | "inactive" | "completed";
   socials: string[] | undefined;
   createdAt?: Date;

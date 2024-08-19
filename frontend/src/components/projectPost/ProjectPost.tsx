@@ -15,15 +15,20 @@ function ProjectPost({ projectPost }: { projectPost: ProjectPost }) {
     <ProjectPostContainer>
       <div className="flex items-start gap-4">
         {/* Avatar  */}
+        <div className="flex flex-col gap-3 pl-2 lg:contents">
+          <UserAvatar
+            src={post.userId.avatarUrl}
+            name={post.userId.name}
+            userId={post.userId._id}
+          />
 
-        <UserAvatar src={post.userId.avatarUrl} name={post.userId.name} />
-
-        <ProjectPostContent
-          name={post.userId.name}
-          title={post.title}
-          content={post.content}
-          createdAt={post.createdAt}
-        />
+          <ProjectPostContent
+            name={post.userId.name}
+            title={post.title}
+            content={post.content}
+            createdAt={post.createdAt}
+          />
+        </div>
       </div>
       <div>
         <div className="flex items-start gap-4">

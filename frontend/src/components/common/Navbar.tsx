@@ -70,7 +70,12 @@ function Navbar() {
             </section>
 
             <section className="flex items-center gap-2" ref={combinedRefs}>
-              <button onClick={() => setIsOpen(!isOpen)}>Contributors</button>
+              <button
+                className="hidden sm:block"
+                onClick={() => setIsOpen(!isOpen)}
+              >
+                Contributors
+              </button>
 
               <ToggleTheme />
 

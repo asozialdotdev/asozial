@@ -7,7 +7,7 @@ import { useFormState } from "react-dom";
 import { useRef } from "react";
 
 //Components
-import ButtonProjectPostForm from "./ButtonProjectPostForm";
+import ProjectPostFormButton from "./ProjectPostFormButton";
 
 //Ui
 import { Input } from "../ui/input";
@@ -77,7 +77,7 @@ function PostForm({ projectId }: { projectId: ProjectId }) {
 
       <input type="hidden" name="projectId" value={projectId.toString()} />
 
-      <ButtonProjectPostForm />
+      <ProjectPostFormButton />
     </form>
   );
 }

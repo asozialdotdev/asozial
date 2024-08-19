@@ -1,12 +1,12 @@
 "use server";
 
+//Actions
 import { fetchProjectPosts } from "@/actions";
 import {
   checkIsMember,
   fetchProjectById,
   handleJoinProject,
 } from "@/actions/projects.server";
-//Actions
 
 //Components
 import PageContainer from "@/components/common/PageContainer";
@@ -20,7 +20,7 @@ import { Button } from "@/components/ui/button";
 import type { ProjectId } from "@/types/Project";
 import { notFound } from "next/navigation";
 
-const membersJoined = ["Benjamin", "Mirko", "John", "Jane", "José"];
+// const membersJoined = ["Benjamin", "Mirko", "John", "Jane", "José"];
 
 async function Page({ params }: { params: { projectId: ProjectId } }) {
   const { projectId } = params;

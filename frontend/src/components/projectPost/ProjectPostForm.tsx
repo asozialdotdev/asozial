@@ -1,7 +1,9 @@
-import { ProjectId } from "@/types/Project";
-
+//Components
 import PostForm from "../project/PostForm";
 import PageTitle from "../common/PageTitle";
+
+//Types
+import type { ProjectId } from "@/types/Project";
 
 async function ProjectPostForm({ projectId }: { projectId: ProjectId }) {
   return (

@@ -1,10 +1,17 @@
 "use server";
+//Next
 import { revalidatePath } from "next/cache";
-import { baseUrl } from "@/constants";
-import { ProjectId } from "@/types/Project";
-import { ProjectPostId, ReplyId } from "@/types/ProjectPost";
+
+//Lib
 import { createPostSchema, createReplySchema } from "@/lib/schema";
 import { auth } from "@/auth";
+
+//Constants
+import { baseUrl } from "@/constants";
+
+//Types
+import type { ProjectPostId, ReplyId } from "@/types/ProjectPost";
+import type { ProjectId } from "@/types/Project";
 
 type CreatePostFormState = {
   errors: {
@@ -96,9 +103,7 @@ const fetchPostByIdAndReplies = async (projectPostId: ProjectPostId) => {
   try {
     const response = await fetch(
       `${baseUrl}/api/project-posts/${projectPostId}`,
-      {
-        cache: "no-store",
-      },
+      { next: { revalidate: 300 } },
     );
     if (!response.ok) {
       throw new Error(`Failed to fetch post: ${response.statusText}`);
@@ -186,7 +191,6 @@ const createLikePost = async (projectPostId: ProjectPostId) => {
     }
     const data = await response.json();
     console.log("data LIKE:", data);
-    // revalidatePath(`/projects/${data.projectId}/posts/${projectPostId}`);
     return data.likes;
   } catch (error) {
     console.error("Error liking post:", error);
@@ -214,7 +218,6 @@ const createDislikePost = async (projectPostId: ProjectPostId) => {
     }
     const data = await response.json();
     console.log("Disliked data:", data);
-    // revalidatePath(`/projects/${data.projectId}/posts/${projectPostId}`);
     return data.dislikes;
   } catch (error) {
     console.error("Error disliking post:", error);

@@ -4,10 +4,10 @@ const projectPostSchema = new Schema(
   {
     title: { type: String, required: true },
     content: { type: String, required: true },
-    likes: [{ type: Schema.Types.ObjectId, ref: "User", default: [] }], // Array of user IDs who liked the post
+    likes: [{ type: Schema.Types.ObjectId, ref: "User", default: [] }],
     dislikes: [{ type: Schema.Types.ObjectId, ref: "User", default: [] }],
     userId: { type: Schema.Types.ObjectId, ref: "User", required: true },
-    projectId: { type: Schema.Types.ObjectId, ref: "Project", required: true }, // Assuming there's a Topic model
+    projectId: { type: Schema.Types.ObjectId, ref: "Project", required: true },
   },
   {
     collection: "ProjectPost",
@@ -16,10 +16,10 @@ const projectPostSchema = new Schema(
 );
 
 projectPostSchema.virtual("replyCount", {
-  ref: "ProjectPostReply", // The model to use
+  ref: "ProjectPostReply",
   localField: "_id", // Find replies where `localField`
   foreignField: "projectPostId", // is equal to `foreignField`
-  count: true, // Only get the number of replies
+  count: true, // get the number of replies
 });
 
 projectPostSchema.index({ likes: 1 });

@@ -1,5 +1,7 @@
 import { Types } from "mongoose";
 
+type UserId = Types.ObjectId | string;
+
 type User = {
   githubID: string;
   email?: string;
@@ -20,4 +22,4 @@ type User = {
   avoidedProjects?: Types.ObjectId[];
 };
 
-export type { User };
+export type { User, UserId };
