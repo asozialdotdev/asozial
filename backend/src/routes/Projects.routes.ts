@@ -16,9 +16,8 @@ projectsRouter.get(
     const { userId } = req.query;
     try {
       const projects = await Project.find({ owner: userId })
-        .populate("membersJoined", "name avatarUrl")
-        .populate("owner", "name avatarUrl")
-
+        .populate("membersJoined", "name image")
+        .populate("owner", "name image")
         .exec();
       console.log("Number of Projects Found:", projects.length);
       res.json(projects);
@@ -130,7 +129,7 @@ projectsRouter.get(
       const projects = await Project.find({
         title: { $regex: query, $options: "i" },
       })
-        .populate("membersJoined", "name avatarUrl")
+        .populate("membersJoined", "name image")
         .exec();
 
       res.json(projects);
@@ -147,8 +146,8 @@ projectsRouter.get(
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       const project = await Project.findById(req.params.projectId)
-        .populate("membersJoined", "name avatarUrl")
-        .populate("owner", "name avatarUrl")
+        .populate("membersJoined", "name image")
+        .populate("owner", "name image")
         .exec();
       console.log("Project Found>>>>>>>>:", project);
       if (!project) {

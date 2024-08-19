@@ -2,8 +2,12 @@ import { Types } from "mongoose";
 
 type ProjectId = Types.ObjectId | string;
 type Member = {
+
   _id: Types.ObjectId | string;
   avatarUrl: string;
+
+  image: string;
+
   name: string;
 };
 

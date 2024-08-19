@@ -163,4 +163,31 @@ friendshipsRouter.get(
   }
 );
 
+// DELETE friendships
+
+friendshipsRouter.delete(
+  "/",
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const deleteResult = await Friendship.deleteMany({
+        $or: [
+          { senderId: req.body.senderId, receiverId: req.body.receiverId },
+          { senderId: req.body.receiverId, receiverId: req.body.senderId },
+        ],
+        status: "accepted",
+      });
+
+      if (deleteResult.deletedCount === 0) {
+        res.status(404).send("Friendship not found or not accepted");
+        console.error("Friendship not found or not accepted");
+        return;
+      }
+
+      res.status(200).json({ message: "Friendship deleted" });
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
 export default friendshipsRouter;

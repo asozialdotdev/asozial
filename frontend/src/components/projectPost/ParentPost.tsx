@@ -22,7 +22,7 @@ async function ParentPost({ projectPostId }: { projectPostId: ProjectPostId }) {
           {/* Avatar on the left side */}
 
           <UserAvatar
-            src={post.userId.avatarUrl}
+            src={post.userId.image}
             name={post.userId.name}
             userId={post.userId._id}
           />

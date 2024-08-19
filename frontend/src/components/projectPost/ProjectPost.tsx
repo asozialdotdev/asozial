@@ -17,7 +17,7 @@ function ProjectPost({ projectPost }: { projectPost: ProjectPost }) {
         {/* Avatar  */}
         <div className="flex flex-col gap-3 pl-2 lg:contents">
           <UserAvatar
-            src={post.userId.avatarUrl}
+            src={post.userId.image}
             name={post.userId.name}
             userId={post.userId._id}
           />
