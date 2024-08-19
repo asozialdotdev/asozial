@@ -100,14 +100,14 @@ githubRouter.get("/", (req: Request, res: Response) => {
 
 githubRouter.post("/", async (req: Request, res: Response) => {
   try {
-    const { name, email, image, id } = req.body;
+    const { name, email, image, id, username } = req.body;
 
     const newUser = await User.create({
       githubID: id,
       avatarUrl: image,
       name: name,
       email,
-
+      username,
     });
     res.status(200).json(newUser);
   } catch (error: any) {

@@ -4,7 +4,7 @@ const userSchema = new Schema(
   {
     githubID: { type: String },
     email: { type: String },
-    username: { type: String, unique: true },
+    username: { type: String},
     name: { type: String },
     avatarUrl: { type: String },
     githubUrl: { type: String },
