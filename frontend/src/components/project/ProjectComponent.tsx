@@ -9,13 +9,15 @@ import UserAvatar from "../common/UserAvatar";
 import github from "/public/socials/github.png";
 
 //Utils
-import { techStackClass } from "@/utils";
+import { techStackClass, setStatusIcon } from "@/utils";
 
 //Types
 import type { Project } from "@/types/Project";
 import Link from "next/link";
 import { auth } from "@/auth";
 import { Button } from "../ui/button";
+import { socialsData } from "@/constants";
+import { checkIsMember } from "@/actions";
 
 const membersJoined = ["Benjamin", "Mirko", "John", "Jane", "José"];
 const membersApplied = ["Alice", "Bob", "Charlie"];
@@ -25,8 +27,8 @@ const userIdTest = "1234567890";
 
 async function ProjectComponent({ project }: { project: Project }) {
   const session = await auth();
+  const isMember = await checkIsMember(project._id);
   const isOwner = project.owner._id === session?.user?.id;
-  console.log("IS OWNER", isOwner);
 
   return (
     <section className="flex w-full flex-col gap-4 border-b border-b-neutral-300 px-4 dark:border-b-neutral-600">
@@ -53,8 +55,22 @@ async function ProjectComponent({ project }: { project: Project }) {
         ))}
       </div>
 
+      <div>
+        <h4 className="text-lg font-semibold">Status</h4>
+        <p className="capitalize">
+          <span>
+            {setStatusIcon(project.status)} {project.status}
+          </span>
+        </p>
+      </div>
+
+      <div>
+        <h4 className="text-lg font-semibold">Language</h4>
+        <p className="capitalize">{project.mainLanguage}</p>
+      </div>
+
       {/* Members */}
-      <div className="flex flex-col gap-4">
+      <div className="flex flex-col">
         <h4 className="text-lg font-semibold">Members</h4>
         <div className="flex gap-4">
           {project.membersJoined.length !== 0 ? (
@@ -67,21 +83,46 @@ async function ProjectComponent({ project }: { project: Project }) {
               />
             ))
           ) : (
-            <p>No members joined yet</p>
+            <p className='text-neutral-500 dark:text-neutral-400'>No members joined yet</p>
           )}
         </div>
       </div>
 
-      <div className="mb-8 mt-4 flex items-center gap-2">
-        <a href={project.githubRepo} target="_blank">
-          <Image
-            src={github}
-            alt="github logo"
-            width={30}
-            height={30}
-            className="dark:invert dark:filter"
-          />
-        </a>
+      {/* Socials */}
+      <div className="mb-8 mt-4 flex items-center gap-5">
+        {project.githubRepo && (
+          <a href={project.githubRepo} target="_blank">
+            <Image
+              src={github}
+              alt="github logo"
+              width={40}
+              height={40}
+              className="inline dark:invert dark:filter"
+            />
+          </a>
+        )}
+        {(isMember || isOwner) &&
+          project.socials &&
+          socialsData.map((socialData) => {
+            const socialUrl =
+              project.socials && project?.socials[socialData.key];
+
+            return (
+              socialUrl && (
+                <a href={socialUrl} target="_blank" key={socialData.key}>
+                  <Image
+                    src={socialData.imageSrc}
+                    alt={socialData.alt}
+                    width={socialData.key === "notion" ? 40 : 40}
+                    height={socialData.key === "notion" ? 40 : 40}
+                    className="inline rounded-md"
+                  />
+                </a>
+              )
+            );
+          })}
+      </div>
+      <div className="mb-6">
         {isOwner && (
           <Link href={`/projects/${project._id}/edit`}>
             <Button>Edit project</Button>

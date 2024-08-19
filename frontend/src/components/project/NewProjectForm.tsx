@@ -40,7 +40,7 @@ import PageTitle from "../common/PageTitle";
 import { socialsData } from "@/constants";
 
 //Types
-import type { CreateUpdateProject } from "@/types/Project";
+import type { CreateUpdateProject, SocialsData } from "@/types/Project";
 
 type Inputs = z.infer<typeof createProjectSchema>;
 
@@ -66,7 +66,12 @@ function NewProjectForm() {
       githubRepo: "",
       techStack: [],
       mainLanguage: "",
-      socials: ["", "", "", ""],
+      socials: {
+        slack: "",
+        discord: "",
+        notion: "",
+        gitlab: "",
+      },
     },
   });
 
@@ -97,7 +102,12 @@ function NewProjectForm() {
     const formattedTitle = title.trim();
     const formattedDescription = description.trim();
     const formattedPitch = pitch.trim();
-    const formattedSocials = socials?.map((social) => social.trim());
+    const formattedSocials = socials
+      ? Object.entries(socials).reduce((acc, [key, value]) => {
+          acc[key] = value?.trim() || ""; // Trim the value if it exists, otherwise set it to an empty string
+          return acc;
+        }, {} as any)
+      : {};
 
     const finalData: CreateUpdateProject = {
       ...data,
@@ -117,7 +127,7 @@ function NewProjectForm() {
   };
 
   return (
-    <div className="mt-8 w-full">
+    <div className="mt-6 w-full">
       <PageTitle className="text-center">Create a new project</PageTitle>
       <form
         onSubmit={handleSubmit(processForm)}
@@ -206,7 +216,7 @@ function NewProjectForm() {
         </div>
 
         {/* TechStack */}
-        <div className="flex flex-col gap-2">
+        <div className="mt-6 flex flex-col gap-2">
           <label htmlFor="mainLanguage" className="font-semibold">
             Language <span className="text-xl text-red-400">*</span>
           </label>
@@ -241,7 +251,7 @@ function NewProjectForm() {
           )}
         </div>
 
-        <div className="flex flex-col gap-2">
+        <div className="mt-6 flex flex-col gap-2">
           <label htmlFor="techStack" className="font-semibold">
             Tech Stack <span className="text-xl text-red-400">*</span>
           </label>
@@ -279,7 +289,8 @@ function NewProjectForm() {
         </div>
 
         {/* Github Repo */}
-        <div className="flex flex-col gap-2">
+
+        <div className="mt-6 flex flex-col gap-2">
           <label htmlFor="gitHubRepo" className="font-semibold"></label>
           <label htmlFor="socials" className="font-semibold">
             Socials
@@ -293,12 +304,18 @@ function NewProjectForm() {
               height={30}
               className="inline dark:invert dark:filter"
             />
-
-            <Input
-              type="text"
-              id="githubRepo"
-              placeholder="https://github.com/username/repo"
-              className="h-12 w-full border-zinc-300 bg-white hover:bg-zinc-50 focus:bg-zinc-50 dark:border-zinc-700 dark:hover:bg-zinc-800 dark:focus:bg-zinc-800"
+            <Controller
+              name="githubRepo"
+              control={control}
+              render={({ field }) => (
+                <Input
+                  {...field}
+                  type="text"
+                  id="githubRepo"
+                  placeholder="https://github.com/username/repo"
+                  className="h-12 w-full border-zinc-300 bg-white hover:bg-zinc-50 focus:bg-zinc-50 dark:border-zinc-700 dark:hover:bg-zinc-800 dark:focus:bg-zinc-800"
+                />
+              )}
             />
           </div>
         </div>
@@ -311,18 +328,18 @@ function NewProjectForm() {
               <Image
                 src={social.imageSrc}
                 alt={social.alt}
-                width={social.alt === "Notion" ? 25 : 60}
-                height={social.alt === "Notion" ? 25 : 60}
+                width={30}
+                height={30}
                 className="inline"
               />
               <Controller
-                name={`socials.${index}`}
+                name={`socials.${social.key}` as any}
                 control={control}
                 render={({ field }) => (
                   <Input
                     {...field}
                     type="text"
-                    id={`socials.${index}`}
+                    id={`socials.${social.key}`}
                     placeholder={social.placeholder}
                     className="h-12 w-full border-zinc-300 bg-white hover:bg-zinc-50 focus:bg-zinc-50 dark:border-zinc-700 dark:hover:bg-zinc-800 dark:focus:bg-zinc-800"
                   />

@@ -2,6 +2,7 @@ import discord from "/public/socials/discord.png";
 import slack from "/public/socials/slack.png";
 import notion from "/public/socials/notion.png";
 import gitlab from "/public/socials/gitlab.png";
+import { SocialsData } from "@/types/Project";
 
 const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:5005";
 console.log("baseUrl in CONSTANTS:", baseUrl);
@@ -79,27 +80,33 @@ const contributors = [
   },
 ];
 
-const socialsData = [
+const socialsData: SocialsData[] = [
   {
-    placeholder: "https://app.slack.com/...",
-    imageSrc: slack,
-    alt: "Slack",
-  },
-  {
-    placeholder: "https://discord.com/...",
-    imageSrc: discord,
-    alt: "Discord",
-  },
-  {
+    key: "notion",
     placeholder: "http://notion.so/...",
     imageSrc: notion,
     alt: "Notion",
   },
   {
+    key: "slack",
+    placeholder: "https://app.slack.com/...",
+    imageSrc: slack,
+    alt: "Slack",
+  },
+  {
+    key: "discord",
+    placeholder: "https://discord.com/...",
+    imageSrc: discord,
+    alt: "Discord",
+  },
+  {
+    key: "gitlab",
     placeholder: "https://gitlab.com/...",
     imageSrc: gitlab,
     alt: "Gitlab",
   },
 ];
 
-export { baseUrl, languagesWithColors, contributors, socialsData };
+const projectStatus = ["active", "inactive", "completed"];
+
+export { baseUrl, languagesWithColors, contributors, socialsData, projectStatus };

@@ -1,4 +1,6 @@
 "use server";
+//Next
+import { notFound } from "next/navigation";
 //Actions
 import { fetchProjectPosts } from "@/actions";
 import {
@@ -15,19 +17,24 @@ import ProjectPostsList from "@/components/projectPost/ProjectPostsList";
 //Ui
 import { Button } from "@/components/ui/button";
 
+//Lib
+import { auth } from "@/auth";
+
 //Types
 import type { ProjectId } from "@/types/Project";
-import { notFound } from "next/navigation";
 
 // const membersJoined = ["Benjamin", "Mirko", "John", "Jane", "José"];
 
 async function Page({ params }: { params: { projectId: ProjectId } }) {
+  const session = await auth();
   const { projectId } = params;
   const project = await fetchProjectById(projectId);
 
   const posts = await fetchProjectPosts(projectId);
 
   const isMember = await checkIsMember(projectId);
+
+  const isOwner = project.owner._id === session?.user?.id;
 
   if (!project) {
     notFound();
@@ -36,7 +43,7 @@ async function Page({ params }: { params: { projectId: ProjectId } }) {
     <PageContainer className="w-full max-w-screen-md gap-4">
       <ProjectComponent project={project} />
 
-      {isMember ? (
+      {isMember || isOwner ? (
         <ProjectPostsList projectPosts={posts} projectId={projectId} />
       ) : (
         <div className="flex flex-col items-center justify-center gap-4 p-4">

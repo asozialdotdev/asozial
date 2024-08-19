@@ -36,7 +36,6 @@ const fetchAllProjects = async () => {
 // Get 1 project
 
 const fetchProjectById = async (projectId: ProjectId) => {
-  console.log("THIS FUNCTION IS BEING CALLED");
   try {
     const response = await fetch(`${baseUrl}/api/projects/${projectId}`, {
       cache: "no-store",
@@ -45,8 +44,6 @@ const fetchProjectById = async (projectId: ProjectId) => {
       throw new Error(`Failed to fetch project: ${response.statusText}`);
     }
     const project = await response.json();
-
-    console.log("Fetched project:", project);
 
     return project;
   } catch (error) {
@@ -78,9 +75,10 @@ const searchForMyProjects = async (searchTerm: string) => {
 
 const createProject = async (data: CreateUpdateProject) => {
   const session = await auth();
-
+  console.log("GITHUB REPO", data);
+  let project;
   try {
-    const response = await fetch(`${baseUrl}/api/projectss/new`, {
+    const response = await fetch(`${baseUrl}/api/projects/new`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -88,13 +86,13 @@ const createProject = async (data: CreateUpdateProject) => {
       body: JSON.stringify({ ...data, userId: session?.user?.id }),
     });
 
-    const project = await response.json();
+    project = await response.json();
     console.log("project", project);
-    redirect(`/projects/${project._id}`);
   } catch (error) {
     console.error("Error creating project:", error);
     return "Error creating project";
   }
+  redirect(`/projects/${project._id}`);
 };
 
 // POST join a project
@@ -143,7 +141,10 @@ const checkIsMember = async (projectId: ProjectId) => {
 
 // PUT update a project
 
-const updateProject = async (projectId: ProjectId, data: CreateUpdateProject) => {
+const updateProject = async (
+  projectId: ProjectId,
+  data: CreateUpdateProject,
+) => {
   const session = await auth();
 
   try {
