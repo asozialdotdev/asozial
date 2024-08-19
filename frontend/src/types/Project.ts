@@ -3,7 +3,7 @@ import { Types } from "mongoose";
 type ProjectId = Types.ObjectId | string;
 type Member = {
   _id: Types.ObjectId;
-  avatarUrl: string;
+  image: string;
   name: string;
 };
 

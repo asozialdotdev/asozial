@@ -5,7 +5,7 @@ type ReplyId = Types.ObjectId | string | null | undefined;
 
 type User = {
   _id: Types.ObjectId;
-  avatarUrl: string;
+  image: string;
   name: string;
 };
 
