@@ -3,6 +3,7 @@ import express, { Request, Response, NextFunction } from "express";
 import axios from "axios";
 import Project from "../models/Project.models";
 import User from "../models/User.models";
+import { getToken } from "@auth/core/jwt";
 
 const projectsRouter = express.Router();
 
@@ -196,7 +197,7 @@ projectsRouter.get(
       if (!project) {
         return res.status(404).json({ error: "Project not found" });
       }
-      const {userId} = req.query;
+      const { userId } = req.query;
       const user = await User.findById(userId);
       if (!user) {
         return res.status(404).json({ error: "User not found" });
@@ -205,6 +206,50 @@ projectsRouter.get(
       res.json({
         isMember: project.membersJoined.includes(user._id),
       });
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
+//PUT request to update a project
+
+projectsRouter.put(
+  "/:projectId",
+  async (req: Request, res: Response, next: NextFunction) => {
+    
+    try {
+      const {
+        title,
+        description,
+        pitch,
+        techStack,
+        mainLanguage,
+        socials,
+        userId,
+      } = req.body;
+
+      // Find the project first
+      const project = await Project.findById(req.params.projectId);
+
+      if (!project) {
+        return res.status(404).json({ message: "Project not found" });
+      }
+
+      // Check if the current user is the owner of the project
+      if (project.owner.toString() !== userId) {
+        return res
+          .status(403)
+          .json({ message: "You are not authorized to edit this project" });
+      }
+
+      const updatedProject = await Project.findByIdAndUpdate(
+        req.params.projectId,
+        { title, description, pitch, techStack, mainLanguage, socials },
+        { new: true, runValidators: true }
+      );
+
+      res.status(200).json(updatedProject);
     } catch (error) {
       next(error);
     }

@@ -30,7 +30,9 @@ export const {
     }),
   ],
   callbacks: {
-    async signIn({ user }) {
+    async signIn({ user, account, profile }) {
+      console.log("Profile>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>", profile);
+      console.log("Profile>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>", profile?.login);
       const db = client.db();
 
       const existingUser = await db
@@ -40,13 +42,16 @@ export const {
       if (!existingUser) {
         try {
           //create user in database
-          const response = await axios.post(`${baseUrl}/api/auth`, {
+          const newUser = {
             name: user.name,
             email: user.email,
-            image: user.image,
-            id: user.id,
-          });
-          console.log("Response from /api/auth:", response.data);
+            avatarUrl: user.image,
+            id: profile?.id,
+            username: profile?.login,
+            provider: account?.provider,
+          };
+          const response = await axios.post(`${baseUrl}/api/auth`, newUser);
+
           user.id = response.data._id; // Assign the custom user ID to NextAuth's user object
         } catch (error) {
           console.error("Error creating user in database", error);
@@ -59,7 +64,7 @@ export const {
           {
             $set: {
               name: user.name,
-              image: user.image,
+              avatarUrl: user.image,
               updatedAt: new Date(),
             },
           },
@@ -74,6 +79,7 @@ export const {
       if (session && token) {
         session.user.id = token.sub ?? "";
       }
+      console.log("Session>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>", session);
       return session;
     },
     async jwt({ token, user }) {

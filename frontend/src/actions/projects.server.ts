@@ -97,6 +97,7 @@ const createProject = async (data: Project) => {
   redirect(`/projects/${project._id}`);
 };
 
+// POST join a project
 const handleJoinProject = async (formData: FormData) => {
   const session = await auth();
   try {
@@ -119,6 +120,7 @@ const handleJoinProject = async (formData: FormData) => {
   }
 };
 
+// GET check if user is a member of a project
 const checkIsMember = async (projectId: ProjectId) => {
   const session = await auth();
   try {
@@ -136,6 +138,34 @@ const checkIsMember = async (projectId: ProjectId) => {
   } catch (error) {
     console.error("Error checking if user is a member:", error);
     return "Error checking if user is a member";
+  }
+};
+
+// PUT update a project
+
+const updateProject = async (projectId: ProjectId, data: Project) => {
+  const session = await auth();
+
+  try {
+    const project = await fetchProjectById(projectId);
+    if (!project) {
+      return "Project not found";
+    }
+
+    const response = await fetch(`${baseUrl}/api/projects/${projectId}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ ...data, userId: session?.user?.id }),
+    });
+
+    const updateProject = await response.json();
+    console.log("Updated updateProject:", updateProject);
+    return "Project updated";
+  } catch (error) {
+    console.error("Error updating project:", error);
+    return "Error updating project";
   }
 };
 
