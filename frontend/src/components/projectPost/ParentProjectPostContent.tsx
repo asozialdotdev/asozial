@@ -1,15 +1,23 @@
 "use client";
+//Next
+import Link from "next/link";
+
+//React
+import { useState } from "react";
+
+//Components
 import UserAvatar from "../common/UserAvatar";
-import ProjectPostLikeButtons from "./ProjectPostButtons";
+import PostLikeButtons from "./PostLikeButtons";
 import ProjectPostContent from "./ProjectPostContent";
 import ReplyCount from "./ReplyCount";
+
+//Ui
 import { FaRegArrowAltCircleRight } from "react-icons/fa";
-import { Project } from "@/types/Project";
-import { ProjectPost, Reply } from "@/types/ProjectPost";
-import { useState } from "react";
-import Link from "next/link";
-import { FiEdit } from "react-icons/fi";
 import { VscEdit } from "react-icons/vsc";
+import { Button } from "../ui/button";
+
+//Types
+import { ProjectPost, Reply } from "@/types/ProjectPost";
 
 type ParentProjectPostContent = {
   post: ProjectPost;
@@ -38,11 +46,12 @@ function ParentProjectPostContent({
             username={post.userId.username}
             userId={post.userId._id}
           />
-          {/* Post Content */}
+          {/* Post Title and Content */}
           <ProjectPostContent
             projectPost={post}
             isEditing={isEditing}
             setIsEditing={setIsEditing}
+            isProjectPage={isProjectPage}
           />
         </div>
       </div>
@@ -50,20 +59,31 @@ function ParentProjectPostContent({
         {/* Post Buttons */}
         <div className="flex items-center gap-4">
           <ReplyCount replies={post.replyCount || replies?.length} />
-          <ProjectPostLikeButtons projectPost={post} />
+          <PostLikeButtons projectPost={post} />
           <div>
-            <button
-              className="-ml-1 mb-4 flex items-center gap-2 text-base hover:opacity-75"
+            <span
+              className="-ml-1 mb-4 flex cursor-pointer items-center gap-2 text-base hover:opacity-75"
               onClick={toggleEditing}
             >
               <VscEdit size={20} />
-              {isEditing ? "Cancel" : "Edit"}
-            </button>
+              {isEditing ? (
+                <Button
+                  variant="outline"
+                  className="min-w-[85px] text-sm hover:dark:bg-zinc-300 dark:focus:bg-zinc-300"
+                >
+                  Cancel
+                </Button>
+              ) : (
+                <span className="-ml-[0.35rem] cursor-pointer text-sm hover:dark:bg-zinc-300 dark:focus:bg-zinc-300">
+                  Edit
+                </span>
+              )}
+            </span>
           </div>
           {/* Arrow Button */}
           {isProjectPage && (
             <Link
-              className="mb-3 ml-4 font-semibold"
+              className="mb-3 ml-4 font-semibold hover:opacity-75"
               key={post._id.toString()}
               href={`/projects/${post.projectId}/posts/${post._id}`}
             >

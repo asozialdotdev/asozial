@@ -8,13 +8,15 @@ import EditPostForm from "./EditPostForm";
 type ProjectPostContentProps = {
   projectPost: ProjectPost;
   isEditing?: boolean;
-  setIsEditing: Dispatch<SetStateAction<boolean>>
+  setIsEditing: Dispatch<SetStateAction<boolean>>;
+  isProjectPage?: boolean;
 };
 
 function ProjectPostContent({
   projectPost,
   isEditing,
   setIsEditing,
+  isProjectPage,
 }: ProjectPostContentProps) {
   const post = projectPost;
 
@@ -32,9 +34,15 @@ function ProjectPostContent({
       <p className="font-medium text-neutral-500 dark:text-neutral-400">
         {username}
       </p>
-      <Link href={`/projects/${post.projectId}/posts/${post._id}`}>
+      {isProjectPage ? (
+        <Link href={`/projects/${post.projectId}/posts/${post._id}`}>
+          <h3 className="text-lg font-semibold tracking-wide hover:opacity-75">
+            {title}
+          </h3>
+        </Link>
+      ) : (
         <h3 className="text-lg font-semibold tracking-wide">{title}</h3>
-      </Link>
+      )}
       <p className="mt-2 text-justify font-light text-dark dark:text-light">
         {content}
       </p>

@@ -62,7 +62,7 @@ function ReplyForm({
         <div className="mt-4 flex items-baseline gap-4">
           <ReplyLikeButtons reply={reply} />
           <button
-            className="flex items-center gap-2 text-sm"
+            className="flex items-center gap-2 text-sm hover:opacity-75"
             onClick={toggleOpen}
           >
             <span>

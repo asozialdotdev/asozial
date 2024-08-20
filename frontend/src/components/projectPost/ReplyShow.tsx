@@ -62,7 +62,7 @@ function ReplyShow({ replyId, projectPostId, replies }: ReplyShowProps) {
     <>
       <div
         key={reply._id?.toString()}
-        className={`mt-6 flex w-full flex-col items-start gap-4 pr-1 lg:max-w-[96%] lg:space-x-4 ${
+        className={`mt-6 flex w-full flex-col items-start gap-4 pr-1 pl-6 lg:pl-0 lg:max-w-[96%] lg:space-x-4 ${
           !isTopLevel
             ? "border-dashed border-zinc-300 pl-2 dark:border-zinc-600"
             : "border border-dashed border-zinc-300 pl-2 pt-6 dark:border-zinc-600 lg:pl-6"
@@ -94,6 +94,7 @@ function ReplyShow({ replyId, projectPostId, replies }: ReplyShowProps) {
         </section>
 
         <section className="flex items-center gap-4">
+          {/* Buttons and Forms /> */}
           {!edit && (
             <ReplyForm
               projectPostId={reply.projectPostId}

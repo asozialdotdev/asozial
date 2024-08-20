@@ -24,7 +24,6 @@ function EditReplyForm({
   toggleEdit,
 }: EditReplyFormProps) {
   const replyId = reply._id?.toString();
-  // const [open, setOpen] = useState<boolean>(false);
 
   const [formState, action] = useFormState(
     updatePostReply.bind(null, { projectPostId, replyId }),

@@ -97,7 +97,7 @@ function EditProjectForm({ project }: { project: Project }) {
     const formattedPitch = pitch.trim();
     const formattedSocials = socials
       ? Object.entries(socials).reduce((acc, [key, value]) => {
-          acc[key] = value?.trim() || ""; // Trim the value if it exists, otherwise set it to an empty string
+          acc[key] = value?.trim() || "";
           return acc;
         }, {} as any)
       : {};
@@ -157,7 +157,7 @@ function EditProjectForm({ project }: { project: Project }) {
           />
         </div>
         {/* Title */}
-        <div className="flex flex-col gap-2 mt-4">
+        <div className="mt-4 flex flex-col gap-2">
           <label htmlFor="title" className="font-semibold">
             Title <span className="text-xl text-red-400">*</span>
           </label>
@@ -239,7 +239,7 @@ function EditProjectForm({ project }: { project: Project }) {
         </div>
 
         {/* TechStack */}
-        <div className="flex flex-col gap-2 mt-4">
+        <div className="mt-4 flex flex-col gap-2">
           <label htmlFor="mainLanguage" className="font-semibold">
             Language <span className="text-xl text-red-400">*</span>
           </label>
@@ -274,7 +274,7 @@ function EditProjectForm({ project }: { project: Project }) {
           )}
         </div>
 
-        <div className="flex flex-col gap-2 mt-4">
+        <div className="mt-4 flex flex-col gap-2">
           <label htmlFor="techStack" className="font-semibold">
             Tech Stack <span className="text-xl text-red-400">*</span>
           </label>
@@ -312,7 +312,7 @@ function EditProjectForm({ project }: { project: Project }) {
         </div>
 
         {/* Github Repo */}
-        <div className="flex flex-col gap-2 mt-4">
+        <div className="mt-4 flex flex-col gap-2">
           <label htmlFor="gitHubRepo" className="font-semibold"></label>
           <label htmlFor="socials" className="font-semibold">
             Socials

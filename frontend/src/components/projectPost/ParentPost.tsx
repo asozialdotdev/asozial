@@ -2,10 +2,7 @@
 import { fetchPostByIdAndReplies } from "@/actions";
 
 //Components
-import UserAvatar from "../common/UserAvatar";
-import ProjectPostContent from "./ProjectPostContent";
-import ProjectPostButtons from "./ProjectPostButtons";
-import ReplyCount from "./ReplyCount";
+
 import ProjectPostContainer from "./ProjectPostContainer";
 
 //Types

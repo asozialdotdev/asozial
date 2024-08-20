@@ -1,4 +1,5 @@
 import { Types } from "mongoose";
+import { UserId } from "./User";
 
 type ProjectPostId = Types.ObjectId | string;
 type ReplyId = Types.ObjectId | string | null | undefined;
@@ -17,8 +18,8 @@ type ProjectPost = {
   userId: User;
   projectId: Types.ObjectId;
   replies: Reply[];
-  likes: User[];
-  dislikes: User[];
+  likes: UserId[];
+  dislikes: UserId[];
   createdAt: Date;
   updatedAt: Date;
   replyCount: number;
@@ -31,8 +32,8 @@ type Reply = {
   projectPostId: ProjectPostId;
   parentId?: Types.ObjectId;
   children: Reply[];
-  likes: User[];
-  dislikes: User[];
+  likes: UserId[];
+  dislikes: UserId[];
   createdAt: Date;
   updatedAt: Date;
 };

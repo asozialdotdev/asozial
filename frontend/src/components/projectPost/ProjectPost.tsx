@@ -1,11 +1,6 @@
 //Types
 import type { ProjectPost } from "@/types/ProjectPost";
-import UserAvatar from "../common/UserAvatar";
-import ProjectPostContent from "./ProjectPostContent";
-import ProjectPostButtons from "./ProjectPostButtons";
-import ReplyCount from "./ReplyCount";
-import Link from "next/link";
-import { FaRegArrowAltCircleRight } from "react-icons/fa";
+
 import ProjectPostContainer from "./ProjectPostContainer";
 import ParentProjectPostContent from "./ParentProjectPostContent";
 
