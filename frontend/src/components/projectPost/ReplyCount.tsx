@@ -1,7 +1,6 @@
-import { ProjectPost } from "@/types/ProjectPost";
 import { GoCommentDiscussion } from "react-icons/go";
 
-function ReplyCount({ replies }: { replies: number }) {
+function ReplyCount({ replies }: { replies?: number }) {
   return (
     <div className="mb-4 ml-14 flex items-center gap-4">
       <div className="flex items-center gap-1">

@@ -5,18 +5,20 @@ import ProjectPostContent from "./ProjectPostContent";
 import ReplyCount from "./ReplyCount";
 import { FaRegArrowAltCircleRight } from "react-icons/fa";
 import { Project } from "@/types/Project";
-import { ProjectPost } from "@/types/ProjectPost";
+import { ProjectPost, Reply } from "@/types/ProjectPost";
 import { useState } from "react";
 import Link from "next/link";
 
 type ParentProjectPostContent = {
   post: ProjectPost;
-  isPostList: boolean;
+  isProjectPage: boolean;
+  replies?: Reply[]
 };
 
 
-function ParentProjectPostContent({ post, isPostList }: ParentProjectPostContent) {
+function ParentProjectPostContent({ post, isProjectPage, replies }: ParentProjectPostContent) {
   const [isEditing, setIsEditing] = useState<boolean>(false);
+  console.log ("post replies", post)
 
   const toggleEditing = () => {
     setIsEditing((prev) => !prev);
@@ -41,13 +43,13 @@ function ParentProjectPostContent({ post, isPostList }: ParentProjectPostContent
       </div>
       <div>
         <div className="flex items-center gap-4">
-          <ReplyCount replies={post.replyCount} />
+          <ReplyCount replies={post.replyCount || replies?.length} />
           <ProjectPostLikeButtons
             projectPost={post}
             toggleEditing={toggleEditing}
           />
 
-          {isPostList && (
+          {isProjectPage && (
             <Link
               className="mb-3 ml-4 font-semibold"
               key={post._id.toString()}

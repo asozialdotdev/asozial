@@ -35,7 +35,7 @@ async function ParentPost({ projectPostId }: { projectPostId: ProjectPostId }) {
         <ReplyCount replies={replies.length} />
         <ProjectPostButtons projectPost={post}  />
       </div> */}
-      <ParentProjectPostContent post={post} isPostList={false} />
+      <ParentProjectPostContent post={post} isProjectPage={false} replies={replies} />
     </ProjectPostContainer>
   );
 }

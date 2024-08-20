@@ -14,7 +14,7 @@ function ProjectPost({ projectPost }: { projectPost: ProjectPost }) {
 
   return (
     <ProjectPostContainer>
-      <ParentProjectPostContent post={post} isPostList />
+      <ParentProjectPostContent post={post} isProjectPage />
     </ProjectPostContainer>
   );
 }
