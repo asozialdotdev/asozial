@@ -51,14 +51,14 @@ async function ReplyShow({ replyId, projectPostId }: ReplyShowProps) {
           {/* Avatar on the left side */}
           <UserAvatar
             src={reply.userId.image}
-            name={reply.userId.name}
+            username={reply.userId.username}
             userId={reply.userId._id}
           />
 
           {/* Content on the right side */}
           <div className="flex-grow">
             <p className="font-medium text-neutral-500 dark:text-neutral-400">
-              {reply.userId.name}
+              {reply.userId.username}
             </p>
             <p className="mt-2 text-justify text-sm font-light text-dark dark:text-light">
               {reply.content}
@@ -71,7 +71,6 @@ async function ReplyShow({ replyId, projectPostId }: ReplyShowProps) {
         </div>
       </section>
       <section className="flex items-center gap-4">
-        {/* <ReplyLikeButtons reply={reply} /> */}
         <ReplyForm
           projectPostId={reply.projectPostId}
           parentId={reply._id}

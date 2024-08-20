@@ -7,6 +7,7 @@ type User = {
   _id: Types.ObjectId;
   image: string;
   name: string;
+  username: string;
 };
 
 type ProjectPost = {

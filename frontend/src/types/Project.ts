@@ -16,6 +16,7 @@ type Member = {
   avatarUrl: string;
   image: string;
   name: string;
+  username: string;
 };
 
 type Socials = {

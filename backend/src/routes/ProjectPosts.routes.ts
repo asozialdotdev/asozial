@@ -19,7 +19,7 @@ projectPostRouter.get(
       const projectPosts = await ProjectPost.find({ projectId })
         .populate({
           path: "userId",
-          select: "name image",
+          select: "username name image",
         })
         .populate("replyCount");
       console.log("Projects with reply counts >>>>><<<<>>>><<<<", projectPosts);
@@ -78,7 +78,7 @@ projectPostRouter.get(
         req.params.projectPostId
       ).populate({
         path: "userId",
-        select: "name image",
+        select: "username name image",
       });
 
       if (!post) {
@@ -90,13 +90,13 @@ projectPostRouter.get(
       })
         .populate({
           path: "userId",
-          select: "name image",
+          select: "username name image",
         })
         .populate({
           path: "children",
           populate: {
             path: "userId",
-            select: "name image",
+            select: "username name image",
           },
         })
         .exec();
@@ -212,6 +212,33 @@ projectPostRouter.post("/:projectPostId/dislike", async (req, res, next) => {
     res.json({ likes: post.likes.length, dislikes: post.dislikes.length });
   } catch (error) {
     console.error("Error disliking post:", error);
+    next(error);
+  }
+});
+
+// PUT Update a project post
+projectPostRouter.put("/:projectPostId", async (req, res, next) => {
+  try {
+    const { title, content, userId } = req.body;
+
+    const post = await ProjectPost.findById(req.params.projectPostId);
+
+    if (!post) {
+      return res.status(404).json({ message: "Post not found" });
+    }
+
+    if (post.userId.toString() !== userId) {
+      return res.status(403).json({ message: "Unauthorized" });
+    }
+
+    const udpatedPost = await ProjectPost.findByIdAndUpdate(
+      req.params.projectPostId,
+      { title, content },
+      { new: true, runValidators: true }
+    );
+
+    res.status(200).json(udpatedPost);
+  } catch (error) {
     next(error);
   }
 });

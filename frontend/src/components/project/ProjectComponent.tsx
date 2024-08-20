@@ -78,7 +78,7 @@ async function ProjectComponent({ project }: { project: Project }) {
               <UserAvatar
                 key={member.name}
                 src={member.image}
-                name={member.name}
+                username={member.username}
                 userId={userIdTest}
               />
             ))

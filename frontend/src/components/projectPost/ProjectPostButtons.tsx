@@ -7,6 +7,7 @@ import { useEffect, useMemo, useState } from "react";
 
 //Ui
 import { GoThumbsdown, GoThumbsup } from "react-icons/go";
+import { FiEdit } from "react-icons/fi";
 
 //Lib
 import FlipNumbers from "react-flip-numbers";
@@ -15,7 +16,16 @@ import { useTheme } from "next-themes";
 //Types
 import { ProjectPost } from "@/types/ProjectPost";
 
-function ProjectPostLikeButtons({ projectPost }: { projectPost: ProjectPost }) {
+type ProjectPostLikeButtonsProps = {
+  projectPost: ProjectPost;
+  toggleEditing: () => void;
+  editing?: boolean;
+};
+
+function ProjectPostLikeButtons({
+  projectPost,
+  toggleEditing,
+}: ProjectPostLikeButtonsProps) {
   const [likes, setLikes] = useState(projectPost.likes.length ?? 0);
   const [dislikes, setDislikes] = useState(projectPost.dislikes.length ?? 0);
   const [userLiked, setUserLiked] = useState(false);
@@ -114,6 +124,12 @@ function ProjectPostLikeButtons({ projectPost }: { projectPost: ProjectPost }) {
             perspective={100}
             numbers={dislikes.toString()}
           />
+        </div>
+
+        <div>
+          <button className="mt-[0.2rem]" onClick={toggleEditing}>
+            <FiEdit size={20} />
+          </button>
         </div>
       </div>
     </>
