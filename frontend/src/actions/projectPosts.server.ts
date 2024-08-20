@@ -17,6 +17,7 @@ import type {
   ReplyId,
 } from "@/types/ProjectPost";
 import type { ProjectId } from "@/types/Project";
+import { redirect } from "next/navigation";
 
 type CreatePostFormState = {
   errors: {
@@ -165,7 +166,7 @@ const createProjectPostReply = async (
       success: true,
     };
   } catch (error) {
-    console.error("Error creating postttttttt:", error);
+    console.error("Error creating post:", error);
     return {
       errors: {
         content: ["Failed to create reply"],
@@ -394,6 +395,63 @@ const updatePostReply = async (
   }
 };
 
+//DELETE a project post
+
+const deleteProjectPost = async (projectPostId: ProjectPostId) => {
+  const session = await auth();
+
+  try {
+    const response = await fetch(
+      `${baseUrl}/api/project-posts/${projectPostId}`,
+      {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          userId: session?.user?.id,
+        }),
+      },
+    );
+    if (!response.ok) {
+      throw new Error(`Failed to delete post: ${response.statusText}`);
+    }
+    const data = await response.json();
+    console.log("Deleted post:", data);
+    revalidatePath(`/projects/${data.projectId}`);
+    return { error: false, message: "Post deleted" };
+  } catch (error) {
+    console.error("Error deleting post:", error);
+    return { error: true, message: "Error deleting post" };
+  }
+};
+
+const deleteReply = async (replyId: ReplyId) => {
+  const session = await auth();
+
+  try {
+    const response = await fetch(`${baseUrl}/api/replies/${replyId}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        userId: session?.user?.id,
+      }),
+    });
+    if (!response.ok) {
+      throw new Error(`Failed to delete reply: ${response.statusText}`);
+    }
+    const data = await response.json();
+
+    revalidatePath(`/projects/${data.projectId}/posts/${data.projectPostId}`);
+    return { error: false, message: "Reply deleted" };
+  } catch (error) {
+    console.error("Error deleting reply:", error);
+    return { error: true, message: "Error deleting reply" };
+  }
+};
+
 export {
   createProjectPost,
   createProjectPostReply,
@@ -405,4 +463,6 @@ export {
   createDislikeReply,
   updateProjectPost,
   updatePostReply,
+  deleteProjectPost,
+  deleteReply,
 };

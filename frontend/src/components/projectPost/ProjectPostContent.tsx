@@ -52,14 +52,22 @@ function ProjectPostContent({
       <p className="mt-2 text-justify font-light text-dark dark:text-light">
         {content}
       </p>
-      <p className="mt-1 text-sm text-neutral-500 dark:text-neutral-400">
-        <small>Posted </small>
-        {formattedCreatedAt}
-      </p>
-      {projectPost.edited && (
-        <p className="mb-4 text-xs text-neutral-500 dark:text-neutral-400">
-          <small>Edited </small>
-          {formattedUpdatedAt}
+
+      {projectPost.edited ? (
+        <>
+          <p className="mt-4 text-sm text-neutral-500 dark:text-neutral-400">
+            <small>Posted </small>
+            {formattedCreatedAt}
+          </p>
+          <p className="mb-4 text-xs text-neutral-500 dark:text-neutral-400">
+            <small>Edited </small>
+            {formattedUpdatedAt}
+          </p>
+        </>
+      ) : (
+        <p className="mb-4 mt-2 text-sm text-neutral-500 dark:text-neutral-400">
+          <small>Posted </small>
+          {formattedCreatedAt}
         </p>
       )}
     </div>

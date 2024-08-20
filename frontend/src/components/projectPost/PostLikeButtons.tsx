@@ -14,6 +14,8 @@ import { useTheme } from "next-themes";
 
 //Types
 import { ProjectPost, User } from "@/types/ProjectPost";
+import ThumbsUpIcon from "../common/ThumbsUpIcon";
+import ThumbsDownIcon from "../common/ThumbsDownIcon";
 
 type ProjectPostLikeButtonsProps = {
   projectPost: ProjectPost;
@@ -88,17 +90,7 @@ function ProjectPostLikeButtons({ projectPost }: ProjectPostLikeButtonsProps) {
     <>
       <div className="mb-4 flex items-center gap-4">
         <div className="flex items-center gap-1">
-          <button onClick={handleLike}>
-            <GoThumbsup
-              size={20}
-              className={`hover:opacity-75 ${userLiked ? "text-green-700 dark:text-green-600" : "text-dark dark:text-light"}`}
-            />
-
-            {/* <GoThumbsup size={20} className="hover:opacity-75"  fill={hasUserLiked ? "text-green-500 dark:text-green-400" : "text-dark dark:text-light"} /> */}
-          </button>
-          {/* <p className="w-[10px] text-lg text-neutral-500 dark:text-neutral-400">
-            {likes}
-          </p> */}
+          <ThumbsUpIcon handleLike={handleLike} userLiked={userLiked} />
           <FlipNumbers
             height={16}
             width={16}
@@ -109,12 +101,10 @@ function ProjectPostLikeButtons({ projectPost }: ProjectPostLikeButtonsProps) {
           />
         </div>
         <div className="flex items-center gap-1">
-          <button onClick={handleDislike}>
-            <GoThumbsdown
-              size={20}
-              className={`hover:opacity-75 ${userDisliked ? "text-orange-700 dark:text-orange-600" : "text-dark dark:text-light"}`}
-            />
-          </button>
+          <ThumbsDownIcon
+            handleDislike={handleDislike}
+            userDisliked={userDisliked}
+          />
 
           <FlipNumbers
             height={16}

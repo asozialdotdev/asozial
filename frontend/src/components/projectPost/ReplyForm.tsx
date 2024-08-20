@@ -11,11 +11,19 @@ import ReplyLikeButtons from "./ReplyLikeButtons";
 
 //Ui
 import { Textarea } from "../ui/textarea";
-import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
+import {
+  Dispatch,
+  SetStateAction,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import { GoComment } from "react-icons/go";
 
 //Types
 import type { ProjectPostId, Reply, ReplyId } from "@/types/ProjectPost";
+import ReplyIcon from "../common/ReplyIcon";
 
 type ReplyFormProps = {
   projectPostId: ProjectPostId;
@@ -42,6 +50,9 @@ function ReplyForm({
   );
   const formRef = useRef<HTMLFormElement>(null);
 
+  const toggleOpen = useCallback(() => {
+    setOpen((prev: boolean) => !prev);
+  }, [setOpen]);
   useEffect(() => {
     if (formState.success) {
       formRef.current?.reset();
@@ -50,26 +61,14 @@ function ReplyForm({
         toggleOpen();
       }
     }
-  }, [formState, startOpen]);
-
-  const toggleOpen = () => {
-    setOpen((prev: boolean) => !prev);
-  };
+  }, [formState, startOpen, toggleOpen]);
 
   return (
     <section className={`${startOpen ? "w-full py-4" : "-mt-4 w-[120%]"}`}>
       {!open ? (
         <div className="mt-4 flex items-baseline gap-4">
           <ReplyLikeButtons reply={reply} />
-          <button
-            className="flex items-center gap-2 text-sm hover:opacity-75"
-            onClick={toggleOpen}
-          >
-            <span>
-              <GoComment size={20} />
-            </span>
-            Reply
-          </button>
+          <ReplyIcon toggleOpen={toggleOpen} />
         </div>
       ) : (
         <form
@@ -89,7 +88,11 @@ function ReplyForm({
             </span>
           )}
 
-          <ReplyFormButton toggleOpen={toggleOpen} startOpen={startOpen} edit={false} />
+          <ReplyFormButton
+            toggleOpen={toggleOpen}
+            startOpen={startOpen}
+            edit={false}
+          />
         </form>
       )}
     </section>

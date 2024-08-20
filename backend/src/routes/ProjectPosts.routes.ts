@@ -243,4 +243,31 @@ projectPostRouter.put("/:projectPostId", async (req, res, next) => {
   }
 });
 
+//DELETE a post
+
+projectPostRouter.delete("/:projectPostId", async (req, res, next) => {
+  try {
+    const { userId } = req.body;
+
+    const post = await ProjectPost.findById(req.params.projectPostId);
+
+    if (!post) {
+      return res.status(404).json({ message: "Post not found" });
+    }
+
+    if (post.userId.toString() !== userId) {
+      return res.status(403).json({ message: "Unauthorized" });
+    }
+    await ProjectPostReply.deleteMany({
+      projectPostId: req.params.projectPostId,
+    });
+
+    await ProjectPost.findByIdAndDelete(req.params.projectPostId);
+
+    res.status(200).json({ message: "Post deleted" });
+  } catch (error) {
+    next(error);
+  }
+});
+
 export default projectPostRouter;

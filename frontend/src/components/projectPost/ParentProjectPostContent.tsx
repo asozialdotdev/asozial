@@ -1,24 +1,28 @@
 "use client";
 //Next
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 //React
 import { useState } from "react";
+
+//Actions
+import { deleteProjectPost } from "@/actions";
 
 //Components
 import UserAvatar from "../common/UserAvatar";
 import PostLikeButtons from "./PostLikeButtons";
 import ProjectPostContent from "./ProjectPostContent";
 import ReplyCount from "./ReplyCount";
+import EditIcon from "../common/EditIcon";
+import DeleteIcon from "../common/DeleteIcon";
 
 //Ui
 import { FaRegArrowAltCircleRight } from "react-icons/fa";
-import { VscEdit } from "react-icons/vsc";
-import { Button } from "../ui/button";
-
+//lib
+import { useSession } from "next-auth/react";
 //Types
 import { ProjectPost, Reply } from "@/types/ProjectPost";
-import { useSession } from "next-auth/react";
 
 type ParentProjectPostContent = {
   post: ProjectPost;
@@ -34,11 +38,25 @@ function ParentProjectPostContent({
   const session = useSession();
   const userId = session.data?.user?.id;
   const isAuthor = userId === post.userId._id.toString();
+  const router = useRouter();
 
   const [isEditing, setIsEditing] = useState<boolean>(false);
+  const [error, setError] = useState("");
+  console.log(error, "<<<<<<<<<")
 
   const toggleEditing = () => {
     setIsEditing((prev) => !prev);
+  };
+
+  const handleDeletePost = async () => {
+    const result = await deleteProjectPost(post._id);
+    console.log("Result", result);
+    if (result.error) {
+      console.error("Error deleting post", result.error);
+      setError(result.message);
+    } else {
+      router.push(`/projects/${post.projectId}`);
+    }
   };
   return (
     <>
@@ -65,25 +83,23 @@ function ParentProjectPostContent({
           <ReplyCount replies={post.replyCount || replies?.length} />
           <PostLikeButtons projectPost={post} />
           {isAuthor && (
-            <div>
-              <span
-                className="-ml-1 mb-4 flex cursor-pointer items-center gap-2 text-base hover:opacity-75"
-                onClick={toggleEditing}
-              >
-                <VscEdit size={20} />
-                {isEditing ? (
-                  <Button
-                    variant="outline"
-                    className="min-w-[85px] text-sm hover:dark:bg-zinc-300 dark:focus:bg-zinc-300"
-                  >
-                    Cancel
-                  </Button>
-                ) : (
-                  <span className="-ml-[0.35rem] cursor-pointer text-sm hover:dark:bg-zinc-300 dark:focus:bg-zinc-300">
-                    Edit
-                  </span>
-                )}
-              </span>
+            <div className="flex items-start gap-3">
+              <EditIcon toggleEditing={toggleEditing} key="edit-post" />
+
+              {!isProjectPage && (
+                <>
+                  <DeleteIcon
+                    handleDelete={handleDeletePost}
+                    key="delete-post"
+                  />
+
+                  {error && (
+                    <span className="text-base font-light text-red-500">
+                      {error}
+                    </span>
+                  )}
+                </>
+              )}
             </div>
           )}
           {/* Arrow Button */}

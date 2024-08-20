@@ -38,7 +38,7 @@ function EditReplyForm({
       formRef.current?.reset();
       toggleEdit();
     }
-  }, [formState]);
+  }, [formState, toggleEdit]);
 
   return (
     <section className={`${startOpen ? "w-full py-4" : "-mt-4 w-[120%]"}`}>

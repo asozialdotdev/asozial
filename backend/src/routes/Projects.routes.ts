@@ -377,18 +377,15 @@ projectsRouter.delete("/:projectId", async (req, res) => {
         .status(403)
         .json({ message: "You are not authorized to delete this project" });
     }
-    // Find all posts associated with the project
+
     const posts = await ProjectPost.find({ projectId });
 
-    // Delete all replies associated with the posts
     for (const post of posts) {
       await ProjectPostReply.deleteMany({ projectPostId: post._id });
     }
 
-    // Delete all posts associated with the project
     await ProjectPost.deleteMany({ projectId });
 
-    // Delete the project itself
     await Project.findByIdAndDelete(projectId);
 
     res.status(200).json({

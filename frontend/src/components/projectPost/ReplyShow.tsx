@@ -16,6 +16,9 @@ import { formattedData } from "@/utils";
 //Types
 import type { ProjectPostId, Reply, ReplyId } from "@/types/ProjectPost";
 import { useSession } from "next-auth/react";
+import EditIcon from "../common/EditIcon";
+import DeleteIcon from "../common/DeleteIcon";
+import { deleteReply } from "@/actions";
 
 type ReplyShowProps = {
   replyId: ReplyId;
@@ -33,6 +36,8 @@ function ReplyShow({ replyId, projectPostId, replies, child }: ReplyShowProps) {
 
   const [edit, setEdit] = useState(false);
 
+  const [error, setError] = useState("");
+
   const reply = replies.find((r: Reply) => r._id === replyId);
 
   const isAuthor = userId === reply?.userId._id.toString();
@@ -44,6 +49,15 @@ function ReplyShow({ replyId, projectPostId, replies, child }: ReplyShowProps) {
 
   const toggleEdit = () => {
     setEdit((prev) => !prev);
+    setError("");
+  };
+
+  const handleDelete = async () => {
+    const result = await deleteReply(replyId);
+    if (result.error) {
+      console.error("Error deleting reply", result.error);
+      setError(result.message);
+    }
   };
 
   const childrenArr = replies.filter((r: Reply) => r.parentId === replyId);
@@ -85,14 +99,22 @@ function ReplyShow({ replyId, projectPostId, replies, child }: ReplyShowProps) {
               <p className="mt-2 text-justify text-sm font-light text-dark dark:text-light">
                 {reply.content}
               </p>
-              <p className="mt-1 text-xs text-neutral-500 dark:text-neutral-400">
-                <small>Posted </small>
-                {formattedCreatedAt}
-              </p>
-              {reply.edited && (
-                <p className="mb-2 text-xs text-neutral-500 dark:text-neutral-400">
-                  <small>Edited </small>
-                  {formattedUpdatedAt}
+
+              {reply.edited ? (
+                <>
+                  <p className="mt-1 text-xs text-neutral-500 dark:text-neutral-400">
+                    <small>Posted </small>
+                    {formattedCreatedAt}
+                  </p>
+                  <p className="mb-2 text-xs text-neutral-500 dark:text-neutral-400">
+                    <small>Edited </small>
+                    {formattedUpdatedAt}
+                  </p>
+                </>
+              ) : (
+                <p className="mt-1 text-xs text-neutral-500 dark:text-neutral-400">
+                  <small>Posted </small>
+                  {formattedCreatedAt}
                 </p>
               )}
             </div>
@@ -124,19 +146,25 @@ function ReplyShow({ replyId, projectPostId, replies, child }: ReplyShowProps) {
                 />
               ) : (
                 !open && (
-                  <button
-                    className="-ml-2 mb-4 flex items-end gap-[0.4rem] text-sm hover:opacity-75"
-                    onClick={toggleEdit}
-                  >
-                    <VscEdit size={20} />
-                    <span>Edit</span>
-                  </button>
+                  <div className="flex items-baseline gap-3">
+                    <EditIcon toggleEditing={toggleEdit} key="edit-reply" />
+                    <DeleteIcon
+                      handleDelete={handleDelete}
+                      key="delete-reply"
+                    />
+                  </div>
                 )
               )}
             </>
           ) : null}
         </section>
 
+        {error && (
+          <span className="flex flex-nowrap text-sm font-light text-red-500">
+            {error}
+          </span>
+        )}
+        {/* Children Replies */}
         {childrenArr.map((child: Reply) => (
           <ReplyShow
             key={child._id?.toString()}
