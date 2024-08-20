@@ -38,9 +38,9 @@ function ParentProjectPostContent({
   };
   return (
     <>
-      <div className="flex items-start gap-4">
+      <div className="flex w-full items-start gap-4">
         {/* Avatar  */}
-        <div className="flex flex-col gap-3 pl-2 lg:contents">
+        <div className="flex w-full flex-col gap-3 pl-2 lg:contents">
           <UserAvatar
             src={post.userId.image}
             username={post.userId.username}

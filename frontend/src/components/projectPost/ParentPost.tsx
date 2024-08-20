@@ -14,7 +14,7 @@ async function ParentPost({ projectPostId }: { projectPostId: ProjectPostId }) {
   console.log("ParentPost:||||||||||||||||||", post);
 
   return (
-    <ProjectPostContainer>
+    <ProjectPostContainer className='w-full'>
       <ParentProjectPostContent
         post={post}
         isProjectPage={false}

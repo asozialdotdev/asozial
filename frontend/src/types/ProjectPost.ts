@@ -20,6 +20,7 @@ type ProjectPost = {
   replies: Reply[];
   likes: UserId[];
   dislikes: UserId[];
+  edited: boolean;
   createdAt: Date;
   updatedAt: Date;
   replyCount: number;
@@ -34,6 +35,7 @@ type Reply = {
   children: Reply[];
   likes: UserId[];
   dislikes: UserId[];
+  edited: boolean;
   createdAt: Date;
   updatedAt: Date;
 };

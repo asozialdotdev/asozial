@@ -78,7 +78,7 @@ function ReplyLikeButtons({ reply }: { reply?: Reply }) {
   return (
     <>
       <div className="mb-4 flex w-full items-center gap-4">
-        <div className="lg:ml-8 ml-2 flex-wrap lg:flex-nowrap flex items-center gap-1">
+        <div className="lg:ml-8 ml-2 flex items-center gap-1">
           <button onClick={handleLike}>
             <GoThumbsup
               size={20}

@@ -1,9 +1,17 @@
 "use client";
-import { ProjectPost } from "@/types/ProjectPost";
-import { format, formatDistance } from "date-fns";
+//Next
 import Link from "next/link";
-import { Dispatch, SetStateAction, useState } from "react";
+//React
+import { Dispatch, SetStateAction } from "react";
+
+//Utils
+import { formattedData } from "@/utils";
+
+//Components
 import EditPostForm from "./EditPostForm";
+
+//Types
+import { ProjectPost } from "@/types/ProjectPost";
 
 type ProjectPostContentProps = {
   projectPost: ProjectPost;
@@ -20,13 +28,11 @@ function ProjectPostContent({
 }: ProjectPostContentProps) {
   const post = projectPost;
 
-  const { userId, title, content, createdAt } = projectPost;
+  const { userId, title, content, createdAt, updatedAt } = projectPost;
   const username = userId.username;
-  const formattedCreatedAt = formatDistance(new Date(createdAt), new Date(), {
-    addSuffix: true,
-  })
-    .replace("about", "")
-    .replace("minutes", "min");
+
+  const formattedCreatedAt = formattedData(createdAt);
+  const formattedUpdatedAt = formattedData(updatedAt);
 
   return !isEditing ? (
     <div className="flex-grow">
@@ -46,10 +52,16 @@ function ProjectPostContent({
       <p className="mt-2 text-justify font-light text-dark dark:text-light">
         {content}
       </p>
-      <p className="mb-4 mt-1 text-sm text-neutral-500 dark:text-neutral-400">
+      <p className="mt-1 text-sm text-neutral-500 dark:text-neutral-400">
         <small>Posted </small>
         {formattedCreatedAt}
       </p>
+      {projectPost.edited && (
+        <p className="mb-4 text-xs text-neutral-500 dark:text-neutral-400">
+          <small>Edited </small>
+          {formattedUpdatedAt}
+        </p>
+      )}
     </div>
   ) : (
     <>

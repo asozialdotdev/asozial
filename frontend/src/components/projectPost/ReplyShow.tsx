@@ -1,39 +1,43 @@
 "use client";
+//React
+
+import { useState } from "react";
 //Actions
 import { fetchPostByIdAndReplies } from "@/actions";
 
 //Components
 import ReplyForm from "./ReplyForm";
 import UserAvatar from "../common/UserAvatar";
+import EditReplyForm from "./EditReplyForm";
 
 //Ui
 import { CiEdit } from "react-icons/ci";
 import { VscEdit } from "react-icons/vsc";
 
-//Lib
-import { formatDistance } from "date-fns";
+//Utils
+import { formattedData } from "@/utils";
 
 //Types
 import type { ProjectPostId, Reply, ReplyId } from "@/types/ProjectPost";
-import { useState } from "react";
-import EditReplyForm from "./EditReplyForm";
 
 type ReplyShowProps = {
   replyId: ReplyId;
   projectPostId: ProjectPostId;
   replies: Reply[];
+  children?: boolean;
 };
 
-function ReplyShow({ replyId, projectPostId, replies }: ReplyShowProps) {
-  // const { replies } = await fetchPostByIdAndReplies(projectPostId);
+function ReplyShow({
+  replyId,
+  projectPostId,
+  replies,
+  children,
+}: ReplyShowProps) {
   const startOpen = false;
-  // const [isEditingReply, setIsEditingReply] = useState<boolean>(false);
-  // const [isReplying, setIsReplying] = useState<boolean>(false);
+
   const [open, setOpen] = useState<boolean>(startOpen);
 
   const [edit, setEdit] = useState(false);
-
-  console.log("REPLIE>>>>>", replies);
 
   const reply = replies.find((r: Reply) => r._id === replyId);
 
@@ -48,25 +52,24 @@ function ReplyShow({ replyId, projectPostId, replies }: ReplyShowProps) {
   const childrenArr = replies.filter((r: Reply) => r.parentId === replyId);
   const isLastChild = childrenArr.length === 0;
   const isTopLevel = !reply.parentId;
-  const formattedCreatedAt = formatDistance(
-    new Date(reply.createdAt),
-    new Date(),
-    {
-      addSuffix: true,
-    },
-  )
-    .replace("about", "")
-    .replace("minutes", "min");
+
+  const formattedCreatedAt = formattedData(reply.createdAt);
+  const formattedUpdatedAt = formattedData(reply.updatedAt);
 
   return (
     <>
-      <div
+      {/* <div
         key={reply._id?.toString()}
-        className={`mt-6 flex w-full flex-col items-start gap-4 pr-1 pl-6 lg:pl-0 lg:max-w-[96%] lg:space-x-4 ${
+        className={`mt-6 flex w-full flex-col items-start gap-4 pl-6 pr-1 lg:max-w-[96%] lg:space-x-4 lg:pl-2 ${
           !isTopLevel
             ? "border-dashed border-zinc-300 pl-2 dark:border-zinc-600"
             : "border border-dashed border-zinc-300 pl-2 pt-6 dark:border-zinc-600 lg:pl-6"
-        } ${isLastChild ? "px-4 pb-4" : ""} `}
+        } ${isLastChild ? "px-4 pb-4" : ""} `} */}
+      {/* > */}
+      <div
+        key={reply._id?.toString()}
+        className={`mt-6 flex w-full flex-col items-start gap-4 pr-1 lg:max-w-[96%] lg:space-x-4 ${!isTopLevel ? "pl-4 border-l border-dashed border-zinc-300 dark:border-zinc-600 " : "border-b border-zinc-300 dark:border-zinc-600 border-dashed"} ${isLastChild ? "mb-6" : ""} ` }
+        style={{ marginLeft: children ? "1rem" : "0" }}
       >
         <section className="flex items-start gap-2">
           <div className="flex flex-col gap-3 lg:contents">
@@ -85,15 +88,21 @@ function ReplyShow({ replyId, projectPostId, replies }: ReplyShowProps) {
               <p className="mt-2 text-justify text-sm font-light text-dark dark:text-light">
                 {reply.content}
               </p>
-              <p className="mt-1 text-sm text-neutral-500 dark:text-neutral-400">
+              <p className="mt-1 text-xs text-neutral-500 dark:text-neutral-400">
                 <small>Posted </small>
                 {formattedCreatedAt}
               </p>
+              {reply.edited && (
+                <p className="mb-2 text-xs text-neutral-500 dark:text-neutral-400">
+                  <small>Edited </small>
+                  {formattedUpdatedAt}
+                </p>
+              )}
             </div>
           </div>
         </section>
 
-        <section className="flex items-center gap-4">
+        <section className="flex items-center gap-4 pr-6">
           {/* Buttons and Forms /> */}
           {!edit && (
             <ReplyForm
@@ -133,6 +142,7 @@ function ReplyShow({ replyId, projectPostId, replies }: ReplyShowProps) {
             replyId={child._id}
             projectPostId={projectPostId}
             replies={replies}
+            children={true}
           />
         ))}
       </div>

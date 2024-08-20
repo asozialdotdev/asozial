@@ -313,6 +313,7 @@ const updateProjectPost = async (
         body: JSON.stringify({
           title: result.data.title,
           content: result.data.content,
+          edited: true,
           userId: session?.user?.id,
         }),
       },
@@ -372,6 +373,7 @@ const updatePostReply = async (
       },
       body: JSON.stringify({
         content: result.data.content,
+        edited: true,
         userId: session?.user?.id,
       }),
     });

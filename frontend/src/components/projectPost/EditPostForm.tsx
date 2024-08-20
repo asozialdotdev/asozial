@@ -83,7 +83,7 @@ function EditPostForm({ projectPost, setIsEditing }: EditPostFormProps) {
         )}
       </div>
 
-      <ProjectPostFormButton isEditing />
+      <ProjectPostFormButton editing />
     </form>
   );
 }

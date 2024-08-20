@@ -61,7 +61,7 @@ function EditReplyForm({
             </span>
           )}
 
-          <ReplyFormButton toggleOpen={toggleEdit} startOpen={startOpen} />
+          <ReplyFormButton toggleOpen={toggleEdit} startOpen={startOpen} edit />
         </form>
       )}
     </section>

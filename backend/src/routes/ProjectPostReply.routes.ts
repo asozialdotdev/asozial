@@ -78,7 +78,7 @@ projectPostReplyRouter.post("/:replyId/dislike", async (req, res, next) => {
 
 // PUT Edit a reply
 projectPostReplyRouter.put("/:replyId", async (req, res, next) => {
-  const { content, userId } = req.body;
+  const { content, edited, userId } = req.body;
 
   try {
     const reply = await ProjectPostReply.findById(req.params.replyId);
@@ -93,7 +93,7 @@ projectPostReplyRouter.put("/:replyId", async (req, res, next) => {
 
     const updateReply = await ProjectPostReply.findByIdAndUpdate(
       req.params.replyId,
-      { content },
+      { content, edited },
       { new: true, runValidators: true }
     );
 

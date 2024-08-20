@@ -1,5 +1,6 @@
 import { languagesWithColors } from "@/constants";
 import clsx from "clsx";
+import { formatDistance } from "date-fns";
 
 const techStackClass = (language: string) => {
   const stackColor = languagesWithColors.find(
@@ -10,7 +11,6 @@ const techStackClass = (language: string) => {
     stackColor ? stackColor.color : "bg-neutral-400 dark:bg-neutral-600",
   );
 };
-
 
 const setStatusIcon = (status: string) => {
   switch (status) {
@@ -25,4 +25,12 @@ const setStatusIcon = (status: string) => {
   }
 };
 
-export { techStackClass, setStatusIcon };
+const formattedData = (date: string | Date) => {
+  return formatDistance(new Date(date), new Date(), {
+    addSuffix: true,
+  })
+    .replace("about", "")
+    .replace("minutes", "min");
+};
+
+export { techStackClass, setStatusIcon, formattedData };

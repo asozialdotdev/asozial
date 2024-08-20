@@ -6,6 +6,7 @@ const projectPostSchema = new Schema(
     content: { type: String, required: true },
     likes: [{ type: Schema.Types.ObjectId, ref: "User", default: [] }],
     dislikes: [{ type: Schema.Types.ObjectId, ref: "User", default: [] }],
+    edited: { type: Boolean, default: false },
     userId: { type: Schema.Types.ObjectId, ref: "User", required: true },
     projectId: { type: Schema.Types.ObjectId, ref: "Project", required: true },
   },

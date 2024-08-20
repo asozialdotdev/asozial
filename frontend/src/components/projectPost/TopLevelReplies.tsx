@@ -9,7 +9,6 @@ type TopLevelRepliesProps = {
 };
 
 function TopLevelReplies({ replies, projectPostId }: TopLevelRepliesProps) {
-  const [isEditingReply, setIsEditingReply] = useState<boolean>(false);
 
   const topLevelReplies = replies.filter(
     (reply: Reply) => reply.parentId === null,
@@ -28,6 +27,7 @@ function TopLevelReplies({ replies, projectPostId }: TopLevelRepliesProps) {
           replyId={reply._id}
           projectPostId={projectPostId}
           replies={replies}
+          children={false}
         />
       ))}
     </section>

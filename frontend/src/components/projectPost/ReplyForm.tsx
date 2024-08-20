@@ -89,7 +89,7 @@ function ReplyForm({
             </span>
           )}
 
-          <ReplyFormButton toggleOpen={toggleOpen} startOpen={startOpen} />
+          <ReplyFormButton toggleOpen={toggleOpen} startOpen={startOpen} edit={false} />
         </form>
       )}
     </section>
