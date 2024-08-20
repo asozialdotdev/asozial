@@ -10,7 +10,12 @@ import { auth } from "@/auth";
 import { baseUrl } from "@/constants";
 
 //Types
-import type { ProjectPost, ProjectPostId, ReplyId } from "@/types/ProjectPost";
+import type {
+  ProjectPost,
+  ProjectPostId,
+  Reply,
+  ReplyId,
+} from "@/types/ProjectPost";
 import type { ProjectId } from "@/types/Project";
 
 type CreatePostFormState = {
@@ -323,8 +328,65 @@ const updateProjectPost = async (
     console.error("Error updating project post:", error);
     return {
       errors: {
-        title: ["Failed to create post"],
-        content: ["Failed to create post"],
+        content: ["Failed to update post"],
+      },
+    };
+  }
+};
+
+//PUT update a project post
+
+const updatePostReply = async (
+  {
+    projectPostId,
+    replyId,
+  }: { projectPostId: ProjectPostId; replyId: ReplyId },
+  formState: CreateReplyFormState,
+  formData: FormData,
+): Promise<CreateReplyFormState> => {
+  const session = await auth();
+
+  const result = createReplySchema.safeParse({
+    content: formData.get("content"),
+  });
+
+  if (!result.success) {
+    console.error("Validation error:", result.error.flatten().fieldErrors);
+    return {
+      errors: result.error.flatten().fieldErrors,
+    };
+  }
+  const { post, replies } = await fetchPostByIdAndReplies(projectPostId);
+
+  const reply = replies.find((r: Reply) => r?._id === replyId);
+
+  if (!reply) {
+    throw new Error("Reply not found");
+  }
+
+  try {
+    const response = await fetch(`${baseUrl}/api/replies/${replyId}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        content: result.data.content,
+        userId: session?.user?.id,
+      }),
+    });
+    const updatedReply = await response.json();
+    console.log("Updated reply:", updatedReply);
+    revalidatePath(`/projects/${post.projectId}/posts/${projectPostId}`);
+    return {
+      errors: {},
+      success: true,
+    };
+  } catch (error) {
+    console.error("Error updating reply:", error);
+    return {
+      errors: {
+        content: ["Failed to update reply"],
       },
     };
   }
@@ -340,4 +402,5 @@ export {
   createLikeReply,
   createDislikeReply,
   updateProjectPost,
+  updatePostReply,
 };

@@ -1,4 +1,4 @@
-'use client'
+"use client";
 import { ProjectPostId, Reply } from "@/types/ProjectPost";
 import ReplyShow from "./ReplyShow";
 import { useState } from "react";
@@ -16,7 +16,11 @@ function TopLevelReplies({ replies, projectPostId }: TopLevelRepliesProps) {
   );
   return (
     <section className="w-full p-4">
-      <h2 className="text-xl font-semibold">{replies.length} comments</h2>
+      <h2 className="text-xl font-semibold">
+        {replies && replies.length > 0
+          ? `${replies.length} comment${replies.length > 1 ? "s" : ""}`
+          : "No comments yet"}
+      </h2>
 
       {topLevelReplies.map((reply: Reply) => (
         <ReplyShow
