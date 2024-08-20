@@ -7,10 +7,9 @@ const techStackClass = (language: string) => {
   );
   return clsx(
     "rounded-full px-2 py-1 text-sm text-light ",
-    stackColor ? stackColor.color : "bg-neutral-400 dark:bg-neutral-600",
+    stackColor ? stackColor.bgColor : "bg-neutral-400 dark:bg-neutral-600",
   );
 };
-
 
 const setStatusIcon = (status: string) => {
   switch (status) {

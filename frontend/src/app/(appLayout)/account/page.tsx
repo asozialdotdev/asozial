@@ -5,7 +5,6 @@ import {
   Building,
   MapPinHouse,
   Globe,
-  MessageSquareMore,
   Github,
   FolderGit,
   CircleUserRound,
@@ -14,14 +13,11 @@ import {
   Code,
   Twitter,
   Layers,
-  Circle,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-
 import PageContainer from "@/components/common/PageContainer";
 import PageTitle from "@/components/common/PageTitle";
 import Image from "next/image";
-import PageCard from "@/components/common/PageCard";
 
 import {
   Tooltip,
@@ -41,7 +37,10 @@ import {
 } from "@/components/ui/table";
 import { languagesWithColors } from "@/constants";
 
-type TechStackEntry = [string, { lines: number; projects: number; color: any }];
+type TechStackEntry = [
+  string,
+  { lines: number; projects: number; textColor: any; bgColor: any; Icon: any },
+];
 
 const user = {
   email: "hello@benjamin.dev",
@@ -138,10 +137,16 @@ async function AccountPage() {
   );
   const sortedUserTechStackWithColors: TechStackEntry[] =
     sortedUserTechStack.map(([language, data]) => {
-      const color = languagesWithColors.find(
+      const bgColor = languagesWithColors.find(
         (entry) => entry.language === language,
-      )?.color;
-      return [language, { ...data, color }];
+      )?.bgColor;
+      const textColor = languagesWithColors.find(
+        (entry) => entry.language === language,
+      )?.textColor;
+      const Icon = languagesWithColors.find(
+        (entry) => entry.language === language,
+      )?.Icon;
+      return [language, { ...data, textColor, bgColor, Icon }];
     });
   console.log("sortedUserTechStackWithColors:", sortedUserTechStackWithColors);
   const githubFollowers = await getUserGithubFollowers();
@@ -291,26 +296,32 @@ async function AccountPage() {
             <Layers size={24} />
             Tech Stack
           </h3>
-          <Table className="relative max-h-80 overflow-y-auto">
+          <Table className="text-center">
             <TableHeader>
-              <TableRow>
-                <TableHead>Icon</TableHead>
-                <TableHead>Language</TableHead>
-                <TableHead>Lines of code</TableHead>
-                <TableHead>Projects</TableHead>
+              <TableRow className="text-center">
+                <TableHead className="text-center">Icon</TableHead>
+                <TableHead className="text-center">Language</TableHead>
+                <TableHead className="text-center">Lines of code</TableHead>
+                <TableHead className="text-center">Projects</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {sortedUserTechStackWithColors.map(
-                ([language, { lines, projects, color }]) => (
+                ([language, { lines, projects, textColor, Icon }]) => (
                   <TableRow key={language}>
                     <TableCell>
-                      <div
-                        className={`h-6 w-6 rounded-xl ${color || "bg-dark dark:bg-light"}`}
-                      ></div>
+                      {Icon ? (
+                        <Icon
+                          className={`mx-auto max-h-6 max-w-6 ${textColor}`}
+                        />
+                      ) : (
+                        <p className={`mx-auto ${textColor}`}>?</p>
+                      )}
                     </TableCell>
                     <TableCell>{language}</TableCell>
-                    <TableCell>{lines}</TableCell>
+                    <TableCell>
+                      {new Intl.NumberFormat().format(lines)}
+                    </TableCell>
                     <TableCell>{projects}</TableCell>
                   </TableRow>
                 ),
