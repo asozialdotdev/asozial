@@ -1,3 +1,4 @@
+"use client";
 //Actions
 import { fetchPostByIdAndReplies } from "@/actions";
 
@@ -10,14 +11,20 @@ import { formatDistance } from "date-fns";
 
 //Types
 import type { ProjectPostId, Reply, ReplyId } from "@/types/ProjectPost";
+import { useState } from "react";
 
 type ReplyShowProps = {
   replyId: ReplyId;
   projectPostId: ProjectPostId;
+  replies: Reply[];
 };
 
-async function ReplyShow({ replyId, projectPostId }: ReplyShowProps) {
-  const { replies } = await fetchPostByIdAndReplies(projectPostId);
+function ReplyShow({ replyId, projectPostId, replies }: ReplyShowProps) {
+  // const { replies } = await fetchPostByIdAndReplies(projectPostId);
+
+  const [isEditingReply, setIsEditingReply] = useState<boolean>(false);
+
+  console.log("REPLIE>>>>>", replies);
 
   const reply = replies.find((r: Reply) => r._id === replyId);
 
@@ -39,7 +46,7 @@ async function ReplyShow({ replyId, projectPostId }: ReplyShowProps) {
     .replace("minutes", "min");
   return (
     <div
-      key={reply._id.toString()}
+      key={reply._id?.toString()}
       className={`mt-6 flex w-full flex-col items-start gap-4 pr-1 lg:max-w-[96%] lg:space-x-4 ${
         !isTopLevel
           ? "border-dashed border-zinc-300 pl-2 dark:border-zinc-600"
@@ -83,6 +90,7 @@ async function ReplyShow({ replyId, projectPostId }: ReplyShowProps) {
           key={child._id?.toString()}
           replyId={child._id}
           projectPostId={projectPostId}
+          replies={replies}
         />
       ))}
     </div>

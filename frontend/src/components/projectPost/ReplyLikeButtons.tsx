@@ -39,14 +39,14 @@ function ReplyLikeButtons({ reply }: { reply?: Reply }) {
   useEffect(() => {
     setUserLiked(hasUserLiked);
     setUserDisliked(hasUserDisliked);
-  }, [reply?.likes, reply?.dislikes, userId]);
+  }, [reply?.likes, reply?.dislikes, userId, hasUserLiked, hasUserDisliked]);
 
   const handleLike = async () => {
     try {
       const updatedLikes = await createLikeReply(reply?._id);
       setLikes(updatedLikes);
 
-      if (userDisliked) {
+      if (userDisliked && dislikes > 0) {
         setDislikes((prev) => prev - 1);
         setUserDisliked(false);
       }
@@ -62,7 +62,7 @@ function ReplyLikeButtons({ reply }: { reply?: Reply }) {
       const updatedDislikes = await createDislikeReply(reply?._id);
       setDislikes(updatedDislikes);
 
-      if (userLiked) {
+      if (userLiked && likes > 0) {
         setLikes((prev) => prev - 1);
         setUserLiked(false);
       }

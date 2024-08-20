@@ -20,7 +20,7 @@ import type { ProjectPostId, Reply, ReplyId } from "@/types/ProjectPost";
 type ReplyFormProps = {
   projectPostId: ProjectPostId;
   parentId?: ReplyId | null;
-  reply?: Reply
+  reply?: Reply;
   startOpen: boolean;
 };
 
@@ -31,6 +31,7 @@ function ReplyForm({
   startOpen,
 }: ReplyFormProps) {
   const [open, setOpen] = useState<boolean>(startOpen);
+  const [isEditingReply, setIsEditingReply] = useState<boolean>(false);
 
   const [formState, action] = useFormState(
     createProjectPostReply.bind(null, { projectPostId, parentId }),

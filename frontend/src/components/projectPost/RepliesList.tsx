@@ -2,6 +2,7 @@
 import type { ProjectPostId, Reply, ReplyId } from "@/types/ProjectPost";
 import ReplyShow from "./ReplyShow";
 import { fetchPostByIdAndReplies } from "@/actions";
+import TopLevelReplies from "./TopLevelReplies";
 
 async function RepliesList({
   projectPostId,
@@ -9,29 +10,12 @@ async function RepliesList({
   projectPostId: ProjectPostId;
 }) {
   const { replies } = await fetchPostByIdAndReplies(projectPostId);
-  console.log("Replies:>>>>>>>>>> ", replies.length);
 
   if (!replies) {
     return null;
   }
 
-  const topLevelReplies = replies.filter(
-    (reply: Reply) => reply.parentId === null,
-  );
-
-  return (
-    <section className="w-full p-4">
-      <h2 className="text-xl font-semibold">{replies.length} comments</h2>
-
-      {topLevelReplies.map((reply: Reply) => (
-        <ReplyShow
-          key={reply._id?.toString()}
-          replyId={reply._id}
-          projectPostId={projectPostId}
-        />
-      ))}
-    </section>
-  );
+  return <TopLevelReplies replies={replies} projectPostId={projectPostId} />;
 }
 
 export default RepliesList;

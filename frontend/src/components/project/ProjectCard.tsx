@@ -34,6 +34,7 @@ function ProjectCard({ projects, isLoading, error }: ProjectCardProps) {
     return <p>No projects found</p>;
   }
   console.log("Projects:", projects);
+
   return (
     <>
       {projects.map((project: Project, i) => (

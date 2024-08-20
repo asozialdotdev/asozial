@@ -45,7 +45,7 @@ export const {
             name: profile?.name,
             email: profile?.email,
             notificationEmail: profile?.notificationEmail,
-            image: profile?.avatarUrl,
+            image: profile?.avatar_url,
             githubId: profile?.id,
             githubNodeId: profile?.node_id,
             bio: profile?.bio,

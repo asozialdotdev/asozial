@@ -29,6 +29,7 @@ async function ProjectComponent({ project }: { project: Project }) {
   const session = await auth();
   const isMember = await checkIsMember(project._id);
   const isOwner = project.owner._id === session?.user?.id;
+  console.log("PROJECT.MEMBERSJOINED", project.membersJoined);
 
   return (
     <section className="flex w-full flex-col gap-4 border-b border-b-neutral-300 px-4 dark:border-b-neutral-600">
@@ -73,7 +74,7 @@ async function ProjectComponent({ project }: { project: Project }) {
       <div className="flex flex-col">
         <h4 className="text-lg font-semibold">Members</h4>
         <div className="flex gap-4">
-          {project.membersJoined.length !== 0 ? (
+          {project.membersJoined.length > 0 ? (
             project.membersJoined.map((member) => (
               <UserAvatar
                 key={member.name}
