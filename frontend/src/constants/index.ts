@@ -35,6 +35,7 @@ import {
   SiPug,
   SiDart,
   SiLua,
+  SiKotlin,
 } from "react-icons/si";
 import { BsFiletypeScss } from "react-icons/bs";
 import { DiGroovy, DiPerl, DiRuby, DiCoffeescript } from "react-icons/di";
@@ -57,6 +58,27 @@ const languagesWithColors: {
     textColor: "text-blue-500",
     library: "si",
     Icon: SiTypescript,
+  },
+  {
+    language: "SQL",
+    bgColor: "bg-yellow-500",
+    textColor: "text-yellow-500",
+    library: "fa",
+    Icon: FaInnosoft,
+  },
+  {
+    language: "PostgreSQL",
+    bgColor: "bg-blue-500",
+    textColor: "text-blue-500",
+    library: "fa",
+    Icon: FaInnosoft,
+  },
+  {
+    language: "Kotlin",
+    bgColor: "bg-orange-500",
+    textColor: "text-orange-500",
+    library: "si",
+    Icon: SiKotlin,
   },
   {
     language: "JavaScript",
