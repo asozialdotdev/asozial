@@ -16,8 +16,8 @@ projectsRouter.get(
     const { userId } = req.query;
     try {
       const projects = await Project.find({ owner: userId })
-        .populate("membersJoined", "name image")
-        .populate("owner", "name image")
+        .populate("membersJoined", "username name image")
+        .populate("owner", "username name image")
         .exec();
       console.log("Number of Projects Found:", projects.length);
       res.json(projects);
@@ -39,9 +39,11 @@ projectsRouter.post(
         pitch,
         techStack,
         mainLanguage,
+        githubRepo,
         socials,
         userId,
       } = req.body;
+      console.log("githubRepo:::::::::::::", githubRepo);
 
       const newProject = await Project.create({
         title,
@@ -49,6 +51,7 @@ projectsRouter.post(
         pitch,
         techStack,
         mainLanguage,
+        githubRepo,
         owner: userId,
         socials,
       });
@@ -129,7 +132,7 @@ projectsRouter.get(
       const projects = await Project.find({
         title: { $regex: query, $options: "i" },
       })
-        .populate("membersJoined", "name image")
+        .populate("membersJoined", "username name image")
         .exec();
 
       res.json(projects);
@@ -149,7 +152,6 @@ projectsRouter.get(
         .populate("membersJoined", "name image")
         .populate("owner", "name image")
         .exec();
-      console.log("Project Found>>>>>>>>:", project);
       if (!project) {
         return res.status(404).json({ error: "Project not found" });
       }
@@ -229,10 +231,15 @@ projectsRouter.put(
         description,
         pitch,
         techStack,
+        githubRepo,
         mainLanguage,
         socials,
+        status,
         userId,
       } = req.body;
+
+      console.log("githubRepo:::::::::::::", githubRepo);
+
 
       // Find the project first
       const project = await Project.findById(req.params.projectId);
@@ -250,7 +257,7 @@ projectsRouter.put(
 
       const updatedProject = await Project.findByIdAndUpdate(
         req.params.projectId,
-        { title, description, pitch, techStack, mainLanguage, socials },
+        { title, description, pitch, techStack, githubRepo, mainLanguage, socials, status },
         { new: true, runValidators: true }
       );
 

@@ -1,31 +1,40 @@
+"use client";
+import { ProjectPost } from "@/types/ProjectPost";
 import { format, formatDistance } from "date-fns";
+import Link from "next/link";
+import { Dispatch, SetStateAction, useState } from "react";
+import EditPostForm from "./EditPostForm";
 
 type ProjectPostContentProps = {
-  name: string;
-  title: string;
-  content: string;
-  createdAt: Date;
+  projectPost: ProjectPost;
+  isEditing?: boolean;
+  setIsEditing: Dispatch<SetStateAction<boolean>>
 };
 
 function ProjectPostContent({
-  name,
-  title,
-  content,
-  createdAt,
+  projectPost,
+  isEditing,
+  setIsEditing,
 }: ProjectPostContentProps) {
+  const post = projectPost;
+
+  const { userId, title, content, createdAt } = projectPost;
+  const username = userId.username;
   const formattedCreatedAt = formatDistance(new Date(createdAt), new Date(), {
     addSuffix: true,
   })
     .replace("about", "")
     .replace("minutes", "min");
 
-  return (
+  return !isEditing ? (
     <div className="flex-grow">
       {/* Content */}
       <p className="font-medium text-neutral-500 dark:text-neutral-400">
-        {name}
+        {username}
       </p>
-      <h3 className="text-lg font-semibold tracking-wide">{title}</h3>
+      <Link href={`/projects/${post.projectId}/posts/${post._id}`}>
+        <h3 className="text-lg font-semibold tracking-wide">{title}</h3>
+      </Link>
       <p className="mt-2 text-justify font-light text-dark dark:text-light">
         {content}
       </p>
@@ -34,6 +43,10 @@ function ProjectPostContent({
         {formattedCreatedAt}
       </p>
     </div>
+  ) : (
+    <>
+      <EditPostForm projectPost={post} setIsEditing={setIsEditing} />
+    </>
   );
 }
 

@@ -10,6 +10,7 @@ import ProjectPostContainer from "./ProjectPostContainer";
 
 //Types
 import type { ProjectPostId } from "@/types/ProjectPost";
+import ParentProjectPostContent from "./ParentProjectPostContent";
 
 async function ParentPost({ projectPostId }: { projectPostId: ProjectPostId }) {
   const { post, replies } = await fetchPostByIdAndReplies(projectPostId);
@@ -17,30 +18,24 @@ async function ParentPost({ projectPostId }: { projectPostId: ProjectPostId }) {
 
   return (
     <ProjectPostContainer>
-      <div className="flex items-start gap-4">
+      {/* <div className="flex items-start gap-4">
         <div className="flex flex-col gap-3 pl-2 lg:contents">
-          {/* Avatar on the left side */}
 
           <UserAvatar
             src={post.userId.image}
-            name={post.userId.name}
+            username={post.userId.username}
             userId={post.userId._id}
           />
 
-          {/* Content on the right side */}
 
-          <ProjectPostContent
-            name={post.userId.name}
-            title={post.title}
-            content={post.content}
-            createdAt={post.createdAt}
-          />
+          <ProjectPostContent projectPost={post}  />
         </div>
       </div>
       <div className="flex items-center gap-4">
         <ReplyCount replies={replies.length} />
-        <ProjectPostButtons projectPost={post} />
-      </div>
+        <ProjectPostButtons projectPost={post}  />
+      </div> */}
+      <ParentProjectPostContent post={post} isProjectPage={false} replies={replies} />
     </ProjectPostContainer>
   );
 }

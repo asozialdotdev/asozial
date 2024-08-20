@@ -10,7 +10,7 @@ import { auth } from "@/auth";
 import { baseUrl } from "@/constants";
 
 //Types
-import type { ProjectPostId, ReplyId } from "@/types/ProjectPost";
+import type { ProjectPost, ProjectPostId, ReplyId } from "@/types/ProjectPost";
 import type { ProjectId } from "@/types/Project";
 
 type CreatePostFormState = {
@@ -93,7 +93,6 @@ const createProjectPost = async (
       errors: {
         title: ["Failed to create post"],
         content: ["Failed to create post"],
-        projectId: ["Failed to create post"],
       },
     };
   }
@@ -272,6 +271,65 @@ const createDislikeReply = async (replyId: ReplyId) => {
   }
 };
 
+//PUT update a project post
+
+const updateProjectPost = async (
+  projectPostId: ProjectPostId,
+  formState: CreatePostFormState,
+  formData: FormData,
+): Promise<CreatePostFormState> => {
+  const session = await auth();
+
+  const result = createPostSchema.safeParse({
+    title: formData.get("title"),
+    content: formData.get("content"),
+  });
+
+  if (!result.success) {
+    console.error("Validation error:", result.error.flatten().fieldErrors);
+    return {
+      errors: result.error.flatten().fieldErrors,
+    };
+  }
+  const { post } = await fetchPostByIdAndReplies(projectPostId);
+
+  if (!post) {
+    throw new Error("Post not found");
+  }
+
+  try {
+    const response = await fetch(
+      `${baseUrl}/api/project-posts/${projectPostId}`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          title: result.data.title,
+          content: result.data.content,
+          userId: session?.user?.id,
+        }),
+      },
+    );
+    const updatedPost = await response.json();
+    console.log("Updated post:", updatedPost);
+    revalidatePath(`/projects/${post.projectId}/posts/${projectPostId}`);
+    return {
+      errors: {},
+      success: true,
+    };
+  } catch (error) {
+    console.error("Error updating project post:", error);
+    return {
+      errors: {
+        title: ["Failed to create post"],
+        content: ["Failed to create post"],
+      },
+    };
+  }
+};
+
 export {
   createProjectPost,
   createProjectPostReply,
@@ -281,4 +339,5 @@ export {
   createDislikePost,
   createLikeReply,
   createDislikeReply,
+  updateProjectPost,
 };

@@ -13,37 +13,40 @@ import FlipNumbers from "react-flip-numbers";
 //Types
 import { Reply } from "@/types/ProjectPost";
 
-function ReplyLikeButtons({ reply }: { reply: Reply }) {
-  const [likes, setLikes] = useState(reply.likes.length ?? 0);
-  const [dislikes, setDislikes] = useState(reply.dislikes.length ?? 0);
-  const [userLiked, setUserLiked] = useState(false);
-  const [userDisliked, setUserDisliked] = useState(false);
+function ReplyLikeButtons({ reply }: { reply?: Reply }) {
+  const [likes, setLikes] = useState(reply?.likes.length ?? 0);
+  const [dislikes, setDislikes] = useState(reply?.dislikes.length ?? 0);
+  const [userLiked, setUserLiked] = useState<boolean | undefined>(false);
+  const [userDisliked, setUserDisliked] = useState<boolean | undefined>(false);
 
   //useMemo for performance
-  const userId = useMemo(() => reply.userId._id.toString(), [reply.userId._id]);
+  const userId = useMemo(
+    () => reply?.userId._id.toString(),
+    [reply?.userId._id],
+  );
 
   const hasUserLiked = useMemo(
-    () => reply.likes.some((id) => id.toString() === userId),
-    [reply.likes, userId],
+    () => reply?.likes.some((id) => id.toString() === userId),
+    [reply?.likes, userId],
   );
 
   const hasUserDisliked = useMemo(
-    () => reply.dislikes.some((id) => id.toString() === userId),
-    [reply.dislikes, userId],
+    () => reply?.dislikes.some((id) => id.toString() === userId),
+    [reply?.dislikes, userId],
   );
 
   // Check if the user has already liked or disliked the post
   useEffect(() => {
     setUserLiked(hasUserLiked);
     setUserDisliked(hasUserDisliked);
-  }, [reply.likes, reply.dislikes, userId]);
+  }, [reply?.likes, reply?.dislikes, userId, hasUserLiked, hasUserDisliked]);
 
   const handleLike = async () => {
     try {
-      const updatedLikes = await createLikeReply(reply._id);
+      const updatedLikes = await createLikeReply(reply?._id);
       setLikes(updatedLikes);
 
-      if (userDisliked) {
+      if (userDisliked && dislikes > 0) {
         setDislikes((prev) => prev - 1);
         setUserDisliked(false);
       }
@@ -56,10 +59,10 @@ function ReplyLikeButtons({ reply }: { reply: Reply }) {
 
   const handleDislike = async () => {
     try {
-      const updatedDislikes = await createDislikeReply(reply._id);
+      const updatedDislikes = await createDislikeReply(reply?._id);
       setDislikes(updatedDislikes);
 
-      if (userLiked) {
+      if (userLiked && likes > 0) {
         setLikes((prev) => prev - 1);
         setUserLiked(false);
       }

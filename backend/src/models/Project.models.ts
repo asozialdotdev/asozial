@@ -12,7 +12,12 @@ const projectSchema = new Schema(
     membersJoined: [{ type: Schema.Types.ObjectId, ref: "User" }],
     membersApplied: [{ type: Schema.Types.ObjectId, ref: "User" }],
     membersInvited: [{ type: Schema.Types.ObjectId, ref: "User" }],
-    socials: [{ type: String }],
+    socials: {
+      slack: { type: String },
+      discord: { type: String },
+      notion: { type: String },
+      gitlab: { type: String },
+    },
     status: {
       type: String,
       enum: ["active", "inactive", "completed"],

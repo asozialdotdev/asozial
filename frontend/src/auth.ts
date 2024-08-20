@@ -32,11 +32,6 @@ export const {
   ],
   callbacks: {
     async signIn({ user, account, profile }) {
-
-      console.log("Profile>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>", profile);
-      console.log("Profile>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>", profile?.login);
-      console.log("Profile>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>", profile?.id);
-
       const db = client.db();
 
       const existingUser = await db
@@ -50,7 +45,7 @@ export const {
             name: profile?.name,
             email: profile?.email,
             notificationEmail: profile?.notificationEmail,
-            image: profile?.avatarUrl,
+            image: profile?.avatar_url,
             githubId: profile?.id,
             githubNodeId: profile?.node_id,
             bio: profile?.bio,
@@ -109,7 +104,6 @@ export const {
         token.accessToken = account.access_token;
         token.id = profile?.id;
       }
-      console.log("Token>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>", token);
       return token;
     },
     async session({ session, user, token }) {
@@ -118,8 +112,7 @@ export const {
         //session.accessToken = token.accessToken;
         session.user.id = token.sub ?? "";
       }
-      console.log("Session>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>", session);
-      console.log("Token>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>", token);
+
       return session;
     },
     async redirect({ url, baseUrl }) {

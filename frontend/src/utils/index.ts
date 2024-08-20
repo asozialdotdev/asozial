@@ -11,4 +11,18 @@ const techStackClass = (language: string) => {
   );
 };
 
-export { techStackClass };
+
+const setStatusIcon = (status: string) => {
+  switch (status) {
+    case "active":
+      return "🟢";
+    case "inactive":
+      return "🔴";
+    case "completed":
+      return "🟡";
+    default:
+      return "";
+  }
+};
+
+export { techStackClass, setStatusIcon };

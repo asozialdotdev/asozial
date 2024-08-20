@@ -3,6 +3,9 @@
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 
+//React
+import { useState } from "react";
+
 //Actions
 import { updateProject } from "@/actions";
 
@@ -29,12 +32,12 @@ import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { createProjectSchema } from "@/lib/schema";
 import { z } from "zod";
-import { languagesWithColors, socialsData } from "@/constants";
+import { languagesWithColors, projectStatus, socialsData } from "@/constants";
 
 //Components
 import PageTitle from "../common/PageTitle";
+
 import type { CreateUpdateProject, Project } from "@/types/Project";
-import { useState } from "react";
 
 type Inputs = z.infer<typeof createProjectSchema>;
 
@@ -62,6 +65,7 @@ function EditProjectForm({ project }: { project: Project }) {
       techStack: project.techStack,
       mainLanguage: project.mainLanguage,
       socials: project.socials,
+      status: project.status,
     },
   });
 
@@ -86,13 +90,17 @@ function EditProjectForm({ project }: { project: Project }) {
   };
 
   const processForm: SubmitHandler<Inputs> = async (data) => {
-    console.log("form data");
     const { title, description, pitch, socials } = data;
 
     const formattedTitle = title.trim();
     const formattedDescription = description.trim();
     const formattedPitch = pitch.trim();
-    const formattedSocials = socials?.map((social) => social.trim());
+    const formattedSocials = socials
+      ? Object.entries(socials).reduce((acc, [key, value]) => {
+          acc[key] = value?.trim() || ""; // Trim the value if it exists, otherwise set it to an empty string
+          return acc;
+        }, {} as any)
+      : {};
 
     const finalData: CreateUpdateProject = {
       ...data,
@@ -120,9 +128,37 @@ function EditProjectForm({ project }: { project: Project }) {
         onSubmit={handleSubmit(processForm)}
         className="mt-2 flex w-full flex-col gap-2"
       >
-        {/* Title */}
         <div className="mt-6 flex flex-col gap-2">
-          <label htmlFor="title" className="text-lg font-semibold">
+          <label htmlFor="status" className="font-semibold">
+            Status <span className="text-xl text-red-400">*</span>
+          </label>
+          <Controller
+            name="status"
+            control={control}
+            render={({ field }) => (
+              <Select
+                onValueChange={field.onChange}
+                value={field.value}
+                name="status"
+              >
+                <SelectTrigger className="w-[180px] capitalize">
+                  <SelectValue placeholder="Status" />
+                </SelectTrigger>
+
+                <SelectContent id="mainLanguage">
+                  {projectStatus.map((s) => (
+                    <SelectItem className="capitalize" key={s} value={s}>
+                      {s}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            )}
+          />
+        </div>
+        {/* Title */}
+        <div className="flex flex-col gap-2 mt-4">
+          <label htmlFor="title" className="font-semibold">
             Title <span className="text-xl text-red-400">*</span>
           </label>
 
@@ -149,7 +185,7 @@ function EditProjectForm({ project }: { project: Project }) {
         </div>
 
         {/* Description */}
-        <div className="mt-6 flex flex-col gap-2">
+        <div className="mt-4 flex flex-col gap-2">
           <label htmlFor="description" className="font-semibold">
             Description <span className="text-xl text-red-400">*</span>
           </label>
@@ -176,7 +212,7 @@ function EditProjectForm({ project }: { project: Project }) {
         </div>
 
         {/* Pitch */}
-        <div className="mt-6 flex flex-col gap-2">
+        <div className="mt-4 flex flex-col gap-2">
           <label htmlFor="pitch" className="font-semibold">
             Pitch <span className="text-xl text-red-400">*</span>
           </label>
@@ -203,7 +239,7 @@ function EditProjectForm({ project }: { project: Project }) {
         </div>
 
         {/* TechStack */}
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-col gap-2 mt-4">
           <label htmlFor="mainLanguage" className="font-semibold">
             Language <span className="text-xl text-red-400">*</span>
           </label>
@@ -238,7 +274,7 @@ function EditProjectForm({ project }: { project: Project }) {
           )}
         </div>
 
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-col gap-2 mt-4">
           <label htmlFor="techStack" className="font-semibold">
             Tech Stack <span className="text-xl text-red-400">*</span>
           </label>
@@ -276,7 +312,7 @@ function EditProjectForm({ project }: { project: Project }) {
         </div>
 
         {/* Github Repo */}
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-col gap-2 mt-4">
           <label htmlFor="gitHubRepo" className="font-semibold"></label>
           <label htmlFor="socials" className="font-semibold">
             Socials
@@ -290,12 +326,18 @@ function EditProjectForm({ project }: { project: Project }) {
               height={30}
               className="inline dark:invert dark:filter"
             />
-
-            <Input
-              type="text"
-              id="githubRepo"
-              placeholder="https://github.com/username/repo"
-              className="h-12 w-full border-zinc-300 bg-white hover:bg-zinc-50 focus:bg-zinc-50 dark:border-zinc-700 dark:hover:bg-zinc-800 dark:focus:bg-zinc-800"
+            <Controller
+              name="githubRepo"
+              control={control}
+              render={({ field }) => (
+                <Input
+                  {...field}
+                  type="text"
+                  id="githubRepo"
+                  placeholder="https://github.com/username/repo"
+                  className="h-12 w-full border-zinc-300 bg-white hover:bg-zinc-50 focus:bg-zinc-50 dark:border-zinc-700 dark:hover:bg-zinc-800 dark:focus:bg-zinc-800"
+                />
+              )}
             />
           </div>
         </div>
@@ -308,18 +350,18 @@ function EditProjectForm({ project }: { project: Project }) {
               <Image
                 src={social.imageSrc}
                 alt={social.alt}
-                width={social.alt === "Notion" ? 25 : 60}
-                height={social.alt === "Notion" ? 25 : 60}
+                width={30}
+                height={30}
                 className="inline"
               />
               <Controller
-                name={`socials.${index}`}
+                name={`socials.${social.key}` as any}
                 control={control}
                 render={({ field }) => (
                   <Input
                     {...field}
                     type="text"
-                    id={`socials.${index}`}
+                    id={`socials.${social.key}`}
                     placeholder={social.placeholder}
                     className="h-12 w-full border-zinc-300 bg-white hover:bg-zinc-50 focus:bg-zinc-50 dark:border-zinc-700 dark:hover:bg-zinc-800 dark:focus:bg-zinc-800"
                   />
