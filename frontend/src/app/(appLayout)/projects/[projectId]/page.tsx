@@ -41,11 +41,14 @@ async function Page({ params }: { params: { projectId: ProjectId } }) {
   }
   return (
     <PageContainer className="w-full max-w-screen-md gap-4">
+      {/* Project */}
       <ProjectComponent project={project} />
 
       {isMember || isOwner ? (
+        // Posts
         <ProjectPostsList projectPosts={posts} projectId={projectId} />
       ) : (
+        // Join Project
         <div className="flex flex-col items-center justify-center gap-4 p-4">
           <h3 className="text-xl font-semibold">
             Join this project to see the threads

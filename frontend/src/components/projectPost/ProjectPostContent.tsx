@@ -28,7 +28,7 @@ function ProjectPostContent({
 
   return !isEditing ? (
     <div className="flex-grow">
-      {/* Content */}
+      {/* Post Content */}
       <p className="font-medium text-neutral-500 dark:text-neutral-400">
         {username}
       </p>

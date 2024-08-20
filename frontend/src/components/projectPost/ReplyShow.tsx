@@ -10,7 +10,6 @@ import UserAvatar from "../common/UserAvatar";
 import { CiEdit } from "react-icons/ci";
 import { VscEdit } from "react-icons/vsc";
 
-
 //Lib
 import { formatDistance } from "date-fns";
 
@@ -27,8 +26,12 @@ type ReplyShowProps = {
 
 function ReplyShow({ replyId, projectPostId, replies }: ReplyShowProps) {
   // const { replies } = await fetchPostByIdAndReplies(projectPostId);
+  const startOpen = false;
+  // const [isEditingReply, setIsEditingReply] = useState<boolean>(false);
+  // const [isReplying, setIsReplying] = useState<boolean>(false);
+  const [open, setOpen] = useState<boolean>(startOpen);
 
-  const [isEditingReply, setIsEditingReply] = useState<boolean>(false);
+  const [edit, setEdit] = useState(false);
 
   console.log("REPLIE>>>>>", replies);
 
@@ -38,8 +41,8 @@ function ReplyShow({ replyId, projectPostId, replies }: ReplyShowProps) {
     return null;
   }
 
-  const toggleEditReply = () => {
-    setIsEditingReply((prev) => !prev);
+  const toggleEdit = () => {
+    setEdit((prev) => !prev);
   };
 
   const childrenArr = replies.filter((r: Reply) => r.parentId === replyId);
@@ -54,6 +57,7 @@ function ReplyShow({ replyId, projectPostId, replies }: ReplyShowProps) {
   )
     .replace("about", "")
     .replace("minutes", "min");
+
   return (
     <>
       <div
@@ -90,31 +94,35 @@ function ReplyShow({ replyId, projectPostId, replies }: ReplyShowProps) {
         </section>
 
         <section className="flex items-center gap-4">
-          <ReplyForm
-            projectPostId={reply.projectPostId}
-            parentId={reply._id}
-            reply={reply}
-            startOpen={false}
-            isEditingReply={isEditingReply}
-          />
+          {!edit && (
+            <ReplyForm
+              projectPostId={reply.projectPostId}
+              parentId={reply._id}
+              reply={reply}
+              startOpen={startOpen}
+              open={open}
+              setOpen={setOpen}
+            />
+          )}
 
-          {isEditingReply ? (
+          {edit ? (
             <EditReplyForm
               reply={reply}
               projectPostId={projectPostId}
               startOpen={false}
-              toggleEditReply={toggleEditReply}
+              edit={edit}
+              toggleEdit={toggleEdit}
             />
           ) : (
-            <button
-              className="flex items-end gap-[0.4rem] text-sm mb-4 -ml-2"
-              onClick={toggleEditReply}
-            >
-              {/* <CiEdit size={25} /> */}
-              <VscEdit size={20} />
-
-              <span>Edit</span>
-            </button>
+            !open && (
+              <button
+                className="-ml-2 mb-4 flex items-end gap-[0.4rem] text-sm hover:opacity-75"
+                onClick={toggleEdit}
+              >
+                <VscEdit size={20} />
+                <span>Edit</span>
+              </button>
+            )
           )}
         </section>
 

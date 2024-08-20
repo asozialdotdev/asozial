@@ -8,17 +8,22 @@ import { Project } from "@/types/Project";
 import { ProjectPost, Reply } from "@/types/ProjectPost";
 import { useState } from "react";
 import Link from "next/link";
+import { FiEdit } from "react-icons/fi";
+import { VscEdit } from "react-icons/vsc";
 
 type ParentProjectPostContent = {
   post: ProjectPost;
   isProjectPage: boolean;
-  replies?: Reply[]
+  replies?: Reply[];
 };
 
-
-function ParentProjectPostContent({ post, isProjectPage, replies }: ParentProjectPostContent) {
+function ParentProjectPostContent({
+  post,
+  isProjectPage,
+  replies,
+}: ParentProjectPostContent) {
   const [isEditing, setIsEditing] = useState<boolean>(false);
-  console.log ("post replies", post)
+  console.log("post replies", post);
 
   const toggleEditing = () => {
     setIsEditing((prev) => !prev);
@@ -33,7 +38,7 @@ function ParentProjectPostContent({ post, isProjectPage, replies }: ParentProjec
             username={post.userId.username}
             userId={post.userId._id}
           />
-
+          {/* Post Content */}
           <ProjectPostContent
             projectPost={post}
             isEditing={isEditing}
@@ -42,13 +47,20 @@ function ParentProjectPostContent({ post, isProjectPage, replies }: ParentProjec
         </div>
       </div>
       <div>
+        {/* Post Buttons */}
         <div className="flex items-center gap-4">
           <ReplyCount replies={post.replyCount || replies?.length} />
-          <ProjectPostLikeButtons
-            projectPost={post}
-            toggleEditing={toggleEditing}
-          />
-
+          <ProjectPostLikeButtons projectPost={post} />
+          <div>
+            <button
+              className="-ml-1 mb-4 flex items-center gap-2 text-base hover:opacity-75"
+              onClick={toggleEditing}
+            >
+              <VscEdit size={20} />
+              {isEditing ? "Cancel" : "Edit"}
+            </button>
+          </div>
+          {/* Arrow Button */}
           {isProjectPage && (
             <Link
               className="mb-3 ml-4 font-semibold"

@@ -18,14 +18,10 @@ import { ProjectPost } from "@/types/ProjectPost";
 
 type ProjectPostLikeButtonsProps = {
   projectPost: ProjectPost;
-  toggleEditing: () => void;
   editing?: boolean;
 };
 
-function ProjectPostLikeButtons({
-  projectPost,
-  toggleEditing,
-}: ProjectPostLikeButtonsProps) {
+function ProjectPostLikeButtons({ projectPost }: ProjectPostLikeButtonsProps) {
   const [likes, setLikes] = useState(projectPost.likes.length ?? 0);
   const [dislikes, setDislikes] = useState(projectPost.dislikes.length ?? 0);
   const [userLiked, setUserLiked] = useState(false);
@@ -124,12 +120,6 @@ function ProjectPostLikeButtons({
             perspective={100}
             numbers={dislikes.toString()}
           />
-        </div>
-
-        <div>
-          <button className="mt-[0.2rem]" onClick={toggleEditing}>
-            <FiEdit size={20} />
-          </button>
         </div>
       </div>
     </>

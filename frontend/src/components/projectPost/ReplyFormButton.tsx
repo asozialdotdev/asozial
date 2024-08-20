@@ -5,7 +5,7 @@ function ReplyFormButton({
   toggleOpen,
   startOpen,
 }: {
-  toggleOpen: () => void;
+  toggleOpen?: () => void;
   startOpen?: boolean;
 }) {
   const { pending } = useFormStatus();

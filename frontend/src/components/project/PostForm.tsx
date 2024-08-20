@@ -84,7 +84,7 @@ function PostForm({ projectId }: { projectId: ProjectId }) {
       </div>
 
 
-      <ProjectPostFormButton isEditing={false} />
+      <ProjectPostFormButton editing={false} />
     </form>
   );
 }
