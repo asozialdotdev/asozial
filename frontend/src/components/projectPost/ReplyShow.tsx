@@ -1,9 +1,6 @@
 "use client";
 //React
-
 import { useState } from "react";
-//Actions
-import { fetchPostByIdAndReplies } from "@/actions";
 
 //Components
 import ReplyForm from "./ReplyForm";
@@ -11,7 +8,6 @@ import UserAvatar from "../common/UserAvatar";
 import EditReplyForm from "./EditReplyForm";
 
 //Ui
-import { CiEdit } from "react-icons/ci";
 import { VscEdit } from "react-icons/vsc";
 
 //Utils
@@ -19,6 +15,7 @@ import { formattedData } from "@/utils";
 
 //Types
 import type { ProjectPostId, Reply, ReplyId } from "@/types/ProjectPost";
+import { useSession } from "next-auth/react";
 
 type ReplyShowProps = {
   replyId: ReplyId;
@@ -33,6 +30,8 @@ function ReplyShow({
   replies,
   children,
 }: ReplyShowProps) {
+  const session = useSession();
+  const userId = session.data?.user?.id;
   const startOpen = false;
 
   const [open, setOpen] = useState<boolean>(startOpen);
@@ -40,6 +39,9 @@ function ReplyShow({
   const [edit, setEdit] = useState(false);
 
   const reply = replies.find((r: Reply) => r._id === replyId);
+
+  const isAuthor = userId === reply?.userId._id.toString();
+  console.log("isAuthor reply", isAuthor);
 
   if (!reply) {
     return null;
@@ -68,7 +70,7 @@ function ReplyShow({
       {/* > */}
       <div
         key={reply._id?.toString()}
-        className={`mt-6 flex w-full flex-col items-start gap-4 pr-1 lg:max-w-[96%] lg:space-x-4 ${!isTopLevel ? "pl-4 border-l border-dashed border-zinc-300 dark:border-zinc-600 " : "border-b border-zinc-300 dark:border-zinc-600 border-dashed"} ${isLastChild ? "mb-6" : ""} ` }
+        className={`mt-6 flex w-full flex-col items-start gap-4 pr-1 lg:max-w-[96%] lg:space-x-4 ${!isTopLevel ? "border-l border-dashed border-zinc-300 pl-4 dark:border-zinc-600" : "border-b border-dashed border-zinc-300 dark:border-zinc-600"} ${isLastChild ? "mb-6" : ""} `}
         style={{ marginLeft: children ? "1rem" : "0" }}
       >
         <section className="flex items-start gap-2">
@@ -115,25 +117,29 @@ function ReplyShow({
             />
           )}
 
-          {edit ? (
-            <EditReplyForm
-              reply={reply}
-              projectPostId={projectPostId}
-              startOpen={false}
-              edit={edit}
-              toggleEdit={toggleEdit}
-            />
-          ) : (
-            !open && (
-              <button
-                className="-ml-2 mb-4 flex items-end gap-[0.4rem] text-sm hover:opacity-75"
-                onClick={toggleEdit}
-              >
-                <VscEdit size={20} />
-                <span>Edit</span>
-              </button>
-            )
-          )}
+          {isAuthor ? (
+            <>
+              {edit ? (
+                <EditReplyForm
+                  reply={reply}
+                  projectPostId={projectPostId}
+                  startOpen={false}
+                  edit={edit}
+                  toggleEdit={toggleEdit}
+                />
+              ) : (
+                !open && (
+                  <button
+                    className="-ml-2 mb-4 flex items-end gap-[0.4rem] text-sm hover:opacity-75"
+                    onClick={toggleEdit}
+                  >
+                    <VscEdit size={20} />
+                    <span>Edit</span>
+                  </button>
+                )
+              )}
+            </>
+          ) : null}
         </section>
 
         {childrenArr.map((child: Reply) => (

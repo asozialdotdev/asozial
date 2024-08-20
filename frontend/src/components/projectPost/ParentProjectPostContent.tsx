@@ -18,6 +18,7 @@ import { Button } from "../ui/button";
 
 //Types
 import { ProjectPost, Reply } from "@/types/ProjectPost";
+import { useSession } from "next-auth/react";
 
 type ParentProjectPostContent = {
   post: ProjectPost;
@@ -30,8 +31,11 @@ function ParentProjectPostContent({
   isProjectPage,
   replies,
 }: ParentProjectPostContent) {
+  const session = useSession();
+  const userId = session.data?.user?.id;
+  const isAuthor = userId === post.userId._id.toString();
+
   const [isEditing, setIsEditing] = useState<boolean>(false);
-  console.log("post replies", post);
 
   const toggleEditing = () => {
     setIsEditing((prev) => !prev);
@@ -60,26 +64,28 @@ function ParentProjectPostContent({
         <div className="flex items-center gap-4">
           <ReplyCount replies={post.replyCount || replies?.length} />
           <PostLikeButtons projectPost={post} />
-          <div>
-            <span
-              className="-ml-1 mb-4 flex cursor-pointer items-center gap-2 text-base hover:opacity-75"
-              onClick={toggleEditing}
-            >
-              <VscEdit size={20} />
-              {isEditing ? (
-                <Button
-                  variant="outline"
-                  className="min-w-[85px] text-sm hover:dark:bg-zinc-300 dark:focus:bg-zinc-300"
-                >
-                  Cancel
-                </Button>
-              ) : (
-                <span className="-ml-[0.35rem] cursor-pointer text-sm hover:dark:bg-zinc-300 dark:focus:bg-zinc-300">
-                  Edit
-                </span>
-              )}
-            </span>
-          </div>
+          {isAuthor && (
+            <div>
+              <span
+                className="-ml-1 mb-4 flex cursor-pointer items-center gap-2 text-base hover:opacity-75"
+                onClick={toggleEditing}
+              >
+                <VscEdit size={20} />
+                {isEditing ? (
+                  <Button
+                    variant="outline"
+                    className="min-w-[85px] text-sm hover:dark:bg-zinc-300 dark:focus:bg-zinc-300"
+                  >
+                    Cancel
+                  </Button>
+                ) : (
+                  <span className="-ml-[0.35rem] cursor-pointer text-sm hover:dark:bg-zinc-300 dark:focus:bg-zinc-300">
+                    Edit
+                  </span>
+                )}
+              </span>
+            </div>
+          )}
           {/* Arrow Button */}
           {isProjectPage && (
             <Link
