@@ -7,7 +7,7 @@ import { SocialsData } from "@/types/Project";
 const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:5005";
 console.log("baseUrl in CONSTANTS:", baseUrl);
 
-const languagesWithColors = [
+const languagesWithColors: { language: string; color: string }[] = [
   { language: "TypeScript", color: "bg-blue-500" },
   { language: "JavaScript", color: "bg-yellow-500" },
   { language: "CSS", color: "bg-blue-600" },
@@ -109,4 +109,10 @@ const socialsData: SocialsData[] = [
 
 const projectStatus = ["active", "inactive", "completed"];
 
-export { baseUrl, languagesWithColors, contributors, socialsData, projectStatus };
+export {
+  baseUrl,
+  languagesWithColors,
+  contributors,
+  socialsData,
+  projectStatus,
+};
