@@ -21,15 +21,10 @@ type ReplyShowProps = {
   replyId: ReplyId;
   projectPostId: ProjectPostId;
   replies: Reply[];
-  children?: boolean;
+  child?: boolean;
 };
 
-function ReplyShow({
-  replyId,
-  projectPostId,
-  replies,
-  children,
-}: ReplyShowProps) {
+function ReplyShow({ replyId, projectPostId, replies, child }: ReplyShowProps) {
   const session = useSession();
   const userId = session.data?.user?.id;
   const startOpen = false;
@@ -71,7 +66,7 @@ function ReplyShow({
       <div
         key={reply._id?.toString()}
         className={`mt-6 flex w-full flex-col items-start gap-4 pr-1 lg:max-w-[96%] lg:space-x-4 ${!isTopLevel ? "border-l border-dashed border-zinc-300 pl-4 dark:border-zinc-600" : "border-b border-dashed border-zinc-300 dark:border-zinc-600"} ${isLastChild ? "mb-6" : ""} `}
-        style={{ marginLeft: children ? "1rem" : "0" }}
+        style={{ marginLeft: child ? "1rem" : "0" }}
       >
         <section className="flex items-start gap-2">
           <div className="flex flex-col gap-3 lg:contents">
@@ -148,7 +143,7 @@ function ReplyShow({
             replyId={child._id}
             projectPostId={projectPostId}
             replies={replies}
-            children={true}
+            child={true}
           />
         ))}
       </div>

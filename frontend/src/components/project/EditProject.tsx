@@ -7,7 +7,7 @@ import Image from "next/image";
 import { useState } from "react";
 
 //Actions
-import { updateProject } from "@/actions";
+import { deleteProject, updateProject } from "@/actions";
 
 //Hooks
 import { ControllerRenderProps } from "react-hook-form";
@@ -38,10 +38,15 @@ import { languagesWithColors, projectStatus, socialsData } from "@/constants";
 import PageTitle from "../common/PageTitle";
 
 import type { CreateUpdateProject, Project } from "@/types/Project";
+import { useSession } from "next-auth/react";
+import Link from "next/link";
 
 type Inputs = z.infer<typeof createProjectSchema>;
 
 function EditProjectForm({ project }: { project: Project }) {
+  const session = useSession();
+  const userId = session?.data?.user?.id;
+  const isOwner = userId === project.owner._id;
   const [error, setError] = useState<string | null>(null);
 
   const { spokenLanguages, isLoadingSpokenLanguages, errorSpokenLanguages } =
@@ -68,6 +73,19 @@ function EditProjectForm({ project }: { project: Project }) {
       status: project.status,
     },
   });
+
+  if (!isOwner) {
+    return (
+      <div className="flex w-full flex-col gap-4 pb-6 items-center justify-center">
+        <PageTitle className="text-center">
+          You are not the owner of this project
+        </PageTitle>
+        <div>
+          <Button onClick={router.back}>Go Back</Button>
+        </div>
+      </div>
+    );
+  }
 
   const techStackValues = watch("techStack");
 
@@ -119,8 +137,18 @@ function EditProjectForm({ project }: { project: Project }) {
     }
   };
 
+  const handleDeleteProject = async () => {
+    const result = await deleteProject(project._id);
+    if (result.error) {
+      console.error("Error deleting project");
+      setError(result.message);
+    } else {
+      router.push("/projects");
+    }
+  };
+
   return (
-    <div className="w-full">
+    <div className="w-full pb-6">
       <PageTitle className="text-center">
         Edit Project {project.title}
       </PageTitle>
@@ -371,15 +399,18 @@ function EditProjectForm({ project }: { project: Project }) {
           ))}
         </div>
 
-        {error && (
-          <span className="text-base font-light text-red-500">{error}</span>
-        )}
         <Button
           disabled={!isValid || isSubmitting}
           type="submit"
           className="my-2 bg-dark dark:bg-light"
         >
           {isSubmitting ? "Updating" : "Update"}
+        </Button>
+        {error && (
+          <span className="text-base font-light text-red-500">{error}</span>
+        )}
+        <Button onClick={handleDeleteProject} variant={"destructive"}>
+          Delete Project
         </Button>
       </form>
     </div>
