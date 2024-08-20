@@ -5,8 +5,6 @@ import client from "./lib/db";
 import authConfig from "../auth.config";
 import { baseUrl } from "@/constants";
 import axios from "axios";
-import { redirect } from "next/navigation";
-import github from "next-auth/providers/github";
 
 const GITHUB_CLIENT_ID = process.env.GITHUB_CLIENT_ID;
 const GITHUB_CLIENT_SECRET = process.env.GITHUB_CLIENT_SECRET;
@@ -31,7 +29,7 @@ export const {
     }),
   ],
   callbacks: {
-    async signIn({ user, account, profile }) {
+    async signIn({ user, profile }) {
       const db = client.db();
 
       const existingUser = await db
@@ -77,6 +75,7 @@ export const {
           });
 
           user.id = response.data._id; // Assign the custom user ID to NextAuth's user object
+          user.username = response.data.username;
         } catch (error) {
           console.error("Error creating user in database", error);
           return false;
@@ -106,11 +105,23 @@ export const {
       }
       return token;
     },
-    async session({ session, user, token }) {
+    async session({
+      session,
+      user,
+      token,
+    }: {
+      session: any;
+      user: any;
+      token: any;
+    }) {
       // Attach the user's ID to the session object
+      console.log("session", session);
+      console.log("user", user);
+      console.log("token", token);
       if (session && token) {
         //session.accessToken = token.accessToken;
         session.user.id = token.sub ?? "";
+        session.user.username = user.username ?? "";
       }
 
       return session;

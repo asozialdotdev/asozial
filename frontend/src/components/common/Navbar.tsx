@@ -107,7 +107,7 @@ function Navbar() {
                   alt={contributor.name}
                   width={100}
                   height={100}
-                  className="h-24 w-24 rounded-full border-4 border-dark dark:border-light"
+                  className="rounded-full border-4 border-dark p-1 dark:border-light"
                 />
                 <div className="flex flex-row gap-4">
                   <a
