@@ -14,7 +14,7 @@ const userPostSchema = new Schema(
     ],
   },
   {
-    collection: "ProjectPost",
+    collection: "UserPost",
     timestamps: true,
   }
 );

@@ -15,20 +15,22 @@ import accountRouter from "./routes/Account.routes";
 import verifyRouter from "./routes/Verify.routes";
 import friendshipsRouter from "./routes/Friendships.routes";
 import userPostsRouter from "./routes/UserPosts.routes";
+import messagesRouter from "./routes/Messages.routes";
 import { isAuthenticated } from "./middleware/jwt.middleware";
 
 const app = express();
 config(app);
 
 app.use("/api/auth", githubRouter);
+app.use("/account", accountRouter);
+app.use("/verify", verifyRouter);
 app.use("/dashboard", dashboardRouter);
 app.use("/users", usersRouter);
 app.use("/api/projects", projectsRouter);
 app.use("/api/project-posts", projectPostRouter);
 app.use("/api/replies", projectPostReplyRouter);
-app.use("/account", accountRouter);
-app.use("/verify", verifyRouter);
 app.use("/api/user-posts", userPostsRouter);
 app.use("/api/friends", friendshipsRouter);
+app.use("/api/messages", messagesRouter);
 
 export default app;

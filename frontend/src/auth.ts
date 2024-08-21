@@ -75,7 +75,7 @@ export const {
           });
 
           user.id = response.data._id; // Assign the custom user ID to NextAuth's user object
-          user.username = response.data.username;
+          //user.username = response.data.username;
         } catch (error) {
           console.error("Error creating user in database", error);
           return false;
@@ -121,7 +121,7 @@ export const {
       if (session && token) {
         //session.accessToken = token.accessToken;
         session.user.id = token.sub ?? "";
-        session.user.username = user.username ?? "";
+        // session.user.username = user.username ?? "";
       }
 
       return session;
