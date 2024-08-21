@@ -36,6 +36,8 @@ type Reply = {
   likes: UserId[];
   dislikes: UserId[];
   edited: boolean;
+  deleted: boolean;
+  deletedAt: Date;
   createdAt: Date;
   updatedAt: Date;
 };

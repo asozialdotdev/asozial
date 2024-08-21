@@ -14,9 +14,9 @@ function DeleteIcon({ handleDelete }: DeleteIconProps) {
     <TooltipProvider>
       <Tooltip>
         <TooltipTrigger>
-          <button onClick={handleDelete}>
-            <Trash size={20} className="hover:opacity-75" />
-          </button>
+          <span onClick={handleDelete}>
+            <Trash size={20} className="cursor-pointer hover:opacity-75" />
+          </span>
         </TooltipTrigger>
         <TooltipContent>Delete</TooltipContent>
       </Tooltip>

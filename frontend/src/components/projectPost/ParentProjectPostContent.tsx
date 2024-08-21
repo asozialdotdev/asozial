@@ -42,7 +42,7 @@ function ParentProjectPostContent({
 
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const [error, setError] = useState("");
-  console.log(error, "<<<<<<<<<")
+  console.log(error, "<<<<<<<<<");
 
   const toggleEditing = () => {
     setIsEditing((prev) => !prev);
@@ -58,6 +58,10 @@ function ParentProjectPostContent({
       router.push(`/projects/${post.projectId}`);
     }
   };
+
+  const repliesCount = replies
+    ? replies.filter((reply) => !reply.deleted).length
+    : 0;
   return (
     <>
       <div className="flex w-full items-start gap-4">
@@ -80,7 +84,7 @@ function ParentProjectPostContent({
       <div>
         {/* Post Buttons */}
         <div className="flex items-center gap-4">
-          <ReplyCount replies={post.replyCount || replies?.length} />
+          <ReplyCount replies={post.replyCount || repliesCount} />
           <PostLikeButtons projectPost={post} />
           {isAuthor && (
             <div className="flex items-start gap-3">

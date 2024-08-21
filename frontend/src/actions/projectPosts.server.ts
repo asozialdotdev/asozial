@@ -10,12 +10,7 @@ import { auth } from "@/auth";
 import { baseUrl } from "@/constants";
 
 //Types
-import type {
-  ProjectPost,
-  ProjectPostId,
-  Reply,
-  ReplyId,
-} from "@/types/ProjectPost";
+import type { ProjectPostId, Reply, ReplyId } from "@/types/ProjectPost";
 import type { ProjectId } from "@/types/Project";
 import { redirect } from "next/navigation";
 
@@ -108,7 +103,7 @@ const fetchPostByIdAndReplies = async (projectPostId: ProjectPostId) => {
   try {
     const response = await fetch(
       `${baseUrl}/api/project-posts/${projectPostId}`,
-      { next: { revalidate: 300 } },
+      { next: { revalidate: 60 } },
     );
     if (!response.ok) {
       throw new Error(`Failed to fetch post: ${response.statusText}`);
@@ -142,6 +137,11 @@ const createProjectPostReply = async (
       errors: result.error.flatten().fieldErrors,
     };
   }
+  const { post } = await fetchPostByIdAndReplies(projectPostId);
+  if (!post) {
+    throw new Error("Post not found");
+  }
+
   try {
     const response = await fetch(`${baseUrl}/api/project-posts/reply`, {
       method: "POST",
@@ -160,7 +160,7 @@ const createProjectPostReply = async (
     }
     const reply = await response.json();
     console.log("Created reply:", reply);
-    revalidatePath(`/projects/${projectPostId}`);
+    revalidatePath(`/projects/${post.projectId}/posts/${projectPostId}`);
     return {
       errors: {},
       success: true,
@@ -431,7 +431,7 @@ const deleteReply = async (replyId: ReplyId) => {
 
   try {
     const response = await fetch(`${baseUrl}/api/replies/${replyId}`, {
-      method: "DELETE",
+      method: "PATCH",
       headers: {
         "Content-Type": "application/json",
       },

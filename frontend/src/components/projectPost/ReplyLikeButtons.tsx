@@ -7,8 +7,6 @@ import { useEffect, useMemo, useState } from "react";
 //Components
 import ThumbsUpIcon from "../common/ThumbsUpIcon";
 import ThumbsDownIcon from "../common/ThumbsDownIcon";
-//Ui
-import { GoThumbsdown } from "react-icons/go";
 
 //Lib
 import FlipNumbers from "react-flip-numbers";

@@ -21,6 +21,8 @@ projectPostSchema.virtual("replyCount", {
   localField: "_id", // Find replies where `localField`
   foreignField: "projectPostId", // is equal to `foreignField`
   count: true, // get the number of replies
+  match: { deleted: { $ne: true } }, // only count replies that are not deleted
+
 });
 
 projectPostSchema.index({ likes: 1 });

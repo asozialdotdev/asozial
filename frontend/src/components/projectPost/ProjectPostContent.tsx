@@ -53,22 +53,19 @@ function ProjectPostContent({
         {content}
       </p>
 
-      {projectPost.edited ? (
+      <p
+        className={`${projectPost.edited ? "mb-0" : "mb-4"} mt-4 text-sm text-neutral-500 dark:text-neutral-400`}
+      >
+        <small>Posted </small>
+        {formattedCreatedAt}
+      </p>
+      {projectPost.edited && (
         <>
-          <p className="mt-4 text-sm text-neutral-500 dark:text-neutral-400">
-            <small>Posted </small>
-            {formattedCreatedAt}
-          </p>
           <p className="mb-4 text-xs text-neutral-500 dark:text-neutral-400">
             <small>Edited </small>
             {formattedUpdatedAt}
           </p>
         </>
-      ) : (
-        <p className="mb-4 mt-2 text-sm text-neutral-500 dark:text-neutral-400">
-          <small>Posted </small>
-          {formattedCreatedAt}
-        </p>
       )}
     </div>
   ) : (
