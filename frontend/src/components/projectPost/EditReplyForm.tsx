@@ -1,7 +1,5 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
-import ReplyLikeButtons from "./ReplyLikeButtons";
-import { GoComment } from "react-icons/go";
 import { Textarea } from "../ui/textarea";
 import ReplyFormButton from "./ReplyFormButton";
 import { useFormState } from "react-dom";
@@ -41,12 +39,12 @@ function EditReplyForm({
   }, [formState, toggleEdit]);
 
   return (
-    <section className={`${startOpen ? "w-full py-4" : "-mt-4 w-[120%]"}`}>
+    <section className={`${startOpen ? "w-full py-4" : "-mt-4 w-full pb-4 "}`}>
       {!edit ? null : (
         <form
           ref={formRef}
           action={action}
-          className="mt-4 flex flex-col gap-4"
+          className="mt-4 flex lg:w-[300%] md:w-[200%] w-full  flex-col gap-4"
         >
           <label htmlFor="content"></label>
           <Textarea

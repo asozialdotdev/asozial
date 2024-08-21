@@ -64,17 +64,22 @@ function ReplyForm({
   }, [formState, startOpen, toggleOpen]);
 
   return (
-    <section className={`${startOpen ? "w-full py-4" : "-mt-4 w-[120%]"}`}>
+    <section className={`${startOpen ? "w-full py-4" : "-mt-4 w-full"}`}>
       {!open ? (
-        <div className="mt-4 flex items-baseline gap-4">
-          <ReplyLikeButtons reply={reply} />
+        <div className="mt-4 flex items-start gap-4">
+          <div>
+            <ReplyLikeButtons reply={reply} />
+          </div>
+          <div>
+
           <ReplyIcon toggleOpen={toggleOpen} />
+          </div>
         </div>
       ) : (
         <form
           ref={formRef}
           action={action}
-          className="mt-4 flex flex-col gap-4"
+          className="mt-4 flex w-full flex-col gap-4 pb-4 md:w-[200%] lg:w-[300%]"
         >
           <label htmlFor="content"></label>
           <Textarea

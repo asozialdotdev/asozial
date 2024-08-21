@@ -83,11 +83,11 @@ function ParentProjectPostContent({
       </div>
       <div>
         {/* Post Buttons */}
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-5">
           <ReplyCount replies={post.replyCount || repliesCount} />
           <PostLikeButtons projectPost={post} />
           {isAuthor && (
-            <div className="flex items-start gap-3">
+            <div className="flex items-start gap-5">
               <EditIcon toggleEditing={toggleEditing} key="edit-post" />
 
               {!isProjectPage && (

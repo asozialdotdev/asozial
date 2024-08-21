@@ -8,16 +8,16 @@ import { MessagesSquare } from 'lucide-react';
 
 function ReplyCount({ replies }: { replies?: number }) {
   return (
-    <div className="mb-4 flex items-center gap-2 lg:ml-14">
+    <div className="mb-3 flex gap-2 lg:ml-14">
         <TooltipProvider>
           <Tooltip>
             <TooltipTrigger>
-              <MessagesSquare size={24} />
+              <MessagesSquare size={26} />
             </TooltipTrigger>
             <TooltipContent>Total Replies</TooltipContent>
           </Tooltip>
         </TooltipProvider>
-      <p className="text-lg text-neutral-500 dark:text-neutral-400">
+      <p className="text-lg mb-[0] text-neutral-500 dark:text-neutral-400">
         {replies}
       </p>
     </div>

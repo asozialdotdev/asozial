@@ -46,7 +46,7 @@ function ProjectPostLikeButtons({ projectPost }: ProjectPostLikeButtonsProps) {
     setUserLiked(true);
     setLikes((prev) => prev + 1);
 
-    if (userDisliked) {
+    if (userDisliked && dislikes > 0) {
       setUserDisliked(false);
       setDislikes((prev) => prev - 1);
     }
@@ -57,7 +57,7 @@ function ProjectPostLikeButtons({ projectPost }: ProjectPostLikeButtonsProps) {
     } catch (error) {
       setUserLiked(false);
       setLikes((prev) => prev - 1);
-      if (userDisliked) {
+      if (userDisliked && dislikes > 0) {
         setUserDisliked(true);
         setDislikes((prev) => prev + 1);
       }
@@ -68,7 +68,7 @@ function ProjectPostLikeButtons({ projectPost }: ProjectPostLikeButtonsProps) {
     setUserDisliked(true);
     setDislikes((prev) => prev + 1);
 
-    if (userLiked) {
+    if (userLiked && likes > 0) {
       setUserLiked(false);
       setLikes((prev) => prev - 1);
     }
@@ -79,7 +79,7 @@ function ProjectPostLikeButtons({ projectPost }: ProjectPostLikeButtonsProps) {
     } catch (error) {
       setUserDisliked(false);
       setDislikes((prev) => prev - 1);
-      if (userLiked) {
+      if (userLiked && likes > 0) {
         setUserLiked(true);
         setLikes((prev) => prev + 1);
       }
@@ -88,9 +88,12 @@ function ProjectPostLikeButtons({ projectPost }: ProjectPostLikeButtonsProps) {
 
   return (
     <>
-      <div className="mb-4 flex items-center gap-4">
+      <div className="mb-4 flex items-center gap-3">
         <div className="flex items-center gap-1">
+          <div className='mt-[0.4rem]'>
+
           <ThumbsUpIcon handleLike={handleLike} userLiked={userLiked} />
+          </div>
           <FlipNumbers
             height={16}
             width={16}
@@ -100,11 +103,13 @@ function ProjectPostLikeButtons({ projectPost }: ProjectPostLikeButtonsProps) {
             numbers={likes.toString()}
           />
         </div>
-        <div className="flex items-center gap-1">
-          <ThumbsDownIcon
-            handleDislike={handleDislike}
-            userDisliked={userDisliked}
-          />
+        <div className="flex items-center gap-2">
+          <div className="mt-2">
+            <ThumbsDownIcon
+              handleDislike={handleDislike}
+              userDisliked={userDisliked}
+            />
+          </div>
 
           <FlipNumbers
             height={16}

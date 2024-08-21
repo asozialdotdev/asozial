@@ -19,6 +19,7 @@ import { useSession } from "next-auth/react";
 import EditIcon from "../common/EditIcon";
 import DeleteIcon from "../common/DeleteIcon";
 import { deleteReply } from "@/actions";
+import { MessageSquareOff } from "lucide-react";
 
 type ReplyShowProps = {
   replyId: ReplyId;
@@ -83,7 +84,12 @@ function ReplyShow({ replyId, projectPostId, replies, child }: ReplyShowProps) {
         style={{ marginLeft: child ? "1rem" : "0" }}
       >
         {reply.deleted ? (
-          <div>DELETED</div>
+          <div className="flex items-center gap-2">
+            <p>Comment deleted by the user </p>
+            <span>
+              <MessageSquareOff />
+            </span>
+          </div>
         ) : (
           <>
             <section className="flex items-start gap-2">
@@ -122,7 +128,7 @@ function ReplyShow({ replyId, projectPostId, replies, child }: ReplyShowProps) {
               </div>
             </section>
 
-            <section className="flex items-center gap-4 pr-6">
+            <section className="flex items-center gap-6 pr-6">
               {/* Buttons and Forms /> */}
               {!edit && (
                 <ReplyForm
@@ -147,7 +153,7 @@ function ReplyShow({ replyId, projectPostId, replies, child }: ReplyShowProps) {
                     />
                   ) : (
                     !open && (
-                      <div className="flex items-baseline gap-3">
+                      <div className="flex items-baseline gap-5 mb-1">
                         <EditIcon toggleEditing={toggleEdit} key="edit-reply" />
                         <DeleteIcon
                           handleDelete={handleDelete}
