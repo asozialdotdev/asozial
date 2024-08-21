@@ -11,17 +11,27 @@ import ReplyLikeButtons from "./ReplyLikeButtons";
 
 //Ui
 import { Textarea } from "../ui/textarea";
-import { useEffect, useRef, useState } from "react";
+import {
+  Dispatch,
+  SetStateAction,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import { GoComment } from "react-icons/go";
 
 //Types
 import type { ProjectPostId, Reply, ReplyId } from "@/types/ProjectPost";
+import ReplyIcon from "../common/ReplyIcon";
 
 type ReplyFormProps = {
   projectPostId: ProjectPostId;
   parentId?: ReplyId | null;
   reply?: Reply;
   startOpen: boolean;
+  open: boolean;
+  setOpen: Dispatch<SetStateAction<boolean>>;
 };
 
 function ReplyForm({
@@ -29,10 +39,9 @@ function ReplyForm({
   parentId,
   reply,
   startOpen,
+  open,
+  setOpen,
 }: ReplyFormProps) {
-  const [open, setOpen] = useState<boolean>(startOpen);
-  const [isEditingReply, setIsEditingReply] = useState<boolean>(false);
-
   const [formState, action] = useFormState(
     createProjectPostReply.bind(null, { projectPostId, parentId }),
     {
@@ -41,34 +50,25 @@ function ReplyForm({
   );
   const formRef = useRef<HTMLFormElement>(null);
 
+  const toggleOpen = useCallback(() => {
+    setOpen((prev: boolean) => !prev);
+  }, [setOpen]);
   useEffect(() => {
     if (formState.success) {
       formRef.current?.reset();
 
       if (!startOpen) {
-        setOpen(false);
+        toggleOpen();
       }
     }
-  }, [formState, startOpen]);
-
-  const toggleOpen = () => {
-    setOpen((prev: boolean) => !prev);
-  };
+  }, [formState, startOpen, toggleOpen]);
 
   return (
     <section className={`${startOpen ? "w-full py-4" : "-mt-4 w-[120%]"}`}>
       {!open ? (
         <div className="mt-4 flex items-baseline gap-4">
           <ReplyLikeButtons reply={reply} />
-          <button
-            className="flex items-center gap-2 text-sm"
-            onClick={toggleOpen}
-          >
-            <span>
-              <GoComment size={20} />
-            </span>
-            Reply
-          </button>
+          <ReplyIcon toggleOpen={toggleOpen} />
         </div>
       ) : (
         <form
@@ -88,7 +88,11 @@ function ReplyForm({
             </span>
           )}
 
-          <ReplyFormButton toggleOpen={toggleOpen} startOpen={startOpen} />
+          <ReplyFormButton
+            toggleOpen={toggleOpen}
+            startOpen={startOpen}
+            edit={false}
+          />
         </form>
       )}
     </section>

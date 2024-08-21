@@ -4,6 +4,7 @@ import ParentPost from "@/components/projectPost/ParentPost";
 import ParentPostLoading from "@/components/projectPost/ParentPostLoading";
 import RepliesList from "@/components/projectPost/RepliesList";
 import ReplyForm from "@/components/projectPost/ReplyForm";
+import ReplyFormOpen from "@/components/projectPost/ReplyFormOpen";
 
 //Types
 import type { ProjectPostId } from "@/types/ProjectPost";
@@ -21,7 +22,7 @@ async function PostPage({
       {/* PostShow */}
       <ParentPost projectPostId={projectPostId} />
       {/* Reply Form */}
-      <ReplyForm projectPostId={projectPostId} startOpen />
+      <ReplyFormOpen projectPostId={projectPostId} startOpen />
       {/* Replies */}
       <RepliesList projectPostId={projectPostId} />
     </PageContainer>

@@ -25,6 +25,7 @@ function ProjectPostsList({ projectPosts, projectId }: ProjectPostsListProps) {
   return (
     <>
       <section className="mt-4 flex w-full flex-col gap-4 pb-6">
+        {/* Post Form */}
         <ProjectPostForm projectId={projectId} />
 
         <PageTitle>Threads</PageTitle>
@@ -33,6 +34,7 @@ function ProjectPostsList({ projectPosts, projectId }: ProjectPostsListProps) {
             No threads yet. Be the first to start one!
           </p>
         )}
+        {/* Posts */}
         {posts.map((post) => (
           <ProjectPost key={post._id.toString()} projectPost={post} />
         ))}

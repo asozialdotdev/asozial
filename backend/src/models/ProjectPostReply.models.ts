@@ -10,6 +10,7 @@ const projectPostReplySchema = new Schema(
       ref: "ProjectPost",
       required: true,
     },
+    edited: { type: Boolean, default: false },
     userId: { type: Schema.Types.ObjectId, ref: "User", required: true },
     parentId: {
       type: Schema.Types.ObjectId,

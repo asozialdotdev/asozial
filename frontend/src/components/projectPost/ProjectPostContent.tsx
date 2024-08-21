@@ -1,47 +1,75 @@
 "use client";
-import { ProjectPost } from "@/types/ProjectPost";
-import { format, formatDistance } from "date-fns";
+//Next
 import Link from "next/link";
-import { Dispatch, SetStateAction, useState } from "react";
+//React
+import { Dispatch, SetStateAction } from "react";
+
+//Utils
+import { formattedData } from "@/utils";
+
+//Components
 import EditPostForm from "./EditPostForm";
+
+//Types
+import { ProjectPost } from "@/types/ProjectPost";
 
 type ProjectPostContentProps = {
   projectPost: ProjectPost;
   isEditing?: boolean;
-  setIsEditing: Dispatch<SetStateAction<boolean>>
+  setIsEditing: Dispatch<SetStateAction<boolean>>;
+  isProjectPage?: boolean;
 };
 
 function ProjectPostContent({
   projectPost,
   isEditing,
   setIsEditing,
+  isProjectPage,
 }: ProjectPostContentProps) {
   const post = projectPost;
 
-  const { userId, title, content, createdAt } = projectPost;
+  const { userId, title, content, createdAt, updatedAt } = projectPost;
   const username = userId.username;
-  const formattedCreatedAt = formatDistance(new Date(createdAt), new Date(), {
-    addSuffix: true,
-  })
-    .replace("about", "")
-    .replace("minutes", "min");
+
+  const formattedCreatedAt = formattedData(createdAt);
+  const formattedUpdatedAt = formattedData(updatedAt);
 
   return !isEditing ? (
     <div className="flex-grow">
-      {/* Content */}
+      {/* Post Content */}
       <p className="font-medium text-neutral-500 dark:text-neutral-400">
         {username}
       </p>
-      <Link href={`/projects/${post.projectId}/posts/${post._id}`}>
+      {isProjectPage ? (
+        <Link href={`/projects/${post.projectId}/posts/${post._id}`}>
+          <h3 className="text-lg font-semibold tracking-wide hover:opacity-75">
+            {title}
+          </h3>
+        </Link>
+      ) : (
         <h3 className="text-lg font-semibold tracking-wide">{title}</h3>
-      </Link>
+      )}
       <p className="mt-2 text-justify font-light text-dark dark:text-light">
         {content}
       </p>
-      <p className="mb-4 mt-1 text-sm text-neutral-500 dark:text-neutral-400">
-        <small>Posted </small>
-        {formattedCreatedAt}
-      </p>
+
+      {projectPost.edited ? (
+        <>
+          <p className="mt-4 text-sm text-neutral-500 dark:text-neutral-400">
+            <small>Posted </small>
+            {formattedCreatedAt}
+          </p>
+          <p className="mb-4 text-xs text-neutral-500 dark:text-neutral-400">
+            <small>Edited </small>
+            {formattedUpdatedAt}
+          </p>
+        </>
+      ) : (
+        <p className="mb-4 mt-2 text-sm text-neutral-500 dark:text-neutral-400">
+          <small>Posted </small>
+          {formattedCreatedAt}
+        </p>
+      )}
     </div>
   ) : (
     <>

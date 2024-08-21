@@ -10,8 +10,14 @@ import { auth } from "@/auth";
 import { baseUrl } from "@/constants";
 
 //Types
-import type { ProjectPost, ProjectPostId, ReplyId } from "@/types/ProjectPost";
+import type {
+  ProjectPost,
+  ProjectPostId,
+  Reply,
+  ReplyId,
+} from "@/types/ProjectPost";
 import type { ProjectId } from "@/types/Project";
+import { redirect } from "next/navigation";
 
 type CreatePostFormState = {
   errors: {
@@ -160,7 +166,7 @@ const createProjectPostReply = async (
       success: true,
     };
   } catch (error) {
-    console.error("Error creating postttttttt:", error);
+    console.error("Error creating post:", error);
     return {
       errors: {
         content: ["Failed to create reply"],
@@ -308,6 +314,7 @@ const updateProjectPost = async (
         body: JSON.stringify({
           title: result.data.title,
           content: result.data.content,
+          edited: true,
           userId: session?.user?.id,
         }),
       },
@@ -323,10 +330,125 @@ const updateProjectPost = async (
     console.error("Error updating project post:", error);
     return {
       errors: {
-        title: ["Failed to create post"],
-        content: ["Failed to create post"],
+        content: ["Failed to update post"],
       },
     };
+  }
+};
+
+//PUT update a project post
+
+const updatePostReply = async (
+  {
+    projectPostId,
+    replyId,
+  }: { projectPostId: ProjectPostId; replyId: ReplyId },
+  formState: CreateReplyFormState,
+  formData: FormData,
+): Promise<CreateReplyFormState> => {
+  const session = await auth();
+
+  const result = createReplySchema.safeParse({
+    content: formData.get("content"),
+  });
+
+  if (!result.success) {
+    console.error("Validation error:", result.error.flatten().fieldErrors);
+    return {
+      errors: result.error.flatten().fieldErrors,
+    };
+  }
+  const { post, replies } = await fetchPostByIdAndReplies(projectPostId);
+
+  const reply = replies.find((r: Reply) => r?._id === replyId);
+
+  if (!reply) {
+    throw new Error("Reply not found");
+  }
+
+  try {
+    const response = await fetch(`${baseUrl}/api/replies/${replyId}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        content: result.data.content,
+        edited: true,
+        userId: session?.user?.id,
+      }),
+    });
+    const updatedReply = await response.json();
+    console.log("Updated reply:", updatedReply);
+    revalidatePath(`/projects/${post.projectId}/posts/${projectPostId}`);
+    return {
+      errors: {},
+      success: true,
+    };
+  } catch (error) {
+    console.error("Error updating reply:", error);
+    return {
+      errors: {
+        content: ["Failed to update reply"],
+      },
+    };
+  }
+};
+
+//DELETE a project post
+
+const deleteProjectPost = async (projectPostId: ProjectPostId) => {
+  const session = await auth();
+
+  try {
+    const response = await fetch(
+      `${baseUrl}/api/project-posts/${projectPostId}`,
+      {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          userId: session?.user?.id,
+        }),
+      },
+    );
+    if (!response.ok) {
+      throw new Error(`Failed to delete post: ${response.statusText}`);
+    }
+    const data = await response.json();
+    console.log("Deleted post:", data);
+    revalidatePath(`/projects/${data.projectId}`);
+    return { error: false, message: "Post deleted" };
+  } catch (error) {
+    console.error("Error deleting post:", error);
+    return { error: true, message: "Error deleting post" };
+  }
+};
+
+const deleteReply = async (replyId: ReplyId) => {
+  const session = await auth();
+
+  try {
+    const response = await fetch(`${baseUrl}/api/replies/${replyId}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        userId: session?.user?.id,
+      }),
+    });
+    if (!response.ok) {
+      throw new Error(`Failed to delete reply: ${response.statusText}`);
+    }
+    const data = await response.json();
+
+    revalidatePath(`/projects/${data.projectId}/posts/${data.projectPostId}`);
+    return { error: false, message: "Reply deleted" };
+  } catch (error) {
+    console.error("Error deleting reply:", error);
+    return { error: true, message: "Error deleting reply" };
   }
 };
 
@@ -340,4 +462,7 @@ export {
   createLikeReply,
   createDislikeReply,
   updateProjectPost,
+  updatePostReply,
+  deleteProjectPost,
+  deleteReply,
 };

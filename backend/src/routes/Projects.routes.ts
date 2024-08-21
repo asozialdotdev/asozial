@@ -2,6 +2,8 @@ import dotenv from "dotenv";
 import express, { Request, Response, NextFunction } from "express";
 import axios from "axios";
 import Project from "../models/Project.models";
+import ProjectPost from "../models/ProjectPost.models";
+import ProjectPostReply from "../models/ProjectPostReply.models";
 import User from "../models/User.models";
 
 const projectsRouter = express.Router();
@@ -240,7 +242,6 @@ projectsRouter.put(
 
       console.log("githubRepo:::::::::::::", githubRepo);
 
-
       // Find the project first
       const project = await Project.findById(req.params.projectId);
 
@@ -257,7 +258,16 @@ projectsRouter.put(
 
       const updatedProject = await Project.findByIdAndUpdate(
         req.params.projectId,
-        { title, description, pitch, techStack, githubRepo, mainLanguage, socials, status },
+        {
+          title,
+          description,
+          pitch,
+          techStack,
+          githubRepo,
+          mainLanguage,
+          socials,
+          status,
+        },
         { new: true, runValidators: true }
       );
 
@@ -347,5 +357,45 @@ projectsRouter.post(
     }
   }
 );
+
+// DELETE Project
+
+// Delete a project and associated posts and replies
+projectsRouter.delete("/:projectId", async (req, res) => {
+  try {
+    const { projectId } = req.params;
+    const { userId } = req.body;
+
+    const project = await Project.findById(projectId);
+
+    if (!project) {
+      return res.status(404).json({ message: "Project not found" });
+    }
+
+    if (userId !== project.owner._id.toString()) {
+      return res
+        .status(403)
+        .json({ message: "You are not authorized to delete this project" });
+    }
+
+    const posts = await ProjectPost.find({ projectId });
+
+    for (const post of posts) {
+      await ProjectPostReply.deleteMany({ projectPostId: post._id });
+    }
+
+    await ProjectPost.deleteMany({ projectId });
+
+    await Project.findByIdAndDelete(projectId);
+
+    res.status(200).json({
+      message:
+        "Project and all associated posts and replies deleted successfully.",
+    });
+  } catch (error) {
+    console.error("Error deleting project:", error);
+    res.status(500).json({ message: "Failed to delete project." });
+  }
+});
 
 export default projectsRouter;

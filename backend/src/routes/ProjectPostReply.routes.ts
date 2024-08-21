@@ -76,4 +76,56 @@ projectPostReplyRouter.post("/:replyId/dislike", async (req, res, next) => {
   }
 });
 
+// PUT Edit a reply
+projectPostReplyRouter.put("/:replyId", async (req, res, next) => {
+  const { content, edited, userId } = req.body;
+
+  try {
+    const reply = await ProjectPostReply.findById(req.params.replyId);
+
+    if (!reply) {
+      return res.status(404).json({ error: "Reply not found" });
+    }
+
+    if (reply.userId.toString() !== userId) {
+      return res.status(403).json({ error: "Unauthorized" });
+    }
+
+    const updateReply = await ProjectPostReply.findByIdAndUpdate(
+      req.params.replyId,
+      { content, edited },
+      { new: true, runValidators: true }
+    );
+
+    res.json(updateReply);
+  } catch (error) {
+    console.error("Error editing reply:", error);
+    next(error);
+  }
+});
+
+//DELETE a reply
+
+projectPostReplyRouter.delete("/:replyId", async (req, res, next) => {
+  const { userId } = req.body;
+
+  try {
+    const reply = await ProjectPostReply.findById(req.params.replyId);
+
+    if (!reply) {
+      return res.status(404).json({ error: "Reply not found" });
+    }
+
+    if (reply.userId.toString() !== userId) {
+      return res.status(403).json({ error: "Unauthorized" });
+    }
+
+    await ProjectPostReply.deleteOne({ _id: req.params.replyId });
+    res.json({ message: "Reply deleted" });
+  } catch (error) {
+    console.error("Error deleting reply:", error);
+    next(error);
+  }
+});
+
 export default projectPostReplyRouter;

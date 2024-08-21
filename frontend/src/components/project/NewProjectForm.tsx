@@ -1,6 +1,5 @@
 "use client";
 //Next
-import { useRouter } from "next/navigation";
 import Image from "next/image";
 
 //React
@@ -96,7 +95,6 @@ function NewProjectForm() {
   };
 
   const processForm: SubmitHandler<Inputs> = async (data) => {
-    console.log("form data");
     const { title, description, pitch, socials } = data;
 
     const formattedTitle = title.trim();
@@ -104,7 +102,7 @@ function NewProjectForm() {
     const formattedPitch = pitch.trim();
     const formattedSocials = socials
       ? Object.entries(socials).reduce((acc, [key, value]) => {
-          acc[key] = value?.trim() || ""; // Trim the value if it exists, otherwise set it to an empty string
+          acc[key] = value?.trim() || "";
           return acc;
         }, {} as any)
       : {};

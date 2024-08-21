@@ -219,7 +219,7 @@ projectPostRouter.post("/:projectPostId/dislike", async (req, res, next) => {
 // PUT Update a project post
 projectPostRouter.put("/:projectPostId", async (req, res, next) => {
   try {
-    const { title, content, userId } = req.body;
+    const { title, content, edited, userId } = req.body;
 
     const post = await ProjectPost.findById(req.params.projectPostId);
 
@@ -233,11 +233,38 @@ projectPostRouter.put("/:projectPostId", async (req, res, next) => {
 
     const udpatedPost = await ProjectPost.findByIdAndUpdate(
       req.params.projectPostId,
-      { title, content },
+      { title, content, edited },
       { new: true, runValidators: true }
     );
 
     res.status(200).json(udpatedPost);
+  } catch (error) {
+    next(error);
+  }
+});
+
+//DELETE a post
+
+projectPostRouter.delete("/:projectPostId", async (req, res, next) => {
+  try {
+    const { userId } = req.body;
+
+    const post = await ProjectPost.findById(req.params.projectPostId);
+
+    if (!post) {
+      return res.status(404).json({ message: "Post not found" });
+    }
+
+    if (post.userId.toString() !== userId) {
+      return res.status(403).json({ message: "Unauthorized" });
+    }
+    await ProjectPostReply.deleteMany({
+      projectPostId: req.params.projectPostId,
+    });
+
+    await ProjectPost.findByIdAndDelete(req.params.projectPostId);
+
+    res.status(200).json({ message: "Post deleted" });
   } catch (error) {
     next(error);
   }

@@ -39,10 +39,10 @@ function PostForm({ projectId }: { projectId: ProjectId }) {
         if (formState.success) {
           formRef.current?.reset();
         }
-         action(formData);
+        action(formData);
       }}
     >
-      <div className="mt-6 flex flex-col gap-2">
+      <div className="mt-6 flex w-full flex-col gap-2">
         <label
           className="font-semibold text-zinc-500 dark:text-zinc-400"
           htmlFor="title"
@@ -83,8 +83,7 @@ function PostForm({ projectId }: { projectId: ProjectId }) {
         )}
       </div>
 
-
-      <ProjectPostFormButton isEditing={false} />
+      <ProjectPostFormButton editing={false} />
     </form>
   );
 }
