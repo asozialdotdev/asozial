@@ -2,12 +2,12 @@ import { Schema, model } from "mongoose";
 
 const projectSchema = new Schema(
   {
-    title: { type: String, required: true },
-    description: { type: String, required: true },
-    pitch: { type: String, required: true },
+    title: { type: String },
+    description: { type: String },
+    pitch: { type: String },
     githubRepo: { type: String },
     techStack: [{ type: String }],
-    mainLanguage: { type: String, required: true },
+    mainLanguage: { type: String },
     owner: { type: Schema.Types.ObjectId, ref: "User", required: true },
     membersJoined: [{ type: Schema.Types.ObjectId, ref: "User" }],
     membersApplied: [{ type: Schema.Types.ObjectId, ref: "User" }],

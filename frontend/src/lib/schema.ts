@@ -17,7 +17,7 @@ const createProjectSchema = z.object({
       gitlab: z.string().optional(),
     })
     .optional(),
-    status: z.enum(["active", "inactive", "completed"]).default("active"),
+  status: z.enum(["active", "inactive", "completed"]).default("active"),
 });
 
 const createPostSchema = z.object({
@@ -29,4 +29,18 @@ const createReplySchema = z.object({
   content: z.string().min(1, "At least try to write something"),
 });
 
-export { createProjectSchema, createPostSchema, createReplySchema };
+const pitchSchema = z.object({
+  pitch: z.string().min(1, "Pitch your project"),
+});
+
+const mainLanguageSchema = z.object({
+  mainLanguage: z.string().min(1, "Specify the main language"),
+});
+
+export {
+  createProjectSchema,
+  createPostSchema,
+  createReplySchema,
+  pitchSchema,
+  mainLanguageSchema,
+};

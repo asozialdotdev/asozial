@@ -21,7 +21,7 @@ function NewProject() {
     setIsNewProjectForm(true);
   };
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col gap-4 w-full">
       <PageTitle className="text-center">Start a new project</PageTitle>
 
       <div>
@@ -29,7 +29,7 @@ function NewProject() {
           Does your project already have an Github repository?
         </h2>
       </div>
-      <div className="flex max-w-screen-md flex-col items-center gap-12 lg:grid lg:grid-cols-2">
+      <div className="flex flex-col items-center gap-12 lg:grid lg:grid-cols-2">
         <Button onClick={handleExistingProject} size="lg">
           Existing project
         </Button>

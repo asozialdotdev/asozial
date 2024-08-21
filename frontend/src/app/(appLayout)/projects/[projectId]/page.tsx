@@ -40,7 +40,7 @@ async function Page({ params }: { params: { projectId: ProjectId } }) {
     notFound();
   }
   return (
-    <PageContainer className="w-full max-w-screen-md gap-4">
+    <PageContainer className="gap-4">
       {/* Project */}
       <ProjectComponent project={project} />
 

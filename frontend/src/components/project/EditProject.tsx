@@ -267,7 +267,7 @@ function EditProjectForm({ project }: { project: Project }) {
           )}
         </div>
 
-        {/* TechStack */}
+        {/* Main Language */}
         <div className="mt-4 flex flex-col gap-2">
           <label htmlFor="mainLanguage" className="font-semibold">
             Language <span className="text-xl text-red-400">*</span>
@@ -302,6 +302,8 @@ function EditProjectForm({ project }: { project: Project }) {
             </span>
           )}
         </div>
+
+        {/* Tech Stack */}
 
         <div className="mt-4 flex flex-col gap-2">
           <label htmlFor="techStack" className="font-semibold">
@@ -408,7 +410,9 @@ function EditProjectForm({ project }: { project: Project }) {
           {isSubmitting ? "Updating" : "Update"}
         </Button>
         {error && (
-          <span className="text-base font-light text-red-500">{error}</span>
+          <span className="text-base font-light text-red-700 dark:text-red-700">
+            {error}
+          </span>
         )}
         <CustomDialog
           title="Are you sure?"
