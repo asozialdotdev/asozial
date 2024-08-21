@@ -1,11 +1,12 @@
 const getAllUsers = async () => {
   "use server";
-  const users = await fetch("/users/search", {
+  const data = await fetch("/users/search", {
     method: "GET",
   });
-  if (!users) {
+  if (!data) {
     console.log("Users not found");
   } else {
+    const users = await data.json();
     return users;
   }
 };

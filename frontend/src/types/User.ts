@@ -3,6 +3,7 @@ import { Types } from "mongoose";
 type UserId = Types.ObjectId | string;
 
 type User = {
+  _id: UserId;
   githubID: string;
   email?: string;
   username?: string;
