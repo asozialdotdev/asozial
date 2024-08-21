@@ -100,8 +100,9 @@ export const {
     async jwt({ token, account, profile }) {
       // Add the user ID to the token for session callback
       if (account) {
-        token.accessToken = account.access_token;
-        token.id = profile?.id;
+        token.githubAccessToken = account.access_token;
+        token.githubId = profile?.id;
+        token.githubUsername = profile?.login;
       }
       return token;
     },
@@ -115,13 +116,11 @@ export const {
       token: any;
     }) {
       // Attach the user's ID to the session object
-      console.log("session", session);
-      console.log("user", user);
-      console.log("token", token);
       if (session && token) {
         //session.accessToken = token.accessToken;
         session.user.id = token.sub ?? "";
-        // session.user.username = user.username ?? "";
+        session.user.githubId = token.githubId;
+        session.user.githubUsername = token.githubUsername;
       }
 
       return session;

@@ -2,9 +2,6 @@ import config from "./config";
 import express from "express";
 import "./db";
 
-import cookieParser from "cookie-parser";
-import cors from "cors";
-
 import dashboardRouter from "./routes/index";
 import usersRouter from "./routes/Users.routes";
 import projectsRouter from "./routes/Projects.routes";

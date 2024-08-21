@@ -18,13 +18,46 @@ type User = {
   githubApiUrl?: string;
   githubUrl?: string;
   githubFollowersUrl?: string;
+  githubFollowers: {
+    githubId: string;
+    githubUsername: string;
+  };
   githubFollowingUrl?: string;
+  githubFollowing: {
+    githubId: string;
+    githubUsername: string;
+  };
   githubPublicGistsUrl?: string;
+  githubPublicGists: {
+    name: string;
+    description: string;
+    url: string;
+  };
   githubPrivateGistsNumber?: string;
   githubStarredUrl?: string;
+  githubStarred: {
+    name: string;
+    description: string;
+    url: string;
+  };
   githubSubscriptionsUrl?: string;
+  githubSubscriptions: {
+    name: string;
+    description: string;
+    url: string;
+  };
   githubOrganizationsUrl?: string;
+  githubOrganizations: {
+    name: string;
+    description: string;
+    url: string;
+  };
   githubReposUrl?: string;
+  githubRepos: {
+    name: string;
+    description: string;
+    url: string;
+  };
   githubPublicReposNumber?: number;
   githubPublicGistsNumber?: number;
   githubCreatedAt?: string;
