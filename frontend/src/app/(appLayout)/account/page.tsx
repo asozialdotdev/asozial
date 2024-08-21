@@ -36,99 +36,90 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { languagesWithColors } from "@/constants";
+import type { User } from "@/types/User";
+import getUserByUsername from "@/actions/getUserByUsername.server";
 
 type TechStackEntry = [
   string,
   { lines: number; projects: number; textColor: any; bgColor: any; Icon: any },
 ];
 
-const user = {
-  email: "hello@benjamin.dev",
-  username: "benjamindotdev",
-  name: "benjamin.dev",
-  company: "Freelance",
-  blog: "benjamin.dev",
-  twitterUsername: null,
-  bio: "Developer working with React, Typescript, TailwindCSS and more.",
-  location: "Berlin, DE",
-  hireable: true,
-  image: "https://avatars.githubusercontent.com/u/25672710?v=4",
-  githubApiUrl: "https://api.github.com/users/benjamindotdev",
-  githubUrl: "https://github.com/benjamindotdev",
-  githubFollowersUrl: "https://api.github.com/users/benjamindotdev/followers",
-  githubFollowingUrl:
-    "https://api.github.com/users/benjamindotdev/following{/other_user}",
-  githubPublicGistsUrl:
-    "https://api.github.com/users/benjamindotdev/gists{/gist_id}",
-  githubPrivateGistsNumber: "0",
-  githubStarredUrl:
-    "https://api.github.com/users/benjamindotdev/starred{/owner}{/repo}",
-  githubSubscriptionsUrl:
-    "https://api.github.com/users/benjamindotdev/subscriptions",
-  githubOrganizationsUrl: "https://api.github.com/users/benjamindotdev/orgs",
-  githubReposUrl: "https://api.github.com/users/benjamindotdev/repos",
-  githubPublicReposNumber: 63,
-  githubPublicGistsNumber: 0,
-  githubCreatedAt: "2017-02-09T21:05:19Z",
-  githubUpdatedAt: "2024-08-06T12:26:44Z",
-  githubCollaboratorsNumber: 1,
-  socials: [],
-  languagesSpoken: [],
-  techStack: [],
-  projectsJoined: [],
-  projectsSuggested: [],
-  projectsApplied: [],
-  dashboardPosts: [],
-  avoidedUsers: [],
-  avoidedProjects: [],
-  matchedUsers: [],
-  createdAt: {
-    $date: "2024-08-20T09:40:45.734Z",
-  },
-  updatedAt: {
-    $date: "2024-08-20T09:58:54.494Z",
-  },
-  __v: 0,
-};
-
 async function AccountPage() {
+  const user = await getUserByUsername();
+  console.log(user);
+  if (!user) {
+    notFound();
+  }
+
   const githubCreatedAtDate = new Date(user.githubCreatedAt);
-  // Format the date to "Month Year"
   const formattedDate = githubCreatedAtDate.toLocaleDateString("en-US", {
     year: "numeric",
     month: "long",
   });
+
   const getUserGithubFollowers = async () => {
-    const data = await fetch(user.githubFollowersUrl);
-    return data.json();
+    if (!user.githubFollowersUrl) {
+      console.error("user.githubFollowersUrl is undefined");
+      return [];
+    }
+    try {
+      const data = await fetch(user.githubFollowersUrl);
+      return data.json();
+    } catch (error: any) {
+      console.log("Error fetching GitHub followers:", error);
+      return [];
+    }
   };
+
   const getUserGithubSubscriptions = async () => {
+    if (!user.githubSubscriptionsUrl) {
+      console.error("user.githubSubscriptionsUrl is undefined");
+      return [];
+    }
     const data = await fetch(user.githubSubscriptionsUrl);
     return data.json();
   };
+
   const getUserGithubOrganizations = async () => {
+    if (!user.githubOrganizationsUrl) {
+      console.error("user.githubOrganizationsUrl is undefined");
+      return [];
+    }
     const data = await fetch(user.githubOrganizationsUrl);
     return data.json();
   };
+
   const getUserGithubRepoLanguages = async () => {
-    const languages: { [key: string]: { lines: number; projects: number } } =
-      {};
-    const data = await fetch(user.githubReposUrl);
-    const repos = await data.json();
+    const languages: {
+      [key: string]: { lines: number; projects: number };
+    } = {};
 
-    for (const repo of repos) {
-      const data = await fetch(repo.languages_url);
-      const repoLanguages: { [key: string]: number } = await data.json();
+    if (!user.githubReposUrl) {
+      console.log("user.githubReposUrl is undefined");
+      return languages; // or throw an error if appropriate
+    }
 
-      for (const [language, count] of Object.entries(repoLanguages)) {
-        if (languages[language]) {
-          languages[language].lines += count;
-          languages[language].projects += 1;
-        } else {
-          languages[language] = { lines: count, projects: 1 };
+    try {
+      const data = await fetch(user.githubReposUrl);
+      const repos = await data.json();
+
+      for (const repo of repos) {
+        const data = await fetch(repo.languages_url);
+        const repoLanguages: { [key: string]: number } = await data.json();
+
+        for (const [language, count] of Object.entries(repoLanguages)) {
+          if (languages[language]) {
+            languages[language].lines += count;
+            languages[language].projects += 1;
+          } else {
+            languages[language] = { lines: count, projects: 1 };
+          }
         }
       }
+    } catch (error) {
+      console.error("Error fetching GitHub repo languages:", error);
     }
+
     return languages;
   };
   const userTechStack = await getUserGithubRepoLanguages();
@@ -152,16 +143,6 @@ async function AccountPage() {
   const githubFollowers = await getUserGithubFollowers();
   const githubSubscriptions = await getUserGithubSubscriptions();
   const githubOrganizations = await getUserGithubOrganizations();
-
-  //const session = await auth();
-  //const data = await fetch(`/api/user/${session?.user?.id}`);
-
-  //const user = await data.json();
-
-  // if (!session) {
-  //   return notFound();
-  // }
-  // console.log(session);
 
   return (
     <PageContainer className="gap-8">
@@ -342,9 +323,18 @@ async function AccountPage() {
             Projects
           </h3>
           <div>
-            <p>Projects joined: {user.projectsJoined.length}</p>
-            <p>Projects suggested: {user.projectsSuggested.length}</p>
-            <p>Projects applied: {user.projectsApplied.length}</p>
+            <p>
+              Projects joined:{" "}
+              {user.projectsJoined ? user.projectsJoined.length : 0}
+            </p>
+            <p>
+              Projects suggested:{" "}
+              {user.projectsSuggested ? user.projectsSuggested.length : 0}
+            </p>
+            <p>
+              Projects applied:{" "}
+              {user.projectsApplied ? user.projectsApplied.length : 0}
+            </p>
           </div>
         </div>
       </div>

@@ -48,10 +48,11 @@ usersRouter.post(
 // rendered in the /users route
 
 usersRouter.get(
-  "/",
+  "/:username",
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const foundUser = await User.findById(req.params.userId);
+      console.log(req.params);
+      const foundUser = await User.findOne({ username: req.params.username });
       if (!foundUser) {
         throw new Error("User not found");
       }
