@@ -40,6 +40,7 @@ import PageTitle from "../common/PageTitle";
 import type { CreateUpdateProject, Project } from "@/types/Project";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
+import CustomDialog from "../common/CustomDialog";
 
 type Inputs = z.infer<typeof createProjectSchema>;
 
@@ -76,7 +77,7 @@ function EditProjectForm({ project }: { project: Project }) {
 
   if (!isOwner) {
     return (
-      <div className="flex w-full flex-col gap-4 pb-6 items-center justify-center">
+      <div className="flex w-full flex-col items-center justify-center gap-4 pb-6">
         <PageTitle className="text-center">
           You are not the owner of this project
         </PageTitle>
@@ -409,9 +410,21 @@ function EditProjectForm({ project }: { project: Project }) {
         {error && (
           <span className="text-base font-light text-red-500">{error}</span>
         )}
-        <Button onClick={handleDeleteProject} variant={"destructive"}>
-          Delete Project
-        </Button>
+        <CustomDialog
+          title="Are you sure?"
+          description="There's no turning back once you delete this project"
+          handler={handleDeleteProject}
+          trigger={
+            <Button
+              onClick={handleDeleteProject}
+              variant={"destructive"}
+              className="mt-2 w-full"
+            >
+              Delete Project
+            </Button>
+          }
+          asChild
+        />
       </form>
     </div>
   );

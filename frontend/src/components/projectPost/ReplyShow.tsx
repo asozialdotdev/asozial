@@ -20,6 +20,7 @@ import EditIcon from "../common/EditIcon";
 import DeleteIcon from "../common/DeleteIcon";
 import { deleteReply } from "@/actions";
 import { MessageSquareOff } from "lucide-react";
+import CustomDialog from "../common/CustomDialog";
 
 type ReplyShowProps = {
   replyId: ReplyId;
@@ -54,12 +55,17 @@ function ReplyShow({ replyId, projectPostId, replies, child }: ReplyShowProps) {
   };
 
   const handleDelete = async () => {
+    console.log("delete called");
     const result = await deleteReply(replyId);
     if (result.error) {
       console.error("Error deleting reply", result.error);
       setError(result.message);
+    } else {
+      console.log("Reply deleted successfully");
     }
   };
+
+  const handleCancelDelete = () => {};
 
   const childrenArr = replies.filter((r: Reply) => r.parentId === replyId);
   const isLastChild = childrenArr.length === 0;
@@ -153,11 +159,13 @@ function ReplyShow({ replyId, projectPostId, replies, child }: ReplyShowProps) {
                     />
                   ) : (
                     !open && (
-                      <div className="flex items-baseline gap-5 mb-1">
+                      <div className="mb-1 flex items-baseline gap-5">
                         <EditIcon toggleEditing={toggleEdit} key="edit-reply" />
-                        <DeleteIcon
-                          handleDelete={handleDelete}
-                          key="delete-reply"
+                        <CustomDialog
+                          title="Are you sure?"
+                          description="There's no turning back once you delete this reply"
+                          handler={handleDelete}
+                          trigger={<DeleteIcon key="delete-reply" />}
                         />
                       </div>
                     )

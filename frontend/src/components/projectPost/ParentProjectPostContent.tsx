@@ -23,6 +23,7 @@ import { FaRegArrowAltCircleRight } from "react-icons/fa";
 import { useSession } from "next-auth/react";
 //Types
 import { ProjectPost, Reply } from "@/types/ProjectPost";
+import CustomDialog from "../common/CustomDialog";
 
 type ParentProjectPostContent = {
   post: ProjectPost;
@@ -92,9 +93,11 @@ function ParentProjectPostContent({
 
               {!isProjectPage && (
                 <>
-                  <DeleteIcon
-                    handleDelete={handleDeletePost}
-                    key="delete-post"
+                  <CustomDialog
+                    trigger={<DeleteIcon key="delete-post" />}
+                    title="Are you sure?"
+                    description="There's no turning back once you delete this post"
+                    handler={handleDeletePost}
                   />
 
                   {error && (
