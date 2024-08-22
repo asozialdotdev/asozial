@@ -41,13 +41,13 @@ import { socialsData } from "@/constants";
 //Types
 import type { CreateUpdateProject } from "@/types/Project";
 import ImageUploader, { ImageT } from "../common/ui/ImageUploader";
+import LoadingTextButton from "../common/ui/LoadingTextButton";
 
 type Inputs = z.infer<typeof createProjectSchema>;
 
 function NewProjectForm() {
   const [error, setError] = useState<string | null>(null);
   const [uploadedImage, setUploadedImage] = useState<ImageT | null>(null);
-
   const { spokenLanguages, isLoadingSpokenLanguages, errorSpokenLanguages } =
     useSpokenLanguages();
 
@@ -371,7 +371,11 @@ function NewProjectForm() {
           type="submit"
           className="my-2 bg-dark dark:bg-light"
         >
-          {isSubmitting ? "Creating project..." : "Create"}
+          {isSubmitting ? (
+            <LoadingTextButton text="Creating Project" />
+          ) : (
+            "Create"
+          )}
         </Button>
       </form>
     </div>

@@ -15,6 +15,7 @@ import {
 import useSpokenLanguages from "@/hooks/useSpokenLanguages";
 import { patchMainLanguage } from "@/actions";
 import { Button } from "../ui/button";
+import { useSession } from "next-auth/react";
 
 type Input = z.infer<typeof mainLanguageSchema>;
 
@@ -22,6 +23,7 @@ function ProjectMainLanguage({ project }: { project: Project }) {
   const [isEditing, setIsEditing] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const { spokenLanguages } = useSpokenLanguages();
+  const session = useSession();
   const {
     handleSubmit,
 
@@ -48,6 +50,8 @@ function ProjectMainLanguage({ project }: { project: Project }) {
     }
   };
 
+  const isOwner = project.owner._id === session.data?.user?.id;
+
   return (
     <div>
       {!isEditing ? (
@@ -56,8 +60,7 @@ function ProjectMainLanguage({ project }: { project: Project }) {
           {!project.mainLanguage ? (
             <div>
               <p className="mb-4 text-justify text-base font-light text-neutral-500 dark:text-neutral-400">
-                No main language provided yet. Here you should tell everyone
-                what language the project is written in.
+                {isOwner ? "Here you can add the main language of your project" : "No language provided yet."}
               </p>
               <Button
                 className="bg-dark dark:bg-light hover:dark:bg-zinc-300 dark:focus:bg-zinc-300"

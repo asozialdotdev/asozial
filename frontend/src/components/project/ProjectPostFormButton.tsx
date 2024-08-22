@@ -1,6 +1,7 @@
 "use client";
 import { useFormStatus } from "react-dom";
 import { Button } from "../ui/button";
+import LoadingTextButton from "../common/ui/LoadingTextButton";
 
 function ProjectPostFormButton({ editing }: { editing: boolean }) {
   const { pending } = useFormStatus();
@@ -12,13 +13,17 @@ function ProjectPostFormButton({ editing }: { editing: boolean }) {
         disabled={pending}
         className="my-6 bg-dark px-8 text-lg dark:bg-light hover:dark:bg-zinc-300 dark:focus:bg-zinc-300"
       >
-        {!editing
-          ? pending
-            ? "Posting"
-            : "Post"
-          : pending
-            ? "Updating"
-            : "Update"}
+        {!editing ? (
+          pending ? (
+            <LoadingTextButton text="Posting" />
+          ) : (
+            "Post"
+          )
+        ) : pending ? (
+          <LoadingTextButton text="Updating" />
+        ) : (
+          "Update"
+        )}
       </Button>
     </>
   );

@@ -12,7 +12,7 @@ import github from "/public/socials/github.png";
 import { techStackClass, setStatusIcon } from "@/utils";
 
 //Types
-import type { Project } from "@/types/Project";
+import type { Member, Project } from "@/types/Project";
 import Link from "next/link";
 import { auth } from "@/auth";
 import { Button } from "../ui/button";
@@ -20,6 +20,7 @@ import { socialsData } from "@/constants";
 import { checkIsMember } from "@/actions";
 import ProjectPitch from "./ProjectPitch";
 import ProjectMainLanguage from "./ProjectMainLanguage";
+import ButtonBack from "../common/ui/ButtonBack";
 
 const membersJoined = ["Benjamin", "Mirko", "John", "Jane", "José"];
 const membersApplied = ["Alice", "Bob", "Charlie"];
@@ -29,40 +30,16 @@ const userIdTest = "1234567890";
 
 async function ProjectComponent({ project }: { project: Project }) {
   const session = await auth();
-  const isMember = await checkIsMember(project._id);
+  const isMember = project.membersJoined.some(
+    (member: Member) => member._id === session?.user?.id,
+  );
   const isOwner = project.owner._id === session?.user?.id;
   console.log("PROJECT.MEMBERSJOINED", project.membersJoined);
 
   return (
     <section className="relative -mt-4 flex w-full flex-col gap-4 border-b border-b-neutral-300 px-4 dark:border-b-neutral-600">
-      {/* {project.image ? (
-        <div className="w-[200%]">
-          <Image
-            src={project.image}
-            alt={project.title}
-            blurDataURL={project.placeholder}
-            fill
-            className="rounded-md"
-          />
-        </div>
-      ) : (
-        <div className="h-48 w-full rounded-md bg-neutral-200 dark:bg-neutral-800">
-          <p className="pt-16 text-center text-neutral-400 dark:text-neutral-500">
-            No image
-          </p>
-        </div>
-      )}
-
-      {/* Title and description */}
-      {/* <div className="flex flex-col items-center gap-2">
-        <PageTitle className="capitalize">{project.title}</PageTitle>
-        <h3 className="text-xl text-zinc-500 first-letter:capitalize dark:text-zinc-400">
-          {project.description}
-        </h3>
-      // </div> */}
       {/* Header Section */}
-      {/* <div className="relative h-64 w-[150%] bg-neutral-200 shadow-md dark:bg-neutral-800"> */}
-      <div className="relative left-1/2 h-64 w-[150%] -translate-x-1/2 transform 2xl:w-[200%]">
+      <div className="relative left-1/2 h-64 w-[150%] -translate-x-1/2 transform shadow-lg dark:shadow-neutral-300/20 2xl:w-[200%]">
         {project.image ? (
           <Image
             src={project.image}
@@ -76,15 +53,18 @@ async function ProjectComponent({ project }: { project: Project }) {
         ) : (
           <div className="flex h-full w-full items-center justify-center"></div>
         )}
-        {/* Overlay Content */}
-        <div className="absolute bottom-0 left-0 right-0 flex items-center justify-center bg-gradient-to-t from-black/80 to-transparent px-8 py-6">
-          <PageTitle className="xs:text-3xl text-2xl font-bold text-white sm:text-4xl md:text-5xl 2xl:text-6xl">
+        {/* Title*/}
+        <div className="absolute bottom-0 left-0 right-0 flex items-center justify-center bg-gradient-to-t from-black/80 to-transparent px-8 py-6 tracking-wide">
+          <PageTitle className="text-2xl font-bold text-white xs:text-3xl sm:text-4xl md:text-5xl 2xl:text-6xl">
             {project.title}
           </PageTitle>
         </div>
       </div>
 
-      <div className="flex flex-col gap-2">
+      {/* <ButtonBack /> */}
+
+      {/* Description */}
+      <div className="mt-4 flex flex-col gap-2">
         <h4 className="text-lg font-semibold">Description</h4>
         <h3 className="font-semibold text-zinc-500 first-letter:capitalize dark:text-zinc-400">
           {project.description}
@@ -92,11 +72,10 @@ async function ProjectComponent({ project }: { project: Project }) {
       </div>
 
       {/* Pitch*/}
-
       <ProjectPitch project={project} />
 
       {/* Tech stack */}
-      <div className="flex gap-4 px-4 py-2">
+      <div className="flex flex-wrap gap-4 px-4 py-6">
         {project.techStack.map((tech: string) => (
           <span key={tech} className={techStackClass(tech)}>
             {tech}
@@ -119,7 +98,12 @@ async function ProjectComponent({ project }: { project: Project }) {
 
       {/* Members */}
       <div className="flex flex-col">
-        <h4 className="text-lg font-semibold">Members</h4>
+        <div className="flex items-center gap-2">
+          <h4 className="text-lg font-semibold">Members</h4>
+          <span className="font-normal">
+            {`(${project.membersJoined.length})`}
+          </span>
+        </div>
         <div className="flex gap-4">
           {project.membersJoined.length > 0 ? (
             project.membersJoined.map((member) => (
@@ -138,6 +122,16 @@ async function ProjectComponent({ project }: { project: Project }) {
         </div>
       </div>
 
+      {/* Owner */}
+      <div className="flex flex-col items-start gap-2">
+        <p className="text-base font-semibold">Owner</p>
+        <UserAvatar
+          src={project.owner.image}
+          username={project.owner.username}
+          userId={project.owner._id}
+        />
+      </div>
+
       {/* Socials */}
       <div className="mb-8 mt-4 flex items-center gap-5">
         {project.githubRepo && (
@@ -151,6 +145,8 @@ async function ProjectComponent({ project }: { project: Project }) {
             />
           </a>
         )}
+
+        {/* Socials */}
         {(isMember || isOwner) &&
           project.socials &&
           socialsData.map((socialData) => {
@@ -172,6 +168,7 @@ async function ProjectComponent({ project }: { project: Project }) {
             );
           })}
       </div>
+      {/* Edit Button */}
       <div className="mb-6">
         {isOwner && (
           <Link href={`/projects/${project._id}/edit`}>

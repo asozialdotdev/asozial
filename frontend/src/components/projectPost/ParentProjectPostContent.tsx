@@ -2,6 +2,7 @@
 //Next
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 
 //React
 import { useState } from "react";
@@ -16,7 +17,9 @@ import ProjectPostContent from "./ProjectPostContent";
 import ReplyCount from "./ReplyCount";
 import EditIcon from "../common/ui/EditIcon";
 import DeleteIcon from "../common/ui/DeleteIcon";
+import CancelIcon from "../common/ui/CancelIcon";
 import CustomDialog from "../common/ui/CustomDialog";
+import { ImageT } from "../common/ui/ImageUploader";
 
 //Ui
 import { FaRegArrowAltCircleRight } from "react-icons/fa";
@@ -42,8 +45,8 @@ function ParentProjectPostContent({
   const router = useRouter();
 
   const [isEditing, setIsEditing] = useState<boolean>(false);
+  const [image, setImage] = useState<ImageT | undefined>(undefined);
   const [error, setError] = useState("");
-  console.log(error, "<<<<<<<<<");
 
   const toggleEditing = () => {
     setIsEditing((prev) => !prev);
@@ -73,45 +76,68 @@ function ParentProjectPostContent({
             username={post.userId.username}
             userId={post.userId._id}
           />
+
           {/* Post Title and Content */}
           <ProjectPostContent
             projectPost={post}
             isEditing={isEditing}
             setIsEditing={setIsEditing}
             isProjectPage={isProjectPage}
+            image={image}
+            setImage={setImage}
           />
         </div>
       </div>
-      <div>
-        {/* Post Buttons */}
-        <div className="flex items-center gap-5">
-          <ReplyCount replies={post.replyCount || repliesCount} />
-          <PostLikeButtons projectPost={post} />
-          {isAuthor && (
-            <div className="flex items-start gap-5">
+
+      {/* Image */}
+      {post.image && !isEditing && (
+        <div className="mb-8 px-6 lg:px-14">
+          <Image
+            src={post.image}
+            alt={post.title}
+            width={600}
+            height={600}
+            blurDataURL={post.placeholder}
+            placeholder="blur"
+            className="rounded-lg"
+          />
+        </div>
+      )}
+
+      {/* Post Buttons */}
+      <div className="flex items-center gap-5">
+        <ReplyCount replies={post.replyCount || repliesCount} />
+        <PostLikeButtons projectPost={post} />
+        {isAuthor && (
+          <div className="flex items-start gap-5">
+            {!isEditing ? (
               <EditIcon toggleEditing={toggleEditing} key="edit-post" />
+            ) : (
+              <CancelIcon handler={toggleEditing} key="edit-post" />
+            )}
 
-              {!isProjectPage && (
-                <>
-                  <CustomDialog
-                    trigger={<DeleteIcon key="delete-post" />}
-                    title="Are you sure?"
-                    description="There's no turning back once you delete this post"
-                    handler={handleDeletePost}
-                    asChild={false}
-                  />
+            {!isProjectPage && (
+              <>
+                <CustomDialog
+                  trigger={<DeleteIcon key="delete-post" />}
+                  title="Are you sure?"
+                  description="There's no turning back once you delete this post"
+                  handler={handleDeletePost}
+                  asChild={false}
+                />
 
-                  {error && (
-                    <span className="text-base font-light text-red-500">
-                      {error}
-                    </span>
-                  )}
-                </>
-              )}
-            </div>
-          )}
-          {/* Arrow Button */}
-          {isProjectPage && (
+                {error && (
+                  <span className="text-base font-light text-red-500">
+                    {error}
+                  </span>
+                )}
+              </>
+            )}
+          </div>
+        )}
+        {/* Arrow Button */}
+        {isProjectPage && (
+          <>
             <Link
               className="mb-3 ml-4 font-semibold hover:opacity-75"
               key={post._id.toString()}
@@ -121,8 +147,8 @@ function ParentProjectPostContent({
                 <FaRegArrowAltCircleRight size={30} />
               </span>
             </Link>
-          )}
-        </div>
+          </>
+        )}
       </div>
     </>
   );

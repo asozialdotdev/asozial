@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 import LoadingSpinner from "./LoadingSpinner";
 import { SquareCheckBig, Upload } from "lucide-react";
+import LoadingTextButton from "./LoadingTextButton";
 
 export type ImageT = {
   url: string;
@@ -80,14 +81,12 @@ export default function ImageUploader({
       <Button
         type="button"
         variant={variant}
+        disabled={isLoading}
         onClick={handleButtonClick}
         className={cn(className)}
       >
         {isLoading ? (
-          <span className="flex items-center gap-3">
-            <LoadingSpinner />
-            <span>Please wait</span>
-          </span>
+          <LoadingTextButton text="Please wait" />
         ) : !success ? (
           <span className="flex items-center gap-3">
             <Upload />

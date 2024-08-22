@@ -39,7 +39,7 @@ function ProjectCard({ projects, isLoading, error }: ProjectCardProps) {
     <>
       {projects.map((project: Project, i) => (
         <Card
-          className="max-h-[25rem] min-h-[25rem] min-w-[20rem] max-w-[20rem] overflow-y-auto overflow-x-hidden border-dashed border-zinc-300 bg-zinc-100 pl-1 hover:bg-zinc-100 dark:border-zinc-600 dark:bg-zinc-800 dark:shadow-neutral-700/30 dark:hover:bg-zinc-800 md:bg-inherit md:dark:bg-inherit"
+          className="max-h-[28rem] min-h-fit min-w-[20rem] max-w-[20rem] overflow-y-auto overflow-x-hidden border-dashed border-zinc-300 bg-zinc-100 pl-1 hover:bg-zinc-100 dark:border-zinc-600 dark:bg-zinc-800 dark:shadow-neutral-700/30 dark:hover:bg-zinc-800 md:bg-inherit md:dark:bg-inherit"
           key={project._id.toString()}
         >
           <CardHeader>
@@ -79,15 +79,16 @@ function ProjectCard({ projects, isLoading, error }: ProjectCardProps) {
             </CardContent>
           </div>
 
-          <CardContent>
-            <div className="flex flex-col gap-2">
-              <p className="text-base font-semibold">Owner</p>
-              <UserAvatar
-                src={project.owner.image}
-                username={project.owner.username}
-                userId={project.owner._id}
+          <CardContent className="flex flex-col items-start gap-2">
+            <div className='flex flex-col items-center gap-2'>
+
+            <p className="text-base font-semibold">Owner</p>
+            <UserAvatar
+              src={project.owner.image}
+              username={project.owner.username}
+              userId={project.owner._id}
               />
-            </div>
+              </div>
           </CardContent>
           <CardFooter>
             <p className="text-sm capitalize text-neutral-500 dark:text-neutral-400">

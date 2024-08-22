@@ -149,8 +149,8 @@ projectsRouter.get(
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       const project = await Project.findById(req.params.projectId)
-        .populate("membersJoined", "name image")
-        .populate("owner", "name image")
+        .populate("membersJoined", "name username image")
+        .populate("owner", "name username image")
         .exec();
       if (!project) {
         return res.status(404).json({ error: "Project not found" });

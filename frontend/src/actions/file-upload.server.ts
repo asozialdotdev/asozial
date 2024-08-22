@@ -9,6 +9,12 @@ const uploadFile = async (formData: FormData) => {
     });
 
     if (!response.ok) {
+      if (response.status === 413) {
+        return { error: true, message: "Image is too large" };
+      }
+      if (response.status === 400 || response.status === 500) {
+        return { error: true, message: "Accepted only images JPG, PNG or WEBP" };
+      }
       throw new Error("Failed to upload file");
     }
     const data = await response.json();
