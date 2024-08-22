@@ -3,24 +3,20 @@ import PageContainer from "@/components/common/PageContainer";
 import getUserByUsername from "@/actions/getUserByUsername.server";
 import UserComponent from "@/components/user/UserComponent";
 import { auth } from "@/auth";
-import UserLoading from "@/components/user/UserLoading";
+import { User } from "@/types/User";
 
 async function AccountPage() {
   const session = await auth();
-  if (!session) {
-    notFound();
+  if (!session || typeof session.user.githubUsername !== "string") {
+    return notFound();
   }
-
-  const user = await getUserByUsername({
-    username: session?.user?.githubUsername ?? "",
-  });
+  const user = await getUserByUsername(session?.user.githubUsername);
   if (!user) {
-    notFound();
+    return notFound();
   }
-
   return (
     <PageContainer className="gap-8">
-      {user ? <UserComponent user={user} /> : <UserLoading />}
+      <UserComponent user={user} />
     </PageContainer>
   );
 }

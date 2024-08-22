@@ -1,15 +1,14 @@
 import { baseUrl } from "@/constants";
+import axios from "axios";
 
-const getUserByUsername = async ({ username }: { username: string }) => {
+const getUserByUsername = async (username: string) => {
   "use server";
-  const data = await fetch(`${baseUrl}/users/${username}`, {
-    method: "GET",
-  });
-  if (!data) {
-    console.log("User not found");
-  } else {
-    const user = await data.json();
-    return user;
+  try {
+    const res = await axios.get(`${baseUrl}/api/users/${username}`);
+    return res.data;
+  } catch (error: any) {
+    console.log("Error fetching user by username:", error.message);
+    return error;
   }
 };
 

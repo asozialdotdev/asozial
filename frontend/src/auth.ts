@@ -178,9 +178,6 @@ export const {
       user: any;
       token: any;
     }) {
-      console.log("session", session);
-      console.log("user", user);
-      console.log("token", token);
       // Attach the user's ID to the session object
       if (session && token) {
         session.user.id = token.sub ?? "";
@@ -188,7 +185,6 @@ export const {
         session.user.githubUsername = token.githubUsername;
         session.user.githubAccessToken = token.githubAccessToken;
       }
-
       return session;
     },
     async redirect({ url, baseUrl }) {
