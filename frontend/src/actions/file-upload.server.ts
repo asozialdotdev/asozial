@@ -34,7 +34,7 @@ const uploadFile = async (formData: FormData) => {
     return finalData;
   } catch (error) {
     console.error("Error uploading file:", error);
-    return {error: true, message: "Error uploading file"};
+    return { error: true, message: "Error uploading image. Please try again." };
   }
 };
 
