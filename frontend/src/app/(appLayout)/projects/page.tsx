@@ -2,13 +2,13 @@
 import { notFound } from "next/navigation";
 
 //Actions
-import { fetchAllProjects } from "@/actions";
+import { fetchAllProjectsFromAUser } from "@/actions";
 //Components
 import MyProjects from "@/components/project/MyProjects";
 import PageContainer from "@/components/common/containers/PageContainer";
 
 async function MyProjectsPage() {
-  const projects = await fetchAllProjects();
+  const projects = await fetchAllProjectsFromAUser();
 
   if (!projects) {
     notFound();

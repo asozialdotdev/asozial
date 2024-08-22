@@ -4,7 +4,7 @@ import Link from "next/link";
 import PageContainer from "@/components/common/containers/PageContainer";
 
 import { auth } from "@/auth";
-import { signIn, signOut } from "@/actions/auth.server";
+import { signIn, signOut } from "@/actions/auth.server/auth.server";
 import { AvatarImage } from "@radix-ui/react-avatar";
 import bearlogo from "/public/bearlogo.webp";
 import Image from "next/image";

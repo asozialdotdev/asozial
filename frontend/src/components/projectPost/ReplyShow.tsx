@@ -2,26 +2,28 @@
 //React
 import { useState } from "react";
 
+//Actions
+import { deleteReply } from "@/actions";
+
 //Components
 import ReplyForm from "./ReplyForm";
 import UserAvatar from "../common/ui/UserAvatar";
 import EditReplyForm from "./EditReplyForm";
+import CustomDialog from "../common/ui/CustomDialog";
+import DeleteIcon from "../common/ui/DeleteIcon";
+import EditIcon from "../common/ui/EditIcon";
 
 //Ui
-import { VscEdit } from "react-icons/vsc";
+import { MessageSquareOff } from "lucide-react";
+
+//Lib
+import { useSession } from "next-auth/react";
 
 //Utils
 import { formattedData } from "@/utils";
 
 //Types
 import type { ProjectPostId, Reply, ReplyId } from "@/types/ProjectPost";
-import { useSession } from "next-auth/react";
-import EditIcon from "../common/ui/EditIcon";
-import DeleteIcon from "../common/ui/DeleteIcon";
-import { deleteReply } from "@/actions";
-import { MessageSquareOff } from "lucide-react";
-import CustomDialog from "../common/CustomDialog";
-
 type ReplyShowProps = {
   replyId: ReplyId;
   projectPostId: ProjectPostId;
