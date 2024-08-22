@@ -104,9 +104,9 @@ projectPostReplyRouter.put("/:replyId", async (req, res, next) => {
   }
 });
 
-//DELETE a reply
+//PATCH mark reply as deleted
 
-projectPostReplyRouter.delete("/:replyId", async (req, res, next) => {
+projectPostReplyRouter.patch("/:replyId", async (req, res, next) => {
   const { userId } = req.body;
 
   try {
@@ -119,9 +119,14 @@ projectPostReplyRouter.delete("/:replyId", async (req, res, next) => {
     if (reply.userId.toString() !== userId) {
       return res.status(403).json({ error: "Unauthorized" });
     }
+    await ProjectPostReply.updateOne(
+      { _id: req.params.replyId },
+      { $set: { deleted: true, deletedAt: new Date() } }
+    );
 
-    await ProjectPostReply.deleteOne({ _id: req.params.replyId });
-    res.json({ message: "Reply deleted" });
+    console.log(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>Reply marked as deleted");
+
+    res.json({ message: "Reply marked as deleted" });
   } catch (error) {
     console.error("Error deleting reply:", error);
     next(error);

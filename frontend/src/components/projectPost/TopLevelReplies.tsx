@@ -9,15 +9,17 @@ type TopLevelRepliesProps = {
 };
 
 function TopLevelReplies({ replies, projectPostId }: TopLevelRepliesProps) {
-
   const topLevelReplies = replies.filter(
     (reply: Reply) => reply.parentId === null,
   );
+  const repliesCount = replies
+    ? replies.filter((reply) => !reply.deleted).length
+    : 0;
   return (
     <section className="w-full p-4">
       <h2 className="text-xl font-semibold">
-        {replies && replies.length > 0
-          ? `${replies.length} comment${replies.length > 1 ? "s" : ""}`
+        {repliesCount && repliesCount > 0
+          ? `${repliesCount} comment${repliesCount > 1 ? "s" : ""}`
           : "No comments yet"}
       </h2>
 
@@ -27,7 +29,7 @@ function TopLevelReplies({ replies, projectPostId }: TopLevelRepliesProps) {
           replyId={reply._id}
           projectPostId={projectPostId}
           replies={replies}
-          children={false}
+          child={false}
         />
       ))}
     </section>

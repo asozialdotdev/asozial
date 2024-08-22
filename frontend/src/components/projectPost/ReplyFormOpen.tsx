@@ -59,7 +59,7 @@ function ReplyFormOpen({
           </span>
         )}
 
-        <ReplyFormButton  startOpen={startOpen} />
+        <ReplyFormButton edit={false} startOpen={startOpen} />
       </form>
     </section>
   );

@@ -65,39 +65,37 @@ projectsRouter.post(
   }
 );
 
-// GET request to create a project after retrieving information from github repo
+// GET request to create a project from Github
 
-projectsRouter.get(
-  "/new",
+projectsRouter.post(
+  "/github",
   async (req: Request, res: Response, next: NextFunction) => {
+    console.log("Request Body in Github function", req.body);
     try {
-      const repoUrl = req.query.repoUrl as string;
-      const ownerId = repoUrl.split("/")[0];
-      console.log("Request Query", req.query.repoUrl);
+      const { repoUrl, userId } = req.body;
 
       if (!repoUrl) {
         return res
           .status(400)
           .json({ error: "repoUrl query parameter is required" });
       }
-      if (!ownerId) {
+      if (!userId) {
         return res
           .status(400)
-          .json({ error: "ownerId query parameter is required" });
+          .json({ error: "userId query parameter is required" });
       }
 
-      const repoInfo = await axios.get(
-        `https://api.github.com/repos/${repoUrl}`
-      );
+      const owner = await User.findOne({ _id: userId });
+      if (!owner) {
+        return res.status(404).json({ error: "User not found" });
+      }
+      const repoInfo = await axios.get(repoUrl);
+      console.log("Repo Info", repoInfo);
+
       if (repoInfo.status !== 200) {
         return res
           .status(repoInfo.status)
           .json({ error: "Failed to fetch repository information" });
-      }
-
-      const owner = await User.findOne({ username: ownerId });
-      if (!owner) {
-        return res.status(404).json({ error: "User not found" });
       }
 
       const { name, description, html_url, language } = repoInfo.data;
@@ -107,12 +105,8 @@ projectsRouter.get(
         description: description,
         githubRepo: html_url,
         techStack: [language],
-        owner: owner._id,
-        membersApplied: [],
-        membersInvited: [],
-        membersJoined: [],
+        owner: userId,
         status: "active",
-        posts: [],
       });
 
       res.status(201).json(createProject);
@@ -268,6 +262,71 @@ projectsRouter.put(
           socials,
           status,
         },
+        { new: true, runValidators: true }
+      );
+
+      res.status(200).json(updatedProject);
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
+//PATCH to update pitch
+projectsRouter.patch(
+  "/:projectId/pitch",
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const { pitch, userId } = req.body;
+
+      const project = await Project.findById(req.params.projectId);
+
+      if (!project) {
+        return res.status(404).json({ message: "Project not found" });
+      }
+
+      if (project.owner.toString() !== userId) {
+        return res
+          .status(403)
+          .json({ message: "You are not authorized to edit this project" });
+      }
+
+      const updatedProject = await Project.findByIdAndUpdate(
+        req.params.projectId,
+        { pitch },
+        { new: true, runValidators: true }
+      );
+
+      res.status(200).json(updatedProject);
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
+// PATCH to update main language
+
+projectsRouter.patch(
+  "/:projectId/main-language",
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const { mainLanguage, userId } = req.body;
+
+      const project = await Project.findById(req.params.projectId);
+
+      if (!project) {
+        return res.status(404).json({ message: "Project not found" });
+      }
+
+      if (project.owner.toString() !== userId) {
+        return res
+          .status(403)
+          .json({ message: "You are not authorized to edit this project" });
+      }
+
+      const updatedProject = await Project.findByIdAndUpdate(
+        req.params.projectId,
+        { mainLanguage },
         { new: true, runValidators: true }
       );
 

@@ -7,8 +7,6 @@ import { useEffect, useMemo, useState } from "react";
 //Components
 import ThumbsUpIcon from "../common/ThumbsUpIcon";
 import ThumbsDownIcon from "../common/ThumbsDownIcon";
-//Ui
-import { GoThumbsdown } from "react-icons/go";
 
 //Lib
 import FlipNumbers from "react-flip-numbers";
@@ -81,14 +79,9 @@ function ReplyLikeButtons({ reply }: { reply?: Reply }) {
   return (
     <>
       <div className="mb-4 flex w-full items-center gap-4">
-        <div className="ml-2 flex items-center gap-1 lg:ml-8">
-          {/* <button onClick={handleLike}>
-            <GoThumbsup
-              size={20}
-              className={`hover:opacity-75 ${userLiked ? "text-green-700 dark:text-green-600" : "text-dark dark:text-light"}`}
-            />
-          </button> */}
+        <div className="ml-2 flex items-center gap-2 lg:ml-8">
           <ThumbsUpIcon handleLike={handleLike} userLiked={userLiked} />
+
           <FlipNumbers
             height={16}
             width={16}
@@ -98,7 +91,7 @@ function ReplyLikeButtons({ reply }: { reply?: Reply }) {
             numbers={likes.toString()}
           />
         </div>
-        <div className="flex items-center gap-1">
+        <div className="flex items-center gap-2">
           <ThumbsDownIcon
             handleDislike={handleDislike}
             userDisliked={userDisliked}

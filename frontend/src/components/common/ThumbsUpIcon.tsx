@@ -15,13 +15,13 @@ function ThumbsUpIcon({ handleLike, userLiked }: ThumbsUpIconProps) {
   return (
     <TooltipProvider>
       <Tooltip>
-        <TooltipTrigger>
-          <button
-            className={`hover:opacity-75 ${userLiked ? "text-green-700 dark:text-green-600" : "text-dark dark:text-light"}`}
+        <TooltipTrigger className='mb-[0.2rem]'>
+          <span
+            className={`hover:opacity-75 cursor-pointer ${userLiked ? "text-green-700 dark:text-green-600" : "text-dark dark:text-light"}`}
             onClick={handleLike}
           >
             <ThumbsUp size={20} />
-          </button>
+          </span>
         </TooltipTrigger>
         <TooltipContent>Reply</TooltipContent>
       </Tooltip>

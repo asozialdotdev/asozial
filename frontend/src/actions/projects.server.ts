@@ -11,6 +11,7 @@ import { auth } from "@/auth";
 
 //Types
 import { CreateUpdateProject, Project, ProjectId } from "@/types/Project";
+import axios from "axios";
 
 // Get all projects
 const fetchAllProjects = async () => {
@@ -71,8 +72,52 @@ const searchForMyProjects = async (searchTerm: string) => {
   }
 };
 
-// POST create a new project
+// GET to get a project from Github
+const fetchGithubRepos = async () => {
+  const session = await auth();
 
+  try {
+    const { data } = await axios.get(
+      `https://api.github.com/users/jrcopeti/repos?per_page=100`,
+    );
+
+    console.log("data", data);
+    console.log("Github repo:", data);
+    return data;
+  } catch {
+    console.error("Error fetching Github repos");
+    return { error: true, message: "Error fetching Github repos" };
+  }
+};
+
+// POST create a project from Github
+
+const createProjectFromGithub = async (repoUrl: string) => {
+  const session = await auth();
+  const owner = "jrcopeti";
+  let project;
+  try {
+    const result = await fetch(`${baseUrl}/api/projects/github`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        repoUrl,
+        userId: session?.user?.id,
+      }),
+    });
+
+    project = await result.json();
+    console.log("project", project);
+    return project;
+  } catch (error) {
+    console.error("Error creating project");
+    return { error: true, message: "Error creating project" };
+  }
+};
+
+// POST create a new project
 const createProject = async (data: CreateUpdateProject) => {
   const session = await auth();
   console.log("GITHUB REPO", data);
@@ -171,6 +216,68 @@ const updateProject = async (
   }
 };
 
+// Patch a pitch
+const patchPitch = async (projectId: ProjectId, pitch: string) => {
+  const session = await auth();
+
+  try {
+    const project = await fetchProjectById(projectId);
+    if (!project) {
+      throw new Error("Project not found");
+    }
+
+    const response = await fetch(`${baseUrl}/api/projects/${projectId}/pitch`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ pitch, userId: session?.user?.id }),
+    });
+
+    const updatePitch = await response.json();
+    console.log("Updated pitch:", updatePitch);
+    revalidatePath(`/projects/${projectId}`);
+    return { error: false, message: "Pitch updated" };
+  } catch (error) {
+    console.error("Error updating pitch:", error);
+    return { error: true, message: "Error updating pitch" };
+  }
+};
+
+//Patch Main Language
+const patchMainLanguage = async (
+  projectId: ProjectId,
+  mainLanguage: string,
+) => {
+  const session = await auth();
+
+  try {
+    const project = await fetchProjectById(projectId);
+    if (!project) {
+      throw new Error("Project not found");
+    }
+
+    const response = await fetch(
+      `${baseUrl}/api/projects/${projectId}/main-language`,
+      {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ mainLanguage, userId: session?.user?.id }),
+      },
+    );
+
+    const updateMainLanguage = await response.json();
+    console.log("Updated main language:", updateMainLanguage);
+    revalidatePath(`/projects/${projectId}`);
+    return { error: false, message: "Main language updated" };
+  } catch (error) {
+    console.error("Error updating main language:", error);
+    return { error: true, message: "Error updating main language" };
+  }
+};
+
 //Delete a project
 
 const deleteProject = async (projectId: ProjectId) => {
@@ -192,21 +299,24 @@ const deleteProject = async (projectId: ProjectId) => {
 
     const deleteProject = await response.json();
     console.log("Deleted deleteProject:", deleteProject);
-    return {error: false, message: "Project deleted"};
+    return { error: false, message: "Project deleted" };
   } catch (error) {
     console.error("Error deleting project:", error);
     return { error: true, message: "Error deleting project" };
   }
-
 };
 
 export {
   fetchAllProjects,
   fetchProjectById,
+  fetchGithubRepos,
+  createProjectFromGithub,
   searchForMyProjects,
   handleJoinProject,
   createProject,
   checkIsMember,
   updateProject,
+  patchPitch,
+  patchMainLanguage,
   deleteProject,
 };

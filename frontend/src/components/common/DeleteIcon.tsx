@@ -1,3 +1,4 @@
+import React, { forwardRef } from "react";
 import {
   Tooltip,
   TooltipContent,
@@ -5,23 +6,28 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { Trash } from "lucide-react";
+
 type DeleteIconProps = {
-  handleDelete: () => void;
+  handleDelete?: () => void;
 };
 
-function DeleteIcon({ handleDelete }: DeleteIconProps) {
-  return (
-    <TooltipProvider>
-      <Tooltip>
-        <TooltipTrigger>
-          <button onClick={handleDelete}>
-            <Trash size={20} className="hover:opacity-75" />
-          </button>
-        </TooltipTrigger>
-        <TooltipContent>Delete</TooltipContent>
-      </Tooltip>
-    </TooltipProvider>
-  );
-}
+const DeleteIcon = forwardRef<HTMLSpanElement, DeleteIconProps>(
+  ({ handleDelete }, ref) => {
+    return (
+      <TooltipProvider>
+        <Tooltip>
+          <TooltipTrigger>
+            <span ref={ref} onClick={handleDelete}>
+              <Trash size={20} className="cursor-pointer hover:opacity-75" />
+            </span>
+          </TooltipTrigger>
+          <TooltipContent>Delete</TooltipContent>
+        </Tooltip>
+      </TooltipProvider>
+    );
+  },
+);
+
+DeleteIcon.displayName = "DeleteIcon";
 
 export default DeleteIcon;

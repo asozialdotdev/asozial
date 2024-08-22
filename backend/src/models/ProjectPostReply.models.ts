@@ -11,6 +11,8 @@ const projectPostReplySchema = new Schema(
       required: true,
     },
     edited: { type: Boolean, default: false },
+    deleted: { type: Boolean, default: false },
+    deletedAt: { type: Date, default: null },
     userId: { type: Schema.Types.ObjectId, ref: "User", required: true },
     parentId: {
       type: Schema.Types.ObjectId,

@@ -18,6 +18,8 @@ import { auth } from "@/auth";
 import { Button } from "../ui/button";
 import { socialsData } from "@/constants";
 import { checkIsMember } from "@/actions";
+import ProjectPitch from "./ProjectPitch";
+import ProjectMainLanguage from "./ProjectMainLanguage";
 
 const membersJoined = ["Benjamin", "Mirko", "John", "Jane", "José"];
 const membersApplied = ["Alice", "Bob", "Charlie"];
@@ -36,16 +38,14 @@ async function ProjectComponent({ project }: { project: Project }) {
       {/* Title and description */}
       <div className="flex flex-col items-center gap-2">
         <PageTitle className="capitalize">{project.title}</PageTitle>
-        <h3 className="text-xl first-letter:capitalize">
+        <h3 className="text-xl text-zinc-500 first-letter:capitalize dark:text-zinc-400">
           {project.description}
         </h3>
       </div>
 
       {/* Pitch*/}
-      <div className="flex flex-col gap-2">
-        <h4 className="text-lg font-semibold">Pitch</h4>
-        <p className="text-justify text-base font-light">{project.pitch}</p>
-      </div>
+
+      <ProjectPitch project={project} />
 
       {/* Tech stack */}
       <div className="flex gap-4 px-4 py-2">
@@ -56,6 +56,7 @@ async function ProjectComponent({ project }: { project: Project }) {
         ))}
       </div>
 
+      {/* Status */}
       <div>
         <h4 className="text-lg font-semibold">Status</h4>
         <p className="capitalize">
@@ -65,10 +66,8 @@ async function ProjectComponent({ project }: { project: Project }) {
         </p>
       </div>
 
-      <div>
-        <h4 className="text-lg font-semibold">Language</h4>
-        <p className="capitalize">{project.mainLanguage}</p>
-      </div>
+      {/* Language */}
+      <ProjectMainLanguage project={project} />
 
       {/* Members */}
       <div className="flex flex-col">
@@ -84,7 +83,9 @@ async function ProjectComponent({ project }: { project: Project }) {
               />
             ))
           ) : (
-            <p className='text-neutral-500 dark:text-neutral-400'>No members joined yet</p>
+            <p className="text-neutral-500 dark:text-neutral-400">
+              No members joined yet
+            </p>
           )}
         </div>
       </div>
