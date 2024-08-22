@@ -81,24 +81,21 @@ friendshipsRouter.patch(
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       const friendshipId = req.params.friendshipId;
-      const friendship = await Friendship.findById(friendshipId);
+
+      const friendship = await Friendship.findOneAndUpdate(
+        {
+          _id: friendshipId,
+          receiverId: (req as any).payload.user._id,  // Ensures only the receiver can decline
+        },
+        { status: "declined" },
+        { new: true }  // Return the updated document
+      );
 
       if (!friendship) {
-        res.status(404).send("Friendship not found");
-        console.error("Friendship not found");
+        res.status(404).send("Friendship not found or unauthorized");
+        console.error("Friendship not found or unauthorized");
         return;
       }
-
-      if (friendship.receiverId.toString() !== (req as any).payload.user) {
-        res
-          .status(403)
-          .send("You are not authorized to decline this friendship");
-        console.error("Unauthorized to decline friendship");
-        return;
-      }
-
-      friendship.status = "declined";
-      await friendship.save();
 
       res.status(200).json(friendship);
     } catch (error) {
@@ -106,6 +103,7 @@ friendshipsRouter.patch(
     }
   }
 );
+
 
 // GET all pending friendships
 

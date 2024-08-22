@@ -13,6 +13,7 @@ import verifyRouter from "./routes/Verify.routes";
 import friendshipsRouter from "./routes/Friendships.routes";
 import userPostsRouter from "./routes/UserPosts.routes";
 import messagesRouter from "./routes/Messages.routes";
+import fileRouter from "./routes/FileUploader.routes";
 import { isAuthenticated } from "./middleware/jwt.middleware";
 
 const app = express();
@@ -29,5 +30,6 @@ app.use("/api/replies", projectPostReplyRouter);
 app.use("/api/user-posts", userPostsRouter);
 app.use("/api/friends", friendshipsRouter);
 app.use("/api/messages", messagesRouter);
+app.use("/api", fileRouter);
 
 export default app;
