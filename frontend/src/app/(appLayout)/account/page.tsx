@@ -5,11 +5,6 @@ import UserComponent from "@/components/user/UserComponent";
 import { auth } from "@/auth";
 import UserLoading from "@/components/user/UserLoading";
 
-type TechStackEntry = [
-  string,
-  { lines: number; projects: number; textColor: any; bgColor: any; Icon: any },
-];
-
 async function AccountPage() {
   const session = await auth();
   if (!session) {

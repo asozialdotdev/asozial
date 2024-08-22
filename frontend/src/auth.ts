@@ -37,6 +37,7 @@ export const {
     Github({
       clientId: GITHUB_CLIENT_ID,
       clientSecret: GITHUB_CLIENT_SECRET,
+      allowDangerousEmailAccountLinking: true,
     }),
   ],
   callbacks: {
@@ -49,96 +50,95 @@ export const {
 
       if (!existingUser) {
         try {
-          //make separate api calls to get user details before creation in db
-          const githubFollowers = await getUserGithubFollowers(
-            profile?.followers_url as string,
-          );
-
-          const githubFollowing = await getUserGithubFollowing(
-            profile?.following_url as string,
-          );
-
-          const githubSubscriptions = await getUserGithubSubscriptions(
-            profile?.subscriptions_url as string,
-          );
-
-          const githubPublicGists = await getUserGithubPublicGists(
-            profile?.gists_url as string,
-          );
-
-          const githubOrganizations = await getUserGithubOrganizations(
-            profile?.organizations_url as string,
-          );
-
-          const githubRepos = await getUserGithubRepos(
-            profile?.repos_url as string,
-          );
-
-          const githubRepoLanguages =
-            await getUserGithubRepoLanguages(githubRepos);
-
-          // const techStack = await getUserTechStack(
-          //   profile?.repos_url as string,
-          // );
-
           const newUser = {
-            username: profile?.preferred_username!,
-            name: profile?.name!,
-            email: profile?.email!,
-            notificationEmail: profile?.notificationEmail!,
-            image: profile?.picture,
-            company: profile?.company!,
-            website: profile?.website!,
-            location: profile?.locale!,
-            hireable: profile?.hireable!,
-            codingLanguages: githubRepoLanguages,
-            codingLibraries: null,
-            languagesSpoken: null,
+            username: profile?.login,
+            name: user?.name,
+            email: user?.email,
+            notificationEmail: profile?.notification_email,
+            image: profile?.avatar_url,
+            company: profile?.company,
+            website: profile?.blog,
+            location: profile?.location,
+            hireable: profile?.hireable,
+            //codingLanguages: githubRepoLanguages,
             socials: [
-              {
+              profile?.twitter_username && {
                 platform: "twitter",
-                url: profile?.twitter,
+                url: profile?.twitter_username,
               },
             ],
             github: {
               id: profile?.id,
-              nodeId: profile?.sub,
-              username: profile?.preferred_username,
-              bio: profile?.profile,
-              apiUrl: profile?.profile,
+              nodeId: profile?.node_id,
+              username: profile?.login,
+              bio: profile?.bio,
+              apiUrl: profile?.url,
               followersUrl: profile?.followers_url,
-              followers: githubFollowers,
+              //followers: githubFollowers,
               followersNumber: profile?.followers,
               followingUrl: profile?.following_url,
-              following: githubFollowing,
+              //following: githubFollowing,
               followingNumber: profile?.following,
               publicGistsUrl: profile?.gists_url,
-              publicGists: githubPublicGists,
+              //publicGists: githubPublicGists,
               publicGistsNumber: profile?.public_gists,
               privateGistsNumber: profile?.private_gists,
               starredUrl: profile?.starred_url,
               subscriptionsUrl: profile?.subscriptions_url,
-              subscriptions: githubSubscriptions,
-              subscriptionsNumber: githubSubscriptions.length,
+              //subscriptions: githubSubscriptions,
+              //subscriptionsNumber: githubSubscriptions.length,
               organizationsUrl: profile?.organizations_url,
-              organizations: githubOrganizations,
-              organizationsNumber: githubOrganizations.length,
+              //organizations: githubOrganizations,
+              //organizationsNumber: githubOrganizations.length,
               reposUrl: profile?.repos_url,
-              publicRepos: githubRepos,
+              //publicRepos: githubRepos,
               publicReposNumber: profile?.public_repos,
               createdAt: profile?.created_at,
               updatedAt: profile?.updated_at,
               collaboratorsNumber: profile?.collaborators,
             },
           };
+          console.log("newUser", newUser);
           const response = await axios.post(`${baseUrl}/api/auth`, newUser, {
             headers: {
               "Content-Type": "application/json",
             },
           });
+          console.log("response", response.data);
+
+          //**ONCE ACCESS TOKEN GIVEN BY GITHUB, DO THE API CALLS HERE */
+          //make separate api calls to get user details before creation in db
+          // **TIMING OUT DUE TO TOO MANY API CALLS**
+          // const githubFollowers = await getUserGithubFollowers(
+          //   profile?.followers_url as string,
+          // );
+          // console.log("githubFollowers", githubFollowers);
+          // const githubFollowing = await getUserGithubFollowing(
+          //   profile?.following_url as string,
+          // );
+          // console.log("githubFollowing", githubFollowing);
+          // const githubSubscriptions = await getUserGithubSubscriptions(
+          //   profile?.subscriptions_url as string,
+          // );
+          // console.log("githubSubscriptions", githubSubscriptions);
+          // const githubPublicGists = await getUserGithubPublicGists(
+          //   profile?.gists_url as string,
+          // );
+          // console.log("githubPublicGists", githubPublicGists);
+          // const githubOrganizations = await getUserGithubOrganizations(
+          //   profile?.organizations_url as string,
+          // );
+          // console.log("githubOrganizations", githubOrganizations);
+          // const githubRepos = await getUserGithubRepos(
+          //   profile?.repos_url as string,
+          // );
+          // console.log("githubRepos", githubRepos);
+          // const githubRepoLanguages =
+          //   await getUserGithubRepoLanguages(githubRepos);
+          // console.log("githubRepoLanguages", githubRepoLanguages);
 
           user.id = response.data._id; // Assign the custom user ID to NextAuth's user object
-          //user.username = response.data.username;
+          //** ADD THE ACCESS TOKEN TO THE USER  */ */
         } catch (error: any) {
           console.log("Error creating user in database", error.message);
           return false;
@@ -158,7 +158,6 @@ export const {
         );
         user.id = existingUser._id.toString();
       }
-
       return true;
     },
     async jwt({ token, account, profile }) {
@@ -179,9 +178,11 @@ export const {
       user: any;
       token: any;
     }) {
+      console.log("session", session);
+      console.log("user", user);
+      console.log("token", token);
       // Attach the user's ID to the session object
       if (session && token) {
-        //session.accessToken = token.accessToken;
         session.user.id = token.sub ?? "";
         session.user.githubId = token.githubId;
         session.user.githubUsername = token.githubUsername;

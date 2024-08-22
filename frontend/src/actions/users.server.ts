@@ -76,6 +76,7 @@ const getUserGithubOrganizations = async (url: string) => {
   }
 };
 
+//get user github public gists
 const getUserGithubPublicGists = async (url: string) => {
   if (!url) {
     console.error("user.githubGistsUrl is undefined");
@@ -91,6 +92,7 @@ const getUserGithubPublicGists = async (url: string) => {
   }
 };
 
+// get user github repos
 const getUserGithubRepos = async (url: string) => {
   if (!url) {
     console.error("user.githubReposUrl is undefined");
@@ -98,6 +100,7 @@ const getUserGithubRepos = async (url: string) => {
   }
   try {
     const data = await fetch(url);
+    console.log(data);
     return data.json();
   } catch (error: any) {
     console.log("Error fetching GitHub repos:", error);

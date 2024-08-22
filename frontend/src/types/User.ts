@@ -11,6 +11,7 @@ type TechStackEntry = {
   lines: number;
   projects: number;
   textColor: string;
+  bgColor: string;
   Icon: React.ComponentType<{ className: string }>;
 };
 
@@ -29,7 +30,7 @@ type CodingLanguage = {
 };
 
 type Github = {
-  iD: number;
+  id: number;
   username: string;
   bio: string;
   apiUrl: string;
