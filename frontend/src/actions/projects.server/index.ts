@@ -9,3 +9,4 @@ export { checkIsMember } from "./checkIsMember.server";
 export { updateProject } from "./updateProject.server";
 export { patchPitch } from "./patchPitch.server.";
 export { deleteProject } from "./deleteProject.server";
+export { patchMainLanguage } from "./patchMainLanguage.server";

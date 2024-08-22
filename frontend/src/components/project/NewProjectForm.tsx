@@ -125,7 +125,7 @@ function NewProjectForm() {
   };
 
   return (
-    <div className="mt-6 w-full">
+    <div className="w-full">
       <PageTitle className="text-center">Create a new project</PageTitle>
       <form
         onSubmit={handleSubmit(processForm)}
@@ -232,8 +232,8 @@ function NewProjectForm() {
                 </SelectTrigger>
 
                 <SelectContent id="mainLanguage">
-                  {spokenLanguages.map((language) => (
-                    <SelectItem key={language} value={language}>
+                  {spokenLanguages.map((language, i) => (
+                    <SelectItem key={language + i} value={language}>
                       {language}
                     </SelectItem>
                   ))}
@@ -254,8 +254,8 @@ function NewProjectForm() {
             Tech Stack <span className="text-xl text-red-400">*</span>
           </label>
           <div className="grid grid-cols-3 items-center gap-3">
-            {languagesWithColors.map((stack) => (
-              <div key={stack.language} className="flex items-center gap-2">
+            {languagesWithColors.map((stack, i) => (
+              <div key={stack.language + i} className="flex items-center gap-2">
                 <Controller
                   name="techStack"
                   control={control}
@@ -322,7 +322,7 @@ function NewProjectForm() {
 
         <div className="flex flex-col gap-2">
           {socialsData.map((social, index) => (
-            <div key={index} className="mt-6 flex flex-col gap-2">
+            <div key={social.alt} className="mt-6 flex flex-col gap-2">
               <Image
                 src={social.imageSrc}
                 alt={social.alt}

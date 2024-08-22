@@ -3,9 +3,11 @@
 import { useState } from "react";
 import { Input } from "../../ui/input";
 import { Button } from "../../ui/button";
+import Image from "next/image";
 
 export default function FileUploader() {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [uploadedFile, setUploadedFile] = useState<File | null>(null);
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files.length > 0) {
@@ -31,6 +33,7 @@ export default function FileUploader() {
 
       const data = await response.json();
       console.log("File uploaded:", data);
+      setUploadedFile(data.url);
     } catch (error) {
       console.error("Error uploading file:", error);
     }
@@ -50,6 +53,18 @@ export default function FileUploader() {
       >
         Upload
       </Button>
+
+      {uploadedFile && (
+        <div className="mt-4">
+          <Image
+            src={uploadedFile}
+            width={200}
+            height={200}
+            alt="uploaded file"
+            className="h-24 w-24"
+          />
+        </div>
+      )}
     </div>
   );
 }

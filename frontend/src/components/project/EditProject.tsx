@@ -174,7 +174,7 @@ function EditProjectForm({ project }: { project: Project }) {
                   <SelectValue placeholder="Status" />
                 </SelectTrigger>
 
-                <SelectContent id="mainLanguage">
+                <SelectContent id="status">
                   {projectStatus.map((s) => (
                     <SelectItem className="capitalize" key={s} value={s}>
                       {s}
@@ -286,8 +286,8 @@ function EditProjectForm({ project }: { project: Project }) {
                 </SelectTrigger>
 
                 <SelectContent id="mainLanguage">
-                  {spokenLanguages.map((language) => (
-                    <SelectItem key={language} value={language}>
+                  {spokenLanguages.map((language, i) => (
+                    <SelectItem key={language + i} value={language}>
                       {language}
                     </SelectItem>
                   ))}
@@ -310,8 +310,8 @@ function EditProjectForm({ project }: { project: Project }) {
             Tech Stack <span className="text-xl text-red-400">*</span>
           </label>
           <div className="grid grid-cols-3 items-center gap-3">
-            {languagesWithColors.map((stack) => (
-              <div key={stack.language} className="flex items-center gap-2">
+            {languagesWithColors.map((stack, i) => (
+              <div key={stack.language + i} className="flex items-center gap-2">
                 <Controller
                   name="techStack"
                   control={control}
@@ -376,8 +376,8 @@ function EditProjectForm({ project }: { project: Project }) {
         {/* Socials */}
 
         <div className="flex flex-col gap-2">
-          {socialsData.map((social, index) => (
-            <div key={index} className="mt-6 flex flex-col gap-2">
+          {socialsData.map((social) => (
+            <div key={social.key} className="mt-6 flex flex-col gap-2">
               <Image
                 src={social.imageSrc}
                 alt={social.alt}

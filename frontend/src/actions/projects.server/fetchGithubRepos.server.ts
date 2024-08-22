@@ -12,12 +12,15 @@ const fetchGithubRepos = async () => {
     const { data } = await axios.get(
       `https://api.github.com/users/${owner}/repos?per_page=100`,
     );
+    if (data.status !== 200) {
+      throw new Error("Error fetching Github repos");
+    }
 
     console.log("data", data);
     console.log("Github repo:", data);
     return data;
-  } catch {
-    console.error("Error fetching Github repos");
+  } catch (error) {
+    console.error("Error fetching Github repos:", error);
     return { error: true, message: "Error fetching Github repos" };
   }
 };
