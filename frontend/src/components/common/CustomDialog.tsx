@@ -21,7 +21,7 @@ function CustomDialog({
   title,
   description,
   handler,
-  asChild = false,
+  asChild,
 }: CustomDialogProps) {
   return (
     <Dialog>

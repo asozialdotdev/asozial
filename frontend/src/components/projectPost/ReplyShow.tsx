@@ -166,6 +166,7 @@ function ReplyShow({ replyId, projectPostId, replies, child }: ReplyShowProps) {
                           description="There's no turning back once you delete this reply"
                           handler={handleDelete}
                           trigger={<DeleteIcon key="delete-reply" />}
+                          asChild={false}
                         />
                       </div>
                     )

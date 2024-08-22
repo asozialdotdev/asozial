@@ -103,7 +103,7 @@ const fetchPostByIdAndReplies = async (projectPostId: ProjectPostId) => {
   try {
     const response = await fetch(
       `${baseUrl}/api/project-posts/${projectPostId}`,
-      { next: { revalidate: 60 } },
+      { cache: "no-store" },
     );
     if (!response.ok) {
       throw new Error(`Failed to fetch post: ${response.statusText}`);

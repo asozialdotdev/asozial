@@ -98,6 +98,7 @@ function ParentProjectPostContent({
                     title="Are you sure?"
                     description="There's no turning back once you delete this post"
                     handler={handleDeletePost}
+                    asChild={false}
                   />
 
                   {error && (
