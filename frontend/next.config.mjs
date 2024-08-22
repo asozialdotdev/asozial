@@ -1,4 +1,10 @@
 /** @type {import('next').NextConfig} */
+// @ts-check
+import withPlaiceholder from "@plaiceholder/next";
+/**
+ * @type {import('next').NextConfig}
+ */
+
 const nextConfig = {
   async headers() {
     return [
@@ -73,4 +79,4 @@ const nextConfig = {
   },
 };
 
-export default nextConfig;
+export default withPlaiceholder(nextConfig);

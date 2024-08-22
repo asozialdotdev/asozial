@@ -4,10 +4,13 @@ import { useState } from "react";
 import { Input } from "../../ui/input";
 import { Button } from "../../ui/button";
 import Image from "next/image";
+import { uploadFile } from "@/actions";
 
 export default function FileUploader() {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [uploadedFile, setUploadedFile] = useState<File | null>(null);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string | null>(null);
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files.length > 0) {
@@ -17,25 +20,20 @@ export default function FileUploader() {
 
   const handleFileUpload = async () => {
     if (!selectedFile) return;
+    setError(null);
+    setIsLoading(true);
 
     const formData = new FormData();
     formData.append("imageUrl", selectedFile);
 
-    try {
-      const response = await fetch("http://localhost:5005/api/upload-image", {
-        method: "POST",
-        body: formData,
-      });
-
-      if (!response.ok) {
-        throw new Error("Failed to upload file");
-      }
-
-      const data = await response.json();
-      console.log("File uploaded:", data);
-      setUploadedFile(data.url);
-    } catch (error) {
-      console.error("Error uploading file:", error);
+    const result = await uploadFile(formData);
+    if (result.error) {
+      setError(result.message);
+      setIsLoading(false);
+    } else {
+      setUploadedFile(result);
+      setIsLoading(false);
+      console.log("File uploaded in client", result);
     }
   };
 
@@ -54,17 +52,22 @@ export default function FileUploader() {
         Upload
       </Button>
 
+      {isLoading && <p className="mt-2">Uploading...</p>}
+
       {uploadedFile && (
         <div className="mt-4">
-          <Image
-            src={uploadedFile}
+          {/* <Image
+            src={uploadedFile.url}
             width={200}
             height={200}
             alt="uploaded file"
             className="h-24 w-24"
-          />
+          /> */}
+          FILE UPLOADED
         </div>
       )}
+
+      {error && <p className="mt-2 text-red-500">{error}</p>}
     </div>
   );
 }
