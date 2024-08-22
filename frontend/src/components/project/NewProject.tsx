@@ -1,6 +1,5 @@
 "use client";
 import { useState } from "react";
-import { Button } from "../ui/button";
 import ExistingProjectForm from "./ExistingProjectForm";
 import NewProjectForm from "./NewProjectForm";
 import PageTitle from "../common/ui/PageTitle";
@@ -22,7 +21,7 @@ function NewProject() {
           id="existing-user"
           checked={isExistingProject}
           onCheckedChange={setIsExistingProject}
-          className="data-[state=checked]:bg-dark dark:data-[state=checked]:bg-light data-[state=unchecked]:bg-zinc-500 dark:data-[state=unchecked]:bg-zinc-500"
+          className="data-[state=checked]:bg-dark data-[state=unchecked]:bg-zinc-500 dark:data-[state=checked]:bg-light dark:data-[state=unchecked]:bg-zinc-500"
         />
       </div>
 

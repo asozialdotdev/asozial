@@ -9,13 +9,13 @@ import { cn } from "@/lib/utils";
 import LoadingSpinner from "./LoadingSpinner";
 import { SquareCheckBig, Upload } from "lucide-react";
 
-type ImageT = {
+export type ImageT = {
   url: string;
   placeholder: string;
   message: string;
 };
 
-type FileUploaderProps = {
+type ImageUploaderProps = {
   className?: string;
   variant?:
     | "secondary"
@@ -24,14 +24,14 @@ type FileUploaderProps = {
     | "ghost"
     | "outline"
     | "link";
-  onUploadSucess: (image: ImageT) => void;
+  onUploadSucess?: (image: ImageT) => void;
 };
 
-export default function FileUploader({
+export default function ImageUploader({
   className,
   variant,
   onUploadSucess,
-}: FileUploaderProps) {
+}: ImageUploaderProps) {
   const [uploadedFile, setUploadedFile] = useState<ImageT | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
@@ -78,6 +78,7 @@ export default function FileUploader({
         ref={fileInputRef}
       />
       <Button
+        type="button"
         variant={variant}
         onClick={handleButtonClick}
         className={cn(className)}

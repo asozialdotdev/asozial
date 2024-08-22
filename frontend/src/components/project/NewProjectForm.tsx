@@ -39,12 +39,14 @@ import PageTitle from "../common/ui/PageTitle";
 import { socialsData } from "@/constants";
 
 //Types
-import type { CreateUpdateProject, SocialsData } from "@/types/Project";
+import type { CreateUpdateProject } from "@/types/Project";
+import ImageUploader, { ImageT } from "../common/ui/ImageUploader";
 
 type Inputs = z.infer<typeof createProjectSchema>;
 
 function NewProjectForm() {
   const [error, setError] = useState<string | null>(null);
+  const [uploadedImage, setUploadedImage] = useState<ImageT | null>(null);
 
   const { spokenLanguages, isLoadingSpokenLanguages, errorSpokenLanguages } =
     useSpokenLanguages();
@@ -71,6 +73,8 @@ function NewProjectForm() {
         notion: "",
         gitlab: "",
       },
+      image: "",
+      placeholder: "",
     },
   });
 
@@ -107,12 +111,19 @@ function NewProjectForm() {
         }, {} as any)
       : {};
 
+    const image = uploadedImage?.url || "";
+    const placeholder = uploadedImage?.placeholder || "";
+    setValue("image", image);
+    setValue("placeholder", placeholder);
+
     const finalData: CreateUpdateProject = {
       ...data,
       title: formattedTitle,
       description: formattedDescription,
       pitch: formattedPitch,
       socials: formattedSocials,
+      image,
+      placeholder,
     };
     console.log("finalData", finalData);
     const result = await createProject(finalData);
@@ -131,6 +142,10 @@ function NewProjectForm() {
         onSubmit={handleSubmit(processForm)}
         className="mt-2 flex w-full flex-col gap-2"
       >
+        {/* Image */}
+        <div className="mt-6 flex flex-col gap-2">
+          <ImageUploader onUploadSucess={setUploadedImage} />
+        </div>
         {/* Title */}
         <div className="mt-6 flex flex-col gap-2">
           <label htmlFor="title" className="text-lg font-semibold">

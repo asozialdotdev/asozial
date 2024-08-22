@@ -18,6 +18,8 @@ const createProjectSchema = z.object({
     })
     .optional(),
   status: z.enum(["active", "inactive", "completed"]).default("active"),
+  image: z.string().optional(),
+  placeholder: z.string().optional(),
 });
 
 const createPostSchema = z.object({

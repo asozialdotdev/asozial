@@ -51,6 +51,8 @@ type CreateUpdateProject = {
   techStack: string[];
   mainLanguage: string;
   githubRepo?: string;
+  image?: string;
+  placeholder?: string;
   socials?: {
     slack?: string;
     discord?: string;
@@ -59,4 +61,11 @@ type CreateUpdateProject = {
   };
 };
 
-export type { Project, ProjectId, Member, CreateUpdateProject, SocialsData, Socials };
+export type {
+  Project,
+  ProjectId,
+  Member,
+  CreateUpdateProject,
+  SocialsData,
+  Socials,
+};

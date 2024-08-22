@@ -43,6 +43,8 @@ projectsRouter.post(
         mainLanguage,
         githubRepo,
         socials,
+        image,
+        placeholder,
         userId,
       } = req.body;
       console.log("githubRepo:::::::::::::", githubRepo);
@@ -54,6 +56,8 @@ projectsRouter.post(
         techStack,
         mainLanguage,
         githubRepo,
+        image,
+        placeholder,
         owner: userId,
         socials,
       });
@@ -231,6 +235,8 @@ projectsRouter.put(
         mainLanguage,
         socials,
         status,
+        image,
+        placeholder,
         userId,
       } = req.body;
 
@@ -261,6 +267,8 @@ projectsRouter.put(
           mainLanguage,
           socials,
           status,
+          image,
+          placeholder,
         },
         { new: true, runValidators: true }
       );
