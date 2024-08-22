@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 
 //Components
 import ProjectPostForm from "./ProjectPostForm";
-import PageTitle from "../common/PageTitle";
+import PageTitle from "../common/ui/PageTitle";
 import ProjectPost from "./ProjectPost";
 
 //Types

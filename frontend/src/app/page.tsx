@@ -1,10 +1,10 @@
-import Footer from "@/components/common/Footer";
+import Footer from "@/components/common/layout/Footer";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import PageContainer from "@/components/common/PageContainer";
+import PageContainer from "@/components/common/containers/PageContainer";
 
 import { auth } from "@/auth";
-import { signIn, signOut } from "@/actions/auth.server";
+import { signIn, signOut } from "@/actions/auth.server/auth.server";
 import { AvatarImage } from "@radix-ui/react-avatar";
 import bearlogo from "/public/bearlogo.webp";
 import Image from "next/image";
@@ -20,10 +20,9 @@ async function LandingPage() {
 
           <Image width={450} height={450} src={bearlogo} alt="bear-logo" />
           <form action={signIn}>
-            <Button className="px-8 flex gap-3" type="submit">
+            <Button className="flex gap-3 px-8" type="submit">
               {session?.user ? "Enter" : "Sign In"}
               <FaGithub size={24} />
-
             </Button>
           </form>
 

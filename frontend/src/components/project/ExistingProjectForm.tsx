@@ -1,9 +1,9 @@
 "use client";
 import useFetchReposFromGithub from "@/hooks/projects/useFetchReposFromGithub";
-import PageTitle from "../common/PageTitle";
+import PageTitle from "../common/ui/PageTitle";
 import { Input } from "../ui/input";
 import { useEffect, useRef, useState } from "react";
-import LoadingSpinner from "../common/LoadingSpinner";
+import LoadingSpinner from "../common/ui/LoadingSpinner";
 import { Button } from "../ui/button";
 import { useOutsideClick } from "@/hooks/useOutsideClick";
 import { createProjectFromGithub } from "@/actions";

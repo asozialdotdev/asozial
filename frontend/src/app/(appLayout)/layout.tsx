@@ -6,11 +6,11 @@ import React, { useEffect } from "react";
 import { useSidebarsContext } from "@/context/SidebarsContext";
 
 //Components
-import Main from "@/components/common/Main";
-import Navbar from "@/components/common/Navbar";
+import Main from "@/components/common/layout/Main";
+import Navbar from "@/components/common/layout/Navbar";
 import ProjectSidebar from "@/components/project/ProjectSidebar";
 import UserSidebar from "@/components/user/UserSidebar";
-import AppFooter from "@/components/common/AppFooter";
+import AppFooter from "@/components/common/layout/AppFooter";
 import { auth } from "@/auth";
 import { useSession } from "next-auth/react";
 

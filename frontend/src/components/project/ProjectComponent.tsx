@@ -2,8 +2,8 @@
 import Image from "next/image";
 
 //Components
-import PageTitle from "../common/PageTitle";
-import UserAvatar from "../common/UserAvatar";
+import PageTitle from "../common/ui/PageTitle";
+import UserAvatar from "../common/ui/UserAvatar";
 
 //UI
 import github from "/public/socials/github.png";

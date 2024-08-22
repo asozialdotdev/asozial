@@ -1,4 +1,4 @@
-import PageContainer from "@/components/common/PageContainer";
+import PageContainer from "@/components/common/containers/PageContainer";
 import ProjectLoading from "@/components/project/ProjectLoading";
 import ParentPostLoading from "@/components/projectPost/ParentPostLoading";
 

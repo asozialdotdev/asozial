@@ -32,16 +32,16 @@ import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { createProjectSchema } from "@/lib/schema";
 import { z } from "zod";
+import { useSession } from "next-auth/react";
+
+// Constants
 import { languagesWithColors, projectStatus, socialsData } from "@/constants";
 
 //Components
-import PageTitle from "../common/PageTitle";
+import PageTitle from "../common/ui/PageTitle";
+import CustomDialog from "../common/ui/CustomDialog";
 
 import type { CreateUpdateProject, Project } from "@/types/Project";
-import { useSession } from "next-auth/react";
-import Link from "next/link";
-import CustomDialog from "../common/CustomDialog";
-
 type Inputs = z.infer<typeof createProjectSchema>;
 
 function EditProjectForm({ project }: { project: Project }) {

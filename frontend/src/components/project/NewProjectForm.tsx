@@ -33,7 +33,7 @@ import { z } from "zod";
 import { languagesWithColors } from "@/constants";
 
 //Components
-import PageTitle from "../common/PageTitle";
+import PageTitle from "../common/ui/PageTitle";
 
 //Constants
 import { socialsData } from "@/constants";

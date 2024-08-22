@@ -1,8 +1,8 @@
 // all users in db, searchbar and filter options
 
 import getAllUsers from "@/actions/getAllUsers.server";
-import PageContainer from "@/components/common/PageContainer";
-import PageTitle from "@/components/common/PageTitle";
+import PageContainer from "@/components/common/containers/PageContainer";
+import PageTitle from "@/components/common/ui/PageTitle";
 import type { User } from "@/types/User";
 
 async function Page() {
