@@ -12,6 +12,7 @@ import { auth } from "@/auth";
 //Types
 import { CreateUpdateProject, Project, ProjectId } from "@/types/Project";
 import axios from "axios";
+import { User } from "next-auth";
 
 // Get all projects
 const fetchAllProjects = async () => {
@@ -75,10 +76,12 @@ const searchForMyProjects = async (searchTerm: string) => {
 // GET to get a project from Github
 const fetchGithubRepos = async () => {
   const session = await auth();
+  const owner = session?.user?.githubUsername 
+  console.log("owner", owner);
 
   try {
     const { data } = await axios.get(
-      `https://api.github.com/users/jrcopeti/repos?per_page=100`,
+      `https://api.github.com/users/${owner}/repos?per_page=100`,
     );
 
     console.log("data", data);

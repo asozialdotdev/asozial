@@ -1,4 +1,8 @@
 import { Types } from "mongoose";
+// next-auth.d.ts
+import NextAuth from "next-auth";
+
+
 
 type UserId = Types.ObjectId | string;
 
@@ -8,6 +12,7 @@ type User = {
   email?: string;
   username?: string;
   name?: string;
+  githubUsername?: string;
   company?: string;
   blog?: string;
   twitterUsername?: string;
