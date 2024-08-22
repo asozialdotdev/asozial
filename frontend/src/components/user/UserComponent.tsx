@@ -1,4 +1,3 @@
-import PageTitle from "../common/PageTitle";
 import type { User } from "../../types/User";
 import {
   Mail,
@@ -63,67 +62,67 @@ function UserComponent({ user }: { user: User }) {
         )}
 
         <div className="flex flex-col justify-evenly gap-2">
-          <h3 className="text-2xl font-semibold">{user?.username}</h3>
+          <h3 className="text-2xl font-semibold">{user.username}</h3>
           <p className="text-xs">Github user since {formattedDate}</p>
           <div className="flex flex-row justify-start gap-6 text-xs">
             <TooltipProvider>
               <Tooltip>
                 <TooltipTrigger>
                   <p className="flex flex-row items-center gap-2">
-                    <Users size={12} /> {user?.github?.followerNumber}
+                    <Users size={12} /> {user.github.followerNumber}
                   </p>
                 </TooltipTrigger>
                 <TooltipContent>
-                  <p>{user?.github?.followerNumber} followers</p>
+                  <p>{user.github.followerNumber} followers</p>
                 </TooltipContent>
               </Tooltip>
 
               <Tooltip>
                 <TooltipTrigger>
                   <p className="flex flex-row items-center gap-2">
-                    <Star size={12} /> {user?.github?.subscriptionsNumber}
+                    <Star size={12} /> {user.github.subscriptionsNumber}
                   </p>
                 </TooltipTrigger>
                 <TooltipContent>
-                  <p>{user?.github?.subscriptionsNumber} starred</p>
+                  <p>{user.github.subscriptionsNumber} starred</p>
                 </TooltipContent>
               </Tooltip>
               <Tooltip>
                 <TooltipTrigger>
                   <p className="flex flex-row items-center gap-2">
-                    <Building size={12} /> {user?.github?.organizationsNumber}
+                    <Building size={12} /> {user.github.organizationsNumber}
                   </p>
                 </TooltipTrigger>
                 <TooltipContent>
-                  <p>{user?.github?.organizationsNumber} organizations</p>
+                  <p>{user.github.organizationsNumber} organizations</p>
                 </TooltipContent>
               </Tooltip>
 
               <Tooltip>
                 <TooltipTrigger>
                   <p className="flex flex-row items-center gap-2">
-                    <FolderGit size={12} /> {user?.github?.publicReposNumber}
+                    <FolderGit size={12} /> {user.github.publicReposNumber}
                   </p>
                 </TooltipTrigger>
                 <TooltipContent>
-                  <p>{user?.github?.publicReposNumber} public repos</p>
+                  <p>{user.github.publicReposNumber} public repos</p>
                 </TooltipContent>
               </Tooltip>
               <Tooltip>
                 <TooltipTrigger>
                   <p className="flex flex-row items-center gap-2">
-                    <Code size={12} /> {user?.github?.publicGistsNumber}
+                    <Code size={12} /> {user.github.publicGistsNumber}
                   </p>
                 </TooltipTrigger>
                 <TooltipContent>
-                  <p>{user?.github?.publicGistsNumber} public gists</p>
+                  <p>{user.github.publicGistsNumber} public gists</p>
                 </TooltipContent>
               </Tooltip>
             </TooltipProvider>
           </div>
           <Button variant={"outline"}>
             <a
-              href={user?.github?.url}
+              href={user.github.url}
               target="_blank"
               rel="noreferrer"
               className="flex flex-row items-center gap-2"
@@ -138,16 +137,16 @@ function UserComponent({ user }: { user: User }) {
           <div className="flex flex-row items-center gap-8">
             <Globe size={16} />
             <a
-              href={"https://" + user?.website}
+              href={"https://" + user.website}
               target="_blank"
               rel="noreferrer"
             >
-              {user?.website}
+              {user.website}
             </a>
           </div>
           <div className="flex flex-row items-center gap-8">
             <Mail size={16} />
-            {user?.email}
+            {user.email}
           </div>
           {/* {user.socials && (
               <div className="flex flex-row items-center gap-8">
@@ -165,12 +164,12 @@ function UserComponent({ user }: { user: User }) {
         <div>
           <div className="flex flex-row items-center gap-8">
             <Building size={16} />
-            {user?.company}
+            {user.company}
           </div>
 
           <div className="flex flex-row items-center gap-8">
             <MapPinHouse size={16} />
-            {user?.location}
+            {user.location}
           </div>
         </div>
       </div>
@@ -178,7 +177,7 @@ function UserComponent({ user }: { user: User }) {
         <p
           className={`italic before:text-2xl before:font-bold before:content-['"'] after:text-2xl after:font-bold after:content-['"']`}
         >
-          {user?.github?.bio}
+          {user.github.bio}
         </p>
       </div>
       <div>
@@ -196,7 +195,7 @@ function UserComponent({ user }: { user: User }) {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {user?.codingLanguages?.map(
+            {user.codingLanguages.map(
               ([language, { lines, projects, textColor, bgColor, Icon }]) => (
                 <TableRow key={language}>
                   <TableCell>
