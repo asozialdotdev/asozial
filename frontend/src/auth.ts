@@ -5,6 +5,17 @@ import client from "./lib/db";
 import authConfig from "../auth.config";
 import { baseUrl } from "@/constants";
 import axios from "axios";
+import type { User } from "@/types/User";
+import {
+  getUserGithubFollowers,
+  getUserGithubFollowing,
+  getUserGithubSubscriptions,
+  getUserGithubPublicGists,
+  getUserGithubOrganizations,
+  getUserGithubRepos,
+  getUserGithubRepoLanguages,
+} from "@/actions/users.server";
+import { GithubUser } from "./types/Github";
 
 const GITHUB_CLIENT_ID = process.env.GITHUB_CLIENT_ID;
 const GITHUB_CLIENT_SECRET = process.env.GITHUB_CLIENT_SECRET;
@@ -38,35 +49,87 @@ export const {
 
       if (!existingUser) {
         try {
-          //create user in database
+          //make separate api calls to get user details before creation in db
+          const githubFollowers = await getUserGithubFollowers(
+            profile?.followers_url as string,
+          );
+
+          const githubFollowing = await getUserGithubFollowing(
+            profile?.following_url as string,
+          );
+
+          const githubSubscriptions = await getUserGithubSubscriptions(
+            profile?.subscriptions_url as string,
+          );
+
+          const githubPublicGists = await getUserGithubPublicGists(
+            profile?.gists_url as string,
+          );
+
+          const githubOrganizations = await getUserGithubOrganizations(
+            profile?.organizations_url as string,
+          );
+
+          const githubRepos = await getUserGithubRepos(
+            profile?.repos_url as string,
+          );
+
+          const githubRepoLanguages =
+            await getUserGithubRepoLanguages(githubRepos);
+
+          // const techStack = await getUserTechStack(
+          //   profile?.repos_url as string,
+          // );
+
           const newUser = {
-            name: profile?.name,
-            email: profile?.email,
-            notificationEmail: profile?.notificationEmail,
-            image: profile?.avatar_url,
-            githubId: profile?.id,
-            githubNodeId: profile?.node_id,
-            bio: profile?.bio,
-            username: profile?.login,
-            company: profile?.company,
-            hireable: profile?.hireable,
-            blog: profile?.blog,
-            twitterUsername: profile?.twitter_username,
-            location: profile?.location,
-            githubApiUrl: profile?.url,
-            githubFollowersUrl: profile?.followers_url,
-            githubFollowingUrl: profile?.following_url,
-            githubPublicGistsUrl: profile?.gists_url,
-            githubPrivateGistsNumber: profile?.private_gists,
-            githubStarredUrl: profile?.starred_url,
-            githubSubscriptionsUrl: profile?.subscriptions_url,
-            githubOrganizationsUrl: profile?.organizations_url,
-            githubReposUrl: profile?.repos_url,
-            githubPublicReposNumber: profile?.public_repos,
-            githubPublicGistsNumber: profile?.public_gists,
-            githubCreatedAt: profile?.created_at,
-            githubUpdatedAt: profile?.updated_at,
-            githubCollaboratorsNumber: profile?.collaborators,
+            username: profile?.preferred_username!,
+            name: profile?.name!,
+            email: profile?.email!,
+            notificationEmail: profile?.notificationEmail!,
+            image: profile?.picture,
+            company: profile?.company!,
+            website: profile?.website!,
+            location: profile?.locale!,
+            hireable: profile?.hireable!,
+            codingLanguages: githubRepoLanguages,
+            codingLibraries: null,
+            languagesSpoken: null,
+            socials: [
+              {
+                platform: "twitter",
+                url: profile?.twitter,
+              },
+            ],
+            github: {
+              id: profile?.id,
+              nodeId: profile?.sub,
+              username: profile?.preferred_username,
+              bio: profile?.profile,
+              apiUrl: profile?.profile,
+              followersUrl: profile?.followers_url,
+              followers: githubFollowers,
+              followersNumber: profile?.followers,
+              followingUrl: profile?.following_url,
+              following: githubFollowing,
+              followingNumber: profile?.following,
+              publicGistsUrl: profile?.gists_url,
+              publicGists: githubPublicGists,
+              publicGistsNumber: profile?.public_gists,
+              privateGistsNumber: profile?.private_gists,
+              starredUrl: profile?.starred_url,
+              subscriptionsUrl: profile?.subscriptions_url,
+              subscriptions: githubSubscriptions,
+              subscriptionsNumber: githubSubscriptions.length,
+              organizationsUrl: profile?.organizations_url,
+              organizations: githubOrganizations,
+              organizationsNumber: githubOrganizations.length,
+              reposUrl: profile?.repos_url,
+              publicRepos: githubRepos,
+              publicReposNumber: profile?.public_repos,
+              createdAt: profile?.created_at,
+              updatedAt: profile?.updated_at,
+              collaboratorsNumber: profile?.collaborators,
+            },
           };
           const response = await axios.post(`${baseUrl}/api/auth`, newUser, {
             headers: {
@@ -76,12 +139,13 @@ export const {
 
           user.id = response.data._id; // Assign the custom user ID to NextAuth's user object
           //user.username = response.data.username;
-        } catch (error) {
-          console.error("Error creating user in database", error);
+        } catch (error: any) {
+          console.log("Error creating user in database", error.message);
           return false;
         }
       } else {
         // update user information if they already exist
+        //Benjamin: add users github followers, following, subscriptions, organizations, repos, tech stack
         await db.collection("User").updateOne(
           { email: user.email },
           {
@@ -121,6 +185,7 @@ export const {
         session.user.id = token.sub ?? "";
         session.user.githubId = token.githubId;
         session.user.githubUsername = token.githubUsername;
+        session.user.githubAccessToken = token.githubAccessToken;
       }
 
       return session;
