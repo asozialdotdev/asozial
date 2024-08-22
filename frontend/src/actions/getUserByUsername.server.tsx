@@ -1,10 +1,17 @@
 import { auth } from "@/auth";
 import { baseUrl } from "@/constants";
+import type { User } from "@/types/User";
 
 const getUserByUsername = async () => {
+  "use server";
   const session = await auth();
-  ("use server");
-  const data = await fetch(`${baseUrl}/users/${session?.user?.username}`, {
+  console.log(session);
+  if (!session || !session.user || !session.user.githubUsername) {
+    console.log("Session or username is not defined");
+    return null;
+  }
+  const username = session.user.githubUsername;
+  const data = await fetch(`${baseUrl}/users/${username}`, {
     method: "GET",
   });
   if (!data) {
