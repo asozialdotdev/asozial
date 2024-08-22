@@ -4,7 +4,7 @@ import { useState } from "react";
 
 //Components
 import ReplyForm from "./ReplyForm";
-import UserAvatar from "../common/UserAvatar";
+import UserAvatar from "../common/ui/UserAvatar";
 import EditReplyForm from "./EditReplyForm";
 
 //Ui
@@ -16,8 +16,8 @@ import { formattedData } from "@/utils";
 //Types
 import type { ProjectPostId, Reply, ReplyId } from "@/types/ProjectPost";
 import { useSession } from "next-auth/react";
-import EditIcon from "../common/EditIcon";
-import DeleteIcon from "../common/DeleteIcon";
+import EditIcon from "../common/ui/EditIcon";
+import DeleteIcon from "../common/ui/DeleteIcon";
 import { deleteReply } from "@/actions";
 import { MessageSquareOff } from "lucide-react";
 import CustomDialog from "../common/CustomDialog";

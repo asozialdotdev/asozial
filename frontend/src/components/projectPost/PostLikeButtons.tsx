@@ -14,8 +14,8 @@ import { useTheme } from "next-themes";
 
 //Types
 import { ProjectPost, User } from "@/types/ProjectPost";
-import ThumbsUpIcon from "../common/ThumbsUpIcon";
-import ThumbsDownIcon from "../common/ThumbsDownIcon";
+import ThumbsUpIcon from "../common/ui/ThumbsUpIcon";
+import ThumbsDownIcon from "../common/ui/ThumbsDownIcon";
 
 type ProjectPostLikeButtonsProps = {
   projectPost: ProjectPost;
@@ -90,9 +90,8 @@ function ProjectPostLikeButtons({ projectPost }: ProjectPostLikeButtonsProps) {
     <>
       <div className="mb-4 flex items-center gap-3">
         <div className="flex items-center gap-1">
-          <div className='mt-[0.4rem]'>
-
-          <ThumbsUpIcon handleLike={handleLike} userLiked={userLiked} />
+          <div className="mt-[0.4rem]">
+            <ThumbsUpIcon handleLike={handleLike} userLiked={userLiked} />
           </div>
           <FlipNumbers
             height={16}

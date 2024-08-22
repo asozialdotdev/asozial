@@ -1,11 +1,12 @@
-import PageContainer from "../common/PageContainer";
-import PageTitle from "../common/PageTitle";
+import PageContainer from "../common/containers/PageContainer";
+import PageTitle from "../common/ui/PageTitle";
 import { auth } from "@/auth";
 import dynamic from "next/dynamic";
+import FileUploader from "../common/ui/FileUploader";
 
-const FileUploader = dynamic(() => import("../common/FileUploader"), {
-  ssr: false,
-});
+// const FileUploader = dynamic(() => import("../common/FileUploader"), {
+//   ssr: false,
+// });
 
 async function DashboardContainer() {
   const session = await auth();
@@ -17,7 +18,9 @@ async function DashboardContainer() {
         <div>
           <h2 className="text-lg">
             Welcome back,{" "}
-            <span className="font-semibold">{session?.user?.name}</span>
+            <span className="font-semibold">
+              {session?.user?.githubUsername}
+            </span>
           </h2>
           <p className="text-sm text-zinc-500 dark:text-zinc-400">
             Here's a quick overview of your account.

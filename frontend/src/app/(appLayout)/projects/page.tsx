@@ -5,7 +5,7 @@ import { notFound } from "next/navigation";
 import { fetchAllProjects } from "@/actions";
 //Components
 import MyProjects from "@/components/project/MyProjects";
-import PageContainer from "@/components/common/PageContainer";
+import PageContainer from "@/components/common/containers/PageContainer";
 
 async function MyProjectsPage() {
   const projects = await fetchAllProjects();

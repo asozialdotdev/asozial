@@ -10,12 +10,13 @@ import { useState } from "react";
 import { deleteProjectPost } from "@/actions";
 
 //Components
-import UserAvatar from "../common/UserAvatar";
+import UserAvatar from "../common/ui/UserAvatar";
 import PostLikeButtons from "./PostLikeButtons";
 import ProjectPostContent from "./ProjectPostContent";
 import ReplyCount from "./ReplyCount";
-import EditIcon from "../common/EditIcon";
-import DeleteIcon from "../common/DeleteIcon";
+import EditIcon from "../common/ui/EditIcon";
+import DeleteIcon from "../common/ui/DeleteIcon";
+import CustomDialog from "../common/ui/CustomDialog";
 
 //Ui
 import { FaRegArrowAltCircleRight } from "react-icons/fa";
@@ -23,7 +24,6 @@ import { FaRegArrowAltCircleRight } from "react-icons/fa";
 import { useSession } from "next-auth/react";
 //Types
 import { ProjectPost, Reply } from "@/types/ProjectPost";
-import CustomDialog from "../common/CustomDialog";
 
 type ParentProjectPostContent = {
   post: ProjectPost;

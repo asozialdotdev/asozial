@@ -9,7 +9,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import Link from "next/link";
-import UserAvatar from "../common/UserAvatar";
+import UserAvatar from "../common/ui/UserAvatar";
 import { setStatusIcon, techStackClass } from "@/utils";
 import MyProjectsLoading from "./MyProjectsLoading";
 
@@ -39,16 +39,18 @@ function ProjectCard({ projects, isLoading, error }: ProjectCardProps) {
     <>
       {projects.map((project: Project, i) => (
         <Card
-          className=" overflow-x-hidden max-h-[25rem] min-h-[25rem] min-w-[20rem] max-w-[20rem] overflow-y-auto border-dashed border-zinc-300 bg-zinc-100 pl-1 hover:bg-zinc-100 dark:border-zinc-600 dark:bg-zinc-800 dark:shadow-neutral-700/30 dark:hover:bg-zinc-800 md:bg-inherit md:dark:bg-inherit"
+          className="max-h-[25rem] min-h-[25rem] min-w-[20rem] max-w-[20rem] overflow-y-auto overflow-x-hidden border-dashed border-zinc-300 bg-zinc-100 pl-1 hover:bg-zinc-100 dark:border-zinc-600 dark:bg-zinc-800 dark:shadow-neutral-700/30 dark:hover:bg-zinc-800 md:bg-inherit md:dark:bg-inherit"
           key={project._id.toString()}
         >
           <CardHeader>
             <Link href={`/projects/${project._id}`}>
-              <CardTitle className="capitalize hover:opacity-75">{project.title}</CardTitle>
+              <CardTitle className="capitalize hover:opacity-75">
+                {project.title}
+              </CardTitle>
             </Link>
             <CardDescription>{project.description}</CardDescription>
           </CardHeader>
-          <CardContent className="flex w-full gap-2 flex-wrap">
+          <CardContent className="flex w-full flex-wrap gap-2">
             {project.techStack.map((tech) => (
               <p key={tech} className={techStackClass(tech)}>
                 {tech}
@@ -89,7 +91,7 @@ function ProjectCard({ projects, isLoading, error }: ProjectCardProps) {
           </CardContent>
           <CardFooter>
             <p className="text-sm capitalize text-neutral-500 dark:text-neutral-400">
-             {setStatusIcon(project.status)} {project.status}
+              {setStatusIcon(project.status)} {project.status}
             </p>
           </CardFooter>
         </Card>

@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 import { Kanit } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/common/Navbar";
-import Footer from "@/components/common/Footer";
+import Footer from "@/components/common/layout/Footer";
 import Providers from "./providers";
 
 const kanit = Kanit({

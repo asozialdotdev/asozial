@@ -3,7 +3,7 @@ import { useState } from "react";
 import { Button } from "../ui/button";
 import ExistingProjectForm from "./ExistingProjectForm";
 import NewProjectForm from "./NewProjectForm";
-import PageTitle from "../common/PageTitle";
+import PageTitle from "../common/ui/PageTitle";
 
 function NewProject() {
   const [isExistingProject, setIsExistingProject] = useState(false);
@@ -21,7 +21,7 @@ function NewProject() {
     setIsNewProjectForm(true);
   };
   return (
-    <div className="flex flex-col gap-4 w-full">
+    <div className="flex w-full flex-col gap-4">
       <PageTitle className="text-center">Start a new project</PageTitle>
 
       <div>

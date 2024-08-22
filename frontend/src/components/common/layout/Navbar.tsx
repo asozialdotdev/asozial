@@ -13,14 +13,13 @@ import { useWindowWidth } from "@/hooks/useWindowWidth";
 import { useSidebarsContext } from "@/context/SidebarsContext";
 
 //Components
-import ToggleTheme from "./ToggleTheme";
-
+import ToggleTheme from "../ui/ToggleTheme";
 //UI
 import { FaGithub, FaLinkedin, FaRegUserCircle } from "react-icons/fa";
 import { IoMenu, IoMoonOutline, IoSunnyOutline } from "react-icons/io5";
 import { PiUserCircleGearDuotone, PiUserFocusBold } from "react-icons/pi";
 import { TbUserSquareRounded } from "react-icons/tb";
-import { Button } from "../ui/button";
+import { Button } from "@/components/ui/button";
 import logo from "/public/logo.png";
 import { contributors } from "@/constants";
 
