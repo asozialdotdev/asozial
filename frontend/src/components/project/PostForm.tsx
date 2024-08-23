@@ -1,20 +1,25 @@
 "use client";
-
+//Next
+import Image from "next/image";
 //Actions
 import { createProjectPost } from "@/actions";
 //Hooks
 import { useFormState } from "react-dom";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 //Components
 import ProjectPostFormButton from "./ProjectPostFormButton";
+import ImageUploader, { ImageT } from "../common/ui/ImageUploader";
 
 //Ui
 import { Input } from "../ui/input";
 import { Textarea } from "../ui/textarea";
+
+//Types
 import type { ProjectId } from "@/types/Project";
 
 function PostForm({ projectId }: { projectId: ProjectId }) {
+  const [uploadImage, setUploadImage] = useState<ImageT | null>(null);
   const [formState, action] = useFormState(
     createProjectPost.bind(null, projectId),
     {
@@ -28,6 +33,7 @@ function PostForm({ projectId }: { projectId: ProjectId }) {
   useEffect(() => {
     if (formState.success) {
       formRef.current?.reset();
+      setUploadImage(null);
     }
   }, [formState]);
 
@@ -81,6 +87,36 @@ function PostForm({ projectId }: { projectId: ProjectId }) {
             {formState.errors?.content.join(", ")}
           </span>
         )}
+      </div>
+
+      <div>
+        <input
+          type="hidden"
+          name="image"
+          value={uploadImage ? uploadImage.url : ""}
+        />
+        <input
+          type="hidden"
+          name="placeholder"
+          value={uploadImage ? uploadImage.placeholder : ""}
+        />
+        <ImageUploader
+          variant="outline"
+          onUploadSucess={setUploadImage}
+          className="my-1"
+        />
+        <div>
+          {uploadImage && (
+            <Image
+              src={uploadImage.url}
+              alt="uploaded-image"
+              width={600}
+              height={600}
+              blurDataURL={uploadImage.placeholder}
+              className="mt-4 rounded-md"
+            />
+          )}
+        </div>
       </div>
 
       <ProjectPostFormButton editing={false} />

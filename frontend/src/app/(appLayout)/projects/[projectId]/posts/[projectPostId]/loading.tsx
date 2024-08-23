@@ -1,4 +1,4 @@
-import PageContainer from "@/components/common/PageContainer";
+import PageContainer from "@/components/common/containers/PageContainer";
 import ParentPostLoading from "@/components/projectPost/ParentPostLoading";
 
 function LoadingProjectPostById() {

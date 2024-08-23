@@ -87,6 +87,8 @@ projectsRouter.post(
         mainLanguage,
         githubRepo,
         socials,
+        image,
+        placeholder,
         userId,
       } = req.body;
       console.log("githubRepo:::::::::::::", githubRepo);
@@ -98,6 +100,8 @@ projectsRouter.post(
         techStack,
         mainLanguage,
         githubRepo,
+        image,
+        placeholder,
         owner: userId,
         socials,
       });
@@ -214,8 +218,8 @@ projectsRouter.get(
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       const project = await Project.findById(req.params.projectId)
-        .populate("membersJoined", "name image")
-        .populate("owner", "name image")
+        .populate("membersJoined", "name username image")
+        .populate("owner", "name username image")
         .exec();
       if (!project) {
         return res.status(404).json({ error: "Project not found" });
@@ -300,6 +304,8 @@ projectsRouter.put(
         mainLanguage,
         socials,
         status,
+        image,
+        placeholder,
         userId,
       } = req.body;
 
@@ -330,6 +336,8 @@ projectsRouter.put(
           mainLanguage,
           socials,
           status,
+          image,
+          placeholder,
         },
         { new: true, runValidators: true }
       );

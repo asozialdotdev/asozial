@@ -1,14 +1,15 @@
 "use client";
 import useFetchReposFromGithub from "@/hooks/projects/useFetchReposFromGithub";
-import PageTitle from "../common/PageTitle";
+import PageTitle from "../common/ui/PageTitle";
 import { Input } from "../ui/input";
 import { useEffect, useRef, useState } from "react";
-import LoadingSpinner from "../common/LoadingSpinner";
+import LoadingSpinner from "../common/ui/LoadingSpinner";
 import { Button } from "../ui/button";
 import { useOutsideClick } from "@/hooks/useOutsideClick";
 import { createProjectFromGithub } from "@/actions";
 import Link from "next/link";
 import { Project } from "@/types/Project";
+import LoadingTextButton from "../common/ui/LoadingTextButton";
 
 type GithubRepo = {
   id: number;
@@ -84,6 +85,8 @@ function ExistingProjectForm() {
     }
     setIsLoadingCreating(false);
   };
+
+  console.log("errorRepos", errorRepos);
 
   if (isLoadingRepos) {
     return (
@@ -165,7 +168,7 @@ function ExistingProjectForm() {
               <div>
                 <Button onClick={handleCreateProject} className="p-8 text-xl">
                   {isLoadingCreating ? (
-                    <LoadingSpinner />
+                    <LoadingTextButton text="Creating Project" />
                   ) : (
                     <span>Create Project</span>
                   )}
@@ -177,9 +180,7 @@ function ExistingProjectForm() {
                   Project created successfully
                 </span>
                 <Link href={`/projects/${project?._id}`}>
-                  <Button className="p-8 text-xl" onClick={() => {}}>
-                    Go to project
-                  </Button>
+                  <Button className="p-8 text-xl">Go to project</Button>
                 </Link>
               </div>
             )}

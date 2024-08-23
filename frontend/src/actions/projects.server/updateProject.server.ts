@@ -1,0 +1,38 @@
+'use server'
+import { auth } from "@/auth";
+import { CreateUpdateProject, ProjectId } from "@/types/Project";
+import { fetchProjectById } from "./fetchProjectById.server";
+import { baseUrl } from "@/constants";
+import { revalidatePath } from "next/cache";
+
+const updateProject = async (
+  projectId: ProjectId,
+  data: CreateUpdateProject,
+) => {
+  const session = await auth();
+
+  try {
+    const project = await fetchProjectById(projectId);
+    if (!project) {
+      throw new Error("Project not found");
+    }
+
+    const response = await fetch(`${baseUrl}/api/projects/${projectId}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ ...data, userId: session?.user?.id }),
+    });
+
+    const updateProject = await response.json();
+    console.log("Updated updateProject:", updateProject);
+    revalidatePath(`/projects/${projectId}`);
+    return "Project updated";
+  } catch (error) {
+    console.error("Error updating project:", error);
+    return "Error updating project";
+  }
+};
+
+export { updateProject };

@@ -6,17 +6,20 @@ function useFetchReposFromGithub() {
   const [githubRepos, setGithubRepos] = useState([]);
   const [isLoadingRepos, setIsLoadingRepos] = useState(true);
   const [errorRepos, setErrorRepos] = useState("");
-
+  console.log("githubERRORRepos", errorRepos);
   useEffect(() => {
     const getGithubRepos = async () => {
       setIsLoadingRepos(true);
       setErrorRepos("");
       try {
         const result = await fetchGithubRepos();
-        setGithubRepos(result);
-      } catch (errorRepos) {
+        if (result.error) {
+          setErrorRepos(result.message);
+        } else {
+          setGithubRepos(result);
+        }
+      } catch (error) {
         console.error("Error in searching for projects");
-        setErrorRepos("Error getting your projects. Please try again.");
       } finally {
         setIsLoadingRepos(false);
       }

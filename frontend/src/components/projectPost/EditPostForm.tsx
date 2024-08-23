@@ -14,13 +14,16 @@ import { Input } from "../ui/input";
 import { Textarea } from "../ui/textarea";
 import type { ProjectId } from "@/types/Project";
 import { ProjectPost } from "@/types/ProjectPost";
+import ImageUploader, { ImageT } from "../common/ui/ImageUploader";
 
 type EditPostFormProps = {
   projectPost: ProjectPost;
   setIsEditing: Dispatch<SetStateAction<boolean>>;
+  image?: ImageT;
+  setImage: Dispatch<SetStateAction<ImageT | undefined>>;
 };
 
-function EditPostForm({ projectPost, setIsEditing }: EditPostFormProps) {
+function EditPostForm({ projectPost, setIsEditing, image, setImage }: EditPostFormProps) {
   const postId = projectPost._id;
   const [formState, action] = useFormState(
     updateProjectPost.bind(null, postId),
@@ -81,6 +84,20 @@ function EditPostForm({ projectPost, setIsEditing }: EditPostFormProps) {
             {formState.errors?.content.join(", ")}
           </span>
         )}
+
+        <div>
+          <input type="hidden" name="image" value={image ? image.url : ""} />
+          <input
+            type="hidden"
+            name="placeholder"
+            value={image ? image.placeholder : ""}
+          />
+          <ImageUploader
+            variant="outline"
+            onUploadSucess={setImage}
+            className="my-1"
+          />
+        </div>
       </div>
 
       <ProjectPostFormButton editing />

@@ -1,4 +1,10 @@
 /** @type {import('next').NextConfig} */
+// @ts-check
+import withPlaiceholder from "@plaiceholder/next";
+/**
+ * @type {import('next').NextConfig}
+ */
+
 const nextConfig = {
   async headers() {
     return [
@@ -63,8 +69,14 @@ const nextConfig = {
         port: "",
         pathname: "/**",
       },
+      {
+        protocol: "https",
+        hostname: "res.cloudinary.com",
+        port: "",
+        pathname: "/**",
+      },
     ],
   },
 };
 
-export default nextConfig;
+export default withPlaiceholder(nextConfig);

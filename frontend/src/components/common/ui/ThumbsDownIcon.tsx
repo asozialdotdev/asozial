@@ -23,7 +23,7 @@ function ThumbsDownIcon({ handleDislike, userDisliked }: ThumbsDownIconProps) {
             <ThumbsDown size={20} />
           </span>
         </TooltipTrigger>
-        <TooltipContent>Reply</TooltipContent>
+        <TooltipContent>Dislike</TooltipContent>
       </Tooltip>
     </TooltipProvider>
   );

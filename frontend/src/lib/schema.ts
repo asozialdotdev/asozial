@@ -18,11 +18,15 @@ const createProjectSchema = z.object({
     })
     .optional(),
   status: z.enum(["active", "inactive", "completed"]).default("active"),
+  image: z.string().optional(),
+  placeholder: z.string().optional(),
 });
 
 const createPostSchema = z.object({
   title: z.string().min(1, "Your thread needs a title"),
   content: z.string().min(1, "At least try to write something"),
+  image: z.string().optional(),
+  placeholder: z.string().optional(),
 });
 
 const createReplySchema = z.object({

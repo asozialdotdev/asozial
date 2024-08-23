@@ -15,8 +15,8 @@ import {
   Layers,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import PageContainer from "@/components/common/PageContainer";
-import PageTitle from "@/components/common/PageTitle";
+import PageContainer from "@/components/common/containers/PageContainer";
+import PageTitle from "@/components/common/ui/PageTitle";
 import Image from "next/image";
 
 import {

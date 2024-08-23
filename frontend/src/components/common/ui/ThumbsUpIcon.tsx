@@ -23,7 +23,7 @@ function ThumbsUpIcon({ handleLike, userLiked }: ThumbsUpIconProps) {
             <ThumbsUp size={20} />
           </span>
         </TooltipTrigger>
-        <TooltipContent>Reply</TooltipContent>
+        <TooltipContent>Like</TooltipContent>
       </Tooltip>
     </TooltipProvider>
   );

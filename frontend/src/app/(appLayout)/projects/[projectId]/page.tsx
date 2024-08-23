@@ -2,15 +2,15 @@
 //Next
 import { notFound } from "next/navigation";
 //Actions
-import { fetchProjectPosts } from "@/actions";
 import {
+  fetchProjectPosts,
   checkIsMember,
   fetchProjectById,
-  handleJoinProject,
-} from "@/actions/projects.server";
+  joinAProject,
+} from "@/actions";
 
 //Components
-import PageContainer from "@/components/common/PageContainer";
+import PageContainer from "@/components/common/containers/PageContainer";
 import ProjectComponent from "@/components/project/ProjectComponent";
 import ProjectPostsList from "@/components/projectPost/ProjectPostsList";
 
@@ -21,19 +21,19 @@ import { Button } from "@/components/ui/button";
 import { auth } from "@/auth";
 
 //Types
-import type { ProjectId } from "@/types/Project";
-
-// const membersJoined = ["Benjamin", "Mirko", "John", "Jane", "José"];
+import type { Member, ProjectId } from "@/types/Project";
 
 async function Page({ params }: { params: { projectId: ProjectId } }) {
   const session = await auth();
   const { projectId } = params;
+
   const project = await fetchProjectById(projectId);
 
   const posts = await fetchProjectPosts(projectId);
 
-  const isMember = await checkIsMember(projectId);
-
+  const isMember = project.membersJoined.some(
+    (member: Member) => member._id === session?.user?.id,
+  );
   const isOwner = project.owner._id === session?.user?.id;
 
   if (!project) {
@@ -53,7 +53,7 @@ async function Page({ params }: { params: { projectId: ProjectId } }) {
           <h3 className="text-xl font-semibold">
             Join this project to see the threads
           </h3>
-          <form action={handleJoinProject}>
+          <form action={joinAProject}>
             <input type="hidden" name="projectId" value={project._id} />
             <Button type="submit">Join this project</Button>
           </form>

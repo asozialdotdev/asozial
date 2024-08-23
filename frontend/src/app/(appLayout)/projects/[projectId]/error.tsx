@@ -1,6 +1,6 @@
 "use client";
 
-import PageContainer from "@/components/common/PageContainer";
+import PageContainer from "@/components/common/containers/PageContainer";
 
 function ErrorProjectById() {
   return (

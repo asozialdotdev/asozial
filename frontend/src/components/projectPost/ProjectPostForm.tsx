@@ -1,6 +1,6 @@
 //Components
 import PostForm from "../project/PostForm";
-import PageTitle from "../common/PageTitle";
+import PageTitle from "../common/ui/PageTitle";
 
 //Types
 import type { ProjectId } from "@/types/Project";

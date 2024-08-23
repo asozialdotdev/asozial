@@ -18,7 +18,7 @@ const storage = new CloudinaryStorage({
   cloudinary: cloudinary,
   params: {
     folder: "asozial",
-    allowed_formats: ["jpg", "png", "jpeg"],
+    allowed_formats: ["jpg", "png", "jpeg", "webp"],
     public_id: (req, file) => {
       const timestamp = Date.now();
       return `${file.fieldname}-${timestamp}`;

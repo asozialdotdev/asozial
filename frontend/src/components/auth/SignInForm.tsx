@@ -3,7 +3,7 @@
 import { FaGithub } from "react-icons/fa";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
-import PageTitle from "../common/PageTitle";
+import PageTitle from "../common/ui/PageTitle";
 
 function SignInForm() {
   const onSubmit = (e: React.FormEvent) => {
