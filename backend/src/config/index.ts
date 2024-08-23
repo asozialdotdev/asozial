@@ -19,6 +19,8 @@ export default (app: Express.Application) => {
     })
   );
 
+  app.use(Express.json({ limit: "100mb" }));
+
   app.use(Morgan("dev"));
   app.use(Express.json());
   app.use(Express.urlencoded({ extended: true }));

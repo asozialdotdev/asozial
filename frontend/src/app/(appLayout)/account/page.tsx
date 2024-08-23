@@ -1,53 +1,24 @@
-"use client";
-
-import PageCard from "@/components/common/PageCard";
-import PageContainer from "@/components/common/PageContainer";
-import PageTitle from "@/components/common/PageTitle";
+import { notFound } from "next/navigation";
+import PageContainer from "@/components/common/containers/PageContainer";
+import { getUserByUsername } from "@/actions/users.server/getUserByUsername.server";
+import UserComponent from "@/components/user/UserComponent";
+import { auth } from "@/auth";
 import { User } from "@/types/User";
-import { useEffect, useState } from "react";
 
-function Page() {
-  const [user, setUser] = useState<User>();
-  useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        const accessToken = localStorage.getItem("accessToken");
-        const response = await fetch("http://localhost:5005/account", {
-          method: "GET",
-          headers: {
-            Authorization: `${accessToken}`,
-          },
-        });
-        console.log(response);
-        if (!response.ok) {
-          throw new Error("Network response was not ok");
-        }
-        const userData: User = await response.json();
-        setUser(userData);
-      } catch (error) {
-        console.error("Failed to fetch user:", error);
-      }
-    };
-    fetchUser();
-  }, []);
+async function AccountPage() {
+  const session = await auth();
+  if (!session || typeof session.user.githubUsername !== "string") {
+    return notFound();
+  }
+  const user = await getUserByUsername(session?.user.githubUsername);
+  if (!user) {
+    return notFound();
+  }
   return (
     <PageContainer className="gap-8">
-      {user && (
-        <>
-          <PageTitle>{user.username}</PageTitle>
-          <PageCard>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Sit non
-            provident, dolore magnam totam quis necessitatibus dolorum harum
-            dignissimos laboriosam.
-          </PageCard>
-          <PageCard>
-            Lorem ipsum dolor, sit amet consectetur adipisicing elit. Ipsa,
-            pariatur.
-          </PageCard>
-        </>
-      )}
+      <UserComponent user={user} />
     </PageContainer>
   );
 }
 
-export default Page;
+export default AccountPage;

@@ -1,6 +1,30 @@
 import { Types } from "mongoose";
+import { StaticImageData } from "next/image";
 
-type ProjectId = Types.ObjectId;
+type SocialPlatforms = "slack" | "discord" | "notion" | "gitlab";
+
+type SocialsData = {
+  key: SocialPlatforms;
+  placeholder: string;
+  imageSrc: StaticImageData;
+  alt: string;
+};
+
+type ProjectId = Types.ObjectId | string;
+type Member = {
+  _id: Types.ObjectId | string;
+  avatarUrl: string
+  image: string;
+  name: string;
+  username: string
+};
+
+type Socials = {
+  slack?: string;
+  discord?: string;
+  notion?: string;
+  gitlab?: string;
+};
 
 type Project = {
   _id: ProjectId;
@@ -8,14 +32,42 @@ type Project = {
   description: string;
   githubRepo: string;
   techStack: string[];
-  owner: Types.ObjectId;
-  membersJoined: Types.ObjectId[];
-  membersApplied: Types.ObjectId[];
-  membersInvited: Types.ObjectId[];
+  owner: Member;
+  pitch: string;
+  image?: string;
+  placeholder?: string;
+  mainLanguage: string;
+  membersJoined: Member[];
+  membersApplied: Member[];
+  membersInvited: Member[];
   status: "active" | "inactive" | "completed";
-  posts: Types.ObjectId[];
+  socials?: Socials;
   createdAt?: Date;
   updatedAt?: Date;
 };
 
-export type { Project, ProjectId };
+type CreateUpdateProject = {
+  title: string;
+  description: string;
+  pitch: string;
+  techStack: string[];
+  mainLanguage: string;
+  githubRepo?: string;
+  image?: string;
+  placeholder?: string;
+  socials?: {
+    slack?: string;
+    discord?: string;
+    notion?: string;
+    gitlab?: string;
+  };
+};
+
+export type {
+  Project,
+  ProjectId,
+  Member,
+  CreateUpdateProject,
+  SocialsData,
+  Socials,
+};

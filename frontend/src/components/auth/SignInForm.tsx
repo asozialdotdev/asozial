@@ -1,13 +1,9 @@
 "use client";
-import { useEffect } from "react";
+
 import { FaGithub } from "react-icons/fa";
-import { useSearchParams } from "next/navigation";
-import getUser from "@/actions/getUser.server";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
-import PageTitle from "../common/PageTitle";
-import axios from "axios";
-import { useSignInContext } from "@/context/SignInContext";
+import PageTitle from "../common/ui/PageTitle";
 
 function SignInForm() {
   const onSubmit = (e: React.FormEvent) => {

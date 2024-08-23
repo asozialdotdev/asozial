@@ -1,19 +1,39 @@
-import Footer from "@/components/common/Footer";
+import Footer from "@/components/common/layout/Footer";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import PageContainer from "@/components/common/PageContainer";
+import PageContainer from "@/components/common/containers/PageContainer";
 
-function LandingPage() {
+import { auth } from "@/auth";
+import {signIn} from "@/actions"
+import { AvatarImage } from "@radix-ui/react-avatar";
+import bearlogo from "/public/bearlogo.webp";
+import Image from "next/image";
+import { FaGithub } from "react-icons/fa";
+
+async function LandingPage() {
+  const session = await auth();
   return (
     <>
-      <PageContainer className="my-auto gap-10">
-        <h1>This is the Landing Page</h1>
-        <Button>
-          <Link href="/dashboard">Go to Dashboard</Link>
-        </Button>
-        <Button>
-          <Link href="/auth">Continue with Github</Link>
-        </Button>
+      <PageContainer>
+        <div className="flex flex-col items-center gap-4">
+          <h1 className="text-7xl">asozial</h1>
+
+          <Image width={450} height={450} src={bearlogo} alt="bear-logo" />
+          <form action={signIn}>
+            <Button className="flex gap-3 px-8" type="submit">
+              {session?.user ? "Enter" : "Sign In"}
+              <FaGithub size={24} />
+            </Button>
+          </form>
+
+          <div>
+            {session?.user ? (
+              <div>You are logged in</div>
+            ) : (
+              <div>Sign in to continue</div>
+            )}
+          </div>
+        </div>
       </PageContainer>
       <Footer />
     </>

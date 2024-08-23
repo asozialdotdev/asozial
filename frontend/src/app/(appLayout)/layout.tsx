@@ -6,15 +6,23 @@ import React, { useEffect } from "react";
 import { useSidebarsContext } from "@/context/SidebarsContext";
 
 //Components
-import Main from "@/components/common/Main";
-import Navbar from "@/components/common/Navbar";
+import Main from "@/components/common/layout/Main";
+import Navbar from "@/components/common/layout/Navbar";
 import ProjectSidebar from "@/components/project/ProjectSidebar";
 import UserSidebar from "@/components/user/UserSidebar";
-import AppFooter from "@/components/common/AppFooter";
+import AppFooter from "@/components/common/layout/AppFooter";
+import { auth } from "@/auth";
+import { useSession } from "next-auth/react";
 
 function AppLayout({ children }: { children: React.ReactNode }) {
+  const session = useSession();
+  console.log("session:", session);
   const { isUserSidebarOpen, isProjectSidebarOpen } = useSidebarsContext();
   const isOverlayVisible = isUserSidebarOpen || isProjectSidebarOpen;
+
+  // if (!session.data) {
+  //   return <div>must be logged in</div>;
+  // }
 
   return (
     <>
@@ -22,22 +30,26 @@ function AppLayout({ children }: { children: React.ReactNode }) {
 
       <div className="relative flex h-full w-full overflow-x-hidden bg-light px-4 dark:bg-dark">
         <aside
-          className={`absolute bottom-0 left-0 top-0 z-40 h-full w-[14rem] border-y border-dark bg-neutral-300 transition-transform duration-300 ease-in-out dark:border-light dark:bg-neutral-700 lg:w-[18rem] ${
-            isUserSidebarOpen ? "translate-x-0" : "-translate-x-full"
+          className={`absolute bottom-0 left-0 top-0 z-40 h-full w-[14rem] border-y border-dark bg-gray-100 transition-transform duration-300 ease-in-out dark:border-light dark:bg-zinc-900 lg:w-[18rem] ${
+            isUserSidebarOpen
+              ? "translate-x-0 xl:-translate-x-full"
+              : "-translate-x-full xl:translate-x-0"
           }`}
         >
           <UserSidebar />
         </aside>
         <Main>
-          {/* {isOverlayVisible && (
-            <div className="absolute inset-0 z-40 bg-dark opacity-20 dark:opacity-50"></div>
-          )} */}
+          {isOverlayVisible && (
+            <div className="absolute inset-0 z-40 bg-dark opacity-20 dark:opacity-50 lg:hidden"></div>
+          )}
           {children}
         </Main>
 
         <aside
-          className={`absolute bottom-0 right-0 top-0 z-50 h-full w-[14rem] border-y border-dark bg-neutral-300 transition-transform duration-300 ease-in-out dark:border-light dark:bg-neutral-700 lg:w-[18rem] ${
-            isProjectSidebarOpen ? "translate-x-0" : "translate-x-full"
+          className={`absolute bottom-0 right-0 top-0 z-50 h-full w-[14rem] border-y border-dark bg-gray-100 transition-transform duration-300 ease-in-out dark:border-light dark:bg-zinc-900 lg:w-[18rem] ${
+            isProjectSidebarOpen
+              ? "translate-x-0 xl:translate-x-full"
+              : "translate-x-full xl:translate-x-0"
           }`}
         >
           <ProjectSidebar />
