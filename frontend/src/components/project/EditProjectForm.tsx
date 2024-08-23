@@ -174,6 +174,7 @@ function EditProjectForm({ project }: { project: Project }) {
           isSubmitting={isSubmitting}
           handleDeleteProject={handleDeleteProject}
           error={error}
+          edit
         />
       </form>
     </div>

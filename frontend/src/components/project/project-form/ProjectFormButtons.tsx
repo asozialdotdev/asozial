@@ -5,13 +5,15 @@ import { Button } from "@/components/ui/button";
 type ProjectFormButtonsProps = {
   isSubmitting: boolean;
   error: string | null;
-  handleDeleteProject: () => void;
+  handleDeleteProject?: () => void;
+  edit?: boolean;
 };
 
 function ProjectFormButtons({
   isSubmitting,
   error,
   handleDeleteProject,
+  edit,
 }: ProjectFormButtonsProps) {
   return (
     <>
@@ -20,28 +22,32 @@ function ProjectFormButtons({
         type="submit"
         className="mt-4 bg-dark dark:bg-light"
       >
-        {isSubmitting ? <LoadingTextButton text="Updating" /> : "Update"}
+        {isSubmitting ? (
+          <LoadingTextButton text={edit ? "Updating" : "Creating"} />
+        ) : edit ? (
+          "Update"
+        ) : (
+          "Create"
+        )}
       </Button>
       {error && (
         <span className="text-base font-light text-red-700 dark:text-red-700">
           {error}
         </span>
       )}
-      <CustomDialog
-        title="Are you sure?"
-        description="There's no turning back once you delete this project"
-        handler={handleDeleteProject}
-        trigger={
-          <Button
-            onClick={handleDeleteProject}
-            variant={"destructive"}
-            className="mt-2 w-full"
-          >
-            Delete
-          </Button>
-        }
-        asChild
-      />
+      {edit && handleDeleteProject && (
+        <CustomDialog
+          title="Are you sure?"
+          description="There's no turning back once you delete this project"
+          handler={handleDeleteProject}
+          trigger={
+            <Button variant={"destructive"} className="mt-2 w-full">
+              Delete
+            </Button>
+          }
+          asChild
+        />
+      )}
     </>
   );
 }

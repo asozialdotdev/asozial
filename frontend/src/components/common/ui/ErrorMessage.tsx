@@ -1,9 +1,8 @@
 import { cn } from "@/lib/utils";
-import { ClassValue } from "clsx";
 
 type ErrorMessageProps = {
   children: React.ReactNode;
-  className?: ClassValue[];
+  className?: string;
 };
 
 function ErrorMessage({ children, className }: ErrorMessageProps) {

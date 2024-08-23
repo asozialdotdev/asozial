@@ -188,6 +188,7 @@ function SyncedProjectForm({ project, syncedData }: SyncedProjectFormProps) {
           isSubmitting={isSubmitting}
           handleDeleteProject={handleDeleteProject}
           error={error}
+          edit
         />
       </form>
     </div>

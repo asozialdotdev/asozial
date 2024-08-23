@@ -1,6 +1,5 @@
 import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
-import { ClassValue } from "clsx";
 
 type CustomTextareaProps = {
   placeholder: string;
