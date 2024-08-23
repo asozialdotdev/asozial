@@ -24,7 +24,7 @@ function ButtonBack({ className, size = 25 }: ButtonBackProps) {
           <Button
             variant={"ghost"}
             size="icon"
-            className={cn(className)}
+            className={cn("hover:opacity-75", className)}
             onClick={router.back}
           >
             <SquareChevronLeft size={size} />

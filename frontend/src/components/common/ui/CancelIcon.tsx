@@ -19,7 +19,7 @@ const CancelIcon = forwardRef<HTMLSpanElement, CancelIconProps>(
           <TooltipTrigger>
             <span ref={ref} onClick={handler}>
               <SquareX
-                size={20}
+                size={23}
                 className="-ml-1 mb-4 flex cursor-pointer items-center gap-2 text-base hover:opacity-75"
               />
             </span>
