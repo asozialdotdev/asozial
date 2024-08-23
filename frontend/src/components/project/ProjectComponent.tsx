@@ -61,7 +61,6 @@ async function ProjectComponent({ project }: { project: Project }) {
         </div>
       </div>
 
-      {/* <ButtonBack /> */}
 
       {/* Description */}
       <div className="mt-4 flex flex-col gap-2">

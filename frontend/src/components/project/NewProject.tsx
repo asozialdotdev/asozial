@@ -13,7 +13,7 @@ function NewProject() {
       <PageTitle className="text-center">Start a new project</PageTitle>
 
       <div className="flex items-center justify-center gap-4">
-        <h2 className="text-xl">
+        <h2 className="text-xl font-semibold">
           Does your project already have an Github repository?
         </h2>
 

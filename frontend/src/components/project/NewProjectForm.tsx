@@ -137,7 +137,6 @@ function NewProjectForm() {
 
   return (
     <div className="w-full">
-      <PageTitle className="text-center">Create a new project</PageTitle>
       <form
         onSubmit={handleSubmit(processForm)}
         className="mt-2 flex w-full flex-col gap-2"
