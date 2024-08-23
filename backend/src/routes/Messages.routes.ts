@@ -8,7 +8,7 @@ const messagesRouter = express.Router();
 // POST request to create a new message
 
 messagesRouter.post(
-  "/new",
+  "/:friendshipId",
   async (req: Request, res: Response, next: NextFunction) => {
     const actualUser = (req as any).payload.user;
     const targetUser = User.findById(req.params.id);
@@ -54,7 +54,7 @@ messagesRouter.post(
 // frontend should send a request when the chat window is opened
 
 messagesRouter.get(
-  "/:userId",
+  "/:friendshipId",
   async (req: Request, res: Response, next: NextFunction) => {
     const actualUser = (req as any).payload.user;
     const targetUser = User.findById(req.params.id);
