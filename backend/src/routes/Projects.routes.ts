@@ -163,9 +163,9 @@ projectsRouter.post(
           .json({ error: "Failed to fetch repository information" });
       }
       console.log(repoInfo.data.owner.id);
-      console.log(owner.githubId);
+      console.log(owner?.github?.id);
 
-      if (owner?.githubId !== repoInfo.data.owner?.id) {
+      if (owner?.github?.id !== repoInfo.data.owner?.id) {
         return res
           .status(403)
           .json({ error: "User is not the owner of this repository" });
