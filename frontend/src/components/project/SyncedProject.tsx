@@ -1,10 +1,55 @@
+"use client";
 import { Project } from "@/types/Project";
-import { Input } from "../ui/input";
+import CustomLabel from "../common/ui/Label";
+import CustomInput from "../common/ui/CustomInput";
+import { useFormState } from "react-dom";
+import { syncGithubRepo } from "@/actions";
+import { useEffect, useRef } from "react";
+import ErrorMessage from "../common/ui/ErrorMessage";
+import SyncRepoButton from "./SyncRepoButton";
+import SyncedProjectForm from "./SyncedProjectForm";
 
 function SyncedProject({ project }: { project: Project }) {
+  const [formState, action] = useFormState(syncGithubRepo, {
+    errors: {},
+  });
+  const formRef = useRef<HTMLFormElement>(null);
+
+  useEffect(() => {
+    if (formState.success) {
+      formRef.current?.reset();
+    }
+  }, [formState]);
   return (
-    <div>
-   syned project
+    <div className="mt-6 flex w-full flex-col gap-2">
+      <form
+        ref={formRef}
+        action={async (formData) => {
+          if (formState.success) {
+            formRef.current?.reset();
+          }
+          action(formData);
+        }}
+        className="flex w-full flex-col gap-2"
+      >
+        <CustomLabel required htmlFor="githubRepo">
+          Github Repository
+        </CustomLabel>
+
+        <CustomInput
+          type="text"
+          name="repo"
+          placeholder="Let us know your Github repository"
+          className="h-12 w-[20rem] lg:w-[25rem]"
+        />
+        <SyncRepoButton />
+        {formState.errors?.repo && (
+          <ErrorMessage>{formState.errors?.repo.join(", ")}</ErrorMessage>
+        )}
+      </form>
+      {formState.success && (
+        <SyncedProjectForm project={project} syncedData={formState.data} />
+      )}
     </div>
   );
 }

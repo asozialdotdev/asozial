@@ -10,7 +10,7 @@ function EditProject({ project }: { project: Project }) {
 
   return (
     <>
-      <div className="flex items-center justify-center gap-4">
+      <div className="w-full flex items-center justify-center gap-4">
         <h2 className="text-xl font-semibold">
           Do you want to sync your project with your Github repo?
         </h2>

@@ -10,3 +10,4 @@ export { updateProject } from "./updateProject.server";
 export { patchPitch } from "./patchPitch.server.";
 export { deleteProject } from "./deleteProject.server";
 export { patchMainLanguage } from "./patchMainLanguage.server";
+export { syncGithubRepo } from "./syncGithubRepo.server";

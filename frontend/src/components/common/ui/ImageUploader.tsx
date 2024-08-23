@@ -74,12 +74,14 @@ export default function ImageUploader({
     <div className="mt-4">
       <Input
         type="file"
+        name="image"
         onChange={handleFileChange}
         className="hidden"
         ref={fileInputRef}
       />
       <Button
         type="button"
+        name="image"
         variant={variant}
         disabled={isLoading}
         onClick={handleButtonClick}

@@ -1,12 +1,11 @@
 import { cn } from "@/lib/utils";
-import { ClassValue } from "clsx";
 
 type ErrorMessageProps = {
-  message: string;
-  className?: ClassValue[];
+  children: React.ReactNode;
+  className?: string;
 };
 
-function ErrorMessage({ message, className }: ErrorMessageProps) {
+function ErrorMessage({ children, className }: ErrorMessageProps) {
   return (
     <span
       className={cn(
@@ -14,7 +13,7 @@ function ErrorMessage({ message, className }: ErrorMessageProps) {
         className,
       )}
     >
-      {message}
+      {children}
     </span>
   );
 }

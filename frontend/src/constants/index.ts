@@ -2,7 +2,7 @@ import discord from "/public/socials/discord.png";
 import slack from "/public/socials/slack.png";
 import notion from "/public/socials/notion.png";
 import gitlab from "/public/socials/gitlab.png";
-import { SocialsData } from "@/types/Project";
+import { Project, SocialsData } from "@/types/Project";
 import React from "react";
 import {
   FaLaravel,
@@ -409,7 +409,7 @@ const socialsData: SocialsData[] = [
   },
 ];
 
-const projectStatus = ["active", "inactive", "completed"];
+const projectStatus: Project["status"][] = ["active", "inactive", "completed"];
 
 export {
   baseUrl,

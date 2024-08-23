@@ -1,5 +1,7 @@
+import { createProjectSchema } from "@/lib/schema";
 import { Types } from "mongoose";
 import { StaticImageData } from "next/image";
+import { z } from "zod";
 
 type SocialPlatforms = "slack" | "discord" | "notion" | "gitlab";
 
@@ -62,6 +64,7 @@ type CreateUpdateProject = {
     gitlab?: string;
   };
 };
+type Inputs = z.infer<typeof createProjectSchema>;
 
 export type {
   Project,
@@ -70,4 +73,5 @@ export type {
   CreateUpdateProject,
   SocialsData,
   Socials,
+  Inputs,
 };

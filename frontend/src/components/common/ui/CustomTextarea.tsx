@@ -1,6 +1,5 @@
 import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
-import { ClassValue } from "clsx";
 
 type CustomTextareaProps = {
   placeholder: string;
@@ -8,7 +7,7 @@ type CustomTextareaProps = {
   id: string;
   value: string;
   onChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
-  className?: ClassValue[];
+  className?: string;
 };
 function CustomTextarea({
   placeholder,

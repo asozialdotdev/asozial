@@ -1,6 +1,5 @@
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
-import { ClassValue } from "clsx";
 
 type CustomInputProps = {
   type: string;
@@ -9,7 +8,8 @@ type CustomInputProps = {
   name: string;
   id?: string;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  className?: ClassValue[];
+  className?: string;
+  disabled?: boolean;
 };
 
 function CustomInput({
@@ -19,6 +19,7 @@ function CustomInput({
   id,
   value,
   onChange,
+  disabled = false,
   className,
 }: CustomInputProps) {
   return (
@@ -29,8 +30,9 @@ function CustomInput({
       id={id}
       value={value}
       onChange={onChange}
+      disabled={disabled}
       className={cn(
-        "h-14 w-[75%] border-zinc-300 bg-white hover:bg-zinc-50 focus:bg-zinc-50 dark:border-zinc-700 dark:hover:bg-zinc-800 dark:focus:bg-zinc-800",
+        "h-12 w-full border-zinc-300 bg-white hover:bg-zinc-50 focus:bg-zinc-50 dark:border-zinc-700 dark:hover:bg-zinc-800 dark:focus:bg-zinc-800",
         className,
       )}
     />
