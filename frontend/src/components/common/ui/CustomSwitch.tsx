@@ -2,19 +2,21 @@ import { Switch } from "@/components/ui/switch";
 import { cn } from "@/lib/utils";
 
 type CustomSwitchProps = {
+  id: string;
   checked: boolean;
   onCheckedChange: (checked: boolean) => void;
   className?: string;
 };
 
 function CustomSwitch({
+  id,
   checked,
   onCheckedChange,
   className,
 }: CustomSwitchProps) {
   return (
     <Switch
-      id="existing-user"
+      id={id}
       checked={checked}
       onCheckedChange={onCheckedChange}
       className={cn(
