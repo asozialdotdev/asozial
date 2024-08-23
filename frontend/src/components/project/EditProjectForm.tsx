@@ -45,6 +45,8 @@ import type { CreateUpdateProject, Project } from "@/types/Project";
 import ImageUploader, { ImageT } from "../common/ui/ImageUploader";
 import LoadingTextButton from "../common/ui/LoadingTextButton";
 import CustomSwitch from "../common/ui/CustomSwitch";
+import CustomLabel from "../common/ui/Label";
+import ErrorMessage from "../common/ui/ErrorMessage";
 type Inputs = z.infer<typeof createProjectSchema>;
 
 function EditProjectForm({ project }: { project: Project }) {
@@ -160,14 +162,17 @@ function EditProjectForm({ project }: { project: Project }) {
       >
         {/* Image */}
         <div className="mt-6 flex flex-col gap-2">
+          <CustomLabel htmlFor="image" className="-mb-4">
+            Image
+          </CustomLabel>
           <ImageUploader onUploadSucess={setUploadedImage} />
         </div>
 
         {/* Status */}
         <div className="mt-6 flex flex-col gap-2">
-          <label htmlFor="status" className="font-semibold">
-            Status <span className="text-xl text-red-400">*</span>
-          </label>
+          <CustomLabel htmlFor="status" required>
+            Status
+          </CustomLabel>
           <Controller
             name="status"
             control={control}
@@ -194,9 +199,9 @@ function EditProjectForm({ project }: { project: Project }) {
         </div>
         {/* Title */}
         <div className="mt-4 flex flex-col gap-2">
-          <label htmlFor="title" className="font-semibold">
-            Title <span className="text-xl text-red-400">*</span>
-          </label>
+          <CustomLabel htmlFor="title" required>
+            Title
+          </CustomLabel>
 
           <Controller
             name="title"
@@ -212,19 +217,14 @@ function EditProjectForm({ project }: { project: Project }) {
               />
             )}
           />
-
-          {errors.title && (
-            <span className="text-sm font-light text-red-500">
-              {errors.title.message}
-            </span>
-          )}
+          {errors.title && <ErrorMessage>{errors.title.message}</ErrorMessage>}
         </div>
 
         {/* Description */}
         <div className="mt-4 flex flex-col gap-2">
-          <label htmlFor="description" className="font-semibold">
-            Description <span className="text-xl text-red-400">*</span>
-          </label>
+          <CustomLabel htmlFor="description" required>
+            Description
+          </CustomLabel>
           <Controller
             name="description"
             control={control}
@@ -239,19 +239,16 @@ function EditProjectForm({ project }: { project: Project }) {
               />
             )}
           />
-
           {errors.description && (
-            <span className="text-sm font-light text-red-500">
-              {errors.description.message}
-            </span>
+            <ErrorMessage>{errors.description.message}</ErrorMessage>
           )}
         </div>
 
         {/* Pitch */}
         <div className="mt-4 flex flex-col gap-2">
-          <label htmlFor="pitch" className="font-semibold">
-            Pitch <span className="text-xl text-red-400">*</span>
-          </label>
+          <CustomLabel htmlFor="pitch" required>
+            Pitch
+          </CustomLabel>
 
           <Controller
             name="pitch"
@@ -267,11 +264,7 @@ function EditProjectForm({ project }: { project: Project }) {
             )}
           />
 
-          {errors.pitch && (
-            <span className="text-sm font-light text-red-500">
-              {errors.pitch.message}
-            </span>
-          )}
+          {errors.pitch && <ErrorMessage>{errors.pitch.message}</ErrorMessage>}
         </div>
 
         {/* Main Language */}
@@ -304,19 +297,17 @@ function EditProjectForm({ project }: { project: Project }) {
           />
 
           {errors.mainLanguage && (
-            <span className="text-sm font-light text-red-500">
-              {errors.mainLanguage.message}
-            </span>
+            <ErrorMessage>{errors.mainLanguage.message}</ErrorMessage>
           )}
         </div>
 
         {/* Tech Stack */}
 
         <div className="mt-4 flex flex-col gap-2">
-          <label htmlFor="techStack" className="font-semibold">
-            Tech Stack <span className="text-xl text-red-400">*</span>
-          </label>
-          <div className="grid grid-cols-3 items-center gap-3">
+          <CustomLabel htmlFor="techStack" required>
+            Tech Stack
+          </CustomLabel>
+          <div className="mt-2 grid grid-cols-3 items-center gap-3">
             {languagesWithColors.map((stack, i) => (
               <div key={stack.language + i} className="flex items-center gap-2">
                 <Controller
@@ -343,18 +334,14 @@ function EditProjectForm({ project }: { project: Project }) {
           </div>
 
           {errors.techStack && (
-            <span className="text-sm font-light text-red-500">
-              {errors.techStack.message}
-            </span>
+            <ErrorMessage>{errors.techStack.message}</ErrorMessage>
           )}
         </div>
 
         {/* Github Repo */}
         <div className="mt-4 flex flex-col gap-2">
-          <label htmlFor="gitHubRepo" className="font-semibold"></label>
-          <label htmlFor="socials" className="font-semibold">
-            Socials
-          </label>
+          <CustomLabel htmlFor="gitHubRepo"></CustomLabel>
+          <CustomLabel htmlFor="socials">Socials</CustomLabel>
 
           <div className="flex flex-col gap-2">
             <Image
@@ -410,7 +397,7 @@ function EditProjectForm({ project }: { project: Project }) {
         </div>
 
         <Button
-          disabled={!isValid || isSubmitting}
+          disabled={isSubmitting}
           type="submit"
           className="my-2 bg-dark dark:bg-light"
         >

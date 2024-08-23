@@ -17,6 +17,7 @@ import { Textarea } from "../ui/textarea";
 
 //Types
 import type { ProjectId } from "@/types/Project";
+import ErrorMessage from "../common/ui/ErrorMessage";
 
 function PostForm({ projectId }: { projectId: ProjectId }) {
   const [uploadImage, setUploadImage] = useState<ImageT | null>(null);
@@ -40,13 +41,13 @@ function PostForm({ projectId }: { projectId: ProjectId }) {
   return (
     <form
       ref={formRef}
-      className="mt-2"
       action={async (formData) => {
         if (formState.success) {
           formRef.current?.reset();
         }
         action(formData);
       }}
+      className="mt-2"
     >
       <div className="mt-6 flex w-full flex-col gap-2">
         <label
@@ -64,9 +65,7 @@ function PostForm({ projectId }: { projectId: ProjectId }) {
         />
 
         {formState.errors?.title && (
-          <span className="text-sm font-light text-red-500">
-            {formState.errors?.title.join(", ")}
-          </span>
+          <ErrorMessage>{formState.errors?.title.join(", ")}</ErrorMessage>
         )}
       </div>
 

@@ -1,14 +1,13 @@
 import { cn } from "@/lib/utils";
-import { ClassValue } from "clsx";
 type CustomLabel = {
-  content: string;
+  children?: React.ReactNode;
   htmlFor: string;
   required?: boolean;
-  className?: ClassValue[];
+  className?: string;
 };
 
 function CustomLabel({
-  content,
+  children,
   htmlFor,
   required = false,
   className,
@@ -22,7 +21,7 @@ function CustomLabel({
         )}
         htmlFor={htmlFor}
       >
-        {content} {required && <span className="text-xl text-red-400">*</span>}
+        {children} {required && <span className="text-xl text-red-400">*</span>}
       </label>
     </>
   );

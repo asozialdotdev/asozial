@@ -366,7 +366,7 @@ function NewProjectForm() {
         )}
 
         <Button
-          disabled={!isValid || isSubmitting}
+          disabled={isSubmitting}
           type="submit"
           className="my-2 bg-dark dark:bg-light"
         >
