@@ -1,13 +1,26 @@
 "use server";
-const getAllMessages = async (friendshipId: string) => {
-  const data = await fetch(`/api/messages/${friendshipId}`, {
-    method: "GET",
-  });
-  if (!data) {
-    console.log("Messages not found");
-  } else {
-    const users = await data.json();
-    return users;
+import { baseUrl } from "@/constants";
+import axios from "axios";
+
+const getAllMessages = async (
+  friendshipId: string,
+  actualUser: string,
+  targetUser: string,
+) => {
+  console.log("Fetching messages between", actualUser, "and", targetUser);
+
+  try {
+    const res = await axios.get(`${baseUrl}/api/messages/${friendshipId}`, {
+      data: {
+        actualUser,
+        targetUser,
+      },
+    });
+
+    return res.data;
+  } catch (error: any) {
+    console.log("Error fetching messages:", error.message);
+    return error;
   }
 };
 

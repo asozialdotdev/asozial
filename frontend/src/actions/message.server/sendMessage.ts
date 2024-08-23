@@ -1,21 +1,27 @@
 "use server";
-import { auth } from "@/auth";
+import { baseUrl } from "@/constants";
+import axios from "axios";
 
-const sendMessage = async (message: string, friendshipId: string) => {
+const sendMessage = async (
+  friendshipId: string,
+  actualUser: string,
+  targetUser: string,
+  content: string,
+) => {
+  console.log("Sending message from", actualUser, "to", targetUser);
+
   try {
-    const response = await fetch(`/api/messages/${friendshipId}`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ friendshipId, message }),
+    const res = await axios.post(`${baseUrl}/api/messages/${friendshipId}`, {
+      actualUser,
+      targetUser,
+      content,
     });
-    const data = await response.json();
-    return data;
-  } catch (error) {
-    console.error("Error sending message:", error);
-    return "Error sending message";
+
+    return res.data;
+  } catch (error: any) {
+    console.log("Error sending message:", error.message);
+    return error;
   }
 };
 
-export default sendMessage;
+export {sendMessage};
