@@ -10,21 +10,121 @@ const projectsRouter = express.Router();
 
 dotenv.config();
 
-// GET all my projects
-
+// GET search for projects
 projectsRouter.get(
-  "/",
+  "/search",
   async (req: Request, res: Response, next: NextFunction) => {
-    const { userId } = req.query;
     try {
-      const projects = await Project.find({ owner: userId })
+      const { query, page = 1, limit = 12 } = req.query;
+      console.log("Query", query);
+
+      const searchQuery = query
+        ? {
+            title: { $regex: query, $options: "i" }, // Case-insensitive search
+          }
+        : {};
+
+      const projects = await Project.find(searchQuery)
+        .skip((+page - 1) * +limit)
+        .limit(+limit)
         .populate("membersJoined", "username name image")
         .populate("owner", "username name image")
         .exec();
       console.log("Number of Projects Found:", projects.length);
-      res.json(projects);
+
+      const totalProjects = await Project.countDocuments(searchQuery);
+      console.log("Total Projects Found:", totalProjects);
+
+      res.json({
+        projects,
+        totalPages: Math.ceil(totalProjects / +limit),
+        currentPage: +page,
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
+// GET all projects from a user (my projects)
+
+projectsRouter.get(
+  "/user",
+  async (req: Request, res: Response, next: NextFunction) => {
+    const { userId, page = 1, limit = 12 } = req.query;
+
+    try {
+      // Ensure page and limit are numbers
+      const pageNumber = parseInt(page as string, 10) || 1;
+      const limitNumber = parseInt(limit as string, 10) || 12;
+
+      // Find projects owned by the user with pagination
+      const projects = await Project.find({ owner: userId })
+        .populate("membersJoined", "username name image")
+        .populate("owner", "username name image")
+        .skip((pageNumber - 1) * limitNumber) // Skip documents for previous pages
+        .limit(limitNumber) // Limit to `limitNumber` documents
+        .exec();
+
+      // Get the total count of projects owned by the user
+      const totalProjects = await Project.countDocuments({ owner: userId });
+
+      console.log("Number of Projects Found:", projects.length);
+
+      // Respond with projects and pagination details
+      res.json({
+        projects,
+        totalPages: Math.ceil(totalProjects / limitNumber),
+        currentPage: pageNumber,
+      });
     } catch (error: any) {
       console.log("Error:", error.message);
+      res
+        .status(500)
+        .json({ message: "An error occurred while fetching projects." });
+    }
+  }
+);
+
+// GET search for projects from a user (my-projects)
+
+projectsRouter.get(
+  "/user/search",
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const { query, page = 1, limit = 12 } = req.query;
+
+      // Ensure page and limit are numbers
+      const pageNumber = parseInt(page as string, 10) || 1;
+      const limitNumber = parseInt(limit as string, 10) || 12;
+
+      console.log("Query", query);
+      console.log("Page", pageNumber);
+      console.log("Limit", limitNumber);
+
+      // Search query with pagination
+      const searchQuery = query
+        ? {
+            title: { $regex: query, $options: "i" },
+          }
+        : {};
+
+      const projects = await Project.find(searchQuery)
+        .populate("membersJoined", "username name image")
+        .populate("owner", "username name image")
+        .skip((pageNumber - 1) * limitNumber)
+        .limit(limitNumber)
+        .exec();
+
+      const totalProjects = await Project.countDocuments(searchQuery);
+
+      res.json({
+        projects,
+        totalPages: Math.ceil(totalProjects / limitNumber),
+        currentPage: pageNumber,
+      });
+    } catch (error) {
+      next(error);
     }
   }
 );
@@ -114,28 +214,6 @@ projectsRouter.post(
       });
 
       res.status(201).json(createProject);
-    } catch (error) {
-      next(error);
-    }
-  }
-);
-
-// GET search for my-projects
-
-projectsRouter.get(
-  "/search",
-  async (req: Request, res: Response, next: NextFunction) => {
-    try {
-      const { query } = req.query;
-      console.log("Query", query);
-
-      const projects = await Project.find({
-        title: { $regex: query, $options: "i" },
-      })
-        .populate("membersJoined", "username name image")
-        .exec();
-
-      res.json(projects);
     } catch (error) {
       next(error);
     }

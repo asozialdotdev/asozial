@@ -1,6 +1,5 @@
 "use server";
 import { auth } from "@/auth";
-import axios from "axios";
 
 // GET to get a project from Github
 const fetchGithubRepos = async () => {
@@ -11,6 +10,9 @@ const fetchGithubRepos = async () => {
   try {
     const response = await fetch(
       `https://api.github.com/users/${owner}/repos?per_page=100`,
+      {
+        cache: "force-cache",
+      },
     );
 
     if (!response.ok) {

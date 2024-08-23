@@ -1,4 +1,4 @@
-import { searchForMyProjects } from "@/actions";
+import {  searchForUserProjects } from "@/actions";
 import { Project } from "@/types/Project";
 import { useEffect, useState } from "react";
 
@@ -17,7 +17,7 @@ function useSearchForMyProjects(searchTerm: string, projects: Project[]) {
         setIsLoading(true);
         setError("");
         try {
-          const result = await searchForMyProjects(searchTerm);
+          const result = await searchForUserProjects(searchTerm, query);
           setProjectsState(result);
         } catch (error) {
           console.error("Error in searching for projects:", error);

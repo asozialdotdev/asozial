@@ -1,12 +1,14 @@
-'use client'
-
+"use server";
+import { auth } from "@/auth";
 import { baseUrl } from "@/constants";
 
-// Search for my-projects
-const searchForMyProjects = async (searchTerm: string) => {
+// Search for user projects
+const searchForUserProjects = async (query: string, currentPage: number) => {
+  const session = await auth();
+  const userId = session?.user?.id;
   try {
     const response = await fetch(
-      `${baseUrl}/api/projects/search?query=${searchTerm}`,
+      ` ${baseUrl}/api/projects/user/search?userId=${userId}&query=${query}&page=${currentPage}`,
     );
     if (!response.ok) {
       throw new Error(`Failed to search for projects: ${response.statusText}`);
@@ -20,4 +22,4 @@ const searchForMyProjects = async (searchTerm: string) => {
   }
 };
 
-export { searchForMyProjects };
+export { searchForUserProjects };

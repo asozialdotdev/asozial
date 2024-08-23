@@ -3,25 +3,44 @@ import { notFound } from "next/navigation";
 
 //Actions
 import { fetchAllProjectsFromAUser } from "@/actions";
+import { searchForUserProjects } from "@/actions";
 //Components
-import MyProjects from "@/components/project/MyProjects";
 import PageContainer from "@/components/common/containers/PageContainer";
+import { Suspense } from "react";
+import SearchUserProjects from "@/components/project/SearchForUserProjects";
+import PageTitle from "@/components/common/ui/PageTitle";
+import UserProjectsTable from "@/components/project/UserProjectsTable";
+import ProjectCardLoadingSkeleton from "@/components/project/ProjectCardsLoadingSkeleton";
 
-async function MyProjectsPage() {
+type UserProjectsPageProps = {
+  searchParams: {
+    query?: string;
+    page?: string;
+  };
+};
+async function UserProjectsPage({ searchParams }: UserProjectsPageProps) {
+  const query = searchParams.query || "";
+  const currentPage = Number(searchParams.page) || 1;
   const projects = await fetchAllProjectsFromAUser();
 
   if (!projects) {
-    notFound();
+    return <ProjectCardLoadingSkeleton />;
   }
-
-  
 
   return (
     <PageContainer className="gap-10 2xl:max-w-screen-xl">
-      {projects.length === 0 && <p>No projects found</p>}
-      {projects.length > 0 && <MyProjects projects={projects} />}
+      <section className="flex w-full flex-col items-center gap-8">
+        <PageTitle className="text-3xl">My Projects</PageTitle>
+        <SearchUserProjects />
+      </section>
+      <Suspense
+        key={query + currentPage}
+        fallback={<ProjectCardLoadingSkeleton />}
+      >
+        <UserProjectsTable query={query} currentPage={currentPage} />
+      </Suspense>
     </PageContainer>
   );
 }
 
-export default MyProjectsPage;
+export default UserProjectsPage;

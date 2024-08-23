@@ -10,6 +10,7 @@ type CustomInputProps = {
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   className?: string;
   disabled?: boolean;
+  defaultValue?: string;
 };
 
 function CustomInput({
@@ -20,6 +21,7 @@ function CustomInput({
   value,
   onChange,
   disabled = false,
+  defaultValue,
   className,
 }: CustomInputProps) {
   return (
@@ -31,6 +33,7 @@ function CustomInput({
       value={value}
       onChange={onChange}
       disabled={disabled}
+      defaultValue={defaultValue}
       className={cn(
         "h-12 w-full border-zinc-300 bg-white hover:bg-zinc-50 focus:bg-zinc-50 dark:border-zinc-700 dark:hover:bg-zinc-800 dark:focus:bg-zinc-800",
         className,
