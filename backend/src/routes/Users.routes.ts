@@ -222,17 +222,38 @@ usersRouter.get(
 
 // GET all projects that a user is a member of
 
-usersRouter.get(
-  "/:userId/projects",
-  async (req: Request, res: Response, next: NextFunction) => {
-    try {
-      const user = (req as any).payload.user;
-      const projects = await Project.find({ membersJoined: user._id });
-      res.json(projects);
-    } catch (error) {
-      next(error);
-    }
+// usersRouter.get(
+//   "/:userId/projects",
+//   async (req: Request, res: Response, next: NextFunction) => {
+//     try {
+//       const user = (req as any).payload.user;
+//       const projects = await Project.find({ membersJoined: user._id });
+//       res.json(projects);
+//     } catch (error) {
+//       next(error);
+//     }
+//   }
+// );
+
+usersRouter.put("/update", async (req: Request, res: Response) => {
+  try {
+    const { _id, codingLanguages, github } = req.body;
+    console.log("received");
+    console.log(codingLanguages);
+    console.log(github);
+    const updatedUser = await User.findByIdAndUpdate(
+      _id,
+      {
+        codingLanguages,
+        github,
+      },
+      { new: true }
+    );
+    console.log("updated");
+    res.json(updatedUser);
+  } catch (error: any) {
+    console.log("Error updating user", error.message);
   }
-);
+});
 
 export default usersRouter;

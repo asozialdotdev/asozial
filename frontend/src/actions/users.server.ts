@@ -1,14 +1,18 @@
 import { languagesWithColors } from "@/constants";
 import { GithubRepo } from "@/types/Github";
 
-const getUserGithubEvents = async (url: string) => {
+const getUserGithubEvents = async (url: string, accessToken: string) => {
   if (!url) {
     console.error("No GitHub events URL provided");
     return [];
   }
   try {
     const baseUrl = url.split("events")[0] + "events";
-    const data = await fetch(baseUrl);
+    const data = await fetch(baseUrl, {
+      headers: {
+        Authorization: `token ${accessToken}`,
+      },
+    });
     return data.json();
   } catch (error: any) {
     console.log("Error fetching GitHub events:", error);
@@ -17,13 +21,17 @@ const getUserGithubEvents = async (url: string) => {
 };
 
 // get user github followers
-const getUserGithubFollowers = async (url: string) => {
+const getUserGithubFollowers = async (url: string, accessToken: string) => {
   if (!url) {
     console.error("No GitHub followers URL provided");
     return [];
   }
   try {
-    const data = await fetch(url);
+    const data = await fetch(url, {
+      headers: {
+        Authorization: `token ${accessToken}`,
+      },
+    });
     return data.json();
   } catch (error: any) {
     console.log("Error fetching GitHub followers:", error);
@@ -31,14 +39,18 @@ const getUserGithubFollowers = async (url: string) => {
   }
 };
 
-const getUserGithubFollowing = async (url: string) => {
+const getUserGithubFollowing = async (url: string, accessToken: string) => {
   if (!url) {
     console.error("No GitHub following URL provided");
     return [];
   }
   try {
     const baseUrl = url.split("following")[0] + "following";
-    const data = await fetch(baseUrl);
+    const data = await fetch(baseUrl, {
+      headers: {
+        Authorization: `token ${accessToken}`,
+      },
+    });
     return data.json();
   } catch (error: any) {
     console.log("Error fetching GitHub following:", error);
@@ -47,13 +59,17 @@ const getUserGithubFollowing = async (url: string) => {
 };
 
 // get user github subscriptions
-const getUserGithubSubscriptions = async (url: string) => {
+const getUserGithubSubscriptions = async (url: string, accessToken: string) => {
   if (!url) {
     console.error("user.githubSubscriptionsUrl is undefined");
     return [];
   }
   try {
-    const data = await fetch(url);
+    const data = await fetch(url, {
+      headers: {
+        Authorization: `token ${accessToken}`,
+      },
+    });
     return data.json();
   } catch (error: any) {
     console.log("Error fetching GitHub subscriptions:", error);
@@ -62,13 +78,17 @@ const getUserGithubSubscriptions = async (url: string) => {
 };
 
 // get user github organizations
-const getUserGithubOrganizations = async (url: string) => {
+const getUserGithubOrganizations = async (url: string, accessToken: string) => {
   if (!url) {
     console.error("user.githubOrganizationsUrl is undefined");
     return;
   }
   try {
-    const data = await fetch(url);
+    const data = await fetch(url, {
+      headers: {
+        Authorization: `token ${accessToken}`,
+      },
+    });
     return data.json();
   } catch (error: any) {
     console.log("Error fetching GitHub organizations:", error);
@@ -77,14 +97,18 @@ const getUserGithubOrganizations = async (url: string) => {
 };
 
 //get user github public gists
-const getUserGithubPublicGists = async (url: string) => {
+const getUserGithubPublicGists = async (url: string, accessToken: string) => {
   if (!url) {
     console.error("user.githubGistsUrl is undefined");
     return [];
   }
   try {
     const baseUrl = url.split("gists")[0] + "gists";
-    const data = await fetch(baseUrl);
+    const data = await fetch(baseUrl, {
+      headers: {
+        Authorization: `token ${accessToken}`,
+      },
+    });
     return data.json();
   } catch (error: any) {
     console.log("Error fetching GitHub gists:", error);
@@ -93,13 +117,17 @@ const getUserGithubPublicGists = async (url: string) => {
 };
 
 // get user github repos
-const getUserGithubRepos = async (url: string) => {
+const getUserGithubRepos = async (url: string, accessToken: string) => {
   if (!url) {
     console.error("user.githubReposUrl is undefined");
     return [];
   }
   try {
-    const data = await fetch(url);
+    const data = await fetch(url, {
+      headers: {
+        Authorization: `token ${accessToken}`,
+      },
+    });
     console.log(data);
     return data.json();
   } catch (error: any) {
@@ -109,7 +137,10 @@ const getUserGithubRepos = async (url: string) => {
 };
 
 // get user github repo languages
-const getUserGithubRepoLanguages = async (repos: GithubRepo[]) => {
+const getUserGithubRepoLanguages = async (
+  repos: GithubRepo[],
+  accessToken: string,
+) => {
   const languages: {
     [key: string]: { lines: number; projects: number };
   } = {};
@@ -121,7 +152,11 @@ const getUserGithubRepoLanguages = async (repos: GithubRepo[]) => {
 
   try {
     for (const repo of repos) {
-      const data = await fetch(repo.languages_url);
+      const data = await fetch(repo.languages_url, {
+        headers: {
+          Authorization: `token ${accessToken}`,
+        },
+      });
       const repoLanguages: { [key: string]: number } = await data.json();
 
       for (const [language, count] of Object.entries(repoLanguages)) {
