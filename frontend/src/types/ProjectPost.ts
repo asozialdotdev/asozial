@@ -20,6 +20,8 @@ type ProjectPost = {
   replies: Reply[];
   likes: UserId[];
   dislikes: UserId[];
+  image?: string;
+  placeholder?: string;
   edited: boolean;
   createdAt: Date;
   updatedAt: Date;

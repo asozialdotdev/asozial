@@ -37,7 +37,8 @@ projectPostRouter.post(
   async (req: Request, res: Response, next: NextFunction) => {
     console.log("POST /api/posts called");
     try {
-      const { title, content, projectId, userId } = req.body;
+      const { title, content, image, placeholder, projectId, userId } =
+        req.body;
       console.log("projectIDDDDDD", projectId);
 
       if (!title || !content || !projectId || !userId) {
@@ -57,6 +58,8 @@ projectPostRouter.post(
       const newPost = await ProjectPost.create({
         title,
         content,
+        image,
+        placeholder,
         userId,
         projectId,
       });
@@ -219,7 +222,7 @@ projectPostRouter.post("/:projectPostId/dislike", async (req, res, next) => {
 // PUT Update a project post
 projectPostRouter.put("/:projectPostId", async (req, res, next) => {
   try {
-    const { title, content, edited, userId } = req.body;
+    const { title, content, image, placeholder, edited, userId } = req.body;
 
     const post = await ProjectPost.findById(req.params.projectPostId);
 
@@ -233,7 +236,7 @@ projectPostRouter.put("/:projectPostId", async (req, res, next) => {
 
     const udpatedPost = await ProjectPost.findByIdAndUpdate(
       req.params.projectPostId,
-      { title, content, edited },
+      { title, content, image, placeholder, edited },
       { new: true, runValidators: true }
     );
 

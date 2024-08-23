@@ -1,12 +1,7 @@
 import PageContainer from "../common/containers/PageContainer";
 import PageTitle from "../common/ui/PageTitle";
 import { auth } from "@/auth";
-import dynamic from "next/dynamic";
-import FileUploader from "../common/ui/FileUploader";
-
-// const FileUploader = dynamic(() => import("../common/FileUploader"), {
-//   ssr: false,
-// });
+import FileUploader from "../common/ui/ImageUploader";
 
 async function DashboardContainer() {
   const session = await auth();
@@ -40,6 +35,7 @@ async function DashboardContainer() {
             <p className="text-sm text-zinc-500 dark:text-zinc-400">0</p>
           </div>
         </div>
+
         <FileUploader />
       </section>
     </PageContainer>

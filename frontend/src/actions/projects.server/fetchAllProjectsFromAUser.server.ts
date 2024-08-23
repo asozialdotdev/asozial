@@ -1,4 +1,4 @@
-'use server'
+"use server";
 import { auth } from "@/auth";
 import { baseUrl } from "@/constants";
 

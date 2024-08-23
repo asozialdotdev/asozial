@@ -14,8 +14,10 @@ async function MyProjectsPage() {
     notFound();
   }
 
+  
+
   return (
-    <PageContainer className="gap-10">
+    <PageContainer className="gap-10 2xl:max-w-screen-xl">
       {projects.length === 0 && <p>No projects found</p>}
       {projects.length > 0 && <MyProjects projects={projects} />}
     </PageContainer>

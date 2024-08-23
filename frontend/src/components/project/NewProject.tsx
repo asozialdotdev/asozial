@@ -1,45 +1,31 @@
 "use client";
 import { useState } from "react";
-import { Button } from "../ui/button";
 import ExistingProjectForm from "./ExistingProjectForm";
 import NewProjectForm from "./NewProjectForm";
 import PageTitle from "../common/ui/PageTitle";
+import { Switch } from "../ui/switch";
 
 function NewProject() {
   const [isExistingProject, setIsExistingProject] = useState(false);
-  const [isNewProjectForm, setIsNewProjectForm] = useState(false);
 
-  console.log(isNewProjectForm, isExistingProject);
-
-  const handleExistingProject = () => {
-    setIsExistingProject(true);
-    setIsNewProjectForm(false);
-  };
-
-  const handleNewProjectForm = () => {
-    setIsExistingProject(false);
-    setIsNewProjectForm(true);
-  };
   return (
-    <div className="flex w-full flex-col gap-4">
+    <div className="flex w-full flex-col gap-6">
       <PageTitle className="text-center">Start a new project</PageTitle>
 
-      <div>
+      <div className="flex items-center justify-center gap-4">
         <h2 className="text-xl">
           Does your project already have an Github repository?
         </h2>
-      </div>
-      <div className="flex flex-col items-center gap-12 lg:grid lg:grid-cols-2">
-        <Button onClick={handleExistingProject} size="lg">
-          Existing project
-        </Button>
-        <Button onClick={handleNewProjectForm} size="lg">
-          New project form
-        </Button>
+
+        <Switch
+          id="existing-user"
+          checked={isExistingProject}
+          onCheckedChange={setIsExistingProject}
+          className="data-[state=checked]:bg-dark data-[state=unchecked]:bg-zinc-500 dark:data-[state=checked]:bg-light dark:data-[state=unchecked]:bg-zinc-500"
+        />
       </div>
 
-      {isExistingProject && <ExistingProjectForm />}
-      {isNewProjectForm && <NewProjectForm />}
+      {isExistingProject ? <ExistingProjectForm /> : <NewProjectForm />}
     </div>
   );
 }

@@ -21,19 +21,19 @@ import { Button } from "@/components/ui/button";
 import { auth } from "@/auth";
 
 //Types
-import type { ProjectId } from "@/types/Project";
-
-// const membersJoined = ["Benjamin", "Mirko", "John", "Jane", "José"];
+import type { Member, ProjectId } from "@/types/Project";
 
 async function Page({ params }: { params: { projectId: ProjectId } }) {
   const session = await auth();
   const { projectId } = params;
+
   const project = await fetchProjectById(projectId);
 
   const posts = await fetchProjectPosts(projectId);
 
-  const isMember = await checkIsMember(projectId);
-
+  const isMember = project.membersJoined.some(
+    (member: Member) => member._id === session?.user?.id,
+  );
   const isOwner = project.owner._id === session?.user?.id;
 
   if (!project) {

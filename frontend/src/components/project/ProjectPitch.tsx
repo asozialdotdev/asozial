@@ -1,5 +1,5 @@
 "use client";
-import { Project } from "@/types/Project";
+import { Member, Project } from "@/types/Project";
 import { Textarea } from "../ui/textarea";
 import { useState } from "react";
 import { Button } from "../ui/button";
@@ -8,12 +8,15 @@ import { pitchSchema } from "@/lib/schema";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { patchPitch } from "@/actions";
+import { useSession } from "next-auth/react";
 
 type Input = z.infer<typeof pitchSchema>;
 
 function ProjectPitch({ project }: { project: Project }) {
   const [isEditing, setIsEditing] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  const session = useSession();
 
   const {
     handleSubmit,
@@ -40,30 +43,33 @@ function ProjectPitch({ project }: { project: Project }) {
     }
   };
 
+  const isOwner = project.owner._id === session.data?.user?.id;
+
   return (
     <div className="flex flex-col gap-2">
       {!isEditing ? (
         <>
           <h4 className="text-lg font-semibold">Pitch</h4>
           {project.pitch ? (
-            <p className="text-justify text-base font-light ">
-              {project.pitch}
-            </p>
+            <p className="text-justify text-base font-light">{project.pitch}</p>
           ) : (
-            <div>
-              <p className="mb-4 text-justify text-base font-light text-neutral-500 dark:text-neutral-400">
-                No pitch provided yet. Here you should tell everyone why they
-                should join your project.
-              </p>
-              {!project.pitch && (
-                <Button
-                  className="bg-dark dark:bg-light hover:dark:bg-zinc-300 dark:focus:bg-zinc-300"
-                  onClick={toggleEditing}
-                >
-                  Add a pitch
-                </Button>
-              )}
-            </div>
+            isOwner && (
+              <div>
+                <p className="mb-4 text-justify text-base font-light text-neutral-500 dark:text-neutral-400">
+                  {isOwner
+                    ? "No pitch provided yet. Here you should tell everyone why they should join your project"
+                    : "No pitch provided yet. Ask the owner for more information."}
+                </p>
+                {!project.pitch && (
+                  <Button
+                    className="bg-dark dark:bg-light hover:dark:bg-zinc-300 dark:focus:bg-zinc-300"
+                    onClick={toggleEditing}
+                  >
+                    Add a pitch
+                  </Button>
+                )}
+              </div>
+            )
           )}
         </>
       ) : (

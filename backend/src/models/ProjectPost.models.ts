@@ -6,6 +6,8 @@ const projectPostSchema = new Schema(
     content: { type: String, required: true },
     likes: [{ type: Schema.Types.ObjectId, ref: "User", default: [] }],
     dislikes: [{ type: Schema.Types.ObjectId, ref: "User", default: [] }],
+    image: { type: String },
+    placeholder: { type: String },
     edited: { type: Boolean, default: false },
     userId: { type: Schema.Types.ObjectId, ref: "User", required: true },
     projectId: { type: Schema.Types.ObjectId, ref: "Project", required: true },
@@ -22,7 +24,6 @@ projectPostSchema.virtual("replyCount", {
   foreignField: "projectPostId", // is equal to `foreignField`
   count: true, // get the number of replies
   match: { deleted: { $ne: true } }, // only count replies that are not deleted
-
 });
 
 projectPostSchema.index({ likes: 1 });

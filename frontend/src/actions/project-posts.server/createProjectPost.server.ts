@@ -24,6 +24,8 @@ const createProjectPost = async (
   const result = createPostSchema.safeParse({
     title: formData.get("title"),
     content: formData.get("content"),
+    image: formData.get("image"),
+    placeholder: formData.get("placeholder"),
   });
 
   if (!result.success) {
@@ -42,6 +44,8 @@ const createProjectPost = async (
       body: JSON.stringify({
         title: result.data.title,
         content: result.data.content,
+        image: result.data.image,
+        placeholder: result.data.placeholder,
         userId: session?.user?.id,
         projectId,
       }),

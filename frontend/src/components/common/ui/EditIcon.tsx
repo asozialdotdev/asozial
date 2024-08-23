@@ -16,7 +16,7 @@ function EditIcon({ toggleEditing }: EditIconProps) {
       <Tooltip>
         <TooltipTrigger>
           <span
-            className="-ml-1 mb-4  flex cursor-pointer items-center gap-2 text-base hover:opacity-75"
+            className="-ml-1 mb-4 flex cursor-pointer items-center gap-2 text-base hover:opacity-75"
             onClick={toggleEditing}
           >
             <FilePenLine size={20} />

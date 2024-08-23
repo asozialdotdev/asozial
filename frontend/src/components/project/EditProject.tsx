@@ -42,6 +42,8 @@ import PageTitle from "../common/ui/PageTitle";
 import CustomDialog from "../common/ui/CustomDialog";
 
 import type { CreateUpdateProject, Project } from "@/types/Project";
+import ImageUploader, { ImageT } from "../common/ui/ImageUploader";
+import LoadingTextButton from "../common/ui/LoadingTextButton";
 type Inputs = z.infer<typeof createProjectSchema>;
 
 function EditProjectForm({ project }: { project: Project }) {
@@ -49,6 +51,7 @@ function EditProjectForm({ project }: { project: Project }) {
   const userId = session?.data?.user?.id;
   const isOwner = userId === project.owner._id;
   const [error, setError] = useState<string | null>(null);
+  const [uploadedImage, setUploadedImage] = useState<ImageT | null>(null);
 
   const { spokenLanguages, isLoadingSpokenLanguages, errorSpokenLanguages } =
     useSpokenLanguages();
@@ -72,6 +75,8 @@ function EditProjectForm({ project }: { project: Project }) {
       mainLanguage: project.mainLanguage,
       socials: project.socials,
       status: project.status,
+      image: project.image,
+      placeholder: project.placeholder,
     },
   });
 
@@ -121,12 +126,19 @@ function EditProjectForm({ project }: { project: Project }) {
         }, {} as any)
       : {};
 
+    const image = uploadedImage?.url || "";
+    const placeholder = uploadedImage?.placeholder || "";
+    setValue("image", image);
+    setValue("placeholder", placeholder);
+
     const finalData: CreateUpdateProject = {
       ...data,
       title: formattedTitle,
       description: formattedDescription,
       pitch: formattedPitch,
       socials: formattedSocials,
+      image,
+      placeholder,
     };
     const result = await updateProject(project._id, finalData);
 
@@ -137,6 +149,10 @@ function EditProjectForm({ project }: { project: Project }) {
       router.push(`/projects/${project._id}`);
     }
   };
+
+  const image = watch("image");
+  console.log("image", image);
+  console.log("uploadedImage", uploadedImage);
 
   const handleDeleteProject = async () => {
     const result = await deleteProject(project._id);
@@ -150,13 +166,17 @@ function EditProjectForm({ project }: { project: Project }) {
 
   return (
     <div className="w-full pb-6">
-      <PageTitle className="text-center">
-        Edit Project {project.title}
-      </PageTitle>
+      <PageTitle className="text-center">Edit Project</PageTitle>
       <form
         onSubmit={handleSubmit(processForm)}
         className="mt-2 flex w-full flex-col gap-2"
       >
+        {/* Image */}
+        <div className="mt-6 flex flex-col gap-2">
+          <ImageUploader onUploadSucess={setUploadedImage} />
+        </div>
+
+        {/* Status */}
         <div className="mt-6 flex flex-col gap-2">
           <label htmlFor="status" className="font-semibold">
             Status <span className="text-xl text-red-400">*</span>
@@ -174,7 +194,7 @@ function EditProjectForm({ project }: { project: Project }) {
                   <SelectValue placeholder="Status" />
                 </SelectTrigger>
 
-                <SelectContent id="mainLanguage">
+                <SelectContent id="status">
                   {projectStatus.map((s) => (
                     <SelectItem className="capitalize" key={s} value={s}>
                       {s}
@@ -286,8 +306,8 @@ function EditProjectForm({ project }: { project: Project }) {
                 </SelectTrigger>
 
                 <SelectContent id="mainLanguage">
-                  {spokenLanguages.map((language) => (
-                    <SelectItem key={language} value={language}>
+                  {spokenLanguages.map((language, i) => (
+                    <SelectItem key={language + i} value={language}>
                       {language}
                     </SelectItem>
                   ))}
@@ -310,8 +330,8 @@ function EditProjectForm({ project }: { project: Project }) {
             Tech Stack <span className="text-xl text-red-400">*</span>
           </label>
           <div className="grid grid-cols-3 items-center gap-3">
-            {languagesWithColors.map((stack) => (
-              <div key={stack.language} className="flex items-center gap-2">
+            {languagesWithColors.map((stack, i) => (
+              <div key={stack.language + i} className="flex items-center gap-2">
                 <Controller
                   name="techStack"
                   control={control}
@@ -376,8 +396,8 @@ function EditProjectForm({ project }: { project: Project }) {
         {/* Socials */}
 
         <div className="flex flex-col gap-2">
-          {socialsData.map((social, index) => (
-            <div key={index} className="mt-6 flex flex-col gap-2">
+          {socialsData.map((social) => (
+            <div key={social.key} className="mt-6 flex flex-col gap-2">
               <Image
                 src={social.imageSrc}
                 alt={social.alt}
@@ -407,7 +427,7 @@ function EditProjectForm({ project }: { project: Project }) {
           type="submit"
           className="my-2 bg-dark dark:bg-light"
         >
-          {isSubmitting ? "Updating" : "Update"}
+          {isSubmitting ? <LoadingTextButton text="Updating" /> : "Update"}
         </Button>
         {error && (
           <span className="text-base font-light text-red-700 dark:text-red-700">
