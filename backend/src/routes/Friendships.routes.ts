@@ -206,4 +206,102 @@ friendshipsRouter.delete(
   }
 );
 
+friendshipsRouter.get(
+  "/:userId/status",
+  async (req: Request, res: Response, next: NextFunction) => {
+    const userId = req.params.userId;
+    try {
+      const user = await User.findById(userId);
+      if (!user) {
+        res.status(404).send("User not found");
+        console.error("User not found");
+        return;
+      }
+
+      const friendsAcceptedDetails = user.friendsAccepted
+        ? await Promise.all(
+            user.friendsAccepted.map(async (friend) => {
+              const friendDetails = await User.findById(friend).populate(
+                "username image"
+              );
+              if (!friendDetails) return null;
+              const response = {
+                id: friendDetails._id,
+                username: friendDetails.username,
+                image: friendDetails.image,
+              };
+              return response;
+            })
+          )
+        : [];
+
+      const friendsPendingDetails = user.friendsPending
+        ? await Promise.all(
+            user.friendsPending.map(async (friend) => {
+              const friendDetails = await User.findById(friend).populate(
+                "username image"
+              );
+              if (!friendDetails) return null;
+              const response = {
+                id: friendDetails._id,
+                username: friendDetails.username,
+                image: friendDetails.image,
+              };
+              return response;
+            })
+          )
+        : [];
+
+      const friendsRejectedDetails = user.friendsRejected
+        ? await Promise.all(
+            user.friendsRejected.map(async (friend) => {
+              const friendDetails = await User.findById(friend).populate(
+                "username image"
+              );
+              if (!friendDetails) return null;
+              const response = {
+                id: friendDetails._id,
+                username: friendDetails.username,
+                image: friendDetails.image,
+              };
+              return response;
+            })
+          )
+        : [];
+
+      const friendsRejectedByDetails = user.friendsRejectedBy
+        ? await Promise.all(
+            user.friendsRejectedBy.map(async (friend) => {
+              const friendDetails = await User.findById(friend).populate(
+                "username image"
+              );
+              if (!friendDetails) return null;
+              const response = {
+                id: friendDetails._id,
+                username: friendDetails.username,
+                image: friendDetails.image,
+              };
+              return response;
+            })
+          )
+        : [];
+
+      console.log("friendsAcceptedDetails", friendsAcceptedDetails);
+      console.log("friendsPendingDetails", friendsPendingDetails);
+      console.log("friendsRejectedDetails", friendsRejectedDetails);
+      console.log("friendsRejectedByDetails", friendsRejectedByDetails);
+
+      res.json({
+        friendsAccepted: friendsAcceptedDetails,
+        friendsPending: friendsPendingDetails,
+        friendsRejected: friendsRejectedDetails,
+        friendsRejectedBy: friendsRejectedByDetails,
+      });
+    } catch (error: any) {
+      console.error("Error fetching user friendships:", error);
+      res.status(500).send("Error fetching user friendships");
+    }
+  }
+);
+
 export default friendshipsRouter;
