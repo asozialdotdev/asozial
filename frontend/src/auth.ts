@@ -5,6 +5,21 @@ import client from "./lib/db";
 import authConfig from "../auth.config";
 import { baseUrl } from "@/constants";
 import axios from "axios";
+import { ObjectId } from "mongodb";
+import type { User } from "@/types/User";
+import {
+  getUserGithubFollowers,
+  getUserGithubFollowing,
+  getUserGithubSubscriptions,
+  getUserGithubPublicGists,
+  getUserGithubOrganizations,
+  getUserGithubRepos,
+  getUserGithubRepoLanguages,
+} from "@/actions/users.server";
+import { GithubUser } from "./types/Github";
+import github from "next-auth/providers/github";
+import { access } from "fs";
+import { CodeSquare } from "lucide-react";
 
 const GITHUB_CLIENT_ID = process.env.GITHUB_CLIENT_ID;
 const GITHUB_CLIENT_SECRET = process.env.GITHUB_CLIENT_SECRET;
@@ -26,10 +41,11 @@ export const {
     Github({
       clientId: GITHUB_CLIENT_ID,
       clientSecret: GITHUB_CLIENT_SECRET,
+      allowDangerousEmailAccountLinking: true,
     }),
   ],
   callbacks: {
-    async signIn({ user, profile }) {
+    async signIn({ user, profile, account }) {
       const db = client.db();
 
       const existingUser = await db
@@ -38,63 +54,161 @@ export const {
 
       if (!existingUser) {
         try {
-          //create user in database
+          const githubFollowers = await getUserGithubFollowers(
+            profile?.followers_url as string,
+            account?.access_token as string,
+          );
+          const githubFollowing = await getUserGithubFollowing(
+            profile?.following_url as string,
+            account?.access_token as string,
+          );
+          const githubSubscriptions = await getUserGithubSubscriptions(
+            profile?.subscriptions_url as string,
+            account?.access_token as string,
+          );
+          const githubPublicGists = await getUserGithubPublicGists(
+            profile?.gists_url as string,
+            account?.access_token as string,
+          );
+          const githubOrganizations = await getUserGithubOrganizations(
+            profile?.organizations_url as string,
+            account?.access_token as string,
+          );
+          const githubRepos = await getUserGithubRepos(
+            profile?.repos_url as string,
+            account?.access_token as string,
+          );
+          const githubRepoLanguages = await getUserGithubRepoLanguages(
+            githubRepos,
+            account?.access_token as string,
+          );
           const newUser = {
-            name: profile?.name,
-            email: profile?.email,
-            notificationEmail: profile?.notificationEmail,
-            image: profile?.avatar_url,
-            githubId: profile?.id,
-            githubNodeId: profile?.node_id,
-            bio: profile?.bio,
             username: profile?.login,
+            name: user?.name,
+            email: user?.email,
+            notificationEmail: profile?.notification_email,
+            image: profile?.avatar_url,
             company: profile?.company,
-            hireable: profile?.hireable,
-            blog: profile?.blog,
-            twitterUsername: profile?.twitter_username,
+            website: profile?.blog,
             location: profile?.location,
-            githubApiUrl: profile?.url,
-            githubFollowersUrl: profile?.followers_url,
-            githubFollowingUrl: profile?.following_url,
-            githubPublicGistsUrl: profile?.gists_url,
-            githubPrivateGistsNumber: profile?.private_gists,
-            githubStarredUrl: profile?.starred_url,
-            githubSubscriptionsUrl: profile?.subscriptions_url,
-            githubOrganizationsUrl: profile?.organizations_url,
-            githubReposUrl: profile?.repos_url,
-            githubPublicReposNumber: profile?.public_repos,
-            githubPublicGistsNumber: profile?.public_gists,
-            githubCreatedAt: profile?.created_at,
-            githubUpdatedAt: profile?.updated_at,
-            githubCollaboratorsNumber: profile?.collaborators,
+            hireable: profile?.hireable,
+            codingLanguages: githubRepoLanguages,
+            socials: [
+              profile?.twitter_username && {
+                platform: "twitter",
+                url: profile?.twitter_username,
+              },
+            ],
+            github: {
+              id: profile?.id,
+              nodeId: profile?.node_id,
+              username: profile?.login,
+              accessToken: account?.access_token,
+              bio: profile?.bio,
+              apiUrl: profile?.url,
+              followersUrl: profile?.followers_url,
+              followers: githubFollowers,
+              followersNumber: profile?.followers,
+              followingUrl: profile?.following_url,
+              following: githubFollowing,
+              followingNumber: profile?.following,
+              publicGistsUrl: profile?.gists_url,
+              publicGists: githubPublicGists,
+              publicGistsNumber: profile?.public_gists,
+              privateGistsNumber: profile?.private_gists,
+              starredUrl: profile?.starred_url,
+              subscriptionsUrl: profile?.subscriptions_url,
+              subscriptions: githubSubscriptions,
+              subscriptionsNumber: githubSubscriptions.length,
+              organizationsUrl: profile?.organizations_url,
+              organizations: githubOrganizations,
+              organizationsNumber: githubOrganizations.length,
+              reposUrl: profile?.repos_url,
+              publicRepos: githubRepos,
+              publicReposNumber: profile?.public_repos,
+              createdAt: profile?.created_at,
+              updatedAt: profile?.updated_at,
+              collaboratorsNumber: profile?.collaborators,
+            },
           };
+          console.log("newUser", newUser);
           const response = await axios.post(`${baseUrl}/api/auth`, newUser, {
             headers: {
               "Content-Type": "application/json",
             },
           });
+          console.log("response", response.data);
+
+          //**ONCE ACCESS TOKEN GIVEN BY GITHUB, DO THE API CALLS HERE */
+          //make separate api calls to get user details before creation in db
+          // **TIMING OUT DUE TO TOO MANY API CALLS**
 
           user.id = response.data._id; // Assign the custom user ID to NextAuth's user object
-          //user.username = response.data.username;
-        } catch (error) {
-          console.error("Error creating user in database", error);
+          //** ADD THE ACCESS TOKEN TO THE USER  */ */
+        } catch (error: any) {
+          console.log("Error creating user in database", error.message);
           return false;
         }
       } else {
         // update user information if they already exist
-        await db.collection("User").updateOne(
-          { email: user.email },
+
+        const githubFollowers = await getUserGithubFollowers(
+          profile?.followers_url as string,
+          account?.access_token as string,
+        );
+        const githubFollowing = await getUserGithubFollowing(
+          profile?.following_url as string,
+          account?.access_token as string,
+        );
+        const githubSubscriptions = await getUserGithubSubscriptions(
+          profile?.subscriptions_url as string,
+          account?.access_token as string,
+        );
+        const githubPublicGists = await getUserGithubPublicGists(
+          profile?.gists_url as string,
+          account?.access_token as string,
+        );
+        const githubOrganizations = await getUserGithubOrganizations(
+          profile?.organizations_url as string,
+          account?.access_token as string,
+        );
+        const githubRepos = await getUserGithubRepos(
+          profile?.repos_url as string,
+          account?.access_token as string,
+        );
+        const githubRepoLanguages = await getUserGithubRepoLanguages(
+          githubRepos,
+          account?.access_token as string,
+        );
+
+        const updatedUser = {
+          _id: existingUser._id,
+          codingLanguages: githubRepoLanguages,
+          github: {
+            followers: githubFollowers,
+            following: githubFollowing,
+            subscriptions: githubSubscriptions,
+            publicGists: githubPublicGists,
+            organizations: githubOrganizations,
+            publicRepos: githubRepos,
+          },
+        };
+
+        const response = await axios.put(
+          `${baseUrl}/api/users/update`,
+          updatedUser,
           {
-            $set: {
-              name: user.name,
-              image: user.image,
-              updatedAt: new Date(),
+            headers: {
+              "Content-Type": "application/json",
             },
+            maxContentLength: 100000000,
+            maxBodyLength: 1000000000,
           },
         );
+        console.log("response", response.data);
+
         user.id = existingUser._id.toString();
       }
-
       return true;
     },
     async jwt({ token, account, profile }) {
@@ -117,12 +231,11 @@ export const {
     }) {
       // Attach the user's ID to the session object
       if (session && token) {
-        //session.accessToken = token.accessToken;
         session.user.id = token.sub ?? "";
         session.user.githubId = token.githubId;
         session.user.githubUsername = token.githubUsername;
+        session.user.githubAccessToken = token.githubAccessToken;
       }
-
       return session;
     },
     async redirect({ url, baseUrl }) {

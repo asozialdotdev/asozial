@@ -1,84 +1,88 @@
 import { Types } from "mongoose";
+import { ProjectId } from "./Project";
+import { ProjectPostId } from "./ProjectPost";
+
 // next-auth.d.ts
 import NextAuth from "next-auth";
 
-
-
 type UserId = Types.ObjectId | string;
 
-type User = {
-  _id: UserId;
-  githubID: string;
-  email?: string;
-  username?: string;
-  name?: string;
-  githubUsername?: string;
-  company?: string;
-  blog?: string;
-  twitterUsername?: string;
-  bio?: string;
-  location?: string;
-  hireable?: boolean;
-  image?: string;
-  githubApiUrl?: string;
-  githubUrl?: string;
-  githubFollowersUrl?: string;
-  githubFollowers: {
-    githubId: string;
-    githubUsername: string;
-  };
-  githubFollowingUrl?: string;
-  githubFollowing: {
-    githubId: string;
-    githubUsername: string;
-  };
-  githubPublicGistsUrl?: string;
-  githubPublicGists: {
-    name: string;
-    description: string;
-    url: string;
-  };
-  githubPrivateGistsNumber?: string;
-  githubStarredUrl?: string;
-  githubStarred: {
-    name: string;
-    description: string;
-    url: string;
-  };
-  githubSubscriptionsUrl?: string;
-  githubSubscriptions: {
-    name: string;
-    description: string;
-    url: string;
-  };
-  githubOrganizationsUrl?: string;
-  githubOrganizations: {
-    name: string;
-    description: string;
-    url: string;
-  };
-  githubReposUrl?: string;
-  githubRepos: {
-    name: string;
-    description: string;
-    url: string;
-  };
-  githubPublicReposNumber?: number;
-  githubPublicGistsNumber?: number;
-  githubCreatedAt?: string;
-  githubUpdatedAt?: string;
-  githubCollaboratorsNumber?: number;
-  website?: string;
-  socials?: string[];
-  languagesSpoken?: string[];
-  techStack?: string[];
-  projectsJoined?: Types.ObjectId[];
-  projectsSuggested?: Types.ObjectId[];
-  projectsApplied?: Types.ObjectId[];
-  dashboardPosts?: Types.ObjectId[];
-  avoidedUsers?: Types.ObjectId[];
-  avoidedProjects?: Types.ObjectId[];
-  matchedUsers?: Types.ObjectId[];
+type TechStackEntry = {
+  lines: number;
+  projects: number;
+  textColor: string;
+  bgColor: string;
+  Icon: React.ComponentType<{ className: string }>;
 };
 
-export type { User, UserId };
+type Social = {
+  platform: string;
+  url: string;
+};
+
+type CodingLanguage = {
+  language: string;
+  lines: number;
+  projects: number;
+  bgColor: string;
+  textColor: string;
+  Icon: React.ComponentType<{ className: string }>;
+};
+
+type Github = {
+  id: number;
+  username: string;
+  bio: string;
+  apiUrl: string;
+  url: string;
+  eventsUrl: string;
+  followersUrl: string;
+  followers: object[];
+  followerNumber: number;
+  followingUrl: string;
+  following: object[];
+  followingNumber: number;
+  publicGistsUrl: string;
+  publicGists: object[];
+  publicGistsNumber: number;
+  privateGistsNumber: string;
+  starredUrl: string;
+  subscriptionsUrl: string;
+  subscriptions: object[];
+  subscriptionsNumber: number;
+  organizationsUrl: string;
+  organizations: object[];
+  organizationsNumber: number;
+  publicReposUrl: string;
+  publicRepos: object[];
+  publicReposNumber: number;
+  createdAt: string;
+  updatedAt: string;
+  collaboratorsNumber: number;
+};
+
+type User = {
+  username: string;
+  name: string;
+  email: string;
+  notificationEmail: string;
+  image: string;
+  company: string;
+  website: string;
+  location: string;
+  hireable: boolean;
+  socials: Social[];
+  languagesSpoken: string[];
+  codingLanguages: [string, CodingLanguage][];
+  codingLibraries: [string, CodingLanguage][];
+  projectsJoined: ProjectId[];
+  projectsSuggested: ProjectId[];
+  projectsApplied: ProjectId[];
+  projectsAvoided: ProjectId[];
+  dashboardPosts: ProjectPostId[];
+  usersMatched: UserId[];
+  usersAvoided: UserId[];
+  github: Github;
+};
+
+export type { User, UserId, TechStackEntry };

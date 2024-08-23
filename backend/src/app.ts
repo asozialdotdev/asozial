@@ -23,7 +23,7 @@ app.use("/api/auth", githubRouter);
 app.use("/account", accountRouter);
 app.use("/verify", verifyRouter);
 app.use("/dashboard", dashboardRouter);
-app.use("/users", usersRouter);
+app.use("/api/users", usersRouter);
 app.use("/api/projects", projectsRouter);
 app.use("/api/project-posts", projectPostRouter);
 app.use("/api/replies", projectPostReplyRouter);

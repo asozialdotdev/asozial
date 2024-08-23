@@ -23,7 +23,7 @@ usersRouter.post(
       actualUser.matchedUsers.push(targetUser);
       await actualUser.save();
 
-      targetUser.matchedUsers.push(actualUser._id);
+      //targetUser.matchedUsers.push(actualUser._id);
       await targetUser.save();
 
       const populatedActualUser = await User.findById(actualUser._id).populate(
@@ -47,41 +47,39 @@ usersRouter.post(
 // GET user friends
 // rendered in the /users route
 
-usersRouter.get(
-  "/:username",
-  async (req: Request, res: Response, next: NextFunction) => {
-    try {
-      console.log(req.params);
-      const foundUser = await User.findOne({ username: req.params.username });
-      if (!foundUser) {
-        throw new Error("User not found");
-      }
-
-      const friendships = await Friendship.find({
-        $or: [
-          { senderId: foundUser._id, status: "accepted" },
-          { receiverId: foundUser._id, status: "accepted" },
-        ],
-      });
-
-      const friendIds = friendships
-        .flatMap((friendship) => [
-          friendship.senderId.toString(),
-          friendship.receiverId.toString(),
-        ])
-        .filter((id) => id !== foundUser._id.toString());
-
-      const friends = await User.find({ _id: { $in: friendIds } });
-
-      res.json({
-        user: foundUser,
-        friends: friends,
-      });
-    } catch (error) {
-      next(error);
+usersRouter.get("/:username", async (req: Request, res: Response) => {
+  try {
+    const user = await User.findOne({ username: req.params.username });
+    if (!user) {
+      console.log("User not found");
     }
+
+    res.json(user);
+
+    // const friendships = await Friendship.find({
+    //   $or: [
+    //     { senderId: foundUser._id, status: "accepted" },
+    //     { receiverId: foundUser._id, status: "accepted" },
+    //   ],
+    // });
+
+    // const friendIds = friendships
+    //   .flatMap((friendship) => [
+    //     friendship.senderId.toString(),
+    //     friendship.receiverId.toString(),
+    //   ])
+    //   .filter((id) => id !== foundUser._id.toString());
+
+    // const friends = await User.find({ _id: { $in: friendIds } });
+
+    // return res.json({
+    //   user: foundUser,
+    //   friends: friends,
+    // });
+  } catch (error: any) {
+    console.log("Error fetching user by username:", error);
   }
-);
+});
 
 // GET all users for the global search
 
@@ -224,17 +222,38 @@ usersRouter.get(
 
 // GET all projects that a user is a member of
 
-usersRouter.get(
-  "/:userId/projects",
-  async (req: Request, res: Response, next: NextFunction) => {
-    try {
-      const user = (req as any).payload.user;
-      const projects = await Project.find({ membersJoined: user._id });
-      res.json(projects);
-    } catch (error) {
-      next(error);
-    }
+// usersRouter.get(
+//   "/:userId/projects",
+//   async (req: Request, res: Response, next: NextFunction) => {
+//     try {
+//       const user = (req as any).payload.user;
+//       const projects = await Project.find({ membersJoined: user._id });
+//       res.json(projects);
+//     } catch (error) {
+//       next(error);
+//     }
+//   }
+// );
+
+usersRouter.put("/update", async (req: Request, res: Response) => {
+  try {
+    const { _id, codingLanguages, github } = req.body;
+    console.log("received");
+    console.log(codingLanguages);
+    console.log(github);
+    const updatedUser = await User.findByIdAndUpdate(
+      _id,
+      {
+        codingLanguages,
+        github,
+      },
+      { new: true }
+    );
+    console.log("updated");
+    res.json(updatedUser);
+  } catch (error: any) {
+    console.log("Error updating user", error.message);
   }
-);
+});
 
 export default usersRouter;
