@@ -13,9 +13,6 @@ import UserAvatar from "../common/ui/UserAvatar";
 import { setStatusIcon, techStackClass } from "@/utils";
 import MyProjectsLoading from "./MyProjectsLoading";
 
-// const membersJoined = ["Benjamin", "Mirko", "John", "Jane"];
-const membersApplied = ["Alice", "Bob", "Charlie"];
-const membersInvited = ["David", "Eve", "Frank"];
 
 type ProjectCardProps = {
   projects: Project[];
@@ -39,7 +36,7 @@ function ProjectCard({ projects, isLoading, error }: ProjectCardProps) {
     <>
       {projects.map((project: Project, i) => (
         <Card
-          className="max-h-[28rem] min-h-fit min-w-[20rem] max-w-[20rem] overflow-y-auto overflow-x-hidden border-dashed border-zinc-300 bg-zinc-100 pl-1 hover:bg-zinc-100 dark:border-zinc-600 dark:bg-zinc-800 dark:shadow-neutral-700/30 dark:hover:bg-zinc-800 md:bg-inherit md:dark:bg-inherit"
+          className="max-h-[28rem] min-h-fit min-w-[20rem] max-w-[20rem] overflow-y-auto overflow-x-hidden border-dashed border-zinc-300 bg-zinc-100 pl-1 hover:bg-zinc-100 dark:border-zinc-600 dark:bg-zinc-800 dark:shadow-neutral-700/30 dark:hover:bg-zinc-800 bg-inherit dark:bg-inherit"
           key={project._id.toString()}
         >
           <CardHeader>
