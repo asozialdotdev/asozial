@@ -28,7 +28,7 @@ const userSchema = new Schema(
     usersMatched: [{ type: Schema.Types.ObjectId, ref: "User" }],
     usersAvoided: [{ type: Schema.Types.ObjectId, ref: "User" }],
     github: {
-      iD: { type: Number },
+      id: { type: Number },
       username: { type: String },
       bio: { type: String },
       apiUrl: { type: String },
