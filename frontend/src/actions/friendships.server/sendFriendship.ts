@@ -3,8 +3,6 @@ import { baseUrl } from "@/constants";
 import axios from "axios";
 
 const sendFriendship = async (senderId: string, receiverId: string) => {
-  console.log("senderId", senderId);
-  console.log("receiverId", receiverId);
   try {
     const res = await axios.post(`${baseUrl}/api/friends`, {
       senderId,
