@@ -13,10 +13,10 @@ type SocialsData = {
 type ProjectId = Types.ObjectId | string;
 type Member = {
   _id: Types.ObjectId | string;
-  avatarUrl: string;
+  avatarUrl: string
   image: string;
   name: string;
-  username: string;
+  username: string
 };
 
 type Socials = {
@@ -34,6 +34,8 @@ type Project = {
   techStack: string[];
   owner: Member;
   pitch: string;
+  image?: string;
+  placeholder?: string;
   mainLanguage: string;
   membersJoined: Member[];
   membersApplied: Member[];
@@ -51,6 +53,8 @@ type CreateUpdateProject = {
   techStack: string[];
   mainLanguage: string;
   githubRepo?: string;
+  image?: string;
+  placeholder?: string;
   socials?: {
     slack?: string;
     discord?: string;
@@ -59,4 +63,11 @@ type CreateUpdateProject = {
   };
 };
 
-export type { Project, ProjectId, Member, CreateUpdateProject, SocialsData, Socials };
+export type {
+  Project,
+  ProjectId,
+  Member,
+  CreateUpdateProject,
+  SocialsData,
+  Socials,
+};

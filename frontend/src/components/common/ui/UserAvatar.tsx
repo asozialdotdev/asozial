@@ -28,15 +28,17 @@ function UserAvatar({ src, username, userId, className }: UserAvatarProps) {
   return (
     <TooltipProvider key={username}>
       <Tooltip>
-        <TooltipTrigger>
-          <Link title={username} href={`/users/${userId}`}>
+        <TooltipTrigger asChild>
+          <Link href={`/users/${userId}`}>
             <Avatar className={clsx("flex-shrink-0", className)}>
               <AvatarImage src={src} alt={username} />
-              <AvatarFallback>{username.charAt(0).toUpperCase()}</AvatarFallback>
+              <AvatarFallback>
+                {username.charAt(0).toUpperCase()}
+              </AvatarFallback>
             </Avatar>
           </Link>
         </TooltipTrigger>
-        <TooltipContent>{username}</TooltipContent>
+        <TooltipContent className="left-0 top-0">{username}</TooltipContent>
       </Tooltip>
     </TooltipProvider>
   );

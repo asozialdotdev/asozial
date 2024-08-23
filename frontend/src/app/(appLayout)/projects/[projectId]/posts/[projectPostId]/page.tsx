@@ -1,5 +1,5 @@
 //Components
-import PageContainer from "@/components/common/PageContainer";
+import PageContainer from "@/components/common/containers/PageContainer";
 import ParentPost from "@/components/projectPost/ParentPost";
 import ParentPostLoading from "@/components/projectPost/ParentPostLoading";
 import RepliesList from "@/components/projectPost/RepliesList";

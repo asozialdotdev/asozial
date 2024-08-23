@@ -5,6 +5,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useSession } from "next-auth/react";
 import { Button } from "../ui/button";
 import { signOut } from "@/actions";
+import ButtonBack from "../common/ui/ButtonBack";
 
 function UserSidebar() {
   const { userSidebarRef, isUserSidebarOpen, projectSidebarRef } =
@@ -13,9 +14,10 @@ function UserSidebar() {
 
   return (
     <aside
-      className={`z-50 flex h-full w-[14rem] flex-col gap-10 overflow-y-auto bg-gray-100 px-[3.2rem] py-[2.4rem] text-3xl text-dark shadow-md transition-transform duration-150 ease-in-out dark:bg-zinc-900 dark:text-light lg:w-[18rem] ${isUserSidebarOpen ? "translate-x-0 xl:-translate-x-full" : "-translate-x-full xl:translate-x-0"}`}
+      className={`relative z-50 flex h-full w-[14rem] flex-col gap-10 overflow-y-auto bg-gray-100 px-[3.2rem] py-[2.4rem] text-3xl text-dark shadow-md transition-transform duration-150 ease-in-out dark:bg-zinc-900 dark:text-light lg:w-[18rem] ${isUserSidebarOpen ? "translate-x-0 xl:-translate-x-full" : "-translate-x-full xl:translate-x-0"}`}
       ref={userSidebarRef}
     >
+      <ButtonBack className="absolute right-3 top-1 z-20" size={30} />
       <Avatar className="h-28 w-28 flex-shrink-0">
         <AvatarImage src={session?.data?.user?.image || ""} alt="User Avatar" />
         <AvatarFallback>

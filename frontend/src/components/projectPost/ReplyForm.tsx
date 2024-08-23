@@ -23,7 +23,7 @@ import { GoComment } from "react-icons/go";
 
 //Types
 import type { ProjectPostId, Reply, ReplyId } from "@/types/ProjectPost";
-import ReplyIcon from "../common/ReplyIcon";
+import ReplyIcon from "../common/ui/ReplyIcon";
 
 type ReplyFormProps = {
   projectPostId: ProjectPostId;

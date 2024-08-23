@@ -6,11 +6,11 @@ import React, { useEffect } from "react";
 import { useSidebarsContext } from "@/context/SidebarsContext";
 
 //Components
-import Main from "@/components/common/Main";
-import Navbar from "@/components/common/Navbar";
+import Main from "@/components/common/layout/Main";
+import Navbar from "@/components/common/layout/Navbar";
 import ProjectSidebar from "@/components/project/ProjectSidebar";
 import UserSidebar from "@/components/user/UserSidebar";
-import AppFooter from "@/components/common/AppFooter";
+import AppFooter from "@/components/common/layout/AppFooter";
 import { auth } from "@/auth";
 import { useSession } from "next-auth/react";
 
@@ -39,9 +39,9 @@ function AppLayout({ children }: { children: React.ReactNode }) {
           <UserSidebar />
         </aside>
         <Main>
-          {/* {isOverlayVisible && (
-            <div className="absolute inset-0 z-40 bg-dark opacity-20 dark:opacity-50"></div>
-          )} */}
+          {isOverlayVisible && (
+            <div className="absolute inset-0 z-40 bg-dark opacity-20 dark:opacity-50 lg:hidden"></div>
+          )}
           {children}
         </Main>
 

@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 
 //Constants
 import { baseUrl } from "@/constants";
-import PageContainer from "@/components/common/PageContainer";
+import PageContainer from "@/components/common/containers/PageContainer";
 import { fetchAllProjects } from "@/actions";
 
 async function ExploreProjectsPage() {

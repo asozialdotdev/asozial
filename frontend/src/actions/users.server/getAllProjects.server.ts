@@ -1,5 +1,5 @@
+"use server";
 const getAllProjects = async () => {
-  "use server";
   const projects = await fetch("/api/projects", {
     method: "GET",
   });
@@ -10,4 +10,4 @@ const getAllProjects = async () => {
   }
 };
 
-export default getAllProjects;
+export { getAllProjects };

@@ -1,4 +1,4 @@
-import PageContainer from "../common/PageContainer";
+import PageContainer from "../common/containers/PageContainer";
 import { Skeleton } from "../ui/skeleton";
 
 function MyProjectsLoading() {

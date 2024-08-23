@@ -8,6 +8,8 @@ const projectSchema = new Schema(
     githubRepo: { type: String },
     techStack: [{ type: String }],
     mainLanguage: { type: String },
+    image: { type: String },
+    placeholder: { type: String },
     owner: { type: Schema.Types.ObjectId, ref: "User", required: true },
     membersJoined: [{ type: Schema.Types.ObjectId, ref: "User" }],
     membersApplied: [{ type: Schema.Types.ObjectId, ref: "User" }],

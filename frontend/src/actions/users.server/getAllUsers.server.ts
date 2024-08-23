@@ -1,5 +1,5 @@
+"use server";
 const getAllUsers = async () => {
-  "use server";
   const data = await fetch("/users/search", {
     method: "GET",
   });
@@ -11,4 +11,4 @@ const getAllUsers = async () => {
   }
 };
 
-export default getAllUsers;
+export { getAllUsers };

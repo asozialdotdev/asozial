@@ -1,3 +1,4 @@
+"use server";
 import { baseUrl } from "@/constants";
 import axios from "axios";
 
@@ -12,4 +13,4 @@ const getUserByUsername = async (username: string) => {
   }
 };
 
-export default getUserByUsername;
+export { getUserByUsername };

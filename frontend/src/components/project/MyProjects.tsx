@@ -33,7 +33,7 @@ function MyProjects({ projects }: { projects: Project[] }) {
           className="h-12 w-[25rem] border-zinc-300 bg-white hover:bg-zinc-50 focus:bg-zinc-50 dark:border-zinc-700 dark:hover:bg-zinc-800 dark:focus:bg-zinc-800"
         />
       </section>
-      <article className="grid grid-cols-1 gap-4 pb-6 lg:grid-cols-2 2xl:grid-cols-3">
+      <article className="grid grid-cols-1 2xl:gap-8 gap-4 pb-6 lg:grid-cols-2 2xl:grid-cols-3">
         <ProjectCard
           projects={projectsState}
           isLoading={isLoading}

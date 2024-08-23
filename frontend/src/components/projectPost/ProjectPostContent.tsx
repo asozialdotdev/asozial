@@ -12,12 +12,15 @@ import EditPostForm from "./EditPostForm";
 
 //Types
 import { ProjectPost } from "@/types/ProjectPost";
+import { ImageT } from "../common/ui/ImageUploader";
 
 type ProjectPostContentProps = {
   projectPost: ProjectPost;
   isEditing?: boolean;
   setIsEditing: Dispatch<SetStateAction<boolean>>;
   isProjectPage?: boolean;
+  image?: ImageT;
+  setImage: Dispatch<SetStateAction<ImageT | undefined>>;
 };
 
 function ProjectPostContent({
@@ -25,6 +28,8 @@ function ProjectPostContent({
   isEditing,
   setIsEditing,
   isProjectPage,
+  image,
+  setImage
 }: ProjectPostContentProps) {
   const post = projectPost;
 
@@ -70,7 +75,12 @@ function ProjectPostContent({
     </div>
   ) : (
     <>
-      <EditPostForm projectPost={post} setIsEditing={setIsEditing} />
+      <EditPostForm
+        projectPost={post}
+        setIsEditing={setIsEditing}
+        image={image}
+        setImage={setImage}
+      />
     </>
   );
 }
