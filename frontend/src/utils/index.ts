@@ -1,4 +1,5 @@
 import { languagesWithColors } from "@/constants";
+import { cn } from "@/lib/utils";
 import clsx from "clsx";
 import { formatDistance } from "date-fns";
 
@@ -6,7 +7,7 @@ const techStackClass = (language: string) => {
   const stackColor = languagesWithColors.find(
     (lang) => lang.language === language,
   );
-  return clsx(
+  return cn(
     "rounded-full px-2 py-1 text-sm text-light ",
     stackColor ? stackColor.bgColor : "bg-neutral-400 dark:bg-neutral-600",
   );

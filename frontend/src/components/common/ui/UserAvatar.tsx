@@ -2,7 +2,7 @@
 import Link from "next/link";
 
 //Lib
-import clsx from "clsx";
+import { cn } from "@/lib/utils";
 
 //Ui
 import {
@@ -30,7 +30,7 @@ function UserAvatar({ src, username, userId, className }: UserAvatarProps) {
       <Tooltip>
         <TooltipTrigger asChild>
           <Link href={`/users/${userId}`}>
-            <Avatar className={clsx("flex-shrink-0", className)}>
+            <Avatar className={cn("flex-shrink-0", className)}>
               <AvatarImage src={src} alt={username} />
               <AvatarFallback>
                 {username.charAt(0).toUpperCase()}

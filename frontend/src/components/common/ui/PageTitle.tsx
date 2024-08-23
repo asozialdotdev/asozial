@@ -1,4 +1,4 @@
-import clsx from "clsx";
+import { cn } from "@/lib/utils";
 
 type PageTitleProps = {
   children: React.ReactNode;
@@ -7,7 +7,7 @@ type PageTitleProps = {
 function PageTitle({ children, className }: PageTitleProps) {
   return (
     <h1
-      className={clsx(
+      className={cn(
         "tracking-wide' text-3xl font-bold text-dark dark:text-light",
         className,
       )}

@@ -309,6 +309,8 @@ projectsRouter.put(
         userId,
       } = req.body;
 
+      //if projectId, do api call to github to get repo info from backend
+
       console.log("githubRepo:::::::::::::", githubRepo);
 
       // Find the project first
