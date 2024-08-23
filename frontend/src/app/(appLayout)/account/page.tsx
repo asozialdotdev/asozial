@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
-import PageContainer from "@/components/common/PageContainer";
-import getUserByUsername from "@/actions/getUserByUsername.server";
+import PageContainer from "@/components/common/containers/PageContainer";
+import { getUserByUsername } from "@/actions/users.server/getUserByUsername.server";
 import UserComponent from "@/components/user/UserComponent";
 import { auth } from "@/auth";
 import { User } from "@/types/User";
