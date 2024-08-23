@@ -1,6 +1,6 @@
 "use server";
-const getAllMessages = async () => {
-  const data = await fetch("/api/messages/:friendshipId", {
+const getAllMessages = async (friendshipId: string) => {
+  const data = await fetch(`/api/messages/${friendshipId}`, {
     method: "GET",
   });
   if (!data) {
