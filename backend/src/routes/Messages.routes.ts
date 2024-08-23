@@ -10,8 +10,8 @@ const messagesRouter = express.Router();
 messagesRouter.post(
   "/new",
   async (req: Request, res: Response, next: NextFunction) => {
-    const actualUser = (req as any).payload.user;
-    const targetUser = User.findById(req.params.id);
+    const { actualUser, targetUser } = req.body;
+    const foundTargetUser = User.findById(targetUser);
 
     // check if the users are already friends
 
@@ -22,7 +22,7 @@ messagesRouter.post(
       ],
     });
 
-    if (!targetUser) {
+    if (!foundTargetUser) {
       return res.status(404).json({ message: "User not found" });
     }
 
@@ -36,7 +36,7 @@ messagesRouter.post(
     try {
       const newMessage = await Message.create({
         senderId: actualUser,
-        receiverId: targetUser,
+        receiverId: foundTargetUser,
         title: req.body.title,
         content: req.body.content,
         isRead: false,
@@ -56,24 +56,24 @@ messagesRouter.post(
 messagesRouter.get(
   "/:userId",
   async (req: Request, res: Response, next: NextFunction) => {
-    const actualUser = (req as any).payload.user;
-    const targetUser = User.findById(req.params.id);
+    const { actualUser, targetUser } = req.body;
+    const foundTargetUser = User.findById(targetUser);
 
-    if (!targetUser) {
+    if (!foundTargetUser) {
       return res.status(404).json({ message: "User not found" });
     }
 
     try {
       const messages = await Message.find({
         $or: [
-          { senderId: actualUser._id, receiverId: targetUser },
-          { senderId: targetUser, receiverId: actualUser._id },
+          { senderId: actualUser, receiverId: foundTargetUser },
+          { senderId: foundTargetUser, receiverId: actualUser },
         ],
       });
 
       await Message.updateMany(
         {
-          receiverId: actualUser._id,
+          receiverId: actualUser,
           senderId: targetUser,
           isRead: false,
         },
