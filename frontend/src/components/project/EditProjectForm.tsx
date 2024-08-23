@@ -1,7 +1,6 @@
 "use client";
 //Next
 import { useRouter } from "next/navigation";
-import Image from "next/image";
 
 //React
 import { useState } from "react";
@@ -12,41 +11,13 @@ import { deleteProject, updateProject } from "@/actions";
 //Hooks
 import { ControllerRenderProps } from "react-hook-form";
 import useSpokenLanguages from "@/hooks/useSpokenLanguages";
-
-//Ui
-import { Button } from "../ui/button";
-import { Input } from "../ui/input";
-import { Textarea } from "../ui/textarea";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { Checkbox } from "@/components/ui/checkbox";
-import github from "/public/socials/github.png";
-
 //Lib
-import { Controller, SubmitHandler, useForm } from "react-hook-form";
+import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { createProjectSchema } from "@/lib/schema";
-import { z } from "zod";
-import { useSession } from "next-auth/react";
 
-// Constants
-import { languagesWithColors, projectStatus, socialsData } from "@/constants";
 
 //Components
-import PageTitle from "../common/ui/PageTitle";
-import CustomDialog from "../common/ui/CustomDialog";
-
-import type { CreateUpdateProject, Project } from "@/types/Project";
-import ImageUploader, { ImageT } from "../common/ui/ImageUploader";
-import LoadingTextButton from "../common/ui/LoadingTextButton";
-import CustomSwitch from "../common/ui/CustomSwitch";
-import CustomLabel from "../common/ui/Label";
-import ErrorMessage from "../common/ui/ErrorMessage";
 import FormImage from "./project-form/FormImage";
 import Status from "./project-form/Status";
 import Title from "./project-form/Title";
@@ -57,17 +28,15 @@ import TechStack from "./project-form/TechStack";
 import GithubRepo from "./project-form/GithubRepo";
 import Socials from "./project-form/Socials";
 import ProjectFormButtons from "./project-form/ProjectFormButtons";
-type Inputs = z.infer<typeof createProjectSchema>;
+
+import type { CreateUpdateProject, Inputs, Project } from "@/types/Project";
+import { ImageT } from "../common/ui/ImageUploader";
 
 function EditProjectForm({ project }: { project: Project }) {
-  const session = useSession();
-  const userId = session?.data?.user?.id;
-  const isOwner = userId === project.owner._id;
   const [error, setError] = useState<string | null>(null);
   const [uploadedImage, setUploadedImage] = useState<ImageT | null>(null);
 
-  const { spokenLanguages, isLoadingSpokenLanguages, errorSpokenLanguages } =
-    useSpokenLanguages();
+  const { spokenLanguages } = useSpokenLanguages();
 
   const router = useRouter();
 
@@ -92,8 +61,6 @@ function EditProjectForm({ project }: { project: Project }) {
       placeholder: project.placeholder,
     },
   });
-
-  const techStackValues = watch("techStack");
 
   const handleCheckedChange = (
     checked: boolean | string,
@@ -150,10 +117,6 @@ function EditProjectForm({ project }: { project: Project }) {
     }
   };
 
-  const image = watch("image");
-  console.log("image", image);
-  console.log("uploadedImage", uploadedImage);
-
   const handleDeleteProject = async () => {
     const result = await deleteProject(project._id);
     if (result.error) {
@@ -193,7 +156,6 @@ function EditProjectForm({ project }: { project: Project }) {
         />
 
         {/* Tech Stack */}
-
         <TechStack
           control={control}
           errors={errors}
@@ -205,9 +167,9 @@ function EditProjectForm({ project }: { project: Project }) {
         <GithubRepo control={control} />
 
         {/* Socials */}
-
         <Socials control={control} />
 
+        {/* Buttons */}
         <ProjectFormButtons
           isSubmitting={isSubmitting}
           handleDeleteProject={handleDeleteProject}
