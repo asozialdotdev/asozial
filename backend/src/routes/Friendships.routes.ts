@@ -10,8 +10,7 @@ friendshipsRouter.post(
   "/",
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const senderId = (req as any).payload.user;
-      const receiverId = await User.findById(req.params.userId);
+      const { senderId, receiverId } = req.body;
 
       if (!receiverId) {
         res.status(404).send("User not found");
@@ -47,16 +46,21 @@ friendshipsRouter.patch(
   "/:friendshipId/accept",
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const friendshipId = req.params.friendshipId;
-      const friendship = await Friendship.findById(friendshipId);
+      const { userId } = req.body;
+      const { friendshipId } = req.params;
 
-      if (!friendship) {
+      const foundFriendship = await Friendship.findById(friendshipId);
+
+      if (!foundFriendship) {
         res.status(404).send("Friendship not found");
         console.error("Friendship not found");
         return;
       }
 
-      if (friendship.receiverId.toString() !== (req as any).payload.user) {
+      if (
+        foundFriendship.receiverId.toString() !== userId ||
+        foundFriendship.senderId.toString() !== userId
+      ) {
         res
           .status(403)
           .send("You are not authorized to accept this friendship");
@@ -64,10 +68,10 @@ friendshipsRouter.patch(
         return;
       }
 
-      friendship.status = "accepted";
-      await friendship.save();
+      foundFriendship.status = "accepted";
+      await foundFriendship.save();
 
-      res.status(200).json(friendship);
+      res.status(200).json(foundFriendship);
     } catch (error) {
       next(error);
     }
@@ -80,15 +84,16 @@ friendshipsRouter.patch(
   "/:friendshipId/decline",
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const friendshipId = req.params.friendshipId;
+      const { receiverId } = req.body;
+      const { friendshipId } = req.params;
 
       const friendship = await Friendship.findOneAndUpdate(
         {
           _id: friendshipId,
-          receiverId: (req as any).payload.user._id,  // Ensures only the receiver can decline
+          receiverId: receiverId, // Ensures only the receiver can decline
         },
         { status: "declined" },
-        { new: true }  // Return the updated document
+        { new: true } // Return the updated document
       );
 
       if (!friendship) {
@@ -104,14 +109,13 @@ friendshipsRouter.patch(
   }
 );
 
-
 // GET all pending friendships
 
 friendshipsRouter.get(
   "/pending",
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const actualUser = (req as any).payload.user;
+      const { actualUser } = req.body;
 
       const pendingFriendships = await Friendship.find({
         $or: [
@@ -139,7 +143,7 @@ friendshipsRouter.get(
   "/declined",
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const actualUser = (req as any).payload.user;
+      const { actualUser } = req.body;
 
       const declinedFriendships = await Friendship.find({
         $or: [
@@ -167,21 +171,17 @@ friendshipsRouter.delete(
   "/",
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const deleteResult = await Friendship.deleteMany({
-        $or: [
-          { senderId: req.body.senderId, receiverId: req.body.receiverId },
-          { senderId: req.body.receiverId, receiverId: req.body.senderId },
-        ],
+      const { actualUser } = req.body;
+      const deleteFriendship = await Friendship.findOneAndDelete({
+        $or: [{ senderId: actualUser }, { receiverId: actualUser }],
         status: "accepted",
       });
-
-      if (deleteResult.deletedCount === 0) {
-        res.status(404).send("Friendship not found or not accepted");
-        console.error("Friendship not found or not accepted");
+      if (!deleteFriendship) {
+        res.status(404).send("Friendship not found or unauthorized");
+        console.error("Friendship not found or unauthorized");
         return;
       }
-
-      res.status(200).json({ message: "Friendship deleted" });
+      res.status(204);
     } catch (error) {
       next(error);
     }

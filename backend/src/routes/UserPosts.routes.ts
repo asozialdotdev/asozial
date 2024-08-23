@@ -11,7 +11,7 @@ usersPostRouter.post(
   "/",
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const actualUser = (req as any).payload.user;
+      const { userId } = req.body;
 
       const { title, content } = req.body;
       if (!title || !content) {
@@ -20,7 +20,7 @@ usersPostRouter.post(
           .json({ message: "Title and content are required" });
       }
       const newPost = await UserPost.create({
-        userId: actualUser._id,
+        userId: userId,
         title,
         content,
       });
@@ -55,19 +55,19 @@ usersPostRouter.get(
   "/friends",
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const actualUser = (req as any).payload.user;
+      const { userId } = req.body;
 
       // Get all friendships where the user is either sender or receiver
       const friendships = await Friendship.find({
         $or: [
-          { senderId: actualUser._id, status: "accepted" },
-          { receiverId: actualUser._id, status: "accepted" },
+          { senderId: userId, status: "accepted" },
+          { receiverId: userId, status: "accepted" },
         ],
       });
 
       // Extract friend IDs
       const friendIds = friendships.map((friendship) =>
-        friendship.senderId.equals(actualUser._id)
+        friendship.senderId.equals(userId)
           ? friendship.receiverId
           : friendship.senderId
       );
