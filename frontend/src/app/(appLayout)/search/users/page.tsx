@@ -10,7 +10,7 @@ import UserAvatar from "@/components/common/ui/UserAvatar";
 import { MapPinHouse, FolderGit } from "lucide-react";
 import { send } from "process";
 import { auth } from "@/auth";
-import sendFriendship from "@/actions/friendships.server/sendFriendship";
+import sendFriendship from "@/actions/friendships.server/sendFriendship.server";
 
 //api/friends POST  => add friend
 

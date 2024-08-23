@@ -164,7 +164,7 @@ usersRouter.get(
   "/match",
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const actualUser = (req as any).payload.user;
+      const { actualUser } = req.body;
 
       const avoidedUsers = await User.find({
         $or: [
