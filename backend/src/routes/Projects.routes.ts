@@ -422,7 +422,7 @@ projectsRouter.get(
   "/match",
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const actualUser = (req as any).payload.user;
+      const { actualUser } = req.body;
 
       const filteredProjects = await Project.aggregate([
         {
@@ -461,7 +461,7 @@ projectsRouter.post(
   "/match",
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const actualUser = (req as any).payload.user;
+      const { actualUser } = req.body;
       const { projectId } = req.body;
       const foundProject = await Project.findById(projectId);
 
