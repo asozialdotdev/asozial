@@ -8,10 +8,15 @@ import { baseUrl } from "@/constants";
 import ButtonAddFriend from "@/components/common/ui/ButtonAddFriend";
 import UserAvatar from "@/components/common/ui/UserAvatar";
 import { MapPinHouse, FolderGit } from "lucide-react";
+import { send } from "process";
+import { auth } from "@/auth";
+import sendFriendship from "@/actions/friendships.server/sendFriendship";
 
 //api/friends POST  => add friend
 
 async function Page() {
+  const session = await auth();
+  const userId = session?.user?.id;
   const allUsers: User[] = await getAllUsers();
   return (
     <PageContainer>
@@ -36,10 +41,13 @@ async function Page() {
                     </h1>
                   </a>
                 </div>
-                <ButtonAddFriend
-                  senderId="53452354"
-                  receiverId={user._id.toString()}
-                />
+                {userId && userId !== user._id.toString() && (
+                  <ButtonAddFriend
+                    sendFriendship={sendFriendship}
+                    userId={userId}
+                    friendId={user._id.toString()}
+                  />
+                )}
               </div>
               <div className="flex flex-col gap-2">
                 <div className="flex flex-row items-center justify-start gap-2">

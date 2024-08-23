@@ -12,16 +12,19 @@ import {
 type ButtonAddFriendProps = {
   className?: string;
   size?: number;
-  senderId: string;
-  receiverId: string;
+  sendFriendship: (userId: string, friendId: string) => void;
+  userId: string;
+  friendId: string;
 };
 
 function ButtonAddFriend({
   className,
   size = 25,
-  senderId,
-  receiverId,
+  sendFriendship,
+  userId,
+  friendId,
 }: ButtonAddFriendProps) {
+  console.log("ButtonAddFriend", userId, friendId);
   return (
     <TooltipProvider>
       <Tooltip>
@@ -30,10 +33,7 @@ function ButtonAddFriend({
             variant={"ghost"}
             size="icon"
             className={`flex flex-row ${cn(className)}`}
-            onClick={() => {
-              console.log("senderId", senderId);
-              console.log("receiverId", receiverId);
-            }}
+            onClick={() => sendFriendship(userId, friendId)}
           >
             <Users size={size} />
             <Plus size={size} />

@@ -25,6 +25,10 @@ const userSchema = new Schema(
     projectsApplied: [{ type: Schema.Types.ObjectId, ref: "Project" }],
     projectsAvoided: [{ type: Schema.Types.ObjectId, ref: "Project" }],
     dashboardPosts: [{ type: Schema.Types.ObjectId, ref: "Post" }],
+    friendsPending: [{ type: Schema.Types.ObjectId, ref: "User" }],
+    friendsAccepted: [{ type: Schema.Types.ObjectId, ref: "User" }],
+    friendsRejected: [{ type: Schema.Types.ObjectId, ref: "User" }],
+    friendsRejectedBy: [{ type: Schema.Types.ObjectId, ref: "User" }],
     usersMatched: [{ type: Schema.Types.ObjectId, ref: "User" }],
     usersAvoided: [{ type: Schema.Types.ObjectId, ref: "User" }],
     github: {

@@ -9,12 +9,21 @@ const friendshipsRouter = express.Router();
 friendshipsRouter.post(
   "/",
   async (req: Request, res: Response, next: NextFunction) => {
+    console.log("req.body", req.body);
     try {
       const { senderId, receiverId } = req.body;
+      console.log("senderId", senderId);
+      console.log("receiverId", receiverId);
+
+      if (!senderId) {
+        res.status(404).send("Sender not found");
+        console.error("Sender not found");
+        return;
+      }
 
       if (!receiverId) {
-        res.status(404).send("User not found");
-        console.error("User not found");
+        res.status(404).send("Receiver not found");
+        console.error("Receiver not found");
         return;
       }
 
@@ -31,6 +40,15 @@ friendshipsRouter.post(
         senderId,
         receiverId,
         status: "pending",
+      });
+
+      //add friendship to sender and receiver
+      await User.findByIdAndUpdate(senderId, {
+        $push: { friendsPending: receiverId },
+      });
+
+      await User.findByIdAndUpdate(receiverId, {
+        $push: { friendsPending: senderId },
       });
 
       res.status(201).json(newFriendship);
