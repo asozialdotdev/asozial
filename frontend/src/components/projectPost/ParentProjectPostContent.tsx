@@ -27,6 +27,7 @@ import { FaRegArrowAltCircleRight } from "react-icons/fa";
 import { useSession } from "next-auth/react";
 //Types
 import { ProjectPost, Reply } from "@/types/ProjectPost";
+import ButtonForward from "../common/ui/ButtonForward";
 
 type ParentProjectPostContent = {
   post: ProjectPost;
@@ -144,7 +145,7 @@ function ParentProjectPostContent({
               href={`/projects/${post.projectId}/posts/${post._id}`}
             >
               <span>
-                <FaRegArrowAltCircleRight size={30} />
+                <ButtonForward size={30} text="Check full thread" />
               </span>
             </Link>
           </>

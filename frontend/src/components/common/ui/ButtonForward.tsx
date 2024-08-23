@@ -1,7 +1,7 @@
 "use client";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { SquareChevronLeft } from "lucide-react";
+import { SquareChevronRight } from "lucide-react";
 import { useRouter } from "next/navigation";
 import {
   Tooltip,
@@ -10,13 +10,19 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 
-type ButtonBackProps = {
+type ButtonForwardProps = {
   className?: string;
   size?: number;
+  handler?: () => void;
+  text?: string;
 };
 
-function ButtonBack({ className, size = 25 }: ButtonBackProps) {
-  const router = useRouter();
+function ButtonForward({
+  className,
+  size = 25,
+  handler,
+  text,
+}: ButtonForwardProps) {
   return (
     <TooltipProvider>
       <Tooltip>
@@ -25,15 +31,15 @@ function ButtonBack({ className, size = 25 }: ButtonBackProps) {
             variant={"ghost"}
             size="icon"
             className={cn(className)}
-            onClick={router.back}
+            onClick={handler}
           >
-            <SquareChevronLeft size={size} />
+            <SquareChevronRight size={size} />
           </Button>
         </TooltipTrigger>
-        <TooltipContent side="left">Go back</TooltipContent>
+        <TooltipContent>{text}</TooltipContent>
       </Tooltip>
     </TooltipProvider>
   );
 }
 
-export default ButtonBack;
+export default ButtonForward;

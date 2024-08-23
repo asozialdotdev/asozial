@@ -37,15 +37,12 @@ function ReplyShow({ replyId, projectPostId, replies, child }: ReplyShowProps) {
   const startOpen = false;
 
   const [open, setOpen] = useState<boolean>(startOpen);
-
   const [edit, setEdit] = useState(false);
-
   const [error, setError] = useState("");
 
   const reply = replies.find((r: Reply) => r._id === replyId);
 
   const isAuthor = userId === reply?.userId._id.toString();
-  console.log("isAuthor reply", isAuthor);
 
   if (!reply) {
     return null;

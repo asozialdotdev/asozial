@@ -39,9 +39,9 @@ function AppLayout({ children }: { children: React.ReactNode }) {
           <UserSidebar />
         </aside>
         <Main>
-          {/* {isOverlayVisible && (
-            <div className="absolute inset-0 z-40 bg-dark opacity-20 dark:opacity-50"></div>
-          )} */}
+          {isOverlayVisible && (
+            <div className="absolute inset-0 z-40 bg-dark opacity-20 dark:opacity-50 lg:hidden"></div>
+          )}
           {children}
         </Main>
 

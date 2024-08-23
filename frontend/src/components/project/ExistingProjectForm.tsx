@@ -86,6 +86,8 @@ function ExistingProjectForm() {
     setIsLoadingCreating(false);
   };
 
+  console.log("errorRepos", errorRepos);
+
   if (isLoadingRepos) {
     return (
       <div className="mt-10 flex flex-col items-center gap-4">

@@ -30,7 +30,7 @@ type ImageUploaderProps = {
 
 export default function ImageUploader({
   className,
-  variant,
+  variant = "outline",
   onUploadSucess,
 }: ImageUploaderProps) {
   const [uploadedFile, setUploadedFile] = useState<ImageT | null>(null);
