@@ -8,7 +8,7 @@ type CustomTextareaProps = {
   id: string;
   value: string;
   onChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
-  className?: ClassValue[];
+  className?: string;
 };
 function CustomTextarea({
   placeholder,

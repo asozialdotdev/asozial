@@ -47,6 +47,16 @@ import LoadingTextButton from "../common/ui/LoadingTextButton";
 import CustomSwitch from "../common/ui/CustomSwitch";
 import CustomLabel from "../common/ui/Label";
 import ErrorMessage from "../common/ui/ErrorMessage";
+import FormImage from "./project-form/FormImage";
+import Status from "./project-form/Status";
+import Title from "./project-form/Title";
+import Description from "./project-form/Description";
+import Pitch from "./project-form/Pitch";
+import MainLanguage from "./project-form/MainLanguage";
+import TechStack from "./project-form/TechStack";
+import GithubRepo from "./project-form/GithubRepo";
+import Socials from "./project-form/Socials";
+import ProjectFormButtons from "./project-form/ProjectFormButtons";
 type Inputs = z.infer<typeof createProjectSchema>;
 
 function EditProjectForm({ project }: { project: Project }) {
@@ -161,267 +171,47 @@ function EditProjectForm({ project }: { project: Project }) {
         className="mt-2 flex w-full flex-col gap-2"
       >
         {/* Image */}
-        <div className="mt-6 flex flex-col gap-2">
-          <CustomLabel htmlFor="image" className="-mb-4">
-            Image
-          </CustomLabel>
-          <ImageUploader onUploadSucess={setUploadedImage} />
-        </div>
+        <FormImage setUploadedImage={setUploadedImage} />
 
         {/* Status */}
-        <div className="mt-6 flex flex-col gap-2">
-          <CustomLabel htmlFor="status" required>
-            Status
-          </CustomLabel>
-          <Controller
-            name="status"
-            control={control}
-            render={({ field }) => (
-              <Select
-                onValueChange={field.onChange}
-                value={field.value}
-                name="status"
-              >
-                <SelectTrigger className="w-[180px] capitalize">
-                  <SelectValue placeholder="Status" />
-                </SelectTrigger>
+        <Status control={control} />
 
-                <SelectContent id="status">
-                  {projectStatus.map((s) => (
-                    <SelectItem className="capitalize" key={s} value={s}>
-                      {s}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            )}
-          />
-        </div>
         {/* Title */}
-        <div className="mt-4 flex flex-col gap-2">
-          <CustomLabel htmlFor="title" required>
-            Title
-          </CustomLabel>
-
-          <Controller
-            name="title"
-            control={control}
-            render={({ field }) => (
-              <Input
-                {...field}
-                type="text"
-                id="title"
-                name="title"
-                placeholder="The title of your project"
-                className="h-12 w-full border-zinc-300 bg-white hover:bg-zinc-50 focus:bg-zinc-50 dark:border-zinc-700 dark:hover:bg-zinc-800 dark:focus:bg-zinc-800"
-              />
-            )}
-          />
-          {errors.title && <ErrorMessage>{errors.title.message}</ErrorMessage>}
-        </div>
+        <Title control={control} errors={errors} />
 
         {/* Description */}
-        <div className="mt-4 flex flex-col gap-2">
-          <CustomLabel htmlFor="description" required>
-            Description
-          </CustomLabel>
-          <Controller
-            name="description"
-            control={control}
-            render={({ field }) => (
-              <Input
-                {...field}
-                type="text"
-                id="description"
-                name="description"
-                placeholder="What is your project about?"
-                className="h-12 w-full border-zinc-300 bg-white hover:bg-zinc-50 focus:bg-zinc-50 dark:border-zinc-700 dark:hover:bg-zinc-800 dark:focus:bg-zinc-800"
-              />
-            )}
-          />
-          {errors.description && (
-            <ErrorMessage>{errors.description.message}</ErrorMessage>
-          )}
-        </div>
+        <Description control={control} errors={errors} />
 
         {/* Pitch */}
-        <div className="mt-4 flex flex-col gap-2">
-          <CustomLabel htmlFor="pitch" required>
-            Pitch
-          </CustomLabel>
-
-          <Controller
-            name="pitch"
-            control={control}
-            render={({ field }) => (
-              <Textarea
-                {...field}
-                id="pitch"
-                name="pitch"
-                placeholder="Describe what is your project about and why other members should join it..."
-                className="h-32 w-full border-zinc-300 bg-white hover:bg-zinc-50 focus:bg-zinc-50 dark:border-zinc-700 dark:hover:bg-zinc-800 dark:focus:bg-zinc-800"
-              />
-            )}
-          />
-
-          {errors.pitch && <ErrorMessage>{errors.pitch.message}</ErrorMessage>}
-        </div>
+        <Pitch control={control} errors={errors} />
 
         {/* Main Language */}
-        <div className="mt-4 flex flex-col gap-2">
-          <label htmlFor="mainLanguage" className="font-semibold">
-            Language <span className="text-xl text-red-400">*</span>
-          </label>
-          <Controller
-            name="mainLanguage"
-            control={control}
-            render={({ field }) => (
-              <Select
-                onValueChange={field.onChange}
-                value={field.value}
-                name="mainLanguage"
-              >
-                <SelectTrigger className="w-[180px]">
-                  <SelectValue placeholder="Language" />
-                </SelectTrigger>
-
-                <SelectContent id="mainLanguage">
-                  {spokenLanguages.map((language, i) => (
-                    <SelectItem key={language + i} value={language}>
-                      {language}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            )}
-          />
-
-          {errors.mainLanguage && (
-            <ErrorMessage>{errors.mainLanguage.message}</ErrorMessage>
-          )}
-        </div>
+        <MainLanguage
+          control={control}
+          errors={errors}
+          spokenLanguages={spokenLanguages}
+        />
 
         {/* Tech Stack */}
 
-        <div className="mt-4 flex flex-col gap-2">
-          <CustomLabel htmlFor="techStack" required>
-            Tech Stack
-          </CustomLabel>
-          <div className="mt-2 grid grid-cols-3 items-center gap-3">
-            {languagesWithColors.map((stack, i) => (
-              <div key={stack.language + i} className="flex items-center gap-2">
-                <Controller
-                  name="techStack"
-                  control={control}
-                  render={({ field }) => (
-                    <Checkbox
-                      id={stack.language}
-                      checked={techStackValues.includes(stack.language)}
-                      onCheckedChange={(checked) =>
-                        handleCheckedChange(checked, field, stack.language)
-                      }
-                    />
-                  )}
-                />
-                <label
-                  htmlFor={stack.language}
-                  className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                >
-                  {stack.language}
-                </label>
-              </div>
-            ))}
-          </div>
-
-          {errors.techStack && (
-            <ErrorMessage>{errors.techStack.message}</ErrorMessage>
-          )}
-        </div>
+        <TechStack
+          control={control}
+          errors={errors}
+          watch={watch}
+          handleCheckedChange={handleCheckedChange}
+        />
 
         {/* Github Repo */}
-        <div className="mt-4 flex flex-col gap-2">
-          <CustomLabel htmlFor="gitHubRepo"></CustomLabel>
-          <CustomLabel htmlFor="socials">Socials</CustomLabel>
-
-          <div className="flex flex-col gap-2">
-            <Image
-              src={github}
-              alt="Github"
-              width={30}
-              height={30}
-              className="inline dark:invert dark:filter"
-            />
-            <Controller
-              name="githubRepo"
-              control={control}
-              render={({ field }) => (
-                <Input
-                  {...field}
-                  type="text"
-                  id="githubRepo"
-                  placeholder="https://github.com/username/repo"
-                  className="h-12 w-full border-zinc-300 bg-white hover:bg-zinc-50 focus:bg-zinc-50 dark:border-zinc-700 dark:hover:bg-zinc-800 dark:focus:bg-zinc-800"
-                />
-              )}
-            />
-          </div>
-        </div>
+        <GithubRepo control={control} />
 
         {/* Socials */}
 
-        <div className="flex flex-col gap-2">
-          {socialsData.map((social) => (
-            <div key={social.key} className="mt-6 flex flex-col gap-2">
-              <Image
-                src={social.imageSrc}
-                alt={social.alt}
-                width={30}
-                height={30}
-                className="inline"
-              />
-              <Controller
-                name={`socials.${social.key}` as any}
-                control={control}
-                render={({ field }) => (
-                  <Input
-                    {...field}
-                    type="text"
-                    id={`socials.${social.key}`}
-                    placeholder={social.placeholder}
-                    className="h-12 w-full border-zinc-300 bg-white hover:bg-zinc-50 focus:bg-zinc-50 dark:border-zinc-700 dark:hover:bg-zinc-800 dark:focus:bg-zinc-800"
-                  />
-                )}
-              />
-            </div>
-          ))}
-        </div>
+        <Socials control={control} />
 
-        <Button
-          disabled={isSubmitting}
-          type="submit"
-          className="my-2 bg-dark dark:bg-light"
-        >
-          {isSubmitting ? <LoadingTextButton text="Updating" /> : "Update"}
-        </Button>
-        {error && (
-          <span className="text-base font-light text-red-700 dark:text-red-700">
-            {error}
-          </span>
-        )}
-        <CustomDialog
-          title="Are you sure?"
-          description="There's no turning back once you delete this project"
-          handler={handleDeleteProject}
-          trigger={
-            <Button
-              onClick={handleDeleteProject}
-              variant={"destructive"}
-              className="mt-2 w-full"
-            >
-              Delete Project
-            </Button>
-          }
-          asChild
+        <ProjectFormButtons
+          isSubmitting={isSubmitting}
+          handleDeleteProject={handleDeleteProject}
+          error={error}
         />
       </form>
     </div>

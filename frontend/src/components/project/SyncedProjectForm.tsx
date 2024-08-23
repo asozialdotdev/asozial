@@ -46,6 +46,7 @@ import LoadingTextButton from "../common/ui/LoadingTextButton";
 import type { CreateUpdateProject, Project } from "@/types/Project";
 import ErrorMessage from "../common/ui/ErrorMessage";
 import CustomLabel from "../common/ui/Label";
+import FormImage from "./project-form/FormImage";
 type Inputs = z.infer<typeof createProjectSchema>;
 
 type SyncedProjectFormProps = {
@@ -165,12 +166,7 @@ function SyncedProjectForm({ project, syncedData }: SyncedProjectFormProps) {
         className="mt-2 flex w-full flex-col gap-2"
       >
         {/* Image */}
-        <div className="mt-6 flex flex-col gap-2">
-          <CustomLabel htmlFor="image" className="-mb-4">
-            Image
-          </CustomLabel>
-          <ImageUploader onUploadSucess={setUploadedImage} />
-        </div>
+        <FormImage setUploadedImage={setUploadedImage} />
 
         {/* Status */}
         <div className="mt-6 flex flex-col gap-2">
