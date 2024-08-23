@@ -62,6 +62,8 @@ type Github = {
 };
 
 type User = {
+  _id: UserId;
+  bio: string;
   username: string;
   name: string;
   email: string;
