@@ -16,7 +16,6 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { createProjectSchema } from "@/lib/schema";
 
-
 //Components
 import FormImage from "./project-form/FormImage";
 import Status from "./project-form/Status";
@@ -134,7 +133,7 @@ function EditProjectForm({ project }: { project: Project }) {
         className="mt-2 flex w-full flex-col gap-2"
       >
         {/* Image */}
-        <FormImage setUploadedImage={setUploadedImage} />
+        <FormImage setUploadedImage={setUploadedImage} image={uploadedImage} />
 
         {/* Status */}
         <Status control={control} />

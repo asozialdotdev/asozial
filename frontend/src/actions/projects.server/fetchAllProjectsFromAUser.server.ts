@@ -10,7 +10,7 @@ const fetchAllProjectsFromAUser = async (page = 1, limit = 12) => {
     const response = await fetch(
       `${baseUrl}/api/projects/user?userId=${userId}&page=${page}&limit=${limit}`,
       {
-        cache: "no-store",
+        cache: "force-cache",
       },
     );
     if (!response.ok) {

@@ -22,6 +22,9 @@ import { auth } from "@/auth";
 
 //Types
 import type { Member, ProjectId } from "@/types/Project";
+import { Suspense } from "react";
+import ProjectLoadingSkeleton from "@/components/project/ProjectLoadingSkeleton";
+import PostLoadingSkeleton from "@/components/project/PostLoadingSkeleton";
 
 async function Page({ params }: { params: { projectId: ProjectId } }) {
   const session = await auth();
@@ -39,14 +42,22 @@ async function Page({ params }: { params: { projectId: ProjectId } }) {
   if (!project) {
     notFound();
   }
+
+  // if (project) {
+  //   return <PostLoadingSkeleton />;
+  // }
   return (
     <PageContainer className="gap-4">
       {/* Project */}
-      <ProjectComponent project={project} />
+      <Suspense fallback={<ProjectLoadingSkeleton />}>
+        <ProjectComponent project={project} />
+      </Suspense>
 
       {isMember || isOwner ? (
         // Posts
-        <ProjectPostsList projectPosts={posts} projectId={projectId} />
+        <Suspense fallback={<PostLoadingSkeleton />}>
+          <ProjectPostsList projectPosts={posts} projectId={projectId} />
+        </Suspense>
       ) : (
         // Join Project
         <div className="flex flex-col items-center justify-center gap-4 p-4">

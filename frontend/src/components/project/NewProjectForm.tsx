@@ -127,7 +127,7 @@ function NewProjectForm() {
         className="mt-2 flex w-full flex-col gap-2"
       >
         {/* Image */}
-        <FormImage setUploadedImage={setUploadedImage} />
+        <FormImage setUploadedImage={setUploadedImage} image={uploadedImage} />
 
         {/* Title */}
         <Title control={control} errors={errors} />

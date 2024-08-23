@@ -40,7 +40,7 @@ function EditPostForm({ projectPost, setIsEditing, image, setImage }: EditPostFo
       formRef.current?.reset();
       setIsEditing(false);
     }
-  }, [formState]);
+  }, [formState, setIsEditing]);
   return (
     <form ref={formRef} className="w-full" action={action}>
       <div className="flex w-full flex-col gap-2">
@@ -95,6 +95,7 @@ function EditPostForm({ projectPost, setIsEditing, image, setImage }: EditPostFo
           <ImageUploader
             variant="outline"
             onUploadSucess={setImage}
+            edit
             className="my-1"
           />
         </div>

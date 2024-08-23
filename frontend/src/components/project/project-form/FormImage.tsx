@@ -3,8 +3,10 @@ import CustomLabel from "@/components/common/ui/Label";
 
 function FormImage({
   setUploadedImage,
+  image,
 }: {
   setUploadedImage: (image: ImageT | null) => void;
+  image?: ImageT | null;
 }) {
   return (
     <div className="mt-6 flex flex-col gap-2">

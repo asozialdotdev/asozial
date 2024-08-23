@@ -34,7 +34,6 @@ async function ProjectComponent({ project }: { project: Project }) {
     (member: Member) => member._id === session?.user?.id,
   );
   const isOwner = project.owner._id === session?.user?.id;
-  console.log("PROJECT.MEMBERSJOINED", project.membersJoined);
 
   return (
     <section className="relative -mt-4 flex w-full flex-col gap-4 border-b border-b-neutral-300 px-4 dark:border-b-neutral-600">
@@ -60,7 +59,6 @@ async function ProjectComponent({ project }: { project: Project }) {
           </PageTitle>
         </div>
       </div>
-
 
       {/* Description */}
       <div className="mt-4 flex flex-col gap-2">

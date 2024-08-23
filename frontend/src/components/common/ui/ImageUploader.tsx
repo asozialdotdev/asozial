@@ -26,12 +26,16 @@ type ImageUploaderProps = {
     | "outline"
     | "link";
   onUploadSucess?: (image: ImageT) => void;
+  edit?: boolean;
+
 };
 
 export default function ImageUploader({
   className,
   variant = "outline",
   onUploadSucess,
+  edit,
+
 }: ImageUploaderProps) {
   const [uploadedFile, setUploadedFile] = useState<ImageT | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -92,11 +96,16 @@ export default function ImageUploader({
         ) : !success ? (
           <span className="flex items-center gap-3">
             <Upload />
-            <span>Upload an image</span>
+            <span>
+              {!edit  ? "Upload an image" : "Update image"}
+            </span>
           </span>
         ) : (
           <span className="flex items-center gap-3">
-            <SquareCheckBig /> <span>Image uploaded</span>
+            <SquareCheckBig />{" "}
+            <span>
+              {!edit ? "Image uploaded" : "Image updated"}
+            </span>
           </span>
         )}
       </Button>

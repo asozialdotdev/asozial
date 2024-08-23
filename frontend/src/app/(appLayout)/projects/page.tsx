@@ -24,7 +24,7 @@ async function UserProjectsPage({ searchParams }: UserProjectsPageProps) {
   const projects = await fetchAllProjectsFromAUser();
 
   if (!projects) {
-    return <ProjectCardLoadingSkeleton />;
+    notFound();
   }
 
   return (
