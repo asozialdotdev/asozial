@@ -19,11 +19,7 @@ function ProjectFormButtons({
 }: ProjectFormButtonsProps) {
   return (
     <>
-      <Button
-        disabled={isSubmitting}
-        type="submit"
-        className="mt-4 bg-dark dark:bg-light"
-      >
+      <Button disabled={isSubmitting} type="submit" className="mt-4">
         {isSubmitting ? (
           <LoadingTextButton text={edit ? "Updating" : "Creating"} />
         ) : edit ? (
