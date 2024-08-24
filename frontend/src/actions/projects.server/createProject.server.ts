@@ -18,11 +18,15 @@ const createProject = async (data: CreateUpdateProject) => {
       body: JSON.stringify({ ...data, userId: session?.user?.id }),
     });
 
+    if (!response.ok) {
+      throw new Error(`Failed to create project: ${response.statusText}`);
+    }
+
     project = await response.json();
     console.log("project", project);
   } catch (error) {
     console.error("Error creating project:", error);
-    return "Error creating project";
+    return { error: true, message: "Failed to create project" };
   }
   redirect(`/projects/${project._id}`);
 };

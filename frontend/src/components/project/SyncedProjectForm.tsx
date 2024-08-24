@@ -3,7 +3,7 @@
 import { useRouter } from "next/navigation";
 
 //React
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 //Actions
 import { deleteProject, updateProject } from "@/actions";
@@ -71,6 +71,12 @@ function SyncedProjectForm({ project, syncedData }: SyncedProjectFormProps) {
       placeholder: project.placeholder,
     },
   });
+
+  useEffect(() => {
+    setValue("description", description);
+    setValue("githubRepo", html_url);
+    setValue("techStack", language ? [language] : []);
+  }, [syncedData]);
 
   const handleCheckedChange = (
     checked: boolean | string,
@@ -154,7 +160,12 @@ function SyncedProjectForm({ project, syncedData }: SyncedProjectFormProps) {
         <Status control={control} />
 
         {/* Title */}
-        <Title control={control} errors={errors} />
+        <Title
+          control={control}
+          errors={errors}
+          setValue={setValue}
+          syncTitle={syncedData.name}
+        />
 
         {/* Description */}
         <Description control={control} errors={errors} />

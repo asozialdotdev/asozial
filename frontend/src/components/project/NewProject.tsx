@@ -11,7 +11,6 @@ function NewProject() {
 
   return (
     <div className="flex w-full flex-col gap-6">
-      <PageTitle className="text-center">Start a new project</PageTitle>
 
       <div className="flex items-center justify-center gap-4">
         <h2 className="text-xl font-semibold">

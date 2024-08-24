@@ -1,10 +1,12 @@
 "use server";
 import { auth } from "@/auth";
 import { baseUrl } from "@/constants";
+import { checkProjectTitle } from "./checkProjectTitle.server";
 
 // POST create a project from Github
 const createProjectFromGithub = async (repoUrl: string) => {
   const session = await auth();
+
   let project;
   try {
     const result = await fetch(`${baseUrl}/api/projects/github`, {
@@ -22,8 +24,8 @@ const createProjectFromGithub = async (repoUrl: string) => {
     console.log("project", project);
     return project;
   } catch (error) {
-    console.error("Error creating project");
-    return { error: true, message: "Error creating project" };
+    console.error("Error creating project", error);
+    return { error: true, message: "Error creating a project" };
   }
 };
 

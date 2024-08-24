@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import CustomInput from "./CustomInput";
+import { Input } from "@/components/ui/input";
 
 type SearchBarProps = {
   placeholder?: string;
@@ -20,7 +20,7 @@ function SearchBar({
 }: SearchBarProps) {
   return (
     <div className='flex items-center'>
-      <CustomInput
+      <Input
         placeholder={placeholder}
         className="2xl:[45rem] h-12 rounded-r-none border-r-0 focus:h-10 xs:w-[15rem] sm:w-[25rem] lg:w-[35rem]"
         name="search"

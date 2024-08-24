@@ -129,6 +129,20 @@ projectsRouter.get(
   }
 );
 
+projectsRouter.get(
+  "/check-title",
+  async (req: Request, res: Response, next: NextFunction) => {
+    const { title, userId } = req.query;
+    console.log("Title", title, "User ID", userId);
+    try {
+      const existingProject = await Project.findOne({ title, owner: userId });
+      res.json({ isUnique: !existingProject });
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
 // POST to create a new project
 
 projectsRouter.post(

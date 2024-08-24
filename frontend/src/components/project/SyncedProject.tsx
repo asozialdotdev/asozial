@@ -1,19 +1,20 @@
 "use client";
 import { Project } from "@/types/Project";
 import CustomLabel from "../common/ui/Label";
-import CustomInput from "../common/ui/CustomInput";
 import { useFormState } from "react-dom";
 import { syncGithubRepo } from "@/actions";
 import { useEffect, useRef } from "react";
 import ErrorMessage from "../common/ui/ErrorMessage";
 import SyncRepoButton from "./SyncRepoButton";
 import SyncedProjectForm from "./SyncedProjectForm";
+import { Input } from "../ui/input";
 
 function SyncedProject({ project }: { project: Project }) {
   const [formState, action] = useFormState(syncGithubRepo, {
     errors: {},
   });
   const formRef = useRef<HTMLFormElement>(null);
+  console.log(formState.data, "formState");
 
   useEffect(() => {
     if (formState.success) {
@@ -36,7 +37,7 @@ function SyncedProject({ project }: { project: Project }) {
           Github Repository
         </CustomLabel>
 
-        <CustomInput
+        <Input
           type="text"
           name="repo"
           placeholder="Let us know your Github repository"

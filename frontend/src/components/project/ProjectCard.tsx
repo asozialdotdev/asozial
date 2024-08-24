@@ -21,7 +21,7 @@ type ProjectCardProps = {
 };
 
 function ProjectCard({
-  
+
   project,
 }: ProjectCardProps) {
   // if (isLoading) {

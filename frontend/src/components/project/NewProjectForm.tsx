@@ -44,7 +44,7 @@ function NewProjectForm() {
     watch,
     setValue,
     reset,
-    formState: { errors, isValid, isSubmitting },
+    formState: { errors, isSubmitting },
   } = useForm<Inputs>({
     resolver: zodResolver(createProjectSchema),
     defaultValues: {
@@ -112,7 +112,7 @@ function NewProjectForm() {
     };
     console.log("finalData", finalData);
     const result = await createProject(finalData);
-    if (result === "Error creating project") {
+    if (result?.error) {
       console.error("Error creating project");
       setError("Error creating project. Please try again");
     } else {
@@ -122,15 +122,14 @@ function NewProjectForm() {
 
   return (
     <div className="w-full pb-6">
+      {/* Title */}
+      <Title control={control} errors={errors} setValue={setValue} />
       <form
         onSubmit={handleSubmit(processForm)}
         className="mt-2 flex w-full flex-col gap-2"
       >
         {/* Image */}
         <FormImage setUploadedImage={setUploadedImage} image={uploadedImage} />
-
-        {/* Title */}
-        <Title control={control} errors={errors} />
 
         {/* Description */}
         <Description control={control} errors={errors} />

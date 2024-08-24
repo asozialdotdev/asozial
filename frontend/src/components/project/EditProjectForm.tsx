@@ -44,7 +44,7 @@ function EditProjectForm({ project }: { project: Project }) {
     control,
     watch,
     setValue,
-    formState: { errors, isValid, isSubmitting },
+    formState: { errors, isSubmitting },
   } = useForm<Inputs>({
     resolver: zodResolver(createProjectSchema),
     defaultValues: {
@@ -128,6 +128,8 @@ function EditProjectForm({ project }: { project: Project }) {
 
   return (
     <div className="w-full pb-6">
+      {/* Title */}
+      <Title control={control} errors={errors} setValue={setValue} />
       <form
         onSubmit={handleSubmit(processForm)}
         className="mt-2 flex w-full flex-col gap-2"
@@ -137,9 +139,6 @@ function EditProjectForm({ project }: { project: Project }) {
 
         {/* Status */}
         <Status control={control} />
-
-        {/* Title */}
-        <Title control={control} errors={errors} />
 
         {/* Description */}
         <Description control={control} errors={errors} />
