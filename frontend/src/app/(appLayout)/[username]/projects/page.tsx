@@ -11,6 +11,7 @@ import SearchUserProjects from "@/components/project/SearchForUserProjects";
 import PageTitle from "@/components/common/ui/PageTitle";
 import UserProjectsTable from "@/components/project/UserProjectsTable";
 import ProjectCardLoadingSkeleton from "@/components/project/ProjectCardsLoadingSkeleton";
+import Pagination from "@/components/project/Pagination";
 
 type UserProjectsPageProps = {
   searchParams: {
@@ -21,11 +22,13 @@ type UserProjectsPageProps = {
 async function UserProjectsPage({ searchParams }: UserProjectsPageProps) {
   const query = searchParams.query || "";
   const currentPage = Number(searchParams.page) || 1;
-  const projects = await fetchAllProjectsFromAUser();
+  const limit = 12;
 
-  if (!projects) {
-    notFound();
-  }
+  const { projects, totalPages } = await searchForUserProjects(
+    query,
+    currentPage,
+    limit,
+  );
 
   return (
     <PageContainer className="gap-10 2xl:max-w-screen-xl">
@@ -37,8 +40,13 @@ async function UserProjectsPage({ searchParams }: UserProjectsPageProps) {
         key={query + currentPage}
         fallback={<ProjectCardLoadingSkeleton />}
       >
-        <UserProjectsTable query={query} currentPage={currentPage} />
+        <UserProjectsTable
+          query={query}
+          currentPage={currentPage}
+          projects={projects}
+        />
       </Suspense>
+      <Pagination totalPages={totalPages} currentPage={currentPage} />
     </PageContainer>
   );
 }

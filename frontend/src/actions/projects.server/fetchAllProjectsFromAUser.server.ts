@@ -1,26 +1,27 @@
-"use server";
+'use server'
 import { auth } from "@/auth";
 import { baseUrl } from "@/constants";
 
-// Search for user projects
-const fetchAllProjectsFromAUser = async (page = 1, limit = 12) => {
+// Function to fetch all projects from a user
+const fetchAllProjectsFromAUser = async (
+  currentPage: number,
+  limit: number,
+) => {
+  console.log("Fetching all projects from a user");
   const session = await auth();
   const userId = session?.user?.id;
   try {
     const response = await fetch(
-      `${baseUrl}/api/projects/user?userId=${userId}&page=${page}&limit=${limit}`,
-      {
-        cache: "force-cache",
-      },
+      `${baseUrl}/api/projects/user?userId=${userId}&page=${currentPage}&limit=${limit}`,
     );
     if (!response.ok) {
-      throw new Error(`Failed to fetch projects: ${response.statusText}`);
+      throw new Error("Failed to fetch projects");
     }
-    const { projects, totalPages, currentPage } = await response.json();
-    return { projects, totalPages, currentPage };
+    const projects = await response.json();
+    console.log("All projects from a user:", projects);
   } catch (error) {
     console.error("Error fetching projects:", error);
-    return null;
+    return { projects: [], totalPages: 1 };
   }
 };
 

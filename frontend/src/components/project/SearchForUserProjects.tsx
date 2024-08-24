@@ -31,10 +31,12 @@ function SearchUserProjects() {
     e.preventDefault();
     const params = new URLSearchParams(searchParams);
 
+    params.set("page", "1");
     if (searchTerm) {
       params.set("query", searchTerm);
     } else {
       params.delete("query");
+      params.delete("page");
     }
 
     router.replace(`${pathname}?${params.toString()}`);
@@ -43,7 +45,7 @@ function SearchUserProjects() {
   const handleClearSearch = () => {
     setSearchTerm("");
     const params = new URLSearchParams(searchParams);
-    params.delete("query");
+    params.delete("query", "page");
     router.replace(`${pathname}?${params.toString()}`);
   };
 
