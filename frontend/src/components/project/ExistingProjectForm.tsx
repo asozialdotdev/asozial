@@ -47,6 +47,12 @@ function ExistingProjectForm() {
       return;
     }
 
+    if (searchTerm.length === 0) {
+      setFilteredRepos(githubRepos);
+      setIsLoadingSearch(false);
+      return;
+    }
+
     if (searchTerm.length < 1) {
       setFilteredRepos([]);
       setIsLoadingSearch(false);
@@ -148,10 +154,10 @@ function ExistingProjectForm() {
           </ul>
         )}
         {filteredRepos.length === 0 &&
-          searchTerm.length > 3 &&
+          searchTerm.length > 0 &&
           !hasSelected &&
           !isLoadingSearch && (
-            <div className="absolute z-10 mt-2 h-auto max-h-60 w-full overflow-y-auto rounded-md border border-dashed border-zinc-300 bg-white p-2 shadow-lg dark:border-zinc-600 dark:bg-zinc-800 dark:shadow-neutral-700/30">
+            <div className="absolute text-center z-10 mt-2 h-auto max-h-80 w-full overflow-y-auto rounded-md border border-dashed border-zinc-300 bg-white p-4 shadow-lg dark:border-zinc-600 dark:bg-zinc-800 dark:shadow-neutral-700/30">
               No Github repos match your search
             </div>
           )}
