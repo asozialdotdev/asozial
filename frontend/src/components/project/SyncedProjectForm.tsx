@@ -46,6 +46,7 @@ function SyncedProjectForm({ project, syncedData }: SyncedProjectFormProps) {
 
   const [error, setError] = useState<string | null>(null);
   const [uploadedImage, setUploadedImage] = useState<ImageT | null>(null);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   const { spokenLanguages } = useSpokenLanguages();
 
@@ -139,12 +140,15 @@ function SyncedProjectForm({ project, syncedData }: SyncedProjectFormProps) {
   console.log("uploadedImage", uploadedImage);
 
   const handleDeleteProject = async () => {
+    setIsDeleting(true);
     const result = await deleteProject(project._id);
     if (result.error) {
       console.error("Error deleting project");
       setError(result.message);
+      setIsDeleting(false);
     } else {
       router.push(`/${username}/projects`);
+      setIsDeleting(false);
     }
   };
 
@@ -196,6 +200,7 @@ function SyncedProjectForm({ project, syncedData }: SyncedProjectFormProps) {
 
         {/* Buttons */}
         <ProjectFormButtons
+          isDeleting={isDeleting}
           isSubmitting={isSubmitting}
           handleDeleteProject={handleDeleteProject}
           error={error}

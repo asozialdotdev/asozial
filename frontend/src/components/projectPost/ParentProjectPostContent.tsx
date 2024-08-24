@@ -49,6 +49,7 @@ function ParentProjectPostContent({
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const [image, setImage] = useState<ImageT | undefined>(undefined);
   const [error, setError] = useState("");
+  const [isDeleting, setIsDeleting] = useState(false);
 
   const toggleEditing = () => {
     setIsEditing((prev) => !prev);
@@ -57,13 +58,16 @@ function ParentProjectPostContent({
   console.log(post);
 
   const handleDeletePost = async () => {
+    setIsDeleting(true);
     const result = await deleteProjectPost(post._id);
     console.log("Result", result);
     if (result?.error) {
       console.error("Error deleting post", result.error);
       setError(result.message);
+      setIsDeleting(false);
     } else {
       router.push(`/${username}/${post.projectId.slug}/${post.projectId._id}`);
+      setIsDeleting(false);
     }
   };
 
@@ -123,6 +127,7 @@ function ParentProjectPostContent({
             {!isProjectPage && (
               <>
                 <CustomDialog
+                  isDeleting={isDeleting}
                   trigger={<DeleteIcon key="delete-post" />}
                   title="Are you sure?"
                   description="There's no turning back once you delete this post"
