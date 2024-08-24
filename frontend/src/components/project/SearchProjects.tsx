@@ -1,8 +1,15 @@
 "use client";
+// React
 import { useState } from "react";
+
+//Components
 import SearchBar from "../common/ui/SearchBar";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
+
+//UI
 import { Button } from "../ui/button";
+
+//Types
+import { usePathname, useSearchParams, useRouter } from "next/navigation";
 
 function SearchProjects() {
   const searchParams = useSearchParams();
@@ -14,10 +21,12 @@ function SearchProjects() {
     e.preventDefault();
     const params = new URLSearchParams(searchParams);
 
+    params.set("page", "1");
     if (searchTerm) {
       params.set("query", searchTerm);
     } else {
       params.delete("query");
+      params.delete("page");
     }
 
     router.replace(`${pathname}?${params.toString()}`);
@@ -27,6 +36,7 @@ function SearchProjects() {
     setSearchTerm("");
     const params = new URLSearchParams(searchParams);
     params.delete("query");
+    params.delete("page");
     router.replace(`${pathname}?${params.toString()}`);
   };
 

@@ -1,15 +1,13 @@
-//Next
-import { notFound } from "next/navigation";
+//React
+import { Suspense } from "react";
 
 //Actions
-import { fetchAllProjectsFromAUser } from "@/actions";
-import { searchForUserProjects } from "@/actions";
+import { searchForProjects, searchForUserProjects } from "@/actions";
 //Components
 import PageContainer from "@/components/common/containers/PageContainer";
-import { Suspense } from "react";
-import SearchUserProjects from "@/components/project/SearchForUserProjects";
+import SearchProjects from "@/components/project/SearchProjects";
+import SearchProjectsTable from "@/components/project/SearchProjectsTable";
 import PageTitle from "@/components/common/ui/PageTitle";
-import UserProjectsTable from "@/components/project/UserProjectsTable";
 import ProjectCardLoadingSkeleton from "@/components/project/ProjectCardsLoadingSkeleton";
 import Pagination from "@/components/project/Pagination";
 
@@ -34,17 +32,13 @@ async function UserProjectsPage({ searchParams }: UserProjectsPageProps) {
     <PageContainer className="gap-10 2xl:max-w-screen-xl">
       <section className="flex w-full flex-col items-center gap-8">
         <PageTitle className="text-3xl">My Projects</PageTitle>
-        <SearchUserProjects />
+        <SearchProjects />
       </section>
       <Suspense
         key={query + currentPage}
         fallback={<ProjectCardLoadingSkeleton />}
       >
-        <UserProjectsTable
-          query={query}
-          currentPage={currentPage}
-          projects={projects}
-        />
+        <SearchProjectsTable projects={projects} />
       </Suspense>
       <Pagination totalPages={totalPages} currentPage={currentPage} />
     </PageContainer>

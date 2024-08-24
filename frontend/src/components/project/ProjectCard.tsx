@@ -14,10 +14,9 @@ import { setStatusIcon, techStackClass } from "@/utils";
 import { useSession } from "next-auth/react";
 
 type ProjectCardProps = {
-  projects?: Project[];
-  isLoading?: boolean;
-  error?: string;
   project: Project;
+  isUser?: boolean;
+  isExplore?: boolean;
 };
 
 function ProjectCard({ project }: ProjectCardProps) {
@@ -32,7 +31,7 @@ function ProjectCard({ project }: ProjectCardProps) {
   //     return <p>No projects found</p>;
   //   }
   // console.log("Projects:", projects);
-  const username = project.owner.username;
+  const username = project?.owner?.username;
 
   return (
     <>

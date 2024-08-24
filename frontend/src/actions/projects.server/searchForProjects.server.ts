@@ -1,20 +1,27 @@
+"use server";
+import { auth } from "@/auth";
 import { baseUrl } from "@/constants";
 
-const searchForProjects = async (query: string, currentPage: number) => {
+// Function to search for projects
+const searchForProjects = async (
+  query: string,
+  currentPage: number,
+  limit: number,
+) => {
+  console.log("Exploring for projects with query:", query);
   try {
     const response = await fetch(
-      ` ${baseUrl}/api/projects/search?query=${query}&page=${currentPage}`,
+      `${baseUrl}/api/projects/explore?&query=${query}&page=${currentPage}&limit=${limit}`,
     );
     if (!response.ok) {
-      throw new Error("Error searching for projects");
+      throw new Error("Failed to fetch projects");
     }
-
-    const data = await response.json();
-    return data;
+    const projects = await response.json();
+    console.log("Explored projects:", projects);
+    return projects;
   } catch (error) {
-    console.error("Error searching for projects", error);
-    return { error: true, message: "Error searching for projects" };
+    console.error("Error fetching projects:", error);
+    return { projects: [], totalPages: 1 };
   }
 };
-
 export { searchForProjects };

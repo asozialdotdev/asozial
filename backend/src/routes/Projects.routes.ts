@@ -12,34 +12,30 @@ const projectsRouter = express.Router();
 dotenv.config();
 
 // GET search for projects
+// GET search for projects from a user (my-projects)
 projectsRouter.get(
   "/explore",
   async (req: Request, res: Response, next: NextFunction) => {
-    console.log("/search is called");
+    console.log("Explore is called");
+    const { query, page = 1, limit = 12 } = req.query;
+
     try {
-      const { query, page = 1, limit = 12 } = req.query;
-      console.log("Query", query);
-
       const searchQuery = query
-        ? {
-            title: { $regex: query, $options: "i" }, // Case-insensitive search
-          }
+        ? { title: { $regex: query, $options: "i" } }
         : {};
-
       const projects = await Project.find(searchQuery)
         .skip((+page - 1) * +limit)
         .limit(+limit)
         .populate("membersJoined", "username name image")
         .populate("owner", "username name image")
         .exec();
-      console.log("Number of Projects Found:", projects.length);
 
       const totalProjects = await Project.countDocuments(searchQuery);
-      console.log("Total Projects Found:", totalProjects);
-
+      const totalPages = Math.ceil(totalProjects / +limit);
+      console.log({ projects, totalPages, currentPage: +page });
       res.json({
         projects,
-        totalPages: Math.ceil(totalProjects / +limit),
+        totalPages,
         currentPage: +page,
       });
     } catch (error) {
@@ -47,7 +43,6 @@ projectsRouter.get(
     }
   }
 );
-
 // // GET all projects from a user (my projects)
 
 // projectsRouter.get(
