@@ -11,6 +11,7 @@ import Link from "next/link";
 import { Project } from "@/types/Project";
 import LoadingTextButton from "../common/ui/LoadingTextButton";
 import ErrorMessage from "../common/ui/ErrorMessage";
+import SuccessMessage from "../common/ui/SuccessMessage";
 
 type GithubRepo = {
   id: number;
@@ -186,9 +187,7 @@ function ExistingProjectForm() {
               </div>
             ) : (
               <div className="flex flex-col items-center gap-4">
-                <span className="text-lg font-semibold text-green-700 dark:text-green-700">
-                  Project created successfully
-                </span>
+                <SuccessMessage>Project created successfully</SuccessMessage>
                 <Link href={`/projects/${project?._id}`}>
                   <Button className="p-8 text-xl">Go to project</Button>
                 </Link>

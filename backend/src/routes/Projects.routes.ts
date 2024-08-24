@@ -5,6 +5,7 @@ import Project from "../models/Project.models";
 import ProjectPost from "../models/ProjectPost.models";
 import ProjectPostReply from "../models/ProjectPostReply.models";
 import User from "../models/User.models";
+import { generateSlug } from "../utils";
 
 const projectsRouter = express.Router();
 
@@ -159,6 +160,7 @@ projectsRouter.post(
         socials,
         image,
         placeholder,
+        slug,
         userId,
       } = req.body;
       console.log("githubRepo:::::::::::::", githubRepo);
@@ -172,8 +174,9 @@ projectsRouter.post(
         githubRepo,
         image,
         placeholder,
-        owner: userId,
         socials,
+        slug,
+        owner: userId,
       });
 
       res.status(201).json(newProject);
@@ -217,6 +220,7 @@ projectsRouter.post(
       }
 
       const { name, description, html_url, language } = repoInfo.data;
+      const slug = generateSlug(name);
 
       const createProject = await Project.create({
         title: name,
@@ -225,6 +229,7 @@ projectsRouter.post(
         techStack: [language],
         owner: userId,
         status: "active",
+        slug,
       });
 
       res.status(201).json(createProject);
@@ -328,6 +333,7 @@ projectsRouter.put(
         socials,
         status,
         image,
+        slug,
         placeholder,
         userId,
       } = req.body;
@@ -363,6 +369,7 @@ projectsRouter.put(
           status,
           image,
           placeholder,
+          slug,
         },
         { new: true, runValidators: true }
       );

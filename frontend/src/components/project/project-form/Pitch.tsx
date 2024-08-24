@@ -1,6 +1,6 @@
-import CustomTextarea from "@/components/common/ui/CustomTextarea";
 import ErrorMessage from "@/components/common/ui/ErrorMessage";
 import CustomLabel from "@/components/common/ui/Label";
+import { Textarea } from "@/components/ui/textarea";
 import { Inputs } from "@/types/Project";
 import { Control, Controller, FieldErrors } from "react-hook-form";
 type PitchProps = {
@@ -18,7 +18,7 @@ function Pitch({ control, errors }: PitchProps) {
         name="pitch"
         control={control}
         render={({ field }) => (
-          <CustomTextarea
+          <Textarea
             {...field}
             id="pitch"
             name="pitch"

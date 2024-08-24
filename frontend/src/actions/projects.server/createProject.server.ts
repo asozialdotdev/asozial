@@ -2,12 +2,13 @@
 import { auth } from "@/auth";
 import { baseUrl } from "@/constants";
 import { CreateUpdateProject } from "@/types/Project";
+import { generateSlug } from "@/utils";
 import { redirect } from "next/navigation";
 
 // POST create a new project
 const createProject = async (data: CreateUpdateProject) => {
   const session = await auth();
-  console.log("GITHUB REPO", data);
+  const slug = generateSlug(data.title);
   let project;
   try {
     const response = await fetch(`${baseUrl}/api/projects/new`, {
@@ -15,7 +16,7 @@ const createProject = async (data: CreateUpdateProject) => {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ ...data, userId: session?.user?.id }),
+      body: JSON.stringify({ ...data, slug, userId: session?.user?.id }),
     });
 
     if (!response.ok) {

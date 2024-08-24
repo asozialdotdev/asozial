@@ -1,40 +1,32 @@
+//React
+import { useCallback, useEffect, useRef, useState } from "react";
+//Actions
 import { checkProjectTitle } from "@/actions";
+
+//Ui
 import ErrorMessage from "@/components/common/ui/ErrorMessage";
 import CustomLabel from "@/components/common/ui/Label";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Inputs } from "@/types/Project";
 import { SquareCheck } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
+
+//Lib
 import { Control, FieldErrors, UseFormSetValue } from "react-hook-form";
+import SuccessMessage from "@/components/common/ui/SuccessMessage";
 
 type TitleProps = {
-  control: Control<Inputs> | undefined;
   errors: FieldErrors<Inputs>;
   setValue: UseFormSetValue<Inputs>;
   syncTitle?: string;
 };
-function Title({ control, errors, setValue, syncTitle }: TitleProps) {
+function Title({ errors, setValue, syncTitle }: TitleProps) {
   const [title, setTitle] = useState(syncTitle ? syncTitle : "");
   const [success, setSuccess] = useState("");
   const [error, setError] = useState("");
   const hasChanged = useRef(false);
 
-  useEffect(() => {
-    if (syncTitle) {
-      handleValidation();
-    }
-  }, [syncTitle]);
-
-  useEffect(() => {
-    if (syncTitle && !hasChanged.current) {
-      setTitle(syncTitle);
-    }
-  }, [syncTitle]);
-
-  console.log(syncTitle, title, "sync in title");
-
-  const handleValidation = async () => {
+  const handleValidation = useCallback(async () => {
     if (!title) {
       setError("Seems like you forgot to enter a title.");
       return;
@@ -49,7 +41,21 @@ function Title({ control, errors, setValue, syncTitle }: TitleProps) {
       setSuccess("");
     }
     console.log(response);
-  };
+  }, [title, setError, setSuccess, setValue]);
+
+  useEffect(() => {
+    if (syncTitle) {
+      handleValidation();
+    }
+  }, [syncTitle, handleValidation]);
+
+  useEffect(() => {
+    if (syncTitle && !hasChanged.current) {
+      setTitle(syncTitle);
+    }
+  }, [syncTitle]);
+
+  console.log(syncTitle, title, "sync in title");
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
@@ -82,14 +88,7 @@ function Title({ control, errors, setValue, syncTitle }: TitleProps) {
         </Button>
       </div>
 
-      {success && (
-        <p className="flex items-center gap-2 font-light text-zinc-500 dark:text-zinc-400">
-          <span>
-            <SquareCheck />
-          </span>
-          {success}{" "}
-        </p>
-      )}
+      {success && <SuccessMessage>{success}</SuccessMessage>}
 
       {(errors.title || error) && (
         <ErrorMessage>{errors?.title?.message || error}</ErrorMessage>
