@@ -42,6 +42,7 @@ function ParentProjectPostContent({
 }: ParentProjectPostContent) {
   const session = useSession();
   const userId = session.data?.user?.id;
+  const username = session.data?.user?.githubUsername;
   const isAuthor = userId === post.userId._id.toString();
   const router = useRouter();
 
@@ -53,14 +54,16 @@ function ParentProjectPostContent({
     setIsEditing((prev) => !prev);
   };
 
+  console.log(post);
+
   const handleDeletePost = async () => {
     const result = await deleteProjectPost(post._id);
     console.log("Result", result);
-    if (result.error) {
+    if (result?.error) {
       console.error("Error deleting post", result.error);
       setError(result.message);
     } else {
-      router.push(`/projects/${post.projectId}`);
+      router.push(`/${username}/${post.projectId.slug}/${post.projectId._id}`);
     }
   };
 
@@ -142,7 +145,7 @@ function ParentProjectPostContent({
             <Link
               className="mb-3 ml-4 font-semibold hover:opacity-75"
               key={post._id.toString()}
-              href={`/projects/${post.projectId}/posts/${post._id}`}
+              href={`/${username}/${post.projectId.slug}/${post.projectId._id}/posts/${post._id}`}
             >
               <span>
                 <ButtonForward size={30} text="Check full thread" />

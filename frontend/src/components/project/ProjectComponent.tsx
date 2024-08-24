@@ -30,6 +30,7 @@ const userIdTest = "1234567890";
 
 async function ProjectComponent({ project }: { project: Project }) {
   const session = await auth();
+  const username = session?.user?.githubUsername;
   const isMember = project.membersJoined.some(
     (member: Member) => member._id === session?.user?.id,
   );
@@ -168,7 +169,7 @@ async function ProjectComponent({ project }: { project: Project }) {
       {/* Edit Button */}
       <div className="mb-6">
         {isOwner && (
-          <Link href={`/projects/${project._id}/edit`}>
+          <Link href={`/${username}/${project.slug}/${project._id}/edit`}>
             <Button>Edit project</Button>
           </Link>
         )}

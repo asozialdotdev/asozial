@@ -10,7 +10,7 @@ const projectSchema = new Schema(
     mainLanguage: { type: String },
     image: { type: String },
     placeholder: { type: String },
-    slug: { type: String },
+    slug: { type: String, required: true, unique: true },
     owner: { type: Schema.Types.ObjectId, ref: "User", required: true },
     membersJoined: [{ type: Schema.Types.ObjectId, ref: "User" }],
     membersApplied: [{ type: Schema.Types.ObjectId, ref: "User" }],

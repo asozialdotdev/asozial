@@ -11,6 +11,7 @@ const updateProject = async (
   data: CreateUpdateProject,
 ) => {
   const session = await auth();
+  const username = session?.user?.githubUsername;
   const slug = generateSlug(data.title);
 
   try {
@@ -29,7 +30,7 @@ const updateProject = async (
 
     const updateProject = await response.json();
     console.log("Updated updateProject:", updateProject);
-    revalidatePath(`/projects/${projectId}`);
+    revalidatePath(`/${username}/${project.slug}/${project._id}`);
     return "Project updated";
   } catch (error) {
     console.error("Error updating project:", error);

@@ -7,10 +7,12 @@ type ProjectFormButtonsProps = {
   error: string | null;
   handleDeleteProject?: () => void;
   edit?: boolean;
+  isDeleting?: boolean;
 };
 
 function ProjectFormButtons({
   isSubmitting,
+  isDeleting,
   error,
   handleDeleteProject,
   edit,
@@ -45,6 +47,7 @@ function ProjectFormButtons({
               Delete
             </Button>
           }
+          isDeleting={isDeleting}
           asChild
         />
       )}

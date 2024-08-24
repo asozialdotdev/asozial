@@ -18,10 +18,11 @@ import SuccessMessage from "@/components/common/ui/SuccessMessage";
 type TitleProps = {
   errors: FieldErrors<Inputs>;
   setValue: UseFormSetValue<Inputs>;
+  editTitle?: string;
   syncTitle?: string;
 };
-function Title({ errors, setValue, syncTitle }: TitleProps) {
-  const [title, setTitle] = useState(syncTitle ? syncTitle : "");
+function Title({ errors, setValue, editTitle, syncTitle }: TitleProps) {
+  const [title, setTitle] = useState(syncTitle || editTitle || "");
   const [success, setSuccess] = useState("");
   const [error, setError] = useState("");
   const hasChanged = useRef(false);
@@ -43,19 +44,32 @@ function Title({ errors, setValue, syncTitle }: TitleProps) {
     console.log(response);
   }, [title, setError, setSuccess, setValue]);
 
-  useEffect(() => {
-    if (syncTitle) {
-      handleValidation();
-    }
-  }, [syncTitle, handleValidation]);
+  console.log(
+    "edit title",
+    editTitle,
+    "syncTitle",
+    syncTitle,
+    "title",
+    title,
+    hasChanged.current,
+  );
 
   useEffect(() => {
     if (syncTitle && !hasChanged.current) {
       setTitle(syncTitle);
+      setValue("title", syncTitle);
+    } else if (editTitle && !hasChanged.current) {
+      setTitle(editTitle);
+      setValue("title", editTitle);
     }
-  }, [syncTitle]);
+  }, [syncTitle, editTitle, setValue]);
 
-  console.log(syncTitle, title, "sync in title");
+  useEffect(() => {
+    if (title !== (syncTitle || editTitle)) {
+      hasChanged.current = true;
+      setValue("title", title);
+    }
+  }, [title, syncTitle, editTitle, setValue]);
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
@@ -78,11 +92,13 @@ function Title({ errors, setValue, syncTitle }: TitleProps) {
           value={title}
           onChange={(e) => setTitle(e.target.value)}
           onKeyDown={handleKeyDown}
+          disabled={!!syncTitle}
         />
         <Button
           onClick={handleValidation}
           type="button"
           className="h-12 w-24 rounded-l-none border-l-0 text-lg"
+          disabled={!!syncTitle}
         >
           Validate
         </Button>

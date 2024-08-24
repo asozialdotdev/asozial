@@ -130,6 +130,8 @@ projectsRouter.get(
   }
 );
 
+//GET check if project title is unique
+
 projectsRouter.get(
   "/check-title",
   async (req: Request, res: Response, next: NextFunction) => {
@@ -239,13 +241,32 @@ projectsRouter.post(
   }
 );
 
-// GET 1 project (detailed information)
+// GET project by ID (detailed information)
 
 projectsRouter.get(
   "/:projectId",
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       const project = await Project.findById(req.params.projectId)
+        .populate("membersJoined", "name username image")
+        .populate("owner", "name username image")
+        .exec();
+      if (!project) {
+        return res.status(404).json({ error: "Project not found" });
+      }
+      res.json(project);
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
+projectsRouter.get(
+  "/:slug",
+  async (req: Request, res: Response, next: NextFunction) => {
+    console.log("Slug>>>>>>>>>>>>>", req.params.slug);
+    try {
+      const project = await Project.findOne({ slug: req.params.slug })
         .populate("membersJoined", "name username image")
         .populate("owner", "name username image")
         .exec();

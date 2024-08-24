@@ -12,6 +12,7 @@ import { Project } from "@/types/Project";
 import LoadingTextButton from "../common/ui/LoadingTextButton";
 import ErrorMessage from "../common/ui/ErrorMessage";
 import SuccessMessage from "../common/ui/SuccessMessage";
+import { useSession } from "next-auth/react";
 
 type GithubRepo = {
   id: number;
@@ -32,6 +33,9 @@ function ExistingProjectForm() {
 
   const { githubRepos, isLoadingRepos, errorRepos } = useFetchReposFromGithub();
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const session = useSession();
+  const username = session?.data?.user?.githubUsername;
+
   useOutsideClick(() => {
     setFilteredRepos([]);
   }, dropdownRef);
@@ -188,7 +192,7 @@ function ExistingProjectForm() {
             ) : (
               <div className="flex flex-col items-center gap-4">
                 <SuccessMessage>Project created successfully</SuccessMessage>
-                <Link href={`/projects/${project?._id}`}>
+                <Link href={`/${username}/${project?.slug}/${project._id}`}>
                   <Button className="p-8 text-xl">Go to project</Button>
                 </Link>
               </div>

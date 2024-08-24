@@ -11,7 +11,7 @@ import {
 import Link from "next/link";
 import UserAvatar from "../common/ui/UserAvatar";
 import { setStatusIcon, techStackClass } from "@/utils";
-import MyProjectsLoading from "./MyProjectsLoading";
+import { useSession } from "next-auth/react";
 
 type ProjectCardProps = {
   projects?: Project[];
@@ -20,10 +20,7 @@ type ProjectCardProps = {
   project: Project;
 };
 
-function ProjectCard({
-
-  project,
-}: ProjectCardProps) {
+function ProjectCard({ project }: ProjectCardProps) {
   // if (isLoading) {
   //   return <MyProjectsLoading />;
   // }
@@ -35,6 +32,7 @@ function ProjectCard({
   //     return <p>No projects found</p>;
   //   }
   // console.log("Projects:", projects);
+  const username = project.owner.username;
 
   return (
     <>
@@ -43,7 +41,7 @@ function ProjectCard({
         key={project._id.toString()}
       >
         <CardHeader>
-          <Link href={`/projects/${project._id}`}>
+          <Link href={`/${username}/${project?.slug}/${project._id}`}>
             <CardTitle className="capitalize hover:opacity-75">
               {project.title}
             </CardTitle>

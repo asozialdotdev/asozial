@@ -110,7 +110,9 @@ projectPostReplyRouter.patch("/:replyId", async (req, res, next) => {
   const { userId } = req.body;
 
   try {
-    const reply = await ProjectPostReply.findById(req.params.replyId);
+    const reply = await ProjectPostReply.findById(req.params.replyId)
+      .populate("projectPostId", "projectId slug")
+      .exec();
 
     if (!reply) {
       return res.status(404).json({ error: "Reply not found" });
@@ -124,9 +126,11 @@ projectPostReplyRouter.patch("/:replyId", async (req, res, next) => {
       { $set: { deleted: true, deletedAt: new Date() } }
     );
 
-    console.log(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>Reply marked as deleted");
+    console.log(
+      ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>Reply marked as deleted"
+    );
 
-    res.json({ message: "Reply marked as deleted" });
+    res.json({ message: "Reply marked as deleted", reply });
   } catch (error) {
     console.error("Error deleting reply:", error);
     next(error);

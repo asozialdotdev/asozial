@@ -25,14 +25,23 @@ import type { Member, ProjectId } from "@/types/Project";
 import { Suspense } from "react";
 import ProjectLoadingSkeleton from "@/components/project/ProjectLoadingSkeleton";
 import PostLoadingSkeleton from "@/components/project/PostLoadingSkeleton";
+import { fetchProjectBySlug } from "@/actions/projects.server/fetchProjectBySlug.server";
 
-async function Page({ params }: { params: { projectId: ProjectId } }) {
+type Params = {
+  username: string;
+  slug: string;
+  projectId: ProjectId;
+};
+
+async function Page({ params }: { params: Params }) {
   const session = await auth();
-  const { projectId } = params;
+  const paramsObj = params;
+  console.log("paramsOBJ", paramsObj);
+  const { projectId } = paramsObj;
 
   const project = await fetchProjectById(projectId);
 
-  const posts = await fetchProjectPosts(projectId);
+  const posts = await fetchProjectPosts(project._id);
 
   const isMember = project.membersJoined.some(
     (member: Member) => member._id === session?.user?.id,

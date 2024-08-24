@@ -8,6 +8,7 @@ import { redirect } from "next/navigation";
 // POST create a new project
 const createProject = async (data: CreateUpdateProject) => {
   const session = await auth();
+  const username = session?.user?.githubUsername;
   const slug = generateSlug(data.title);
   let project;
   try {
@@ -29,7 +30,7 @@ const createProject = async (data: CreateUpdateProject) => {
     console.error("Error creating project:", error);
     return { error: true, message: "Failed to create project" };
   }
-  redirect(`/projects/${project._id}`);
+  redirect(`/${username}/${project.slug}/${project._id}`);
 };
 
 export { createProject };

@@ -42,6 +42,7 @@ type SyncedProjectFormProps = {
 
 function SyncedProjectForm({ project, syncedData }: SyncedProjectFormProps) {
   const { name, html_url, description, language } = syncedData;
+  const username = project.owner.username;
 
   const [error, setError] = useState<string | null>(null);
   const [uploadedImage, setUploadedImage] = useState<ImageT | null>(null);
@@ -129,7 +130,7 @@ function SyncedProjectForm({ project, syncedData }: SyncedProjectFormProps) {
       console.error("Error updating project");
       setError("Error updating project. Please try again");
     } else {
-      router.push(`/projects/${project._id}`);
+      router.push(`/${username}/${project.slug}/${project._id}`);
     }
   };
 
@@ -143,7 +144,7 @@ function SyncedProjectForm({ project, syncedData }: SyncedProjectFormProps) {
       console.error("Error deleting project");
       setError(result.message);
     } else {
-      router.push("/projects");
+      router.push(`/${username}/projects`);
     }
   };
 
@@ -161,7 +162,6 @@ function SyncedProjectForm({ project, syncedData }: SyncedProjectFormProps) {
 
         {/* Title */}
         <Title
-          control={control}
           errors={errors}
           setValue={setValue}
           syncTitle={syncedData.name}

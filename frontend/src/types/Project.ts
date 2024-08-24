@@ -15,10 +15,10 @@ type SocialsData = {
 type ProjectId = Types.ObjectId | string;
 type Member = {
   _id: Types.ObjectId | string;
-  avatarUrl: string
+  avatarUrl: string;
   image: string;
   name: string;
-  username: string
+  username: string;
 };
 
 type Socials = {
@@ -38,6 +38,7 @@ type Project = {
   pitch: string;
   image?: string;
   placeholder?: string;
+  slug: string;
   mainLanguage: string;
   membersJoined: Member[];
   membersApplied: Member[];
