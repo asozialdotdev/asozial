@@ -1,6 +1,9 @@
 "use server";
+
+import { baseUrl } from "@/constants";
+
 const getAllUsers = async () => {
-  const data = await fetch("/users/search", {
+  const data = await fetch(`${baseUrl}/search/users`, {
     method: "GET",
   });
   if (!data) {

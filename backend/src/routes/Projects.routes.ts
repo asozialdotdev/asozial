@@ -11,7 +11,9 @@ const projectsRouter = express.Router();
 
 dotenv.config();
 
+
 // GET search for all projects
+
 projectsRouter.get(
   "/all",
   async (req: Request, res: Response, next: NextFunction) => {
@@ -34,7 +36,6 @@ projectsRouter.get(
         .populate("membersJoined", "username name image")
         .populate("owner", "username name image")
         .exec();
-
       const totalProjects = await Project.countDocuments(searchQuery);
       const totalPages = Math.ceil(totalProjects / +limit);
       console.log({ projects, totalPages, currentPage: +page });
@@ -205,17 +206,42 @@ projectsRouter.post(
           .json({ error: "userId query parameter is required" });
       }
 
-      const owner = await User.findOne({ _id: userId });
+      const owner = await User.findById(userId);
       if (!owner) {
         return res.status(404).json({ error: "User not found" });
       }
-      const repoInfo = await axios.get(repoUrl);
-      console.log("Repo Info", repoInfo);
 
+      const regex = /https:\/\/api\.github\.com\/repos\/([^\/]+)\/([^\/]+)/;
+      const match = repoUrl.match(regex);
+      if (!match) {
+        return res.status(400).json({ error: "Invalid GitHub API URL format" });
+      }
+
+      const [_, repoOwner, repoName] = match;
+      const normalizedRepoUrl = `https://github.com/${repoOwner}/${repoName}`;
+
+      const existingProject = await Project.findOne({
+        githubRepo: normalizedRepoUrl,
+      });
+      if (existingProject) {
+        return res.status(409).json({
+          error: "Project with this GitHub repository already exists",
+        });
+      }
+
+      const repoInfo: any = await axios.get(repoUrl);
       if (repoInfo.status !== 200) {
         return res
           .status(repoInfo.status)
           .json({ error: "Failed to fetch repository information" });
+      }
+      console.log(repoInfo.data.owner.id);
+      console.log(owner?.github?.id);
+
+      if (owner?.github?.id !== repoInfo.data.owner?.id) {
+        return res
+          .status(403)
+          .json({ error: "User is not the owner of this repository" });
       }
 
       const { name, description, html_url, language } = repoInfo.data;
@@ -224,7 +250,7 @@ projectsRouter.post(
       const createProject = await Project.create({
         title: name,
         description: description,
-        githubRepo: html_url,
+        githubRepo: normalizedRepoUrl,
         techStack: [language],
         owner: userId,
         status: "active",
@@ -470,7 +496,7 @@ projectsRouter.get(
   "/match",
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const actualUser = (req as any).payload.user;
+      const { actualUser } = req.body;
 
       const filteredProjects = await Project.aggregate([
         {
@@ -509,7 +535,7 @@ projectsRouter.post(
   "/match",
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const actualUser = (req as any).payload.user;
+      const { actualUser } = req.body;
       const { projectId } = req.body;
       const foundProject = await Project.findById(projectId);
 

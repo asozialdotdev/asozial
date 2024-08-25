@@ -14,7 +14,7 @@ import friendshipsRouter from "./routes/Friendships.routes";
 import userPostsRouter from "./routes/UserPosts.routes";
 import messagesRouter from "./routes/Messages.routes";
 import fileRouter from "./routes/FileUploader.routes";
-import { isAuthenticated } from "./middleware/jwt.middleware";
+import searchRouter from "./routes/Search.router";
 
 const app = express();
 config(app);
@@ -31,5 +31,6 @@ app.use("/api/user-posts", userPostsRouter);
 app.use("/api/friends", friendshipsRouter);
 app.use("/api/messages", messagesRouter);
 app.use("/api", fileRouter);
+app.use("/search", searchRouter);
 
 export default app;

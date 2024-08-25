@@ -24,7 +24,6 @@ type UserAvatarProps = {
 };
 
 function UserAvatar({ src, username, userId, className }: UserAvatarProps) {
-  console.log("SRC", src);
   return (
     <TooltipProvider key={username}>
       <Tooltip>
