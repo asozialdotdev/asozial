@@ -22,7 +22,7 @@ function Pitch({ control, errors }: PitchProps) {
             {...field}
             id="pitch"
             name="pitch"
-            placeholder="Describe what is your project about and why other members should join it..."
+            placeholder="Let other know why they should join your project..."
           />
         )}
       />

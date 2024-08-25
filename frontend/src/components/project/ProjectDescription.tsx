@@ -4,15 +4,16 @@ import { Textarea } from "../ui/textarea";
 import { useState } from "react";
 import { Button } from "../ui/button";
 import { useForm } from "react-hook-form";
-import { pitchSchema } from "@/lib/schema";
+import { descriptionSchema } from "@/lib/schema";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { patchPitch } from "@/actions";
+import { patchDescription } from "@/actions";
 import { useSession } from "next-auth/react";
+import CustomLabel from "../common/ui/Label";
 
-type Input = z.infer<typeof pitchSchema>;
+type Input = z.infer<typeof descriptionSchema>;
 
-function ProjectPitch({ project }: { project: Project }) {
+function ProjectDescription({ project }: { project: Project }) {
   const [isEditing, setIsEditing] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -23,9 +24,9 @@ function ProjectPitch({ project }: { project: Project }) {
     register,
     formState: { errors, isValid, isSubmitting },
   } = useForm<Input>({
-    resolver: zodResolver(pitchSchema),
+    resolver: zodResolver(descriptionSchema),
     defaultValues: {
-      pitch: "",
+      description: "",
     },
   });
 
@@ -34,7 +35,7 @@ function ProjectPitch({ project }: { project: Project }) {
   };
 
   const processForm = async (data: Input) => {
-    const result = await patchPitch(project._id, data.pitch);
+    const result = await patchDescription(project._id, data.description);
     if (result.error) {
       setError(result.message);
       return;
@@ -44,33 +45,35 @@ function ProjectPitch({ project }: { project: Project }) {
   };
 
   const isOwner = project.owner._id === session.data?.user?.id;
-  console.log("project Pitch", project.pitch);
+  console.log("project description", project.description);
 
   return (
     <div
-      className={`${project.pitch ? "h-auto" : "h-[12rem]"} mt-4 flex flex-col gap-2`}
+      className={`${project.description ? "h-auto" : "h-[10rem]"} mt-4 flex flex-col gap-2`}
     >
       {!isEditing ? (
         <>
-          <h4 className="text-lg font-semibold">Pitch</h4>
-          {project.pitch ? (
-            <p className="text-justify text-base font-light">{project.pitch}</p>
+          <h4 className="text-lg font-semibold">Description</h4>
+          {project.description ? (
+            <h3 className="font-semibold text-zinc-500 first-letter:capitalize dark:text-zinc-400">
+              {project.description}
+            </h3>
           ) : isOwner ? (
             <div>
               <p className="mb-4 text-justify text-base font-light text-neutral-500 dark:text-neutral-400">
-                No pitch provided yet. Here you should tell everyone why they
-                should join your project.
+                No description provided yet. Describe your project to attract
+                more members.
               </p>
               <Button
                 className="bg-dark dark:bg-light hover:dark:bg-zinc-300 dark:focus:bg-zinc-300"
                 onClick={toggleEditing}
               >
-                Add a pitch
+                Add a description
               </Button>
             </div>
           ) : (
             <p className="mb-4 text-justify text-base font-light text-neutral-500 dark:text-neutral-400">
-              No pitch provided yet. Ask the owner for more information.
+              No description provided yet.
             </p>
           )}
         </>
@@ -79,17 +82,12 @@ function ProjectPitch({ project }: { project: Project }) {
           onSubmit={handleSubmit(processForm)}
           className="mb-4 flex w-full flex-col gap-2"
         >
-          <label
-            className="font-semibold text-zinc-500 dark:text-zinc-400"
-            htmlFor="pitch"
-          >
-            Pitch
-          </label>
+          <CustomLabel htmlFor="description">Description</CustomLabel>
           <Textarea
-            id="pitch"
-            {...register("pitch")}
+            id="description"
+            {...register("description")}
             placeholder="What's on your mind?"
-            className="h-32 w-full border-zinc-300 bg-white hover:bg-zinc-50 focus:bg-zinc-50 dark:border-zinc-700 dark:hover:bg-zinc-800 dark:focus:bg-zinc-800"
+            className="h-20 w-full"
           />
           <div className="flex items-center gap-4">
             <Button
@@ -108,9 +106,9 @@ function ProjectPitch({ project }: { project: Project }) {
               Cancel
             </Button>
           </div>
-          {(errors.pitch || error) && (
+          {(errors.description || error) && (
             <span className="text-base font-light text-red-700 dark:text-red-700">
-              {errors?.pitch?.message || error}
+              {errors?.description?.message || error}
             </span>
           )}
         </form>
@@ -119,4 +117,4 @@ function ProjectPitch({ project }: { project: Project }) {
   );
 }
 
-export default ProjectPitch;
+export default ProjectDescription;

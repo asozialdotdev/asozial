@@ -21,6 +21,7 @@ import { checkIsMember } from "@/actions";
 import ProjectPitch from "./ProjectPitch";
 import ProjectMainLanguage from "./ProjectMainLanguage";
 import ButtonBack from "../common/ui/ButtonBack";
+import ProjectDescription from "./ProjectDescription";
 
 const membersJoined = ["Benjamin", "Mirko", "John", "Jane", "José"];
 const membersApplied = ["Alice", "Bob", "Charlie"];
@@ -62,12 +63,7 @@ async function ProjectComponent({ project }: { project: Project }) {
       </div>
 
       {/* Description */}
-      <div className="mt-4 flex flex-col gap-2">
-        <h4 className="text-lg font-semibold">Description</h4>
-        <h3 className="font-semibold text-zinc-500 first-letter:capitalize dark:text-zinc-400">
-          {project.description}
-        </h3>
-      </div>
+      <ProjectDescription project={project} />
 
       {/* Pitch*/}
       <ProjectPitch project={project} />

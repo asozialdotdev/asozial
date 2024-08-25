@@ -14,3 +14,4 @@ export { searchForProjects } from "./searchForProjects.server";
 export { checkProjectTitle } from "./checkProjectTitle.server";
 export { searchForProjectsThatUserIsMember } from "./searchForProjectsThatUserIsMember.server";
 export { applyForProject } from "./applyForProject.server";
+export {patchDescription} from "./patchDescription.server"

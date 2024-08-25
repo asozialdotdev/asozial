@@ -3,6 +3,7 @@ import { Control, Controller, FieldErrors } from "react-hook-form";
 import { Inputs } from "@/types/Project";
 import ErrorMessage from "@/components/common/ui/ErrorMessage";
 import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 
 type DescriptionProps = {
   control: Control<Inputs> | undefined;
@@ -19,12 +20,12 @@ function Description({ control, errors }: DescriptionProps) {
         name="description"
         control={control}
         render={({ field }) => (
-          <Input
+          <Textarea
             {...field}
-            type="text"
             id="description"
             name="description"
             placeholder="What is your project about?"
+            className='h-20'
           />
         )}
       />

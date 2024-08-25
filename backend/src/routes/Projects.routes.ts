@@ -396,10 +396,6 @@ projectsRouter.put(
         userId,
       } = req.body;
 
-      //if projectId, do api call to github to get repo info from backend
-
-      console.log("githubRepo:::::::::::::", githubRepo);
-
       // Find the project first
       const project = await Project.findById(req.params.projectId);
 
@@ -429,6 +425,38 @@ projectsRouter.put(
           placeholder,
           slug,
         },
+        { new: true, runValidators: true }
+      );
+
+      res.status(200).json(updatedProject);
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
+//PATCH to update pitch
+projectsRouter.patch(
+  "/:projectId/description",
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const { description, userId } = req.body;
+
+      const project = await Project.findById(req.params.projectId);
+
+      if (!project) {
+        return res.status(404).json({ message: "Project not found" });
+      }
+
+      if (project.owner.toString() !== userId) {
+        return res
+          .status(403)
+          .json({ message: "You are not authorized to edit this project" });
+      }
+
+      const updatedProject = await Project.findByIdAndUpdate(
+        req.params.projectId,
+        { description },
         { new: true, runValidators: true }
       );
 

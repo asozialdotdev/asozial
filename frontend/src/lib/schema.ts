@@ -54,6 +54,12 @@ const createReplySchema = z.object({
     .max(1000, "Maximum of 1000 characters, bitte 🙏"),
 });
 
+const descriptionSchema = z.object({
+  description: z
+    .string({ required_error: "Pitch your project" })
+    .min(3, "Minimum of 3 characters, bitte 🙏")
+    .max(250, "Maximum of 250 characters, bitte 🙏"),
+});
 const pitchSchema = z.object({
   pitch: z
     .string({ required_error: "Pitch your project" })
@@ -78,4 +84,5 @@ export {
   pitchSchema,
   mainLanguageSchema,
   syncGithubRepoSchema,
+  descriptionSchema,
 };
