@@ -1,5 +1,5 @@
 import { contributors } from "@/constants";
-import UserAvatar from "../ui/UserAvatar";
+import UserAvatar from "../ui/image/UserAvatar";
 
 const ContributorsImages = () => {
   return (

@@ -5,12 +5,12 @@ import { useSidebarsContext } from "@/context/SidebarsContext";
 
 //UI
 import { useSession } from "next-auth/react";
-import SidebarTitle from "../common/ui/SidebarTitle";
-import SearchIcon from "../common/ui/SearchIcon";
-import MatchIcon from "../common/ui/MatchIcon";
+import SidebarTitle from "../common/sidebar/SidebarTitle";
+import SearchIcon from "../common/ui/icons/SearchIcon";
+import MatchIcon from "../common/ui/icons/MatchIcon";
 import ProjectCreateIcon from "../common/ui/ProjectCreateIcon";
 import SidebarButtons from "../common/sidebar/SidebarButtons";
-import SidebarFriendsList from "../user/SidebarFriendsList";
+import SidebarFriendsList from "../common/sidebar/SidebarFriendsList";
 
 function ProjectSidebar() {
   const { projectSidebarRef, isProjectSidebarOpen } = useSidebarsContext();

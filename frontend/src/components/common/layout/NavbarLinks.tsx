@@ -1,9 +1,9 @@
 import NavbarLinkItem from "./NavbarLinkItem";
 import NavbarLinkItemWithSubLinks from "./NavbarLinkWithSubLinks";
-import DashboardIcon from "../ui/DashboardIcon";
-import SearchIcon from "../ui/SearchIcon";
-import MatchIcon from "../ui/MatchIcon";
-import ProjectIcon from "../ui/ProjectIcon";
+import DashboardIcon from "../ui/icons/DashboardIcon";
+import SearchIcon from "../ui/icons/SearchIcon";
+import MatchIcon from "../ui/icons/MatchIcon";
+import ProjectIcon from "../ui/icons/ProjectIcon";
 import UsersIcon from "../ui/UsersIcon";
 const navbarLinks = [
   {

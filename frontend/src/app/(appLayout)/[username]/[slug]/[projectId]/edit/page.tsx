@@ -1,7 +1,7 @@
 import { fetchProjectById } from "@/actions";
 import { auth } from "@/auth";
 import PageContainer from "@/components/common/containers/PageContainer";
-import ButtonBack from "@/components/common/ui/ButtonBack";
+import ButtonBack from "@/components/common/ui/buttons/ButtonBack";
 import PageTitle from "@/components/common/ui/PageTitle";
 import EditProject from "@/components/project/EditProject";
 import { Button } from "@/components/ui/button";
@@ -31,7 +31,7 @@ async function EditProjectPage({
     );
   }
   return (
-    <PageContainer className='gap-4'>
+    <PageContainer className="gap-4">
       <PageTitle>Edit Project</PageTitle>
       <EditProject project={project} />
     </PageContainer>
