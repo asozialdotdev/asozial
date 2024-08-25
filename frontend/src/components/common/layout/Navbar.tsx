@@ -17,14 +17,13 @@ import { useSidebarsContext } from "@/context/SidebarsContext";
 import ToggleTheme from "../ui/ToggleTheme";
 //UI
 import { FaGithub, FaLinkedin } from "react-icons/fa";
-import { IoMenu } from "react-icons/io5";
-import { TbUserSquareRounded } from "react-icons/tb";
 import { Button } from "@/components/ui/button";
 import logo from "/public/logo.png";
 import { contributors } from "@/constants";
 import UserAvatar from "@/components/common/ui/UserAvatar";
 import NavbarLinks from "./NavbarLinks";
 import { Menu, SquareUserRound } from "lucide-react";
+import NavbarAsozialMenu from "./NavbarAsozialMenu";
 
 function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -67,18 +66,7 @@ function Navbar() {
                 <SquareUserRound size={33} />
               </Button>
 
-              <Link className="flex items-center gap-2" href="/dashboard">
-                <h1 className="cursor-pointer text-2xl tracking-wide">
-                  asozial
-                </h1>
-                <Image
-                  src={logo}
-                  alt="logo"
-                  width={30}
-                  height={30}
-                  className="rounded-full border-2 border-dark"
-                />
-              </Link>
+              <NavbarAsozialMenu />
             </section>
 
             <NavbarLinks />
