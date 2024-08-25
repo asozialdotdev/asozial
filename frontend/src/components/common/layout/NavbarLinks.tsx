@@ -1,14 +1,7 @@
 import NavbarLinkItem from "./NavbarLinkItem";
 import NavbarLinkItemWithSubLinks from "./NavbarLinkWithSubLinks";
-import {
-  LayoutDashboard,
-  UserPen,
-  Search,
-  Users,
-  FolderGit,
-} from "lucide-react";
+import { LayoutDashboard, Link, Search, Users, FolderGit } from "lucide-react";
 const navbarLinks = [
-  { name: "Dashboard", href: "/dashboard", Icon: LayoutDashboard },
   {
     name: "Search",
     href: "/search",
@@ -16,6 +9,16 @@ const navbarLinks = [
     sublinks: [
       { name: "Users", href: "/search/users", Icon: Users },
       { name: "Projects", href: "/search/projects", Icon: FolderGit },
+    ],
+  },
+  { name: "Dashboard", href: "/dashboard", Icon: LayoutDashboard },
+  {
+    name: "Match",
+    href: "/match",
+    Icon: Link,
+    sublinks: [
+      { name: "Users", href: "/match/users", Icon: Users },
+      { name: "Projects", href: "/match/projects", Icon: FolderGit },
     ],
   },
 ];
