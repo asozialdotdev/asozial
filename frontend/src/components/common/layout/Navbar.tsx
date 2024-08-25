@@ -26,6 +26,7 @@ import UserAvatar from "@/components/common/ui/UserAvatar";
 import NavbarLinks from "./NavbarLinks";
 import { Menu, SquareUserRound } from "lucide-react";
 
+
 function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -77,7 +78,7 @@ function Navbar() {
 
             <NavbarLinks />
 
-            <section className="flex items-center gap-2" ref={combinedRefs}>
+            <section className="flex items-center gap-2">
               {status === "authenticated" &&
                 session.user.image &&
                 session.user.githubUsername && (
@@ -92,6 +93,7 @@ function Navbar() {
               <Button
                 variant="ghost"
                 className="hidden hover:opacity-75 sm:block"
+
                 onClick={() => setIsOpen(!isOpen)}
               >
                 Contributors

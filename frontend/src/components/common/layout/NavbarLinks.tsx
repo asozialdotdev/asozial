@@ -2,7 +2,7 @@ import NavBarLinkItem from "./NavBarLinkItem";
 
 const navbarLinks = [
   { name: "Dashboard", href: "/dashboard" },
-  {
+  }
     name: "Account",
     href: "/account",
     sublinks: [
