@@ -7,6 +7,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { Button } from "@/components/ui/button";
 
 type NavbarLinkItemWithSubLinksProps = {
   name: string;
@@ -24,8 +25,13 @@ function NavbarLinkItemWithSubLinks({
   return (
     <DropdownMenu>
       <DropdownMenuTrigger className="flex flex-row items-center gap-2">
-        <Icon />
-        {name}
+        <Button
+          variant="ghost"
+          className="flex flex-row flex-nowrap items-center gap-2"
+        >
+          <Icon />
+          {name}
+        </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent>
         <DropdownMenuLabel>

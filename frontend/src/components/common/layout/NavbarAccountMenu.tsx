@@ -30,7 +30,13 @@ function NavbarAccountMenu({
   return (
     <DropdownMenu>
       <DropdownMenuTrigger className="text-2xl">
-        <UserAvatar src={src} userId={userId} username={username} isInNavbar />
+        <UserAvatar
+          src={src}
+          userId={userId}
+          username={username}
+          isInNavbar
+          className="opacity-75 hover:scale-110 hover:border-2 hover:opacity-100"
+        />
       </DropdownMenuTrigger>
       <DropdownMenuContent>
         <DropdownMenuLabel className="flex flex-row items-center gap-2 text-xs italic">

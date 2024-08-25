@@ -1,3 +1,4 @@
+import { Button } from "@/components/ui/button";
 import Link from "next/link";
 
 type NavbarLinkItemProps = {
@@ -8,10 +9,15 @@ type NavbarLinkItemProps = {
 
 function NavbarLinkItem({ name, href, Icon }: NavbarLinkItemProps) {
   return (
-    <Link href={href} className="flex flex-row flex-nowrap">
-      <Icon />
-      {name}
-    </Link>
+    <Button variant="ghost">
+      <Link
+        href={href}
+        className="flex flex-row flex-nowrap items-center gap-2"
+      >
+        <Icon />
+        {name}
+      </Link>
+    </Button>
   );
 }
 

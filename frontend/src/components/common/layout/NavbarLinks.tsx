@@ -22,7 +22,7 @@ const navbarLinks = [
 
 function NavbarLinks() {
   return (
-    <ul className="flex items-center gap-2">
+    <ul className="flex items-center gap-6">
       {navbarLinks.map((link) => (
         <>
           {link.sublinks ? (
