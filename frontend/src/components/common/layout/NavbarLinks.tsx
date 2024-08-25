@@ -3,14 +3,6 @@ import NavBarLinkItem from "./NavBarLinkItem";
 const navbarLinks = [
   { name: "Dashboard", href: "/dashboard" },
   {
-    name: "Search",
-    href: "/search",
-    sublinks: [
-      { name: "Users", href: "/search/users" },
-      { name: "Projects", href: "/search/projects" },
-    ],
-  },
-  {
     name: "Account",
     href: "/account",
     sublinks: [
@@ -19,11 +11,11 @@ const navbarLinks = [
     ],
   },
   {
-    name: "Explore",
-    href: "/explore",
+    name: "Search",
+    href: "/search",
     sublinks: [
-      { name: "Projects", href: "/explore/projects" },
-      { name: "Users", href: "/explore/users" },
+      { name: "Users", href: "/search/users" },
+      { name: "Projects", href: "/search/projects" },
     ],
   },
 ];
