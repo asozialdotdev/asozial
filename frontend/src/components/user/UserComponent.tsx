@@ -35,7 +35,7 @@ import {
 import { notFound } from "next/navigation";
 
 function UserComponent({ user }: { user: User }) {
-  //console.log("user on page", user);
+  console.log("user on page", user);
 
   let formattedDate = "Unknown";
   if (user?.github?.createdAt) {

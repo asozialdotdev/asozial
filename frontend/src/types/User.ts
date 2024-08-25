@@ -62,6 +62,8 @@ type Github = {
 };
 
 type User = {
+  _id: UserId;
+  bio: string;
   username: string;
   name: string;
   email: string;
@@ -82,6 +84,10 @@ type User = {
   dashboardPosts: ProjectPostId[];
   usersMatched: UserId[];
   usersAvoided: UserId[];
+  friendsPending: UserId[];
+  friendsAccepted: UserId[];
+  friendsRejected: UserId[];
+  friendsRejectedBy: UserId[];
   github: Github;
 };
 

@@ -11,25 +11,25 @@ usersRouter.post(
   "/match",
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const actualUser = (req as any).payload.user;
-      const targetUser = await User.findById(req.body.userId);
+      const { actualUser, targetUser } = req.body;
+      const findTargetUser = await User.findById(targetUser);
 
-      if (!targetUser) {
+      if (!findTargetUser) {
         res.status(404).send("User not found");
         console.error("User not found");
         return;
       }
 
-      actualUser.matchedUsers.push(targetUser);
+      actualUser.matchedUsers.push(findTargetUser);
       await actualUser.save();
 
-      //targetUser.matchedUsers.push(actualUser._id);
-      await targetUser.save();
+      //findTargetUser.matchedUsers.push(actualUser._id);
+      await findTargetUser.save();
 
       const populatedActualUser = await User.findById(actualUser._id).populate(
         "matchedUsers"
       );
-      const populatedTargetUser = await User.findById(targetUser).populate(
+      const populatedTargetUser = await User.findById(findTargetUser).populate(
         "matchedUsers"
       );
 
@@ -164,7 +164,7 @@ usersRouter.get(
   "/match",
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const actualUser = (req as any).payload.user;
+      const { actualUser } = req.body;
 
       const avoidedUsers = await User.find({
         $or: [

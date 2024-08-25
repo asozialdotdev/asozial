@@ -9,13 +9,21 @@ const friendshipsRouter = express.Router();
 friendshipsRouter.post(
   "/",
   async (req: Request, res: Response, next: NextFunction) => {
+    console.log("req.body", req.body);
     try {
-      const senderId = (req as any).payload.user;
-      const receiverId = await User.findById(req.params.userId);
+      const { senderId, receiverId } = req.body;
+      console.log("senderId", senderId);
+      console.log("receiverId", receiverId);
+
+      if (!senderId) {
+        res.status(404).send("Sender not found");
+        console.error("Sender not found");
+        return;
+      }
 
       if (!receiverId) {
-        res.status(404).send("User not found");
-        console.error("User not found");
+        res.status(404).send("Receiver not found");
+        console.error("Receiver not found");
         return;
       }
 
@@ -34,6 +42,15 @@ friendshipsRouter.post(
         status: "pending",
       });
 
+      //add friendship to sender and receiver
+      await User.findByIdAndUpdate(senderId, {
+        $push: { friendsPending: receiverId },
+      });
+
+      await User.findByIdAndUpdate(receiverId, {
+        $push: { friendsPending: senderId },
+      });
+
       res.status(201).json(newFriendship);
     } catch (error) {
       next(error);
@@ -47,16 +64,21 @@ friendshipsRouter.patch(
   "/:friendshipId/accept",
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const friendshipId = req.params.friendshipId;
-      const friendship = await Friendship.findById(friendshipId);
+      const { userId } = req.body;
+      const { friendshipId } = req.params;
 
-      if (!friendship) {
+      const foundFriendship = await Friendship.findById(friendshipId);
+
+      if (!foundFriendship) {
         res.status(404).send("Friendship not found");
         console.error("Friendship not found");
         return;
       }
 
-      if (friendship.receiverId.toString() !== (req as any).payload.user) {
+      if (
+        foundFriendship.receiverId.toString() !== userId ||
+        foundFriendship.senderId.toString() !== userId
+      ) {
         res
           .status(403)
           .send("You are not authorized to accept this friendship");
@@ -64,10 +86,10 @@ friendshipsRouter.patch(
         return;
       }
 
-      friendship.status = "accepted";
-      await friendship.save();
+      foundFriendship.status = "accepted";
+      await foundFriendship.save();
 
-      res.status(200).json(friendship);
+      res.status(200).json(foundFriendship);
     } catch (error) {
       next(error);
     }
@@ -80,15 +102,16 @@ friendshipsRouter.patch(
   "/:friendshipId/decline",
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const friendshipId = req.params.friendshipId;
+      const { receiverId } = req.body;
+      const { friendshipId } = req.params;
 
       const friendship = await Friendship.findOneAndUpdate(
         {
           _id: friendshipId,
-          receiverId: (req as any).payload.user._id,  // Ensures only the receiver can decline
+          receiverId: receiverId, // Ensures only the receiver can decline
         },
         { status: "declined" },
-        { new: true }  // Return the updated document
+        { new: true } // Return the updated document
       );
 
       if (!friendship) {
@@ -104,14 +127,13 @@ friendshipsRouter.patch(
   }
 );
 
-
 // GET all pending friendships
 
 friendshipsRouter.get(
   "/pending",
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const actualUser = (req as any).payload.user;
+      const { actualUser } = req.body;
 
       const pendingFriendships = await Friendship.find({
         $or: [
@@ -139,7 +161,7 @@ friendshipsRouter.get(
   "/declined",
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const actualUser = (req as any).payload.user;
+      const { actualUser } = req.body;
 
       const declinedFriendships = await Friendship.find({
         $or: [
@@ -167,23 +189,117 @@ friendshipsRouter.delete(
   "/",
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const deleteResult = await Friendship.deleteMany({
-        $or: [
-          { senderId: req.body.senderId, receiverId: req.body.receiverId },
-          { senderId: req.body.receiverId, receiverId: req.body.senderId },
-        ],
+      const { actualUser } = req.body;
+      const deleteFriendship = await Friendship.findOneAndDelete({
+        $or: [{ senderId: actualUser }, { receiverId: actualUser }],
         status: "accepted",
       });
+      if (!deleteFriendship) {
+        res.status(404).send("Friendship not found or unauthorized");
+        console.error("Friendship not found or unauthorized");
+        return;
+      }
+      res.status(204);
+    } catch (error) {
+      next(error);
+    }
+  }
+);
 
-      if (deleteResult.deletedCount === 0) {
-        res.status(404).send("Friendship not found or not accepted");
-        console.error("Friendship not found or not accepted");
+friendshipsRouter.get(
+  "/:userId/status",
+  async (req: Request, res: Response, next: NextFunction) => {
+    const userId = req.params.userId;
+    try {
+      const user = await User.findById(userId);
+      if (!user) {
+        res.status(404).send("User not found");
+        console.error("User not found");
         return;
       }
 
-      res.status(200).json({ message: "Friendship deleted" });
-    } catch (error) {
-      next(error);
+      const friendsAcceptedDetails = user.friendsAccepted
+        ? await Promise.all(
+            user.friendsAccepted.map(async (friend) => {
+              const friendDetails = await User.findById(friend).populate(
+                "username image"
+              );
+              if (!friendDetails) return null;
+              const response = {
+                id: friendDetails._id,
+                username: friendDetails.username,
+                image: friendDetails.image,
+              };
+              return response;
+            })
+          )
+        : [];
+
+      const friendsPendingDetails = user.friendsPending
+        ? await Promise.all(
+            user.friendsPending.map(async (friend) => {
+              const friendDetails = await User.findById(friend).populate(
+                "username image"
+              );
+              if (!friendDetails) return null;
+              const response = {
+                id: friendDetails._id,
+                username: friendDetails.username,
+                image: friendDetails.image,
+              };
+              return response;
+            })
+          )
+        : [];
+
+      const friendsRejectedDetails = user.friendsRejected
+        ? await Promise.all(
+            user.friendsRejected.map(async (friend) => {
+              const friendDetails = await User.findById(friend).populate(
+                "username image"
+              );
+              if (!friendDetails) return null;
+              const response = {
+                id: friendDetails._id,
+                username: friendDetails.username,
+                image: friendDetails.image,
+              };
+              return response;
+            })
+          )
+        : [];
+
+      const friendsRejectedByDetails = user.friendsRejectedBy
+        ? await Promise.all(
+            user.friendsRejectedBy.map(async (friend) => {
+              const friendDetails = await User.findById(friend).populate(
+                "username image"
+              );
+              if (!friendDetails) return null;
+              const response = {
+                id: friendDetails._id,
+                username: friendDetails.username,
+                image: friendDetails.image,
+              };
+              return response;
+            })
+          )
+        : [];
+
+      console.log("friendsAcceptedDetails", friendsAcceptedDetails);
+      console.log("friendsPendingDetails", friendsPendingDetails);
+      console.log("friendsRejectedDetails", friendsRejectedDetails);
+      console.log("friendsRejectedByDetails", friendsRejectedByDetails);
+
+      res.json({
+        friendsAccepted: friendsAcceptedDetails,
+        friendsPending: friendsPendingDetails,
+        friendsRejected: friendsRejectedDetails,
+        friendsRejectedBy: friendsRejectedByDetails,
+      });
+    } catch (error: any) {
+      console.error("Error fetching user friendships:", error);
+      res.status(500).send("Error fetching user friendships");
     }
   }
 );
