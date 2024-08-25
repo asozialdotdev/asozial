@@ -1,10 +1,9 @@
-'use client'
+"use client";
+
+import PageContainer from "@/components/common/containers/PageContainer";
+
 function MyProjectsError() {
-  return (
-    <div>
-      Error fetching projects
-    </div>
-  )
+  return <PageContainer>Error fetching projects</PageContainer>;
 }
 
-export default MyProjectsError
+export default MyProjectsError;

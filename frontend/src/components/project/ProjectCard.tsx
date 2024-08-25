@@ -11,7 +11,6 @@ import {
 import Link from "next/link";
 import UserAvatar from "../common/ui/UserAvatar";
 import { setStatusIcon, techStackClass } from "@/utils";
-import { useSession } from "next-auth/react";
 
 type ProjectCardProps = {
   project: Project;
@@ -20,17 +19,6 @@ type ProjectCardProps = {
 };
 
 function ProjectCard({ project }: ProjectCardProps) {
-  // if (isLoading) {
-  //   return <MyProjectsLoading />;
-  // }
-  // if (error) {
-  //   return <p>{error}</p>;
-  // }
-  // if (!project)
-  //   if (projects?.length === 0 || !projects) {
-  //     return <p>No projects found</p>;
-  //   }
-  // console.log("Projects:", projects);
   const username = project?.owner?.username;
 
   return (

@@ -11,6 +11,7 @@ import PageTitle from "@/components/common/ui/PageTitle";
 import ProjectCardLoadingSkeleton from "@/components/project/ProjectCardsLoadingSkeleton";
 import Pagination from "@/components/common/ui/Pagination";
 import { SearchX } from "lucide-react";
+import { notFound } from "next/navigation";
 
 type ExploreProjectsPageProps = {
   searchParams: {
@@ -28,6 +29,8 @@ async function ExploreProjectsPage({ searchParams }: ExploreProjectsPageProps) {
     currentPage,
     limit,
   );
+
+  if (!projects) return notFound();
   return (
     <PageContainer className="gap-10 2xl:max-w-screen-xl">
       <section className="flex w-full flex-col items-center gap-8">
