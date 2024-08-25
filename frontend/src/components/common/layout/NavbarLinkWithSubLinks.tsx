@@ -8,19 +8,19 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-type NavBarLinkItemWithSubLinksProps = {
+type NavbarLinkItemWithSubLinksProps = {
   name: string;
   href: string;
   Icon: React.ComponentType;
   subLinks: { name: string; href: string; Icon: React.ComponentType }[];
 };
 
-function NavBarLinkItemWithSubLinks({
+function NavbarLinkItemWithSubLinks({
   name,
   href,
   Icon,
   subLinks,
-}: NavBarLinkItemWithSubLinksProps) {
+}: NavbarLinkItemWithSubLinksProps) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger className="flex flex-row items-center gap-2">
@@ -51,4 +51,4 @@ function NavBarLinkItemWithSubLinks({
   );
 }
 
-export default NavBarLinkItemWithSubLinks;
+export default NavbarLinkItemWithSubLinks;

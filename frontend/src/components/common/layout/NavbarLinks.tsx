@@ -1,5 +1,5 @@
 import NavbarLinkItem from "./NavbarLinkItem";
-import NavBarLinkItemWithSubLinks from "./NavbarLinkWithSubLinks";
+import NavbarLinkItemWithSubLinks from "./NavbarLinkWithSubLinks";
 import {
   LayoutDashboard,
   UserPen,
@@ -26,7 +26,7 @@ function NavbarLinks() {
       {navbarLinks.map((link) => (
         <>
           {link.sublinks ? (
-            <NavBarLinkItemWithSubLinks
+            <NavbarLinkItemWithSubLinks
               key={link.name}
               name={link.name}
               href={link.href}

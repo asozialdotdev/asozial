@@ -1,12 +1,12 @@
 import Link from "next/link";
 
-type NavBarLinkItemProps = {
+type NavbarLinkItemProps = {
   name: string;
   href: string;
   Icon: React.ComponentType;
 };
 
-function NavbarLinkItem({ name, href, Icon }: NavBarLinkItemProps) {
+function NavbarLinkItem({ name, href, Icon }: NavbarLinkItemProps) {
   return (
     <Link href={href} className="flex flex-row flex-nowrap">
       <Icon />
