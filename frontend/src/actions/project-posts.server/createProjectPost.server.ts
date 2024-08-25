@@ -21,6 +21,7 @@ const createProjectPost = async (
   formData: FormData,
 ): Promise<CreatePostFormState> => {
   const session = await auth();
+  const username = session?.user?.githubUsername;
   const result = createPostSchema.safeParse({
     title: formData.get("title"),
     content: formData.get("content"),
@@ -54,8 +55,9 @@ const createProjectPost = async (
       throw new Error(`Failed to create post: ${response.statusText}`);
     }
     const post = await response.json();
+    console.log("post Project Slug", post.projectId.slug);
     console.log("Created post:", post);
-    revalidatePath(`/projects/${projectId}`);
+    revalidatePath(`/${username}/${post.projectId.slug}/${post.projectId._id}`);
     return {
       errors: {},
       success: true,

@@ -1,15 +1,19 @@
+import { checkProjectTitle } from "@/actions";
 import { z } from "zod";
 
 const createProjectSchema = z.object({
   title: z
     .string({ required_error: "Project with no name?" })
-    .min(1, "Project with no name?"),
+    .min(2, "Minimum of 2 characters, bitte 🙏")
+    .max(100, "Maximum of 100 characters, bitte 🙏"),
   description: z
     .string({ required_error: "They need to know what your project is about" })
-    .min(1, "They need to know what your project is about"),
+    .min(3, "Minimum of 3 characters, bitte 🙏")
+    .max(200, "Maximum of 200 characters, bitte 🙏"),
   pitch: z
     .string({ required_error: "Pitch your project" })
-    .min(1, "Pitch your project"),
+    .min(3, "Minimum of 3 characters, bitte 🙏")
+    .max(2000, "Maximum of 2000 characters, bitte 🙏"),
   githubRepo: z
     .string({ required_error: "Pick at least one tech stack" })
     .optional(),
@@ -31,20 +35,30 @@ const createProjectSchema = z.object({
 });
 
 const createPostSchema = z.object({
-  title: z.string().min(1, "Your thread needs a title"),
-  content: z.string().min(1, "At least try to write something"),
+  title: z
+    .string()
+    .min(1, "Your thread needs a title")
+    .max(100, "Maximum of 100 characters, bitte 🙏"),
+  content: z
+    .string()
+    .min(1, "At least try to write something")
+    .max(2000, "Maximum of 2000 characters, bitte 🙏"),
   image: z.string().optional(),
   placeholder: z.string().optional(),
 });
 
 const createReplySchema = z.object({
-  content: z.string().min(1, "At least try to write something"),
+  content: z
+    .string()
+    .min(1, "At least try to write something")
+    .max(1000, "Maximum of 1000 characters, bitte 🙏"),
 });
 
 const pitchSchema = z.object({
   pitch: z
-    .string({ required_error: "Specify the main language" })
-    .min(1, "Pitch your project"),
+    .string({ required_error: "Pitch your project" })
+    .min(3, "Minimum of 3 characters, bitte 🙏")
+    .max(2000, "Maximum of 2000 characters, bitte 🙏"),
 });
 
 const mainLanguageSchema = z.object({

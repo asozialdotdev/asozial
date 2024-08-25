@@ -2,8 +2,8 @@ import CustomLabel from "@/components/common/ui/Label";
 import Image from "next/image";
 import github from "/public/socials/github.png";
 import { Control, Controller } from "react-hook-form";
-import CustomInput from "@/components/common/ui/CustomInput";
 import { Inputs } from "@/types/Project";
+import { Input } from "@/components/ui/input";
 
 type GithubRepoProps = {
   control: Control<Inputs> | undefined;
@@ -26,7 +26,7 @@ function GithubRepo({ control }: GithubRepoProps) {
           name="githubRepo"
           control={control}
           render={({ field }) => (
-            <CustomInput
+            <Input
               {...field}
               type="text"
               id="githubRepo"

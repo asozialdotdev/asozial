@@ -1,8 +1,8 @@
-import CustomInput from "@/components/common/ui/CustomInput";
 import CustomLabel from "@/components/common/ui/Label";
 import { Control, Controller, FieldErrors } from "react-hook-form";
 import { Inputs } from "@/types/Project";
 import ErrorMessage from "@/components/common/ui/ErrorMessage";
+import { Input } from "@/components/ui/input";
 
 type DescriptionProps = {
   control: Control<Inputs> | undefined;
@@ -19,7 +19,7 @@ function Description({ control, errors }: DescriptionProps) {
         name="description"
         control={control}
         render={({ field }) => (
-          <CustomInput
+          <Input
             {...field}
             type="text"
             id="description"

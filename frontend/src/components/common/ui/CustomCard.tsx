@@ -20,6 +20,8 @@ type CustomCardProps = {
   titleContent4?: string;
   content4?: JSX.Element;
   footer?: string;
+  query?: string;
+  currentPage?: number;
 };
 
 function CustomCard({
@@ -33,6 +35,8 @@ function CustomCard({
   titleContent4,
   content4,
   footer,
+  query,
+  currentPage,
 }: CustomCardProps) {
   return (
     <>

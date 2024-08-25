@@ -11,12 +11,17 @@ type User = {
   username: string;
 };
 
+type ProjectInPost = {
+  _id: Types.ObjectId;
+  slug: string;
+};
+
 type ProjectPost = {
   _id: ProjectPostId;
   title: string;
   content: string;
   userId: User;
-  projectId: Types.ObjectId;
+  projectId: ProjectInPost;
   replies: Reply[];
   likes: UserId[];
   dislikes: UserId[];

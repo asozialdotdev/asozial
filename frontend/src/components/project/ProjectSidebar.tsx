@@ -7,24 +7,26 @@ import { useSidebarsContext } from "@/context/SidebarsContext";
 
 //UI
 import { Button } from "../ui/button";
-
-const links = [
-  {
-    name: "My Projects",
-    href: "/projects",
-  },
-  {
-    name: "Create Project",
-    href: "/projects/new",
-  },
-  {
-    name: "Explore Projects",
-    href: "/projects/explore",
-  },
-];
+import { useSession } from "next-auth/react";
 
 function ProjectSidebar() {
   const { projectSidebarRef, isProjectSidebarOpen } = useSidebarsContext();
+  const session = useSession();
+  const username = session.data?.user?.githubUsername;
+  const links = [
+    {
+      name: "My Projects",
+      href: `/${username}/projects`,
+    },
+    {
+      name: "Create Project",
+      href: "/projects/new",
+    },
+    {
+      name: "Explore Projects",
+      href: "/projects/explore",
+    },
+  ];
 
   return (
     <aside

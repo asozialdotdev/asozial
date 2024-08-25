@@ -2,7 +2,7 @@ import { Schema, model } from "mongoose";
 
 const projectSchema = new Schema(
   {
-    title: { type: String },
+    title: { type: String, required: true },
     description: { type: String },
     pitch: { type: String },
     githubRepo: { type: String },
@@ -10,6 +10,7 @@ const projectSchema = new Schema(
     mainLanguage: { type: String },
     image: { type: String },
     placeholder: { type: String },
+    slug: { type: String, required: true, unique: true },
     owner: { type: Schema.Types.ObjectId, ref: "User", required: true },
     membersJoined: [{ type: Schema.Types.ObjectId, ref: "User" }],
     membersApplied: [{ type: Schema.Types.ObjectId, ref: "User" }],
@@ -31,5 +32,6 @@ const projectSchema = new Schema(
     timestamps: true,
   }
 );
+projectSchema.index({ owner: 1, title: 1 }, { unique: true });
 
 export default model("Project", projectSchema);

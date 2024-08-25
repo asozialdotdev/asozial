@@ -1,4 +1,4 @@
-import CustomInput from "@/components/common/ui/CustomInput";
+import { Input } from "@/components/ui/input";
 import { socialsData } from "@/constants";
 import { Inputs } from "@/types/Project";
 import Image from "next/image";
@@ -23,7 +23,7 @@ function Socials({ control }: SocialsProps) {
             name={`socials.${social.key}` as any}
             control={control}
             render={({ field }) => (
-              <CustomInput
+              <Input
                 {...field}
                 type="text"
                 id={`socials.${social.key}`}

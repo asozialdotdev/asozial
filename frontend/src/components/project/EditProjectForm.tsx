@@ -16,7 +16,6 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { createProjectSchema } from "@/lib/schema";
 
-
 //Components
 import FormImage from "./project-form/FormImage";
 import Status from "./project-form/Status";
@@ -33,8 +32,10 @@ import type { CreateUpdateProject, Inputs, Project } from "@/types/Project";
 import { ImageT } from "../common/ui/ImageUploader";
 
 function EditProjectForm({ project }: { project: Project }) {
+  const username = project.owner.username;
   const [error, setError] = useState<string | null>(null);
   const [uploadedImage, setUploadedImage] = useState<ImageT | null>(null);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   const { spokenLanguages } = useSpokenLanguages();
 
@@ -45,7 +46,7 @@ function EditProjectForm({ project }: { project: Project }) {
     control,
     watch,
     setValue,
-    formState: { errors, isValid, isSubmitting },
+    formState: { errors, isSubmitting },
   } = useForm<Inputs>({
     resolver: zodResolver(createProjectSchema),
     defaultValues: {
@@ -113,34 +114,37 @@ function EditProjectForm({ project }: { project: Project }) {
       console.error("Error updating project");
       setError("Error updating project. Please try again");
     } else {
-      router.push(`/projects/${project._id}`);
+      router.push(`/${username}/${project.slug}/${project._id}`);
     }
   };
 
   const handleDeleteProject = async () => {
+    setIsDeleting(true);
+
     const result = await deleteProject(project._id);
     if (result.error) {
       console.error("Error deleting project");
       setError(result.message);
+      setIsDeleting(false);
     } else {
-      router.push("/projects");
+      router.push(`/${username}/projects`);
+      setIsDeleting(false);
     }
   };
 
   return (
     <div className="w-full pb-6">
+      {/* Title */}
+      <Title errors={errors} setValue={setValue} editTitle={project.title} />
       <form
         onSubmit={handleSubmit(processForm)}
         className="mt-2 flex w-full flex-col gap-2"
       >
         {/* Image */}
-        <FormImage setUploadedImage={setUploadedImage} />
+        <FormImage setUploadedImage={setUploadedImage} image={uploadedImage} />
 
         {/* Status */}
         <Status control={control} />
-
-        {/* Title */}
-        <Title control={control} errors={errors} />
 
         {/* Description */}
         <Description control={control} errors={errors} />
@@ -172,6 +176,7 @@ function EditProjectForm({ project }: { project: Project }) {
         {/* Buttons */}
         <ProjectFormButtons
           isSubmitting={isSubmitting}
+          isDeleting={isDeleting}
           handleDeleteProject={handleDeleteProject}
           error={error}
           edit

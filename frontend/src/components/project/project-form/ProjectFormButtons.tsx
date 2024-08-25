@@ -7,21 +7,19 @@ type ProjectFormButtonsProps = {
   error: string | null;
   handleDeleteProject?: () => void;
   edit?: boolean;
+  isDeleting?: boolean;
 };
 
 function ProjectFormButtons({
   isSubmitting,
+  isDeleting,
   error,
   handleDeleteProject,
   edit,
 }: ProjectFormButtonsProps) {
   return (
     <>
-      <Button
-        disabled={isSubmitting}
-        type="submit"
-        className="mt-4 bg-dark dark:bg-light"
-      >
+      <Button disabled={isSubmitting} type="submit" className="mt-4">
         {isSubmitting ? (
           <LoadingTextButton text={edit ? "Updating" : "Creating"} />
         ) : edit ? (
@@ -45,6 +43,7 @@ function ProjectFormButtons({
               Delete
             </Button>
           }
+          isDeleting={isDeleting}
           asChild
         />
       )}

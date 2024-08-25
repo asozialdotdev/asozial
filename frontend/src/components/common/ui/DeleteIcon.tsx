@@ -16,7 +16,7 @@ const DeleteIcon = forwardRef<HTMLSpanElement, DeleteIconProps>(
     return (
       <TooltipProvider>
         <Tooltip>
-          <TooltipTrigger>
+          <TooltipTrigger asChild>
             <span ref={ref} onClick={handleDelete}>
               <Trash size={20} className="cursor-pointer hover:opacity-75" />
             </span>

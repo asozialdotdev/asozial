@@ -22,6 +22,7 @@ const createProjectPostReply = async (
   formData: FormData,
 ): Promise<CreateReplyFormState> => {
   const session = await auth();
+  const username = session?.user?.githubUsername;
 
   const result = createReplySchema.safeParse({
     content: formData.get("content"),
@@ -56,7 +57,7 @@ const createProjectPostReply = async (
     }
     const reply = await response.json();
     console.log("Created reply:", reply);
-    revalidatePath(`/projects/${post.projectId}/posts/${projectPostId}`);
+    revalidatePath(`/${username}/${post.projectId.slug}/${post.projectId._id}/posts/${projectPostId}`);
     return {
       errors: {},
       success: true,

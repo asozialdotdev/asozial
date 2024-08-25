@@ -29,7 +29,7 @@ function ProjectPostContent({
   setIsEditing,
   isProjectPage,
   image,
-  setImage
+  setImage,
 }: ProjectPostContentProps) {
   const post = projectPost;
 
@@ -46,7 +46,9 @@ function ProjectPostContent({
         {username}
       </p>
       {isProjectPage ? (
-        <Link href={`/projects/${post.projectId}/posts/${post._id}`}>
+        <Link
+          href={`/${username}/${post.projectId.slug}/${post.projectId._id}/posts/${post._id}`}
+        >
           <h3 className="text-lg font-semibold tracking-wide hover:opacity-75">
             {title}
           </h3>

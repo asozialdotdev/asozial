@@ -30,11 +30,11 @@ const userIdTest = "1234567890";
 
 async function ProjectComponent({ project }: { project: Project }) {
   const session = await auth();
+  const username = session?.user?.githubUsername;
   const isMember = project.membersJoined.some(
     (member: Member) => member._id === session?.user?.id,
   );
   const isOwner = project.owner._id === session?.user?.id;
-  console.log("PROJECT.MEMBERSJOINED", project.membersJoined);
 
   return (
     <section className="relative -mt-4 flex w-full flex-col gap-4 border-b border-b-neutral-300 px-4 dark:border-b-neutral-600">
@@ -60,7 +60,6 @@ async function ProjectComponent({ project }: { project: Project }) {
           </PageTitle>
         </div>
       </div>
-
 
       {/* Description */}
       <div className="mt-4 flex flex-col gap-2">
@@ -170,7 +169,7 @@ async function ProjectComponent({ project }: { project: Project }) {
       {/* Edit Button */}
       <div className="mb-6">
         {isOwner && (
-          <Link href={`/projects/${project._id}/edit`}>
+          <Link href={`/${username}/${project.slug}/${project._id}/edit`}>
             <Button>Edit project</Button>
           </Link>
         )}

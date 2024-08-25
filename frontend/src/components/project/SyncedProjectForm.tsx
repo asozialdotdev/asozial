@@ -3,7 +3,7 @@
 import { useRouter } from "next/navigation";
 
 //React
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 //Actions
 import { deleteProject, updateProject } from "@/actions";
@@ -42,9 +42,11 @@ type SyncedProjectFormProps = {
 
 function SyncedProjectForm({ project, syncedData }: SyncedProjectFormProps) {
   const { name, html_url, description, language } = syncedData;
+  const username = project.owner.username;
 
   const [error, setError] = useState<string | null>(null);
   const [uploadedImage, setUploadedImage] = useState<ImageT | null>(null);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   const { spokenLanguages } = useSpokenLanguages();
 
@@ -71,6 +73,12 @@ function SyncedProjectForm({ project, syncedData }: SyncedProjectFormProps) {
       placeholder: project.placeholder,
     },
   });
+
+  useEffect(() => {
+    setValue("description", description);
+    setValue("githubRepo", html_url);
+    setValue("techStack", language ? [language] : []);
+  }, [syncedData]);
 
   const handleCheckedChange = (
     checked: boolean | string,
@@ -123,7 +131,7 @@ function SyncedProjectForm({ project, syncedData }: SyncedProjectFormProps) {
       console.error("Error updating project");
       setError("Error updating project. Please try again");
     } else {
-      router.push(`/projects/${project._id}`);
+      router.push(`/${username}/${project.slug}/${project._id}`);
     }
   };
 
@@ -132,12 +140,15 @@ function SyncedProjectForm({ project, syncedData }: SyncedProjectFormProps) {
   console.log("uploadedImage", uploadedImage);
 
   const handleDeleteProject = async () => {
+    setIsDeleting(true);
     const result = await deleteProject(project._id);
     if (result.error) {
       console.error("Error deleting project");
       setError(result.message);
+      setIsDeleting(false);
     } else {
-      router.push("/projects");
+      router.push(`/${username}/projects`);
+      setIsDeleting(false);
     }
   };
 
@@ -154,7 +165,11 @@ function SyncedProjectForm({ project, syncedData }: SyncedProjectFormProps) {
         <Status control={control} />
 
         {/* Title */}
-        <Title control={control} errors={errors} />
+        <Title
+          errors={errors}
+          setValue={setValue}
+          syncTitle={syncedData.name}
+        />
 
         {/* Description */}
         <Description control={control} errors={errors} />
@@ -185,6 +200,7 @@ function SyncedProjectForm({ project, syncedData }: SyncedProjectFormProps) {
 
         {/* Buttons */}
         <ProjectFormButtons
+          isDeleting={isDeleting}
           isSubmitting={isSubmitting}
           handleDeleteProject={handleDeleteProject}
           error={error}

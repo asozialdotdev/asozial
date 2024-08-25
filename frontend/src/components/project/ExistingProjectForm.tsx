@@ -6,10 +6,13 @@ import { useEffect, useRef, useState } from "react";
 import LoadingSpinner from "../common/ui/LoadingSpinner";
 import { Button } from "../ui/button";
 import { useOutsideClick } from "@/hooks/useOutsideClick";
-import { createProjectFromGithub } from "@/actions";
+import { checkProjectTitle, createProjectFromGithub } from "@/actions";
 import Link from "next/link";
 import { Project } from "@/types/Project";
 import LoadingTextButton from "../common/ui/LoadingTextButton";
+import ErrorMessage from "../common/ui/ErrorMessage";
+import SuccessMessage from "../common/ui/SuccessMessage";
+import { useSession } from "next-auth/react";
 
 type GithubRepo = {
   id: number;
@@ -25,12 +28,14 @@ function ExistingProjectForm() {
   const [hasSelected, setHasSelected] = useState(false);
   const [isLoadingSearch, setIsLoadingSearch] = useState(false);
   const [isLoadingCreating, setIsLoadingCreating] = useState(false);
-
+  const [errorCreating, setErrorCreating] = useState("");
   const [project, setProject] = useState<Project | null>(null);
 
-  const { githubRepos, isLoadingRepos, errorRepos, setErrorRepos } =
-    useFetchReposFromGithub();
+  const { githubRepos, isLoadingRepos, errorRepos } = useFetchReposFromGithub();
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const session = useSession();
+  const username = session?.data?.user?.githubUsername;
+
   useOutsideClick(() => {
     setFilteredRepos([]);
   }, dropdownRef);
@@ -42,7 +47,13 @@ function ExistingProjectForm() {
       return;
     }
 
-    if (searchTerm.length < 3) {
+    if (searchTerm.length === 0) {
+      setFilteredRepos(githubRepos);
+      setIsLoadingSearch(false);
+      return;
+    }
+
+    if (searchTerm.length < 1) {
       setFilteredRepos([]);
       setIsLoadingSearch(false);
       return;
@@ -66,20 +77,33 @@ function ExistingProjectForm() {
     setSelectedRepo(repo);
     setFilteredRepos([]);
     setHasSelected(true);
+    setErrorCreating("");
+    setProject(null);
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(e.target.value);
     setSelectedRepo(null);
     setHasSelected(false);
+    setErrorCreating("");
   };
 
   const handleCreateProject = async () => {
     setIsLoadingCreating(true);
+    setErrorCreating("");
+    const { isUnique } = await checkProjectTitle(selectedRepo?.name as string);
+    console.log("isUnique", isUnique);
+    if (!isUnique) {
+      setErrorCreating(
+        "A project with this name already exists for your account.",
+      );
+      setIsLoadingCreating(false);
+      return;
+    }
     const result = await createProjectFromGithub(selectedRepo?.url as string);
     if (result?.error) {
-      console.error("Error creating project from Github");
-      setErrorRepos(result.message);
+      console.error(result.message);
+      setErrorCreating(result.message);
     } else {
       setProject(result);
     }
@@ -130,10 +154,10 @@ function ExistingProjectForm() {
           </ul>
         )}
         {filteredRepos.length === 0 &&
-          searchTerm.length > 3 &&
+          searchTerm.length > 0 &&
           !hasSelected &&
           !isLoadingSearch && (
-            <div className="absolute z-10 mt-2 h-auto max-h-60 w-full overflow-y-auto rounded-md border border-dashed border-zinc-300 bg-white p-2 shadow-lg dark:border-zinc-600 dark:bg-zinc-800 dark:shadow-neutral-700/30">
+            <div className="absolute text-center z-10 mt-2 h-auto max-h-80 w-full overflow-y-auto rounded-md border border-dashed border-zinc-300 bg-white p-4 shadow-lg dark:border-zinc-600 dark:bg-zinc-800 dark:shadow-neutral-700/30">
               No Github repos match your search
             </div>
           )}
@@ -149,11 +173,7 @@ function ExistingProjectForm() {
       </div>
 
       <div>
-        {errorRepos && (
-          <span className="text-base font-light text-red-700 dark:text-red-700">
-            {errorRepos}
-          </span>
-        )}
+        {errorRepos && <ErrorMessage>{errorRepos}</ErrorMessage>}
 
         {selectedRepo && (
           <div className="flex flex-col items-center gap-8">
@@ -165,7 +185,8 @@ function ExistingProjectForm() {
               </p>
             </div>
             {!project ? (
-              <div>
+              <div className="flex flex-col items-center gap-2">
+                {errorCreating && <ErrorMessage>{errorCreating}</ErrorMessage>}
                 <Button onClick={handleCreateProject} className="p-8 text-xl">
                   {isLoadingCreating ? (
                     <LoadingTextButton text="Creating Project" />
@@ -176,10 +197,8 @@ function ExistingProjectForm() {
               </div>
             ) : (
               <div className="flex flex-col items-center gap-4">
-                <span className="text-lg font-semibold text-green-700 dark:text-green-700">
-                  Project created successfully
-                </span>
-                <Link href={`/projects/${project?._id}`}>
+                <SuccessMessage>Project created successfully</SuccessMessage>
+                <Link href={`/${username}/${project?.slug}/${project._id}`}>
                   <Button className="p-8 text-xl">Go to project</Button>
                 </Link>
               </div>

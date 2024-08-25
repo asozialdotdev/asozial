@@ -28,7 +28,7 @@ function UserAvatar({ src, username, userId, className }: UserAvatarProps) {
     <TooltipProvider key={username}>
       <Tooltip>
         <TooltipTrigger asChild>
-          <Link href={`/users/${userId}`}>
+          <Link href={`/users/${username}`}>
             <Avatar className={cn("flex-shrink-0", className)}>
               <AvatarImage src={src} alt={username} />
               <AvatarFallback>

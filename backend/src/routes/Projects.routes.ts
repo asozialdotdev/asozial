@@ -5,70 +5,135 @@ import Project from "../models/Project.models";
 import ProjectPost from "../models/ProjectPost.models";
 import ProjectPostReply from "../models/ProjectPostReply.models";
 import User from "../models/User.models";
+import { generateSlug } from "../utils";
 
 const projectsRouter = express.Router();
 
 dotenv.config();
 
-// PUT to sync info from github
 
-projectsRouter.put(
-  "/sync",
+// GET search for projects
+// GET search for projects from a user (my-projects)
+projectsRouter.get(
+  "/explore",
   async (req: Request, res: Response, next: NextFunction) => {
+    console.log("Explore is called");
+    const { query, page = 1, limit = 12 } = req.query;
+
     try {
-      const { githubRepo } = req.body;
+      const searchQuery = query
+        ? { title: { $regex: query, $options: "i" } }
+        : {};
+      const projects = await Project.find(searchQuery)
+        .skip((+page - 1) * +limit)
+        .limit(+limit)
+        .populate("membersJoined", "username name image")
+        .populate("owner", "username name image")
+        .exec();
 
-      const regex = /https:\/\/github\.com\/([^\/]+)\/([^\/]+)/;
-      const match = githubRepo.match(regex);
 
-      if (!match) {
-        return res.status(400).json({ error: "Invalid GitHub repository URL" });
-      }
 
-      const [_, owner, repo] = match;
-      const githubApiUrl = `https://api.github.com/repos/${owner}/${repo}`;
-      const githubResponse = await axios.get(githubApiUrl);
+// GET all my projects
 
-      let project = await Project.findOne({ githubRepo: `${owner}/${repo}` });
 
-      if (project) {
-        project = await Project.findByIdAndUpdate(
-          project._id,
-          {
-            $set: {
-              title: githubResponse.data.name,
-              description: githubResponse.data.description,
-              techStack: [githubResponse.data.language],
-              githubRepo: githubResponse.data.html_url,
-            },
-          },
-          { new: true }
-        ).exec();
-      }
-
-      res.json(project);
+      const totalProjects = await Project.countDocuments(searchQuery);
+      const totalPages = Math.ceil(totalProjects / +limit);
+      console.log({ projects, totalPages, currentPage: +page });
+      res.json({
+        projects,
+        totalPages,
+        currentPage: +page,
+      });
     } catch (error) {
-      console.error("Error syncing project with GitHub:", error);
+      next(error);
+    }
+  }
+);
+// // GET all projects from a user (my projects)
+
+// projectsRouter.get(
+//   "/user/all/search",
+//   async (req: Request, res: Response, next: NextFunction) => {
+//     console.log("/user is called");
+//     const { userId, page = 1, limit = 12 } = req.query;
+
+//     try {
+//       // Ensure page and limit are numbers
+//       const pageNumber = parseInt(page as string, 10) || 1;
+//       const limitNumber = parseInt(limit as string, 10) || 12;
+
+//       // Find projects owned by the user with pagination
+//       const projects = await Project.find({ owner: userId })
+//         .populate("membersJoined", "username name image")
+//         .populate("owner", "username name image")
+//         .skip((pageNumber - 1) * limitNumber) // Skip documents for previous pages
+//         .limit(limitNumber) // Limit to `limitNumber` documents
+//         .exec();
+
+//       // Get the total count of projects owned by the user
+//       const totalProjects = await Project.countDocuments({ owner: userId });
+
+//       console.log("Number of Projects Found:", projects.length);
+
+//       // Respond with projects and pagination details
+//       res.json({
+//         projects,
+//         totalPages: Math.ceil(totalProjects / limitNumber),
+//         currentPage: pageNumber,
+//       });
+//     } catch (error: any) {
+//       console.log("Error:", error.message);
+//       res
+//         .status(500)
+//         .json({ message: "An error occurred while fetching projects." });
+//     }
+//   }
+// );
+
+// GET search for projects from a user (my-projects)
+projectsRouter.get(
+  "/user",
+  async (req: Request, res: Response, next: NextFunction) => {
+    const { userId, query, page = 1, limit = 12 } = req.query;
+
+    try {
+      const searchQuery = query
+        ? { owner: userId, title: { $regex: query, $options: "i" } }
+        : { owner: userId };
+
+      const projects = await Project.find(searchQuery)
+        .skip((+page - 1) * +limit)
+        .limit(+limit)
+        .populate("membersJoined", "username name image")
+        .populate("owner", "username name image")
+        .exec();
+
+      const totalProjects = await Project.countDocuments(searchQuery);
+      const totalPages = Math.ceil(totalProjects / +limit);
+
+      res.json({
+        projects,
+        totalPages,
+        currentPage: +page,
+      });
+    } catch (error) {
       next(error);
     }
   }
 );
 
-// GET all my projects
+//GET check if project title is unique
 
 projectsRouter.get(
-  "/",
+  "/check-title",
   async (req: Request, res: Response, next: NextFunction) => {
-    const { userId } = req.query;
+    const { title, userId } = req.query;
+    console.log("Title", title, "User ID", userId);
     try {
-      const projects = await Project.find({ owner: userId })
-        .populate("membersJoined", "username name image")
-        .populate("owner", "username name image")
-        .exec();
-      console.log("Number of Projects Found:", projects.length);
-      res.json(projects);
-    } catch (error: any) {
-      console.log("Error:", error.message);
+      const existingProject = await Project.findOne({ title, owner: userId });
+      res.json({ isUnique: !existingProject });
+    } catch (error) {
+      next(error);
     }
   }
 );
@@ -89,6 +154,7 @@ projectsRouter.post(
         socials,
         image,
         placeholder,
+        slug,
         userId,
       } = req.body;
       console.log("githubRepo:::::::::::::", githubRepo);
@@ -102,8 +168,9 @@ projectsRouter.post(
         githubRepo,
         image,
         placeholder,
-        owner: userId,
         socials,
+        slug,
+        owner: userId,
       });
 
       res.status(201).json(newProject);
@@ -172,6 +239,7 @@ projectsRouter.post(
       }
 
       const { name, description, html_url, language } = repoInfo.data;
+      const slug = generateSlug(name);
 
       const createProject = await Project.create({
         title: name,
@@ -180,6 +248,7 @@ projectsRouter.post(
         techStack: [language],
         owner: userId,
         status: "active",
+        slug,
       });
 
       res.status(201).json(createProject);
@@ -189,35 +258,32 @@ projectsRouter.post(
   }
 );
 
-// GET search for my-projects
-
-projectsRouter.get(
-  "/search",
-  async (req: Request, res: Response, next: NextFunction) => {
-    try {
-      const { query } = req.query;
-      console.log("Query", query);
-
-      const projects = await Project.find({
-        title: { $regex: query, $options: "i" },
-      })
-        .populate("membersJoined", "username name image")
-        .exec();
-
-      res.json(projects);
-    } catch (error) {
-      next(error);
-    }
-  }
-);
-
-// GET 1 project (detailed information)
+// GET project by ID (detailed information)
 
 projectsRouter.get(
   "/:projectId",
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       const project = await Project.findById(req.params.projectId)
+        .populate("membersJoined", "name username image")
+        .populate("owner", "name username image")
+        .exec();
+      if (!project) {
+        return res.status(404).json({ error: "Project not found" });
+      }
+      res.json(project);
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
+projectsRouter.get(
+  "/:slug",
+  async (req: Request, res: Response, next: NextFunction) => {
+    console.log("Slug>>>>>>>>>>>>>", req.params.slug);
+    try {
+      const project = await Project.findOne({ slug: req.params.slug })
         .populate("membersJoined", "name username image")
         .populate("owner", "name username image")
         .exec();
@@ -305,6 +371,7 @@ projectsRouter.put(
         socials,
         status,
         image,
+        slug,
         placeholder,
         userId,
       } = req.body;
@@ -340,6 +407,7 @@ projectsRouter.put(
           status,
           image,
           placeholder,
+          slug,
         },
         { new: true, runValidators: true }
       );
