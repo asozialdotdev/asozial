@@ -46,20 +46,10 @@ function SearchProjects() {
         <SearchBar
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
+          handleClearSearch={handleClearSearch}
+          searchTerm={searchTerm}
         />
       </form>
-      <div className='flex justify-center'>
-        {searchTerm && (
-          <Button
-            type="button"
-            onClick={handleClearSearch}
-            variant={"outline"}
-            className=" lg:left-0 lg:right-0 w-[300%]  lg:text-lg text-base"
-          >
-            Clear Search
-          </Button>
-        )}
-      </div>
     </div>
   );
 }
