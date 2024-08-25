@@ -39,7 +39,7 @@ async function DashboardContainer() {
           </div>
           <div className="rounded bg-white p-4 shadow dark:bg-black">
             <h2 className="text-lg font-bold">Friends</h2>
-            <p className="text-sm text-zinc-500 dark:text-zinc-400">
+            <div className="text-sm text-zinc-500 dark:text-zinc-400">
               {Object.entries(userFriendStatuses).map(
                 ([key, status]: [string, any]) => (
                   <div key={key}>
@@ -72,7 +72,7 @@ async function DashboardContainer() {
                   </div>
                 ),
               )}
-            </p>
+            </div>
           </div>
         </div>
 
