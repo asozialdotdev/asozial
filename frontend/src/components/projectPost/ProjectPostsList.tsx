@@ -33,8 +33,9 @@ function ProjectPostsList({ projectPosts, projectId }: ProjectPostsListProps) {
         <ProjectPostForm projectId={projectId} />
 
         <PageTitle>
-          <span>{posts.length}</span>{" "}
-          {posts.length > 1 ? "Threads" : "Thread"}
+          {posts.length && posts.length > 0
+            ? `${posts.length} Thread${posts.length > 1 ? "s" : ""}`
+            : "Threads"}
         </PageTitle>
         {posts.length === 0 && (
           <p className="text-lg text-neutral-500 dark:text-neutral-400">

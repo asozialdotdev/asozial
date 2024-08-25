@@ -26,6 +26,8 @@ import { Suspense } from "react";
 import ProjectLoadingSkeleton from "@/components/project/ProjectLoadingSkeleton";
 import PostLoadingSkeleton from "@/components/project/PostLoadingSkeleton";
 import { fetchProjectBySlug } from "@/actions/projects.server/fetchProjectBySlug.server";
+import NewProjectLoadingSkeleton from "@/components/project/NewProjectLoadingSkeleton";
+import ParentPostLoading from "@/components/projectPost/ParentPostLoading";
 
 type Params = {
   username: string;
@@ -53,7 +55,7 @@ async function Page({ params }: { params: Params }) {
   }
 
   // if (project) {
-  //   return <PostLoadingSkeleton />;
+  //   return <ParentPostLoading/>;
   // }
   return (
     <PageContainer className="gap-4">

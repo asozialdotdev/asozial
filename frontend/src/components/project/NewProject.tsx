@@ -2,8 +2,6 @@
 import { useState } from "react";
 import ExistingProjectForm from "./ExistingProjectForm";
 import NewProjectForm from "./NewProjectForm";
-import PageTitle from "../common/ui/PageTitle";
-import { Switch } from "../ui/switch";
 import CustomSwitch from "../common/ui/CustomSwitch";
 
 function NewProject() {
