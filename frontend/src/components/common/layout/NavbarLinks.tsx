@@ -1,24 +1,28 @@
 import NavbarLinkItem from "./NavbarLinkItem";
 import NavbarLinkItemWithSubLinks from "./NavbarLinkWithSubLinks";
-import { LayoutDashboard, Link, Search, Users, FolderGit } from "lucide-react";
+import DashboardIcon from "../ui/DashboardIcon";
+import SearchIcon from "../ui/SearchIcon";
+import MatchIcon from "../ui/MatchIcon";
+import ProjectIcon from "../ui/ProjectIcon";
+import UsersIcon from "../ui/UsersIcon";
 const navbarLinks = [
   {
     name: "Search",
     href: "/search",
-    Icon: Search,
+    Icon: SearchIcon,
     sublinks: [
-      { name: "Users", href: "/search/users", Icon: Users },
-      { name: "Projects", href: "/search/projects", Icon: FolderGit },
+      { name: "Users", href: "/search/users", Icon: UsersIcon },
+      { name: "Projects", href: "/search/projects", Icon: ProjectIcon },
     ],
   },
-  { name: "Dashboard", href: "/dashboard", Icon: LayoutDashboard },
+  { name: "Dashboard", href: "/dashboard", Icon: DashboardIcon },
   {
     name: "Match",
     href: "/match",
-    Icon: Link,
+    Icon: MatchIcon,
     sublinks: [
-      { name: "Users", href: "/match/users", Icon: Users },
-      { name: "Projects", href: "/match/projects", Icon: FolderGit },
+      { name: "Users", href: "/match/users", Icon: UsersIcon },
+      { name: "Projects", href: "/match/projects", Icon: ProjectIcon },
     ],
   },
 ];
