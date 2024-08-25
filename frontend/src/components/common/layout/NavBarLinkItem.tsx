@@ -8,7 +8,7 @@ type NavBarLinkItemProps = {
 
 function NavbarLinkItem({ name, href, Icon }: NavBarLinkItemProps) {
   return (
-    <Link href={href}>
+    <Link href={href} className="flex flex-row flex-nowrap">
       <Icon />
       {name}
     </Link>

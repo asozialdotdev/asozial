@@ -10,11 +10,6 @@ import {
 const navbarLinks = [
   { name: "Dashboard", href: "/dashboard", Icon: LayoutDashboard },
   {
-    name: "Account",
-    href: "/account",
-    Icon: UserPen,
-  },
-  {
     name: "Search",
     href: "/search",
     Icon: Search,

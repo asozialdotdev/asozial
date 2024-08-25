@@ -19,7 +19,7 @@ import type { UserId } from "@/types/User";
 type UserAvatarProps = {
   src: string;
   username: string;
-  userId: UserId;
+  userId?: UserId;
   className?: string;
   isInNavbar?: boolean;
 };
