@@ -26,7 +26,6 @@ import UserAvatar from "@/components/common/ui/UserAvatar";
 import NavbarLinks from "./NavbarLinks";
 import { Menu, SquareUserRound } from "lucide-react";
 
-
 function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -72,7 +71,13 @@ function Navbar() {
                 <h1 className="cursor-pointer text-2xl tracking-wide">
                   asozial
                 </h1>
-                <Image src={logo} alt="logo" width={30} height={30} />
+                <Image
+                  src={logo}
+                  alt="logo"
+                  width={30}
+                  height={30}
+                  className="rounded-full border-2 border-dark"
+                />
               </Link>
             </section>
 
@@ -93,7 +98,6 @@ function Navbar() {
               <Button
                 variant="ghost"
                 className="hidden hover:opacity-75 sm:block"
-
                 onClick={() => setIsOpen(!isOpen)}
               >
                 Contributors

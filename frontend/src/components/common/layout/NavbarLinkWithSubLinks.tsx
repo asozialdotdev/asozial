@@ -12,33 +12,38 @@ import {
 type NavBarLinkItemWithSubLinksProps = {
   name: string;
   href: string;
-  subLinks: { name: string; href: string }[];
+  Icon: React.ComponentType;
+  subLinks: { name: string; href: string; Icon: React.ComponentType }[];
 };
 
 function NavBarLinkItemWithSubLinks({
   name,
   href,
+  Icon,
   subLinks,
 }: NavBarLinkItemWithSubLinksProps) {
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger>{name}</DropdownMenuTrigger>
+      <DropdownMenuTrigger>
+        <Icon />
+        {name}
+      </DropdownMenuTrigger>
       <DropdownMenuContent>
         <DropdownMenuLabel>
-          <Link href={href}>{name}</Link>
+          <Link href={href}>
+            <Icon />
+            {name}
+          </Link>
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
-        <DropdownMenuItem>
-          <Link key={subLinks[0].name} href={subLinks[0].href}>
-            {subLinks[0].name}
-          </Link>
-        </DropdownMenuItem>
-        <DropdownMenuSeparator />
-        <DropdownMenuItem>
-          <Link key={subLinks[1].name} href={subLinks[1].href}>
-            {subLinks[1].name}
-          </Link>
-        </DropdownMenuItem>
+        {subLinks.map((subLink) => (
+          <DropdownMenuItem key={subLink.name}>
+            <Link href={subLink.href}>
+              <subLink.Icon />
+              {subLink.name}
+            </Link>
+          </DropdownMenuItem>
+        ))}
       </DropdownMenuContent>
     </DropdownMenu>
   );
