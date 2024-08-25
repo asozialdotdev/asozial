@@ -16,15 +16,17 @@ import { useSidebarsContext } from "@/context/SidebarsContext";
 //Components
 import ToggleTheme from "../ui/ToggleTheme";
 //UI
-import { FaGithub, FaLinkedin, FaRegUserCircle } from "react-icons/fa";
-import { IoMenu, IoMoonOutline, IoSunnyOutline } from "react-icons/io5";
-import { PiUserCircleGearDuotone, PiUserFocusBold } from "react-icons/pi";
+import { FaGithub, FaLinkedin } from "react-icons/fa";
+import { IoMenu } from "react-icons/io5";
 import { TbUserSquareRounded } from "react-icons/tb";
 import { Button } from "@/components/ui/button";
 import logo from "/public/logo.png";
 import { contributors } from "@/constants";
+
 import UserAvatar from "@/components/common/ui/UserAvatar";
 import NavbarLinks from "./NavbarLinks";
+import { Menu, SquareUserRound } from "lucide-react";
+
 
 function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -57,18 +59,20 @@ function Navbar() {
             <section className="flex items-center gap-5">
               <Button
                 size="icon"
-                variant="outline"
-                className="dark:text-light"
+                variant="ghost"
+                className="hover:opacity-75 dark:text-light xl:hidden"
                 onClick={toggleUserSidebar}
                 disabled={
                   width && width <= 640 ? !!isProjectSidebarOpen : undefined
                 }
               >
-                <TbUserSquareRounded size={26} />
+                <SquareUserRound size={33} />
               </Button>
 
               <Link className="flex items-center gap-2" href="/dashboard">
-                <h1 className="cursor-pointer text-2xl">asozial</h1>
+                <h1 className="cursor-pointer text-2xl tracking-wide">
+                  asozial
+                </h1>
                 <Image src={logo} alt="logo" width={30} height={30} />
               </Link>
             </section>
@@ -76,6 +80,7 @@ function Navbar() {
             <NavbarLinks />
 
             <section className="flex items-center gap-2" ref={combinedRefs}>
+
               {status === "authenticated" &&
                 session.user.image &&
                 session.user.githubUsername && (
@@ -87,25 +92,27 @@ function Navbar() {
                   />
                 )}
 
-              <button
-                className="hidden sm:block"
+              <Button
+                variant="ghost"
+                className="hidden hover:opacity-75 sm:block"
+
                 onClick={() => setIsOpen(!isOpen)}
               >
                 Contributors
-              </button>
+              </Button>
 
               <ToggleTheme />
 
               <Button
                 size="icon"
-                variant="outline"
-                className="dark:text-light"
+                variant="ghost"
+                className="hover:opacity-75 dark:text-light xl:hidden"
                 onClick={toggleProjectSidebar}
                 disabled={
                   width && width <= 640 ? !!isUserSidebarOpen : undefined
                 }
               >
-                <IoMenu size={26} />
+                <Menu size={26} />
               </Button>
             </section>
           </>

@@ -14,6 +14,7 @@ import { SquareCheck } from "lucide-react";
 //Lib
 import { Control, FieldErrors, UseFormSetValue } from "react-hook-form";
 import SuccessMessage from "@/components/common/ui/SuccessMessage";
+import LoadingTextButton from "@/components/common/ui/LoadingTextButton";
 
 type TitleProps = {
   errors: FieldErrors<Inputs>;
@@ -25,9 +26,13 @@ function Title({ errors, setValue, editTitle, syncTitle }: TitleProps) {
   const [title, setTitle] = useState(syncTitle || editTitle || "");
   const [success, setSuccess] = useState("");
   const [error, setError] = useState("");
+  const [isValidating, setIsValidating] = useState(false);
   const hasChanged = useRef(false);
 
+  console.log("isValidating", isValidating);
+
   const handleValidation = useCallback(async () => {
+    setIsValidating(true);
     if (!title) {
       setError("Seems like you forgot to enter a title.");
       return;
@@ -37,9 +42,11 @@ function Title({ errors, setValue, editTitle, syncTitle }: TitleProps) {
       setSuccess("Title is valid and unique");
       setError("");
       setValue("title", title);
+      setIsValidating(false);
     } else {
       setError("A project with this name already exists for your account.");
       setSuccess("");
+      setIsValidating(false);
     }
     console.log(response);
   }, [title, setError, setSuccess, setValue]);
@@ -97,10 +104,10 @@ function Title({ errors, setValue, editTitle, syncTitle }: TitleProps) {
         <Button
           onClick={handleValidation}
           type="button"
-          className="h-12 w-24 rounded-l-none border-l-0 text-lg"
-          disabled={!!syncTitle}
+          className="h-12 w-24 min-w-24 rounded-l-none border-l-0 text-lg"
+          disabled={!!syncTitle || isValidating}
         >
-          Validate
+          {isValidating ? <LoadingTextButton /> : "Validate"}
         </Button>
       </div>
 
