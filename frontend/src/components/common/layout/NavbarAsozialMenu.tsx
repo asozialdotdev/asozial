@@ -28,14 +28,17 @@ function NavbarAsozialMenu() {
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuItem className="text-lg">
-          <Link href="/about" className="flex flex-row items-center gap-2">
+          <Link
+            href="/about"
+            className="flex w-full flex-row items-center justify-between gap-2 px-2"
+          >
             <AsozialLogo /> about
           </Link>
         </DropdownMenuItem>
         <DropdownMenuItem className="text-lg">
           <Link
             href="/contributors"
-            className="flex flex-row items-center gap-2"
+            className="flex w-full flex-row items-center justify-between gap-2 px-2"
           >
             <ContributorsImages />
             contributors
