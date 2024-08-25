@@ -21,14 +21,21 @@ type UserAvatarProps = {
   username: string;
   userId: UserId;
   className?: string;
+  isInNavbar?: boolean;
 };
 
-function UserAvatar({ src, username, userId, className }: UserAvatarProps) {
+function UserAvatar({
+  src,
+  username,
+  userId,
+  className,
+  isInNavbar,
+}: UserAvatarProps) {
   return (
     <TooltipProvider key={username}>
       <Tooltip>
         <TooltipTrigger asChild>
-          <Link href={`/users/${username}`}>
+          <Link href={`/${isInNavbar ? "account" : username}`}>
             <Avatar className={cn("flex-shrink-0", className)}>
               <AvatarImage src={src} alt={username} />
               <AvatarFallback>
@@ -37,7 +44,12 @@ function UserAvatar({ src, username, userId, className }: UserAvatarProps) {
             </Avatar>
           </Link>
         </TooltipTrigger>
-        <TooltipContent className="left-0 top-0">{username}</TooltipContent>
+        <TooltipContent
+          side={isInNavbar ? "left" : undefined}
+          className="left-0 top-0"
+        >
+          {username}
+        </TooltipContent>
       </Tooltip>
     </TooltipProvider>
   );
