@@ -24,6 +24,7 @@ import { Button } from "@/components/ui/button";
 import logo from "/public/logo.png";
 import { contributors } from "@/constants";
 import UserAvatar from "@/components/common/ui/UserAvatar";
+import NavbarLinks from "./NavbarLinks";
 
 function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -71,6 +72,8 @@ function Navbar() {
                 <Image src={logo} alt="logo" width={30} height={30} />
               </Link>
             </section>
+
+            <NavbarLinks />
 
             <section className="flex items-center gap-2" ref={combinedRefs}>
               {status === "authenticated" &&
