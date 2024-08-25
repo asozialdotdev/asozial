@@ -40,16 +40,7 @@ function PostForm({ projectId }: { projectId: ProjectId }) {
   }, [formState]);
 
   return (
-    <form
-      ref={formRef}
-      action={async (formData) => {
-        if (formState.success) {
-          formRef.current?.reset();
-        }
-        action(formData);
-      }}
-      className="mt-2"
-    >
+    <form ref={formRef} action={action} className="mt-2">
       <div className="mt-6 flex w-full flex-col gap-2">
         <CustomLabel required htmlFor="title">
           Title

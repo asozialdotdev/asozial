@@ -2,12 +2,7 @@
 //Next
 import { notFound } from "next/navigation";
 //Actions
-import {
-  fetchProjectPosts,
-  checkIsMember,
-  fetchProjectById,
-  joinAProject,
-} from "@/actions";
+import { fetchProjectPosts, fetchProjectById } from "@/actions";
 
 //Components
 import PageContainer from "@/components/common/containers/PageContainer";
@@ -24,10 +19,8 @@ import { auth } from "@/auth";
 import type { Member, ProjectId } from "@/types/Project";
 import { Suspense } from "react";
 import ProjectLoadingSkeleton from "@/components/project/ProjectLoadingSkeleton";
-import PostLoadingSkeleton from "@/components/project/PostLoadingSkeleton";
-import { fetchProjectBySlug } from "@/actions/projects.server/fetchProjectBySlug.server";
-import NewProjectLoadingSkeleton from "@/components/project/NewProjectLoadingSkeleton";
-import ParentPostLoading from "@/components/projectPost/ParentPostLoading";
+import ApplyProject from "@/components/project/ApplyProject";
+import { UserId } from "@/types/User";
 
 type Params = {
   username: string;
@@ -46,10 +39,15 @@ async function Page({ params }: { params: Params }) {
     fetchProjectPosts(projectId),
   ]);
 
-  const isMember = project.membersJoined.some(
-    (member: Member) => member._id === session?.user?.id,
+  const isMember = project.membersJoined?.some(
+    (member: UserId) => member === session?.user?.id.toString(),
   );
   const isOwner = project.owner._id === session?.user?.id;
+
+  const hasApplied = project.membersApplied?.some(
+    (member: UserId) => member === session?.user?.id.toString(),
+  );
+  console.log("membersApplied", project.membersApplied);
 
   if (!project) {
     notFound();
@@ -67,20 +65,10 @@ async function Page({ params }: { params: Params }) {
 
       {isMember || isOwner ? (
         // Posts
-        <Suspense fallback={<PostLoadingSkeleton />}>
-          <ProjectPostsList projectPosts={posts} projectId={projectId} />
-        </Suspense>
+        <ProjectPostsList projectPosts={posts} projectId={projectId} />
       ) : (
-        // Join Project
-        <div className="flex flex-col items-center justify-center gap-4 p-4">
-          <h3 className="text-xl font-semibold">
-            Join this project to see the threads
-          </h3>
-          <form action={joinAProject}>
-            <input type="hidden" name="projectId" value={project._id} />
-            <Button type="submit">Join this project</Button>
-          </form>
-        </div>
+        // Apply Project
+        <ApplyProject project={project} hasApplied={hasApplied} />
       )}
     </PageContainer>
   );

@@ -228,7 +228,7 @@ projectsRouter.post(
         title: name,
         description: sanitizedDescription,
         githubRepo: html_url,
-        pitch: "", 
+        pitch: "",
         techStack: [sanitizedLanguage],
         owner: userId,
         status: "active",
@@ -243,7 +243,6 @@ projectsRouter.post(
 );
 
 // GET project by ID (detailed information)
-
 projectsRouter.get(
   "/:projectId",
   async (req: Request, res: Response, next: NextFunction) => {
@@ -261,6 +260,8 @@ projectsRouter.get(
     }
   }
 );
+
+// GET project by slug (not working)
 
 projectsRouter.get(
   "/:slug",
@@ -281,10 +282,44 @@ projectsRouter.get(
   }
 );
 
-// POST request to join a project
-// Change from from users to join to test
+// POST request to APPLY to a project
 projectsRouter.post(
-  ///:projectId/users,
+  "/:projectId/apply",
+  async (req: Request, res: Response, next: NextFunction) => {
+    console.log("Apply is called");
+    try {
+      const { userId } = req.body;
+      const project = await Project.findById(req.params.projectId)
+        .populate("owner", "username")
+        .exec();
+      if (!project) {
+        return res.status(404).json({ error: "Project not found" });
+      }
+
+      if (project.membersApplied.includes(userId)) {
+        return res
+          .status(400)
+          .json({ error: "User already applied to be a memeber" });
+      }
+
+      if (project.membersJoined.includes(userId)) {
+        return res
+          .status(400)
+          .json({ error: "User is already a member of this project" });
+      }
+
+      project.membersApplied.push(userId);
+      await project.save();
+      console.log("Project applied>>>>>>>>>>", project);
+      res.json(project);
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
+// POST request to JOIN a project
+projectsRouter.post(
   "/:projectId/join",
   async (req: Request, res: Response, next: NextFunction) => {
     try {
@@ -294,17 +329,18 @@ projectsRouter.post(
         return res.status(404).json({ error: "Project not found" });
       }
 
-      if (
-        project.membersJoined.includes(userId) ||
-        project.membersApplied.includes(userId)
-      ) {
+      if (project.membersApplied.includes(userId)) {
+        return res
+          .status(400)
+          .json({ error: "User already applied to be a memeber" });
+      }
+      if (project.membersJoined.includes(userId)) {
         return res
           .status(400)
           .json({ error: "User is already a member of this project" });
       }
 
-      // project.membersApplied.push(userId);
-      project.membersJoined.push(userId); // Change from membersApplied to membersJoined to test
+      project.membersJoined.push(userId);
       await project.save();
 
       res.json(project);
