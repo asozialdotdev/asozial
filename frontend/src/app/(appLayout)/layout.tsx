@@ -11,7 +11,6 @@ import Navbar from "@/components/common/layout/Navbar";
 import ProjectSidebar from "@/components/project/ProjectSidebar";
 import UserSidebar from "@/components/user/UserSidebar";
 import AppFooter from "@/components/common/layout/AppFooter";
-import { auth } from "@/auth";
 import { useSession } from "next-auth/react";
 
 function AppLayout({ children }: { children: React.ReactNode }) {

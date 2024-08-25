@@ -12,7 +12,6 @@ const projectsRouter = express.Router();
 dotenv.config();
 
 // GET search for projects
-// GET search for projects from a user (my-projects)
 projectsRouter.get(
   "/explore",
   async (req: Request, res: Response, next: NextFunction) => {
@@ -43,46 +42,6 @@ projectsRouter.get(
     }
   }
 );
-// // GET all projects from a user (my projects)
-
-// projectsRouter.get(
-//   "/user/all/search",
-//   async (req: Request, res: Response, next: NextFunction) => {
-//     console.log("/user is called");
-//     const { userId, page = 1, limit = 12 } = req.query;
-
-//     try {
-//       // Ensure page and limit are numbers
-//       const pageNumber = parseInt(page as string, 10) || 1;
-//       const limitNumber = parseInt(limit as string, 10) || 12;
-
-//       // Find projects owned by the user with pagination
-//       const projects = await Project.find({ owner: userId })
-//         .populate("membersJoined", "username name image")
-//         .populate("owner", "username name image")
-//         .skip((pageNumber - 1) * limitNumber) // Skip documents for previous pages
-//         .limit(limitNumber) // Limit to `limitNumber` documents
-//         .exec();
-
-//       // Get the total count of projects owned by the user
-//       const totalProjects = await Project.countDocuments({ owner: userId });
-
-//       console.log("Number of Projects Found:", projects.length);
-
-//       // Respond with projects and pagination details
-//       res.json({
-//         projects,
-//         totalPages: Math.ceil(totalProjects / limitNumber),
-//         currentPage: pageNumber,
-//       });
-//     } catch (error: any) {
-//       console.log("Error:", error.message);
-//       res
-//         .status(500)
-//         .json({ message: "An error occurred while fetching projects." });
-//     }
-//   }
-// );
 
 // GET search for projects from a user (my-projects)
 projectsRouter.get(
