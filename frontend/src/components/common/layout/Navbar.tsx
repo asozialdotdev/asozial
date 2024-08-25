@@ -80,6 +80,7 @@ function Navbar() {
                     src={session.user.image}
                     username={session.user.githubUsername}
                     userId={session.user.id}
+                    isInNavbar
                   />
                 )}
 

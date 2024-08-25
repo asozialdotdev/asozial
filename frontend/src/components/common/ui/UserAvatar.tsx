@@ -44,7 +44,12 @@ function UserAvatar({
             </Avatar>
           </Link>
         </TooltipTrigger>
-        <TooltipContent className="left-0 top-0">{username}</TooltipContent>
+        <TooltipContent
+          side={isInNavbar ? "left" : undefined}
+          className="left-0 top-0"
+        >
+          {username}
+        </TooltipContent>
       </Tooltip>
     </TooltipProvider>
   );
