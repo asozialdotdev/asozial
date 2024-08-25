@@ -41,18 +41,25 @@ function SearchProjects() {
   };
 
   return (
-    <div className="flex flex-col gap-2">
+    <div className="flex flex-col items-center gap-4">
       <form onSubmit={handleSearch}>
         <SearchBar
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
         />
       </form>
-      {searchTerm && (
-        <Button type="button" onClick={handleClearSearch} variant={"outline"}>
-          Clear Search
-        </Button>
-      )}
+      <div className='flex justify-center'>
+        {searchTerm && (
+          <Button
+            type="button"
+            onClick={handleClearSearch}
+            variant={"outline"}
+            className=" lg:left-0 lg:right-0 w-[300%]  lg:text-lg text-base"
+          >
+            Clear Search
+          </Button>
+        )}
+      </div>
     </div>
   );
 }

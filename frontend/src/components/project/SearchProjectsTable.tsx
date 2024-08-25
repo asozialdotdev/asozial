@@ -9,7 +9,7 @@ type SearchProjectsTableProps = {
 
 async function SearchProjectsTable({ projects }: SearchProjectsTableProps) {
   if (projects.length === 0) {
-    return <p>No projects found</p>;
+    <p>No projects found</p>;
   }
 
   if (!projects) {
