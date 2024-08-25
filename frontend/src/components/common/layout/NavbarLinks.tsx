@@ -1,14 +1,10 @@
-import NavBarLinkItem from "./NavBarLinkItem";
-
+import NavbarLinkItem from "./NavbarLinkItem";
+import NavBarLinkItemWithSubLinks from "./NavbarLinkWithSubLinks";
 const navbarLinks = [
   { name: "Dashboard", href: "/dashboard" },
   {
     name: "Account",
     href: "/account",
-    sublinks: [
-      { name: "Settings", href: "/account/settings" },
-      { name: "Profile", href: "/account/profile" },
-    ],
   },
   {
     name: "Search",
@@ -22,11 +18,21 @@ const navbarLinks = [
 
 function NavbarLinks() {
   return (
-    <section className="flex items-center gap-2">
+    <ul className="flex items-center gap-2">
       {navbarLinks.map((link) => (
-        <NavBarLinkItem key={link.name} {...link} />
+        <>
+          {link.sublinks ? (
+            <NavBarLinkItemWithSubLinks
+              key={link.name}
+              {...link}
+              subLinks={link.sublinks}
+            />
+          ) : (
+            <NavbarLinkItem key={link.name} {...link} />
+          )}
+        </>
       ))}
-    </section>
+    </ul>
   );
 }
 
