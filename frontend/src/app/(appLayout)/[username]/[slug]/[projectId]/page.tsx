@@ -41,9 +41,10 @@ async function Page({ params }: { params: Params }) {
   console.log("paramsOBJ", paramsObj);
   const { projectId } = paramsObj;
 
-  const project = await fetchProjectById(projectId);
-
-  const posts = await fetchProjectPosts(project._id);
+  const [project, posts] = await Promise.all([
+    fetchProjectById(projectId),
+    fetchProjectPosts(projectId),
+  ]);
 
   const isMember = project.membersJoined.some(
     (member: Member) => member._id === session?.user?.id,

@@ -221,11 +221,15 @@ projectsRouter.post(
       const { name, description, html_url, language } = repoInfo.data;
       const slug = generateSlug(name);
 
+      const sanitizedDescription = description === null ? "" : language;
+      const sanitizedLanguage = language === null ? "Other" : language;
+
       const createProject = await Project.create({
         title: name,
-        description: description,
+        description: sanitizedDescription,
         githubRepo: html_url,
-        techStack: [language],
+        pitch: "", 
+        techStack: [sanitizedLanguage],
         owner: userId,
         status: "active",
         slug,

@@ -64,7 +64,7 @@ function ProjectTabs({
 
       {/* All Projects */}
       <Suspense fallback={<ProjectCardLoadingSkeleton />}>
-        <TabsContent className="w-full 2xl:max-w-screen-lg" value="all-projects">
+        <TabsContent className="2xl:max-w-screen-lg" value="all-projects">
           <div className="w-full flex-grow">{renderProjects(projects)}</div>
           <div className="mt-auto w-full">
             <Pagination totalPages={totalPages} currentPage={currentPage} />
@@ -74,7 +74,10 @@ function ProjectTabs({
 
       {/* Owner Projects */}
       <Suspense fallback={<ProjectCardLoadingSkeleton />}>
-        <TabsContent className="w-full 2xl:max-w-screen-lg" value="owner-projects">
+        <TabsContent
+          className="w-full 2xl:max-w-screen-lg"
+          value="owner-projects"
+        >
           <div className="w-full flex-grow">
             {renderProjects(ownerProjects)}
           </div>
@@ -89,7 +92,10 @@ function ProjectTabs({
 
       {/* Member Projects */}
       <Suspense fallback={<ProjectCardLoadingSkeleton />}>
-        <TabsContent className="w-full 2xl:max-w-screen-lg" value="member-projects">
+        <TabsContent
+          className="w-full 2xl:max-w-screen-lg"
+          value="member-projects"
+        >
           <div className="w-full flex-grow">
             {renderProjects(memberProjects)}
           </div>

@@ -56,7 +56,7 @@ function ProjectPitch({ project }: { project: Project }) {
             isOwner && (
               <div>
                 <p className="mb-4 text-justify text-base font-light text-neutral-500 dark:text-neutral-400">
-                  {isOwner
+                  {isOwner && !project.pitch
                     ? "No pitch provided yet. Here you should tell everyone why they should join your project"
                     : "No pitch provided yet. Ask the owner for more information."}
                 </p>
