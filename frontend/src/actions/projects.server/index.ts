@@ -12,4 +12,5 @@ export { deleteProject } from "./deleteProject.server";
 export { patchMainLanguage } from "./patchMainLanguage.server";
 export { syncGithubRepo } from "./syncGithubRepo.server";
 export { searchForProjects } from "./searchForProjects.server";
-export {checkProjectTitle} from "./checkProjectTitle.server";
+export { checkProjectTitle } from "./checkProjectTitle.server";
+export { searchForProjectsThatUserIsMember } from "./searchForProjectsThatUserIsMember.server";

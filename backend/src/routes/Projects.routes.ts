@@ -11,17 +11,23 @@ const projectsRouter = express.Router();
 
 dotenv.config();
 
-// GET search for projects
+// GET search for all projects
 projectsRouter.get(
-  "/explore",
+  "/all",
   async (req: Request, res: Response, next: NextFunction) => {
     console.log("Explore is called");
     const { query, page = 1, limit = 12 } = req.query;
 
     try {
       const searchQuery = query
-        ? { title: { $regex: query, $options: "i" } }
+        ? {
+            $or: [
+              { title: { $regex: query, $options: "i" } },
+              { techStack: { $regex: query, $options: "i" } },
+            ],
+          }
         : {};
+
       const projects = await Project.find(searchQuery)
         .skip((+page - 1) * +limit)
         .limit(+limit)
@@ -45,13 +51,19 @@ projectsRouter.get(
 
 // GET search for projects from a user (my-projects)
 projectsRouter.get(
-  "/user",
+  "/my-projects",
   async (req: Request, res: Response, next: NextFunction) => {
     const { userId, query, page = 1, limit = 12 } = req.query;
 
     try {
       const searchQuery = query
-        ? { owner: userId, title: { $regex: query, $options: "i" } }
+        ? {
+            owner: userId,
+            $or: [
+              { title: { $regex: query, $options: "i" } },
+              { techStack: { $regex: query, $options: "i" } },
+            ],
+          }
         : { owner: userId };
 
       const projects = await Project.find(searchQuery)
@@ -60,6 +72,46 @@ projectsRouter.get(
         .populate("membersJoined", "username name image")
         .populate("owner", "username name image")
         .exec();
+
+      const totalProjects = await Project.countDocuments(searchQuery);
+      const totalPages = Math.ceil(totalProjects / +limit);
+
+      res.json({
+        projects,
+        totalPages,
+        currentPage: +page,
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
+// GET search for projects that a user is a member of
+projectsRouter.get(
+  "/member",
+  async (req: Request, res: Response, next: NextFunction) => {
+    const { userId, query, page = 1, limit = 12 } = req.query;
+
+    try {
+      const searchQuery = {
+        membersJoined: { $in: [userId] },
+        ...(query && {
+          $or: [
+            { title: { $regex: query, $options: "i" } },
+            { techStack: { $regex: query, $options: "i" } },
+          ],
+        }),
+      };
+
+      const projects = await Project.find(searchQuery)
+        .skip((+page - 1) * +limit)
+        .limit(+limit)
+        .populate("membersJoined", "username name image")
+        .populate("owner", "username name image")
+        .exec();
+
+      console.log("memebers projects>>>>>>>>>>>>>", projects);
 
       const totalProjects = await Project.countDocuments(searchQuery);
       const totalPages = Math.ceil(totalProjects / +limit);

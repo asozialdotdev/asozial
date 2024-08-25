@@ -9,7 +9,7 @@ const createProjectSchema = z.object({
   description: z
     .string({ required_error: "They need to know what your project is about" })
     .min(3, "Minimum of 3 characters, bitte 🙏")
-    .max(200, "Maximum of 200 characters, bitte 🙏"),
+    .max(250, "Maximum of 250 characters, bitte 🙏"),
   pitch: z
     .string({ required_error: "Pitch your project" })
     .min(3, "Minimum of 3 characters, bitte 🙏")

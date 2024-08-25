@@ -13,7 +13,10 @@ const searchForUserProjects = async (
   const userId = session?.user?.id;
   try {
     const response = await fetch(
-      `${baseUrl}/api/projects/user?userId=${userId}&query=${query}&page=${currentPage}&limit=${limit}`,
+      `${baseUrl}/api/projects/my-projects?userId=${userId}&query=${query}&page=${currentPage}&limit=${limit}`,
+      {
+        cache: "force-cache",
+      },
     );
     if (!response.ok) {
       throw new Error("Failed to fetch projects");

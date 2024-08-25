@@ -19,10 +19,6 @@ function AppLayout({ children }: { children: React.ReactNode }) {
   const { isUserSidebarOpen, isProjectSidebarOpen } = useSidebarsContext();
   const isOverlayVisible = isUserSidebarOpen || isProjectSidebarOpen;
 
-  // if (!session.data) {
-  //   return <div>must be logged in</div>;
-  // }
-
   return (
     <>
       <Navbar />
