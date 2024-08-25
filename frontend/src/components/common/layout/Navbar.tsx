@@ -5,6 +5,7 @@ import { useRef, useState } from "react";
 //Next
 import Image from "next/image";
 import Link from "next/link";
+import { useSession } from "next-auth/react";
 
 //Hooks
 import { useOutsideClick } from "@/hooks/useOutsideClick";
@@ -22,6 +23,7 @@ import { TbUserSquareRounded } from "react-icons/tb";
 import { Button } from "@/components/ui/button";
 import logo from "/public/logo.png";
 import { contributors } from "@/constants";
+import UserAvatar from "@/components/common/ui/UserAvatar";
 
 function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -40,6 +42,8 @@ function Navbar() {
   const combinedRefs = useCombinedRef(navRef, projectHeaderRef, userHeaderRef);
 
   const { width } = useWindowWidth();
+
+  const { data: session, status } = useSession();
 
   return (
     <>
@@ -69,6 +73,16 @@ function Navbar() {
             </section>
 
             <section className="flex items-center gap-2" ref={combinedRefs}>
+              {status === "authenticated" &&
+                session.user.image &&
+                session.user.githubUsername && (
+                  <UserAvatar
+                    src={session.user.image}
+                    username={session.user.githubUsername}
+                    userId={session.user.id}
+                  />
+                )}
+
               <button
                 className="hidden sm:block"
                 onClick={() => setIsOpen(!isOpen)}
