@@ -1,7 +1,8 @@
 import { useFormStatus } from "react-dom";
 import { Button } from "../ui/button";
-import LoadingTextButton from "../common/ui/loading/LoadingTextButton";
+
 import { SquareCheck } from "lucide-react";
+import LoadingTextButton from "../common/ui/loading/LoadingTextButton";
 
 type AcceptButtonProps = {
   acceptSuccess: boolean | undefined;

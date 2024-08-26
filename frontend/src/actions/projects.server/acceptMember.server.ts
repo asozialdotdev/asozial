@@ -18,6 +18,8 @@ const acceptMember = async (
   formState: AcceptMemberState,
   formData: FormData,
 ): Promise<AcceptMemberState> => {
+  const session = await auth();
+  const userId = session?.user?.id;
   const projectId = formData.get("projectId") as ProjectId;
   const memberId = formData.get("memberId") as string;
 
@@ -27,7 +29,7 @@ const acceptMember = async (
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ memberId, projectId }),
+      body: JSON.stringify({ memberId, userId }),
     });
 
     if (!response.ok) {

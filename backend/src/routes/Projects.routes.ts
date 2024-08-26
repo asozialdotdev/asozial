@@ -356,10 +356,21 @@ projectsRouter.post(
         return res.status(404).json({ error: "Project not found" });
       }
 
+      const user = await User.findById(userId);
+      if (!user) {
+        return res.status(404).json({ error: "User not found" });
+      }
+
       if (project.membersApplied.includes(userId)) {
         return res
           .status(400)
           .json({ error: "User already applied to be a memeber" });
+      }
+
+      if (user.projects?.projectsApplied.includes(project._id)) {
+        return res
+          .status(400)
+          .json({ error: "User already applied to this project" });
       }
 
       if (project.membersJoined.includes(userId)) {
@@ -371,12 +382,20 @@ projectsRouter.post(
       await Project.updateOne(
         { _id: project._id },
         {
-          $pull: { membersApplied: userId },
+          $push: { membersApplied: userId },
         }
       );
-      await project.save();
+
+      await User.updateOne(
+        { _id: userId },
+        {
+          $push: { projectsApplied: project._id },
+        }
+      );
+    
       console.log("Project applied>>>>>>>>>>", project);
-      res.json(project);
+      console.log("User applied>>>>>>>>>>", user);
+      res.status(200).json({ project, user });
     } catch (error) {
       next(error);
     }
@@ -388,7 +407,8 @@ projectsRouter.post(
   "/:projectId/join",
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const { projectId, memberId } = req.body;
+      const { projectId } = req.params;
+      const { memberId, userId } = req.body;
       const project = await Project.findById(projectId)
         .populate("owner", "info.username")
         .exec();
@@ -396,11 +416,22 @@ projectsRouter.post(
       if (!project) {
         return res.status(404).json({ error: "Project not found" });
       }
+      if (project.owner.toString() !== userId) {
+        return res
+          .status(403)
+          .json({ error: "You are not authorized to accept this user" });
+      }
 
       if (project.membersJoined.includes(memberId)) {
         return res
           .status(400)
           .json({ error: "User is already a member of this project" });
+      }
+
+      const member = await User.findById(memberId);
+
+      if (!member) {
+        return res.status(404).json({ error: "User not found" });
       }
 
       await Project.updateOne(
@@ -410,9 +441,18 @@ projectsRouter.post(
           $pull: { membersApplied: memberId },
         }
       );
-      await project.save();
 
-      res.json(project);
+      await User.updateOne(
+        { _id: memberId },
+        {
+          $push: { projectsJoined: project._id },
+          $pull: { projectsApplied: project._id },
+        }
+      );
+
+
+
+      res.status(200).json({ project, member });
     } catch (error) {
       next(error);
     }
@@ -424,7 +464,8 @@ projectsRouter.post(
   "/:projectId/decline",
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const { projectId, memberId } = req.body;
+      const { projectId } = req.params;
+      const { memberId, userId } = req.body;
       const project = await Project.findById(projectId)
         .populate("owner", "info.username")
         .exec();
@@ -433,15 +474,38 @@ projectsRouter.post(
         return res.status(404).json({ error: "Project not found" });
       }
 
+      if (project.owner.toString() !== userId) {
+        return res
+          .status(403)
+          .json({ error: "You are not authorized to decline this user" });
+      }
+
       await Project.updateOne(
         { _id: project._id },
         {
           $pull: { membersApplied: memberId },
+          $push: { membersDeclined: memberId },
         }
       );
-      await project.save();
 
-      res.json(project);
+      const member = await User.findById(memberId);
+
+      if (!member) {
+        return res.status(404).json({ error: "User not found" });
+      }
+
+      await User.updateOne(
+        { _id: memberId },
+        {
+          $pull: { projectsApplied: project._id },
+          $push: { projectsDeclined: project._id },
+        }
+      );
+
+      await project.save();
+      await member.save();
+
+      res.json({ project, member });
     } catch (error) {
       next(error);
     }
@@ -453,7 +517,8 @@ projectsRouter.post(
   "/:projectId/leave",
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const { projectId, userId } = req.body;
+      const { projectId } = req.params;
+      const { userId } = req.body;
       const project = await Project.findById(projectId)
         .populate("owner", "info.username")
         .exec();
@@ -468,15 +533,30 @@ projectsRouter.post(
           .json({ error: "User is not a member of this project" });
       }
 
+      const user = await User.findById(userId);
+
+      if (!user) {
+        return res.status(404).json({ error: "User not found" });
+      }
+
       await Project.updateOne(
         { _id: project._id },
         {
           $pull: { membersJoined: userId },
         }
       );
-      await project.save();
 
-      res.json(project);
+      await User.updateOne(
+        { _id: userId },
+        {
+          $pull: { projectsJoined: project._id },
+        }
+      );
+
+      await project.save();
+      await user.save();
+
+      res.json({ project, user });
     } catch (error) {
       next(error);
     }
@@ -488,7 +568,8 @@ projectsRouter.post(
   "/:projectId/remove",
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const { projectId, userId, memberId } = req.body;
+      const { projectId } = req.params;
+      const { userId, memberId } = req.body;
       const project = await Project.findById(projectId)
         .populate("owner", "info.username")
         .exec();
@@ -509,13 +590,29 @@ projectsRouter.post(
           .json({ error: "You are not authorized to remove this user" });
       }
 
+      const member = await User.findById(memberId);
+
+      if (!member) {
+        return res.status(404).json({ error: "User not found" });
+      }
+
       await Project.updateOne(
         { _id: project._id },
         {
           $pull: { membersJoined: memberId },
+          $push: { membersAvoided: memberId },
+        }
+      );
+
+      await User.updateOne(
+        { _id: memberId },
+        {
+          $pull: { projectsJoined: project._id },
+          $push: { projectsAvoided: project._id },
         }
       );
       await project.save();
+      await member.save();
 
       res.json(project);
     } catch (error) {

@@ -16,6 +16,10 @@ const projectSchema = new Schema(
     membersJoined: [{ type: Schema.Types.ObjectId, ref: "User", default: [] }],
     membersApplied: [{ type: Schema.Types.ObjectId, ref: "User", default: [] }],
     membersInvited: [{ type: Schema.Types.ObjectId, ref: "User", default: [] }],
+    membersDeclined: [
+      { type: Schema.Types.ObjectId, ref: "User", default: [] },
+    ],
+    membersAvoided: [{ type: Schema.Types.ObjectId, ref: "User", default: [] }],
     socials: {
       slack: { type: String },
       discord: { type: String },
