@@ -99,11 +99,13 @@ function SyncedProjectForm({ project, syncedData }: SyncedProjectFormProps) {
   };
 
   const processForm: SubmitHandler<Inputs> = async (data) => {
-    const { title, description, pitch, socials } = data;
+    const { title, description, pitch, socials, techStack } = data;
 
     const formattedTitle = title.trim();
     const formattedDescription = description.trim();
     const formattedPitch = pitch.trim();
+    const formattedTechStack = techStack?.filter((item) => item !== null) || [];
+
     const formattedSocials = socials
       ? Object.entries(socials).reduce((acc, [key, value]) => {
           acc[key] = value?.trim() || "";
@@ -122,6 +124,7 @@ function SyncedProjectForm({ project, syncedData }: SyncedProjectFormProps) {
       description: formattedDescription,
       pitch: formattedPitch,
       socials: formattedSocials,
+      techStack: formattedTechStack,
       image,
       placeholder,
     };
@@ -147,7 +150,7 @@ function SyncedProjectForm({ project, syncedData }: SyncedProjectFormProps) {
       setError(result.message);
       setIsDeleting(false);
     } else {
-      router.push(`/${username}/projects`);
+      router.push(`/projects`);
       setIsDeleting(false);
     }
   };

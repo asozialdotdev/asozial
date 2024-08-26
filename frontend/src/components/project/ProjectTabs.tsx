@@ -54,7 +54,7 @@ function ProjectTabs({
     <Tabs
       defaultValue="all-projects"
       onValueChange={handleTabChange}
-      className="flex w-full max-w-screen-xl flex-col items-center"
+      className="flex w-full flex-col items-center gap-2"
     >
       <TabsList className="w-full md:grid md:w-1/2 md:grid-cols-3">
         <TabsTrigger value="all-projects">All projects</TabsTrigger>
@@ -64,7 +64,7 @@ function ProjectTabs({
 
       {/* All Projects */}
       <Suspense fallback={<ProjectCardLoadingSkeleton />}>
-        <TabsContent className="w-full" value="all-projects">
+        <TabsContent className="2xl:max-w-screen-lg" value="all-projects">
           <div className="w-full flex-grow">{renderProjects(projects)}</div>
           <div className="mt-auto w-full">
             <Pagination totalPages={totalPages} currentPage={currentPage} />
@@ -74,7 +74,10 @@ function ProjectTabs({
 
       {/* Owner Projects */}
       <Suspense fallback={<ProjectCardLoadingSkeleton />}>
-        <TabsContent className="w-full max-w-screen-xl" value="owner-projects">
+        <TabsContent
+          className="w-full 2xl:max-w-screen-lg"
+          value="owner-projects"
+        >
           <div className="w-full flex-grow">
             {renderProjects(ownerProjects)}
           </div>
@@ -89,7 +92,10 @@ function ProjectTabs({
 
       {/* Member Projects */}
       <Suspense fallback={<ProjectCardLoadingSkeleton />}>
-        <TabsContent className="w-full max-w-screen-xl" value="member-projects">
+        <TabsContent
+          className="w-full 2xl:max-w-screen-lg"
+          value="member-projects"
+        >
           <div className="w-full flex-grow">
             {renderProjects(memberProjects)}
           </div>

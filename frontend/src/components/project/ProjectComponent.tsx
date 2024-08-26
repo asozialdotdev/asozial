@@ -21,6 +21,7 @@ import { checkIsMember } from "@/actions";
 import ProjectPitch from "./ProjectPitch";
 import ProjectMainLanguage from "./ProjectMainLanguage";
 import ButtonBack from "../common/ui/buttons/ButtonBack";
+import ProjectDescription from "./ProjectDescription";
 
 const membersJoined = ["Benjamin", "Mirko", "John", "Jane", "José"];
 const membersApplied = ["Alice", "Bob", "Charlie"];
@@ -55,19 +56,14 @@ async function ProjectComponent({ project }: { project: Project }) {
         )}
         {/* Title*/}
         <div className="absolute bottom-0 left-0 right-0 flex items-center justify-center bg-gradient-to-t from-black/80 to-transparent px-8 py-6 tracking-wide">
-          <PageTitle className="xs:text-3xl text-2xl font-bold text-white sm:text-4xl md:text-5xl 2xl:text-6xl">
+          <PageTitle className="text-2xl font-bold text-white xs:text-3xl sm:text-4xl md:text-5xl 2xl:text-6xl">
             {project.title}
           </PageTitle>
         </div>
       </div>
 
       {/* Description */}
-      <div className="mt-4 flex flex-col gap-2">
-        <h4 className="text-lg font-semibold">Description</h4>
-        <h3 className="font-semibold text-zinc-500 first-letter:capitalize dark:text-zinc-400">
-          {project.description}
-        </h3>
-      </div>
+      <ProjectDescription project={project} />
 
       {/* Pitch*/}
       <ProjectPitch project={project} />

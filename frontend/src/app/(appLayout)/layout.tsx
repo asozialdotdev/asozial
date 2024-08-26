@@ -14,8 +14,6 @@ import AppFooter from "@/components/common/layout/AppFooter";
 import { useSession } from "next-auth/react";
 
 function AppLayout({ children }: { children: React.ReactNode }) {
-  const session = useSession();
-  console.log("session:", session);
   const { isUserSidebarOpen, isProjectSidebarOpen } = useSidebarsContext();
   const isOverlayVisible = isUserSidebarOpen || isProjectSidebarOpen;
 

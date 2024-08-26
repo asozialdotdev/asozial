@@ -76,6 +76,7 @@ export const {
             githubRepos,
             account?.access_token as string,
           );
+          console.log("githubRepoLanguages", githubRepoLanguages);
           const newUser = {
             info: {
               username: profile?.login,

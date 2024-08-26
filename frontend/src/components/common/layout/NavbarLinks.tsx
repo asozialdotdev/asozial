@@ -7,14 +7,6 @@ import ProjectIcon from "../ui/icons/ProjectIcon";
 import UsersIcon from "../ui/icons/UsersIcon";
 const navbarLinks = [
   {
-    name: "Account",
-    href: "/account",
-    sublinks: [
-      { name: "Settings", href: "/account/settings" },
-      { name: "Profile", href: "/account/profile" },
-    ],
-  },
-  {
     name: "Search",
     href: "/search",
     Icon: SearchIcon,
@@ -39,10 +31,9 @@ function NavbarLinks() {
   return (
     <ul className="flex items-center gap-6">
       {navbarLinks.map((link) => (
-        <>
+        <li key={link.name}>
           {link.sublinks ? (
             <NavbarLinkItemWithSubLinks
-              key={link.name}
               name={link.name}
               href={link.href}
               Icon={link.Icon}
@@ -50,13 +41,12 @@ function NavbarLinks() {
             />
           ) : (
             <NavbarLinkItem
-              key={link.name}
               name={link.name}
               href={link.href}
               Icon={link.Icon}
             />
           )}
-        </>
+        </li>
       ))}
     </ul>
   );

@@ -356,6 +356,13 @@ const languagesWithColors: {
     library: "fa",
     Icon: RiSvelteFill,
   },
+  {
+    language: "Other",
+    bgColor: "bg-gray-500",
+    textColor: "text-gray-500",
+    library: "",
+    Icon: "",
+  },
 ];
 
 const contributors = [

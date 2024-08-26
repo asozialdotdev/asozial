@@ -20,14 +20,12 @@ import DeleteIcon from "../common/ui/icons/DeleteIcon";
 import CancelIcon from "../common/ui/icons/CancelIcon";
 import CustomDialog from "../common/ui/CustomDialog";
 import { ImageT } from "../common/ui/ImageUploader";
+import ButtonForward from "../common/ui/buttons/ButtonForward";
 
-//Ui
-import { FaRegArrowAltCircleRight } from "react-icons/fa";
 //lib
 import { useSession } from "next-auth/react";
 //Types
 import { ProjectPost, Reply } from "@/types/ProjectPost";
-import ButtonForward from "../common/ui/buttons/ButtonForward";
 
 type ParentProjectPostContent = {
   post: ProjectPost;

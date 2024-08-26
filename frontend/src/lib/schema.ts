@@ -1,4 +1,3 @@
-import { checkProjectTitle } from "@/actions";
 import { z } from "zod";
 
 const createProjectSchema = z.object({
@@ -18,6 +17,7 @@ const createProjectSchema = z.object({
     .string({ required_error: "Pick at least one tech stack" })
     .optional(),
   techStack: z.array(z.string()).min(1, "Pick at least one tech stack"),
+
   mainLanguage: z
     .string({ required_error: "Specify the main language" })
     .min(1, "Specify the main language"),
@@ -54,6 +54,12 @@ const createReplySchema = z.object({
     .max(1000, "Maximum of 1000 characters, bitte 🙏"),
 });
 
+const descriptionSchema = z.object({
+  description: z
+    .string({ required_error: "Pitch your project" })
+    .min(3, "Minimum of 3 characters, bitte 🙏")
+    .max(250, "Maximum of 250 characters, bitte 🙏"),
+});
 const pitchSchema = z.object({
   pitch: z
     .string({ required_error: "Pitch your project" })
@@ -78,4 +84,5 @@ export {
   pitchSchema,
   mainLanguageSchema,
   syncGithubRepoSchema,
+  descriptionSchema,
 };

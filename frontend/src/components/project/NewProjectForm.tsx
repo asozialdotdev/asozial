@@ -123,7 +123,7 @@ function NewProjectForm() {
   return (
     <div className="w-full pb-6">
       {/* Title */}
-      <Title control={control} errors={errors} setValue={setValue} />
+      <Title errors={errors} setValue={setValue} />
       <form
         onSubmit={handleSubmit(processForm)}
         className="mt-2 flex w-full flex-col gap-2"

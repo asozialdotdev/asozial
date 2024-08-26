@@ -17,7 +17,7 @@ import ToggleTheme from "../ui/buttons/ToggleTheme";
 import { Button } from "@/components/ui/button";
 import logo from "/public/logo.png";
 import { contributors } from "@/constants";
-import UserAvatar from "@/components/common/ui/UserAvatar";
+import UserAvatar from "@/components/common/ui//image/UserAvatar";
 import NavbarLinks from "./NavbarLinks";
 import { Menu, SquareUserRound } from "lucide-react";
 import NavbarAsozialMenu from "./NavbarAsozialMenu";

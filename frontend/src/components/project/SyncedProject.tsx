@@ -1,13 +1,20 @@
 "use client";
-import { Project } from "@/types/Project";
-import CustomLabel from "../common/ui/Label";
+// React
 import { useFormState } from "react-dom";
-import { syncGithubRepo } from "@/actions";
 import { useEffect, useRef } from "react";
+
+//Actions
+import { syncGithubRepo } from "@/actions";
+
+//Components
+import CustomLabel from "../common/ui/Label";
 import ErrorMessage from "../common/ui/ErrorMessage";
 import SyncRepoButton from "./SyncRepoButton";
 import SyncedProjectForm from "./SyncedProjectForm";
 import { Input } from "../ui/input";
+
+//Types
+import { Project } from "@/types/Project";
 
 function SyncedProject({ project }: { project: Project }) {
   const [formState, action] = useFormState(syncGithubRepo, {

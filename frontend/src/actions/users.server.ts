@@ -137,6 +137,16 @@ const getUserGithubRepos = async (url: string, accessToken: string) => {
 };
 
 // get user github repo languages
+
+type LanguageData = {
+  language: string;
+  lines: number;
+  projects: number;
+  bgColor?: string;
+  textColor?: string;
+  Icon?: any;
+};
+
 const getUserGithubRepoLanguages = async (
   repos: GithubRepo[],
   accessToken: string,
@@ -147,7 +157,7 @@ const getUserGithubRepoLanguages = async (
 
   if (!repos) {
     console.log("repo is undefined");
-    return languages; // or throw an error if appropriate
+    return languages;
   }
 
   try {
@@ -175,6 +185,7 @@ const getUserGithubRepoLanguages = async (
   const sortedUserTechStack = Object.entries(languages).sort(
     (a, b) => b[1].lines - a[1].lines,
   );
+
   const sortedUserTechStackWithColors = sortedUserTechStack.map(
     ([language, data]) => {
       const bgColor = languagesWithColors.find(
@@ -186,33 +197,34 @@ const getUserGithubRepoLanguages = async (
       const Icon = languagesWithColors.find(
         (entry) => entry.language === language,
       )?.Icon;
-      return [language, { ...data, textColor, bgColor, Icon }];
+      return {
+        language,
+        lines: data.lines,
+        projects: data.projects,
+        bgColor,
+        textColor,
+        Icon,
+      };
     },
   );
-  return sortedUserTechStackWithColors;
-};
 
-// const getUserTechStack = async (url: string) => {
-//   const userTechStack = await getUserGithubRepoLanguages(url);
-//   const sortedUserTechStack = Object.entries(userTechStack).sort(
-//     (a, b) => b[1].lines - a[1].lines,
-//   );
-//   const sortedUserTechStackWithColors = sortedUserTechStack.map(
-//     ([language, data]) => {
-//       const bgColor = languagesWithColors.find(
-//         (entry) => entry.language === language,
-//       )?.bgColor;
-//       const textColor = languagesWithColors.find(
-//         (entry) => entry.language === language,
-//       )?.textColor;
-//       const Icon = languagesWithColors.find(
-//         (entry) => entry.language === language,
-//       )?.Icon;
-//       return [language, { ...data, textColor, bgColor, Icon }];
-//     },
-//   );
-//   return sortedUserTechStackWithColors;
-// };
+  const languagesObject = sortedUserTechStackWithColors.reduce(
+    (acc, data) => {
+      acc[data.language] = {
+        language: data.language,
+        lines: data.lines,
+        projects: data.projects,
+        bgColor: data.bgColor,
+        textColor: data.textColor,
+        Icon: data.Icon,
+      };
+      return acc;
+    },
+    {} as { [key: string]: LanguageData },
+  );
+
+  return { languages: languagesObject };
+};
 
 export {
   getUserGithubFollowers,

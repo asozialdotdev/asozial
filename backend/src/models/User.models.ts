@@ -17,7 +17,6 @@ const codingLanguageSchema = new Schema({
 
 const userSchema = new Schema(
   {
-    _id: { type: Schema.Types.ObjectId },
     info: {
       bio: { type: String },
       username: { type: String },
@@ -31,12 +30,11 @@ const userSchema = new Schema(
     },
     skills: {
       languagesSpoken: [{ type: String }],
-      codingLanguages: [{ type: [String, codingLanguageSchema] }],
-      codingLibraries: [{ type: [String, codingLanguageSchema] }],
+      codingLanguages: [codingLanguageSchema],
+      codingLibraries: [codingLanguageSchema],
     },
     projects: {
       projectsJoined: [{ type: Schema.Types.ObjectId, ref: "Project" }],
-      projectsSuggested: [{ type: Schema.Types.ObjectId, ref: "Project" }],
       projectsApplied: [{ type: Schema.Types.ObjectId, ref: "Project" }],
       projectsAvoided: [{ type: Schema.Types.ObjectId, ref: "Project" }],
       dashboardPosts: [{ type: Schema.Types.ObjectId, ref: "Post" }],

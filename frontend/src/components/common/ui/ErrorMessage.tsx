@@ -4,9 +4,10 @@ import { SquareX } from "lucide-react";
 type ErrorMessageProps = {
   children: React.ReactNode;
   className?: string;
+  size?: number;
 };
 
-function ErrorMessage({ children, className }: ErrorMessageProps) {
+function ErrorMessage({ children, size, className }: ErrorMessageProps) {
   return (
     <span
       className={cn(
@@ -15,7 +16,7 @@ function ErrorMessage({ children, className }: ErrorMessageProps) {
       )}
     >
       <span>
-        <SquareX />
+        <SquareX size={size} />
       </span>
       {children}
     </span>
