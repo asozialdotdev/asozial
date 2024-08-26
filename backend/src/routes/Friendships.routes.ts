@@ -228,14 +228,14 @@ friendshipsRouter.get(
       const friendsAcceptedDetails = user.friends?.accepted
         ? await Promise.all(
             user.friends?.accepted.map(async (friend) => {
-              const friendDetails = await User.findById(friend).populate(
-                "username image"
-              );
+              const friendDetails = await User.findById(friend);
               if (!friendDetails) return null;
               const response = {
                 id: friendDetails._id,
-                username: friendDetails.info?.username,
-                image: friendDetails.info?.image,
+                info: {
+                  username: friendDetails.info?.username || "Kreuzbär",
+                  image: friendDetails.info?.image || "",
+                },
               };
               return response;
             })
@@ -245,14 +245,14 @@ friendshipsRouter.get(
       const friendsPendingDetails = user.friends?.pending
         ? await Promise.all(
             user.friends?.pending.map(async (friend) => {
-              const friendDetails = await User.findById(friend).populate(
-                "username image"
-              );
+              const friendDetails = await User.findById(friend);
               if (!friendDetails) return null;
               const response = {
                 id: friendDetails._id,
-                username: friendDetails.info?.username,
-                image: friendDetails.info?.image,
+                info: {
+                  username: friendDetails.info?.username,
+                  image: friendDetails.info?.image,
+                },
               };
               return response;
             })
@@ -262,14 +262,15 @@ friendshipsRouter.get(
       const friendsRejectedDetails = user.friends?.declined
         ? await Promise.all(
             user.friends?.declined.map(async (friend) => {
-              const friendDetails = await User.findById(friend).populate(
-                "username image"
-              );
+              const friendDetails = await User.findById(friend);
+              console.log("friendDetails", friendDetails);
               if (!friendDetails) return null;
               const response = {
                 id: friendDetails._id,
-                username: friendDetails.info?.username,
-                image: friendDetails.info?.image,
+                info: {
+                  username: friendDetails.info?.username || "",
+                  image: friendDetails.info?.image || "",
+                },
               };
               return response;
             })

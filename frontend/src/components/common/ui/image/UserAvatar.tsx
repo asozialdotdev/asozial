@@ -39,7 +39,7 @@ function UserAvatar({
             <Avatar className={cn("flex-shrink-0", className)}>
               <AvatarImage src={src} alt={username} />
               <AvatarFallback>
-                {username.charAt(0).toUpperCase()}
+                {username?.charAt(0).toUpperCase()}
               </AvatarFallback>
             </Avatar>
           </Link>

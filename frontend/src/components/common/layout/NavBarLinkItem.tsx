@@ -5,7 +5,7 @@ import { Icon } from "@/types/Ui";
 type NavbarLinkItemProps = {
   name: string;
   href: string;
-  Icon: Icon;
+  Icon: React.ComponentType;
 };
 
 function NavbarLinkItem({ name, href, Icon }: NavbarLinkItemProps) {
