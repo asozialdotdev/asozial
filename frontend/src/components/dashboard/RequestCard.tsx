@@ -13,8 +13,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import UserAvatar from "../common/ui/UserAvatar";
-
+import UserAvatar from "../common/ui/image/UserAvatar";
 //Components
 import AcceptDeclineForm from "./AcceptDeclineForm";
 

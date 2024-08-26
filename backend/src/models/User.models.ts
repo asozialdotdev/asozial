@@ -35,9 +35,21 @@ const userSchema = new Schema(
       codingLibraries: [{ type: [String, codingLanguageSchema] }],
     },
     projects: {
-      projectsJoined: [{ type: Schema.Types.ObjectId, ref: "Project" }],
-      projectsApplied: [{ type: Schema.Types.ObjectId, ref: "Project" }],
-      projectsAvoided: [{ type: Schema.Types.ObjectId, ref: "Project" }],
+      projectsJoined: [
+        { type: Schema.Types.ObjectId, ref: "Project", default: [] },
+      ],
+      projectsApplied: [
+        { type: Schema.Types.ObjectId, ref: "Project", default: [] },
+      ],
+      projectsInvited: [
+        { type: Schema.Types.ObjectId, ref: "Project", default: [] },
+      ],
+      projectsAvoided: [
+        { type: Schema.Types.ObjectId, ref: "Project", default: [] },
+      ],
+      projectsDeclined: [
+        { type: Schema.Types.ObjectId, ref: "Project", default: [] },
+      ],
       dashboardPosts: [{ type: Schema.Types.ObjectId, ref: "Post" }],
     },
     socials: [socialSchema],
