@@ -4,9 +4,8 @@ import Link from "next/link";
 import PageContainer from "@/components/common/containers/PageContainer";
 
 import { auth } from "@/auth";
-import {signIn} from "@/actions"
-import { AvatarImage } from "@radix-ui/react-avatar";
-import bearlogo from "/public/bearlogo.webp";
+import { signIn } from "@/actions";
+import bearlogo from "/public/bearlogo.jpg";
 import Image from "next/image";
 import { FaGithub } from "react-icons/fa";
 

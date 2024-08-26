@@ -181,7 +181,9 @@ export const {
 
         const updatedUser = {
           _id: existingUser._id,
-          codingLanguages: githubRepoLanguages,
+          skills: {
+            codingLanguages: githubRepoLanguages,
+          },
           github: {
             followers: githubFollowers,
             following: githubFollowing,

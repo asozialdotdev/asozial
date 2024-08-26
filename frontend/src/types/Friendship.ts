@@ -3,7 +3,7 @@ import { Types } from "mongoose";
 type Friendship = {
   senderId?: Types.ObjectId;
   receiverId?: Types.ObjectId;
-  users?: Types.ObjectId[];
+  friends?: Types.ObjectId[];
   messages?: Types.ObjectId[];
   status: "pending" | "accepted" | "declined";
   createdAt?: Date;
