@@ -214,7 +214,7 @@ usersRouter.get(
               $size: {
                 $setIntersection: [
                   "$languagesSpoken",
-                  actualUser.info.languagesSpoken,
+                  actualUser.skills.languagesSpoken,
                 ],
               },
             },
@@ -227,6 +227,15 @@ usersRouter.get(
           $sort: { totalMatches: -1 },
         },
       ]);
+
+      const suggestedUserIds = filteredUsers.map((user) => user._id);
+
+      await User.updateOne(
+        { _id: actualUser._id },
+        {
+          $addToSet: { "matches.users.suggested": { $each: suggestedUserIds } },
+        }
+      );
 
       res.status(200).json(filteredUsers);
     } catch (error) {
