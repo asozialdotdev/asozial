@@ -313,7 +313,9 @@ projectsRouter.get(
   }
 );
 
-// POST request to APPLY to a project
+//APPLY, JOIN, DECLINE AND LEAVE PROJECTS
+
+// POST request to apply to a project (APPLY)
 projectsRouter.post(
   "/:projectId/apply",
   async (req: Request, res: Response, next: NextFunction) => {
@@ -339,7 +341,12 @@ projectsRouter.post(
           .json({ error: "User is already a member of this project" });
       }
 
-      project.membersApplied.push(userId);
+      await Project.updateOne(
+        { _id: project._id },
+        {
+          $pull: { membersApplied: userId },
+        }
+      );
       await project.save();
       console.log("Project applied>>>>>>>>>>", project);
       res.json(project);
@@ -349,7 +356,7 @@ projectsRouter.post(
   }
 );
 
-// POST request to JOIN a project
+// POST request to accept a user to a project (JOIN)
 projectsRouter.post(
   "/:projectId/join",
   async (req: Request, res: Response, next: NextFunction) => {
@@ -385,8 +392,112 @@ projectsRouter.post(
   }
 );
 
-// GET check if user is a member of a project
+// POST request to DECLINE a user from a project (DECLINE)
+projectsRouter.post(
+  "/:projectId/decline",
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const { projectId, memberId } = req.body;
+      const project = await Project.findById(projectId)
+        .populate("owner", "username")
+        .exec();
 
+      if (!project) {
+        return res.status(404).json({ error: "Project not found" });
+      }
+
+      await Project.updateOne(
+        { _id: project._id },
+        {
+          $pull: { membersApplied: memberId },
+        }
+      );
+      await project.save();
+
+      res.json(project);
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
+// POST request to LEAVE a project (LEAVE)
+projectsRouter.post(
+  "/:projectId/leave",
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const { projectId, userId } = req.body;
+      const project = await Project.findById(projectId)
+        .populate("owner", "username")
+        .exec();
+
+      if (!project) {
+        return res.status(404).json({ error: "Project not found" });
+      }
+
+      if (project.membersJoined.includes(userId)) {
+        return res
+          .status(400)
+          .json({ error: "User is not a member of this project" });
+      }
+
+      await Project.updateOne(
+        { _id: project._id },
+        {
+          $pull: { membersJoined: userId },
+        }
+      );
+      await project.save();
+
+      res.json(project);
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
+// POST request to REMOVE a user from a project (REMOVE)
+projectsRouter.post(
+  "/:projectId/remove",
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const { projectId, userId, memberId } = req.body;
+      const project = await Project.findById(projectId)
+        .populate("owner", "username")
+        .exec();
+
+      if (!project) {
+        return res.status(404).json({ error: "Project not found" });
+      }
+
+      if (project.membersJoined.includes(memberId)) {
+        return res
+          .status(400)
+          .json({ error: "User is not a member of this project" });
+      }
+
+      if (project.owner._id.toString() !== userId) {
+        return res
+          .status(403)
+          .json({ error: "You are not authorized to remove this user" });
+      }
+
+      await Project.updateOne(
+        { _id: project._id },
+        {
+          $pull: { membersJoined: memberId },
+        }
+      );
+      await project.save();
+
+      res.json(project);
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
+// GET check if user is a member of a project
 projectsRouter.get(
   "/:projectId/is-member",
   async (req: Request, res: Response, next: NextFunction) => {

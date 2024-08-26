@@ -18,3 +18,4 @@ export { patchDescription } from "./patchDescription.server";
 export { checkMembersApplied } from "./checkMembersApplied.server";
 export { acceptMember } from "./acceptMember.server";
 export {declineMember} from "./declineMember.ts.server"
+export { leaveProject } from "./leaveProject.server";

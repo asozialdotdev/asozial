@@ -13,7 +13,7 @@ function DeclineButton({ error }: DeclineButtonProps) {
       {pending ? (
         <LoadingTextButton />
       ) : error ? (
-        <span className="flex items-center text-red-700 dark:text-red-700">
+        <span className="flex items-center text-red-700 dark:text-red-700 gap-1">
           <SquareX size={15} /> Error
         </span>
       ) : (
