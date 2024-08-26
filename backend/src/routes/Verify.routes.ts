@@ -5,7 +5,7 @@ import { verifyJWT } from "../middleware/jwt.middleware";
 const verifyRouter = express.Router();
 
 verifyRouter.get("/", (req: Request, res: Response) => {
-  const actualUser = (req as any).payload.user;
+  // const actualUser = (req as any).payload.user;
   const accessToken = req.headers.authorization?.split(" ")[1];
   console.log("this is the access token", accessToken);
   if (!accessToken) {

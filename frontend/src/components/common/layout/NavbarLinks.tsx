@@ -7,6 +7,14 @@ import ProjectIcon from "../ui/icons/ProjectIcon";
 import UsersIcon from "../ui/icons/UsersIcon";
 const navbarLinks = [
   {
+    name: "Account",
+    href: "/account",
+    sublinks: [
+      { name: "Settings", href: "/account/settings" },
+      { name: "Profile", href: "/account/profile" },
+    ],
+  },
+  {
     name: "Search",
     href: "/search",
     Icon: SearchIcon,
