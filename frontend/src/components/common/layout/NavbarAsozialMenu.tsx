@@ -22,7 +22,7 @@ function NavbarAsozialMenu() {
           anti-social media since 2024
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
-        <DropdownMenuItem className="text-lg">
+        <DropdownMenuItem asChild className="text-lg">
           <Link
             href="/about"
             className="flex w-full flex-row items-center justify-between gap-2 px-2"
@@ -30,7 +30,7 @@ function NavbarAsozialMenu() {
             <AsozialLogo /> about
           </Link>
         </DropdownMenuItem>
-        <DropdownMenuItem className="text-lg">
+        <DropdownMenuItem asChild className="text-lg">
           <Link
             href="/contributors"
             className="flex w-full flex-row items-center justify-between gap-2 px-2"
