@@ -28,10 +28,7 @@ friendshipsRouter.post(
       }
 
       const friendshipExists = await Friendship.findOne({
-        $or: [
-          { senderId, receiverId },
-          { senderId: receiverId, receiverId: senderId },
-        ],
+        $or: [{ friends: receiverId, senderId }],
       });
 
       if (friendshipExists) return;
@@ -42,7 +39,6 @@ friendshipsRouter.post(
         status: "pending",
       });
 
-      //add friendship to sender and receiver
       await User.findByIdAndUpdate(senderId, {
         $push: { "friends.pending": receiverId },
       });
@@ -87,6 +83,10 @@ friendshipsRouter.patch(
         );
         return;
       }
+
+      friendship.friends.push(userId, friendship.senderId);
+
+      await friendship.save();
 
       res.status(200).json(friendship);
     } catch (error) {
@@ -276,33 +276,14 @@ friendshipsRouter.get(
           )
         : [];
 
-      // const friendsRejectedByDetails = user.friendsRejectedBy
-      //   ? await Promise.all(
-      //       user.friendsRejectedBy.map(async (friend) => {
-      //         const friendDetails = await User.findById(friend).populate(
-      //           "username image"
-      //         );
-      //         if (!friendDetails) return null;
-      //         const response = {
-      //           id: friendDetails._id,
-      //           username: friendDetails.info?.username,
-      //           image: friendDetails.info?.image,
-      //         };
-      //         return response;
-      //       })
-      //     )
-      //   : [];
-
       console.log("friendsAcceptedDetails", friendsAcceptedDetails);
       console.log("friendsPendingDetails", friendsPendingDetails);
       console.log("friendsRejectedDetails", friendsRejectedDetails);
-      // console.log("friendsRejectedByDetails", friendsRejectedByDetails);
 
       res.json({
         friendsAccepted: friendsAcceptedDetails,
         friendsPending: friendsPendingDetails,
         friendsRejected: friendsRejectedDetails,
-        //   friendsRejectedBy: friendsRejectedByDetails,
       });
     } catch (error: any) {
       console.error("Error fetching user friendships:", error);

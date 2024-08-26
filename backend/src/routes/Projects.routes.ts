@@ -1,6 +1,8 @@
 import dotenv from "dotenv";
 import express, { Request, Response, NextFunction } from "express";
 import axios from "axios";
+import { ObjectId } from "mongoose";
+
 import Project from "../models/Project.models";
 import ProjectPost from "../models/ProjectPost.models";
 import ProjectPostReply from "../models/ProjectPostReply.models";
@@ -495,24 +497,47 @@ projectsRouter.get(
   "/match",
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const { actualUser } = req.body;
+      const { actualUser, targetProject } = req.body;
+
+      const user = await User.findById(actualUser);
+
+      if (!user) {
+        return res.status(404).json({ message: "User not found" });
+      }
+
+      const isProjectAlreadyMatched =
+        user.matches?.projects?.suggested.includes(targetProject) ||
+        user.matches?.projects?.pending.includes(targetProject) ||
+        user.matches?.projects?.accepted.includes(targetProject) ||
+        user.matches?.projects?.declined.includes(targetProject);
+
+      if (isProjectAlreadyMatched) {
+        return res.status(200).json({
+          message: "Project already matched or suggested to the user.",
+        });
+      }
 
       const filteredProjects = await Project.aggregate([
         {
           $match: {
-            $and: [
-              { _id: { $nin: actualUser.avoidedProjects } },
-              { _id: { $nin: actualUser.joinedProjects } },
-              { _id: { $nin: actualUser.appliedProjects } },
-              { mainLanguage: { $in: actualUser.languagesSpoken } },
-            ],
+            _id: {
+              $nin: user.matches?.projects?.suggested.concat(
+                user.matches?.projects?.pending,
+                user.matches?.projects?.accepted,
+                user.matches?.projects?.declined
+              ),
+            },
+            mainLanguage: { $in: user.skills?.languagesSpoken },
           },
         },
         {
           $addFields: {
             techStackMatches: {
               $size: {
-                $setIntersection: ["$techStack", actualUser.techStack],
+                $setIntersection: [
+                  "$techStack",
+                  user.skills?.codingLanguages.map((cl: any) => cl.language),
+                ],
               },
             },
           },
@@ -521,8 +546,16 @@ projectsRouter.get(
           $sort: { techStackMatches: -1 },
         },
       ]);
-      res.status(200).json(filteredProjects);
+
+      user.matches?.projects?.suggested.push(targetProject);
+      await user.save();
+
+      res.status(200).json({
+        message: "Project matched successfully",
+        suggestedProjects: filteredProjects,
+      });
     } catch (error) {
+      console.error("Error fetching matched projects:", error);
       next(error);
     }
   }
@@ -543,8 +576,7 @@ projectsRouter.post(
         console.error("Project not found");
         return;
       }
-
-      actualUser.projectsApplied.push(foundProject);
+      actualUser.matches.projects.pending.push(foundProject);
       await actualUser.save();
 
       foundProject.membersApplied.push(actualUser._id);
@@ -562,6 +594,51 @@ projectsRouter.post(
         message: "User have matched with a Project",
         actualUser: populatedActualUser,
         foundProject: populatedFoundProject,
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
+// PUT REQUEST TO ACCEPT A USER IN A PROJECT(DOABLE ONLY BY THE PROJECT OWNER)
+
+projectsRouter.put(
+  "/:projectId/accept",
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const { projectId } = req.params;
+      const { ownerId, matchedUserId } = req.body;
+
+      const project = await Project.findByIdAndUpdate(
+        { _id: projectId, owner: ownerId },
+        {
+          $push: { membersJoined: matchedUserId },
+          $pull: { membersApplied: matchedUserId },
+        },
+        { new: true }
+      );
+
+      if (!project) {
+        return res.status(404).json({ message: "Project not found" });
+      }
+
+      const updateUser = await User.findByIdAndUpdate(
+        { _id: matchedUserId },
+        {
+          $push: { "matches.projects.accepted": project._id },
+          $pull: {
+            "matches.projects.pending": project._id,
+            "matches.projects.suggested": project._id,
+          },
+        },
+        { new: true }
+      );
+
+      res.status(200).json({
+        message: "User accepted successfully",
+        project: project,
+        user: updateUser,
       });
     } catch (error) {
       next(error);

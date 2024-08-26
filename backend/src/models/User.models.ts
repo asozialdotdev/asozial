@@ -63,6 +63,7 @@ const userSchema = new Schema(
         declined: [{ type: Schema.Types.ObjectId, ref: "Project" }],
       },
     },
+    posts: { type: Schema.Types.ObjectId, ref: "UserPosts" },
     github: {
       id: { type: Number },
       nodeId: { type: String },
