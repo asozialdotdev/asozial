@@ -58,7 +58,7 @@ usersRouter.post(
 
 usersRouter.get("/:username", async (req: Request, res: Response) => {
   try {
-    const user = await User.findOne({ username: req.params.username });
+    const user = await User.findOne({ "info.username": req.params.username });
     if (!user) {
       console.log("User not found");
     }
@@ -270,7 +270,5 @@ usersRouter.put("/update", async (req: Request, res: Response) => {
     console.log("Error updating user", error.message);
   }
 });
-
-
 
 export default usersRouter;
