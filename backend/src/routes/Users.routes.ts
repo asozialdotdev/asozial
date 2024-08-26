@@ -58,7 +58,7 @@ usersRouter.post(
 
 usersRouter.get("/:username", async (req: Request, res: Response) => {
   try {
-    const user = await User.findOne({ username: req.params.username });
+    const user = await User.findOne({ "info.username": req.params.username });
     if (!user) {
       console.log("User not found");
     }
@@ -235,21 +235,6 @@ usersRouter.get(
   }
 );
 
-// GET all projects that a user is a member of
-
-// usersRouter.get(
-//   "/:userId/projects",
-//   async (req: Request, res: Response, next: NextFunction) => {
-//     try {
-//       const user = (req as any).payload.user;
-//       const projects = await Project.find({ membersJoined: user._id });
-//       res.json(projects);
-//     } catch (error) {
-//       next(error);
-//     }
-//   }
-// );
-
 usersRouter.put("/update", async (req: Request, res: Response) => {
   try {
     const { _id, codingLanguages, github } = req.body;
@@ -270,7 +255,5 @@ usersRouter.put("/update", async (req: Request, res: Response) => {
     console.log("Error updating user", error.message);
   }
 });
-
-
 
 export default usersRouter;

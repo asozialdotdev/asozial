@@ -12,6 +12,7 @@ const projectSchema = new Schema(
     placeholder: { type: String },
     slug: { type: String, required: true, unique: true },
     owner: { type: Schema.Types.ObjectId, ref: "User", required: true },
+    membersDeclined: [{ type: Schema.Types.ObjectId, ref: "User", default: []  }],
     membersJoined: [{ type: Schema.Types.ObjectId, ref: "User", default: [] }],
     membersApplied: [{ type: Schema.Types.ObjectId, ref: "User", default: [] }],
     membersInvited: [{ type: Schema.Types.ObjectId, ref: "User", default: [] }],

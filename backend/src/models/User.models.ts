@@ -1,4 +1,3 @@
-import { access } from "fs";
 import { Schema, model } from "mongoose";
 
 const socialSchema = new Schema({
@@ -17,7 +16,7 @@ const codingLanguageSchema = new Schema({
 
 const userSchema = new Schema(
   {
-    _id: { type: Schema.Types.ObjectId },
+    username: { type: String, required: true, unique: true },
     info: {
       bio: { type: String },
       username: { type: String },
@@ -31,8 +30,8 @@ const userSchema = new Schema(
     },
     skills: {
       languagesSpoken: [{ type: String }],
-      codingLanguages: [{ type: [String, codingLanguageSchema] }],
-      codingLibraries: [{ type: [String, codingLanguageSchema] }],
+      codingLanguages: [codingLanguageSchema],
+      codingLibraries: [codingLanguageSchema],
     },
     projects: {
       projectsJoined: [
@@ -57,8 +56,6 @@ const userSchema = new Schema(
       accepted: [{ type: Schema.Types.ObjectId, ref: "Friendship" }],
       pending: [{ type: Schema.Types.ObjectId, ref: "Friendship" }],
       declined: [{ type: Schema.Types.ObjectId, ref: "Friendship" }],
-      // outgoingPending: [{ type: Schema.Types.ObjectId, ref: "Friendship" }],
-      // outgoingDeclined: [{ type: Schema.Types.ObjectId, ref: "Friendship" }],
     },
     matches: {
       users: {
@@ -74,11 +71,12 @@ const userSchema = new Schema(
         declined: [{ type: Schema.Types.ObjectId, ref: "Project" }],
       },
     },
+    posts: { type: Schema.Types.ObjectId, ref: "UserPosts" },
     github: {
       id: { type: Number },
       nodeId: { type: String },
       accessToken: { type: String },
-      username: { type: String },
+      login: { type: String },
       notificationEmail: { type: String },
       bio: { type: String },
       apiUrl: { type: String },
@@ -108,6 +106,7 @@ const userSchema = new Schema(
       updatedAt: { type: String },
       collaboratorsNumber: { type: Number },
     },
+    lastLogin: { type: Date },
   },
   {
     collection: "User",

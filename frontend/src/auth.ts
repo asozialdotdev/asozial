@@ -40,11 +40,15 @@ export const {
   ],
   callbacks: {
     async signIn({ user, profile, account }) {
+      console.log("Account:", account);
+      console.log("Profile:", profile);
+      console.log("User:", user);
+
       const db = client.db();
 
       const existingUser = await db
         .collection("User")
-        .findOne({ email: user.email });
+        .findOne({ "info.email": user.email });
 
       if (!existingUser) {
         try {
@@ -77,8 +81,9 @@ export const {
             account?.access_token as string,
           );
           const newUser = {
+            username: profile?.login || "",
             info: {
-              username: profile?.login,
+              username: profile?.login || "",
               name: user?.name,
               email: user?.email,
               notificationEmail: profile?.notification_email,
@@ -100,7 +105,7 @@ export const {
             github: {
               id: profile?.id,
               nodeId: profile?.node_id,
-              username: profile?.login,
+              login: profile?.login,
               accessToken: account?.access_token,
               bio: profile?.bio,
               apiUrl: profile?.url,
@@ -128,18 +133,14 @@ export const {
               updatedAt: profile?.updated_at,
               collaboratorsNumber: profile?.collaborators,
             },
+            lastLogin: null,
           };
-          console.log("newUser", newUser);
           const response = await axios.post(`${baseUrl}/api/auth`, newUser, {
             headers: {
               "Content-Type": "application/json",
             },
           });
           console.log("response", response.data);
-
-          //**ONCE ACCESS TOKEN GIVEN BY GITHUB, DO THE API CALLS HERE */
-          //make separate api calls to get user details before creation in db
-          // **TIMING OUT DUE TO TOO MANY API CALLS**
 
           user.id = response.data._id; // Assign the custom user ID to NextAuth's user object
           //** ADD THE ACCESS TOKEN TO THE USER  */ */
@@ -192,6 +193,7 @@ export const {
             organizations: githubOrganizations,
             publicRepos: githubRepos,
           },
+          lastLogin: Date.now(),
         };
 
         const response = await axios.put(

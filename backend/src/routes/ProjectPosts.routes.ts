@@ -19,7 +19,7 @@ projectPostRouter.get(
       const projectPosts = await ProjectPost.find({ projectId })
         .populate({
           path: "userId",
-          select: "username name image",
+          select: "info.username info.name info.image",
         })
         .populate({
           path: "projectId",
@@ -84,7 +84,7 @@ projectPostRouter.get(
       const post = await ProjectPost.findById(req.params.projectPostId)
         .populate({
           path: "userId",
-          select: "username name image",
+          select: "info.username info.name info.image",
         })
         .populate({
           path: "projectId",
@@ -101,13 +101,13 @@ projectPostRouter.get(
       })
         .populate({
           path: "userId",
-          select: "username name image",
+          select: "info.username info.name info.image",
         })
         .populate({
           path: "children",
           populate: {
             path: "userId",
-            select: "username name image",
+            select: "info.username info.name info.image",
           },
         })
         .exec();
