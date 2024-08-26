@@ -25,7 +25,7 @@ function NavbarLinkItemWithSubLinks({
 }: NavbarLinkItemWithSubLinksProps) {
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger className="flex flex-row items-center gap-2">
+      <DropdownMenuTrigger asChild className="flex flex-row items-center gap-2">
         <Button
           variant="ghost"
           className="flex flex-row flex-nowrap items-center gap-2"
@@ -35,7 +35,7 @@ function NavbarLinkItemWithSubLinks({
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent>
-        <DropdownMenuLabel>
+        <DropdownMenuLabel asChild>
           <Link href={href} className="flex flex-row items-center gap-2">
             <Icon />
             {name}
@@ -43,7 +43,7 @@ function NavbarLinkItemWithSubLinks({
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
         {subLinks.map((subLink) => (
-          <DropdownMenuItem key={subLink.name}>
+          <DropdownMenuItem asChild key={subLink.name}>
             <Link
               href={subLink.href}
               className="flex flex-row items-center gap-2"
