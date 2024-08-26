@@ -44,10 +44,10 @@ const userSchema = new Schema(
     socials: [socialSchema],
     friends: {
       accepted: [{ type: Schema.Types.ObjectId, ref: "Friendship" }],
-      incomingPending: [{ type: Schema.Types.ObjectId, ref: "Friendship" }],
-      incomingDeclined: [{ type: Schema.Types.ObjectId, ref: "Friendship" }],
-      outgoingPending: [{ type: Schema.Types.ObjectId, ref: "Friendship" }],
-      outgoingDeclined: [{ type: Schema.Types.ObjectId, ref: "Friendship" }],
+      pending: [{ type: Schema.Types.ObjectId, ref: "Friendship" }],
+      declined: [{ type: Schema.Types.ObjectId, ref: "Friendship" }],
+      // outgoingPending: [{ type: Schema.Types.ObjectId, ref: "Friendship" }],
+      // outgoingDeclined: [{ type: Schema.Types.ObjectId, ref: "Friendship" }],
     },
     matches: {
       users: {

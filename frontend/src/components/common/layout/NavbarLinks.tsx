@@ -12,6 +12,8 @@ const navbarLinks = [
     sublinks: [
       { name: "Settings", href: "/account/settings" },
       { name: "Profile", href: "/account/profile" },
+    ],
+  },
   {
     name: "Search",
     href: "/search",

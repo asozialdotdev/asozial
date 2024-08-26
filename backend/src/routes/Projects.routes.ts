@@ -11,7 +11,6 @@ const projectsRouter = express.Router();
 
 dotenv.config();
 
-
 // GET search for all projects
 
 projectsRouter.get(
@@ -353,7 +352,7 @@ projectsRouter.get(
       }
 
       res.json({
-        isMember: project.membersJoined.includes(user._id),
+        isMember: project.membersJoined.includes(user?._id!),
       });
     } catch (error) {
       next(error);
