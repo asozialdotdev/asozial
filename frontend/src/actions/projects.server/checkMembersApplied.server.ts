@@ -16,9 +16,9 @@ const checkMembersApplied = async () => {
     if (!res.ok) {
       throw new Error("Failed to fetch members applied");
     }
-    const membersApllied = await res.json();
-    console.log("appliedProjects", membersApllied);
-    return membersApllied;
+    const membersApplied = await res.json();
+    console.log("appliedProjects", membersApplied);
+    return membersApplied;
   } catch (error) {
     console.error("Failed to fetch members applied", error);
     return { error: true, message: "Failed to fetch members applied" };

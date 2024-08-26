@@ -32,7 +32,7 @@ const userIdTest = "1234567890";
 async function ProjectComponent({ project }: { project: Project }) {
   const session = await auth();
   const username = session?.user?.githubUsername;
-  const isMember = project.membersJoined.some(
+  const isMember = project.members?.membersJoined.some(
     (member: Member) => member._id === session?.user?.id,
   );
   const isOwner = project.owner._id === session?.user?.id;
@@ -95,12 +95,12 @@ async function ProjectComponent({ project }: { project: Project }) {
         <div className="flex items-center gap-2">
           <h4 className="text-lg font-semibold">Members</h4>
           <span className="font-normal">
-            {`(${project.membersJoined.length})`}
+            {`(${project.members?.membersJoined.length})`}
           </span>
         </div>
         <div className="flex gap-4">
-          {project.membersJoined.length > 0 ? (
-            project.membersJoined.map((member) => (
+          {project.members?.membersJoined?.length > 0 ? (
+            project.members?.membersJoined.map((member) => (
               <UserAvatar
                 key={member.name}
                 src={member.image}
