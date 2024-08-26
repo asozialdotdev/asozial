@@ -1,5 +1,5 @@
 import CustomDialog from "@/components/common/ui/CustomDialog";
-import LoadingTextButton from "@/components/common/ui/LoadingTextButton";
+import LoadingTextButton from "@/components/common/ui/loading/LoadingTextButton";
 import { Button } from "@/components/ui/button";
 
 type ProjectFormButtonsProps = {

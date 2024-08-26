@@ -2,7 +2,7 @@ import React from "react";
 import type { Metadata } from "next";
 import { Kanit } from "next/font/google";
 import "./globals.css";
-import Navbar from "@/components/common/Navbar";
+import Navbar from "@/components/common/layout/Navbar";
 import Footer from "@/components/common/layout/Footer";
 import Providers from "./providers";
 

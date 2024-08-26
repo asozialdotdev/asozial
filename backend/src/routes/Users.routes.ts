@@ -12,26 +12,33 @@ usersRouter.post(
   "/match",
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const actualUser = (req as any).payload.user;
-      const targetUser = await User.findById(req.body.userId);
+      const { actualUserId, targetUserId } = req.body;
 
-      if (!targetUser) {
-        res.status(404).send("User not found");
-        console.error("User not found");
+      const actualUser = await User.findById(actualUserId);
+      const targetUser = await User.findById(targetUserId);
+
+      if (!actualUser || !targetUser) {
+        res.status(404).send("One or both users not found");
+        console.error("One or both users not found");
         return;
       }
 
-      actualUser.matchedUsers.push(targetUser);
-      await actualUser.save();
+      if (!actualUser?.matches?.users?.accepted.includes(targetUserId)) {
+        actualUser?.matches?.users?.accepted.push(targetUserId);
+      }
 
-      //targetUser.matchedUsers.push(actualUser._id);
+      if (!targetUser?.matches?.users?.accepted.includes(actualUserId)) {
+        targetUser?.matches?.users?.accepted.push(actualUserId);
+      }
+
+      await actualUser.save();
       await targetUser.save();
 
       const populatedActualUser = await User.findById(actualUser._id).populate(
-        "matchedUsers"
+        "matches.users.accepted"
       );
-      const populatedTargetUser = await User.findById(targetUser).populate(
-        "matchedUsers"
+      const populatedTargetUser = await User.findById(targetUser._id).populate(
+        "matches.users.accepted"
       );
 
       res.status(200).json({
@@ -40,6 +47,7 @@ usersRouter.post(
         targetUser: populatedTargetUser,
       });
     } catch (error) {
+      console.error("Error matching users:", error);
       next(error);
     }
   }
@@ -128,10 +136,10 @@ usersRouter.get(
         res.json({
           message: "You are not friend with this user",
           basicInfo: {
-            username: targetUser.username,
-            name: targetUser.name,
-            email: targetUser.email,
-            image: targetUser.image,
+            username: targetUser.info?.username,
+            name: targetUser.info?.name,
+            email: targetUser.info?.email,
+            image: targetUser.info?.image,
           },
         });
       }
@@ -147,8 +155,7 @@ usersRouter.get(
   "/account",
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      //GET CURRENT USER FROM MIDDLEWARE
-      const user = (req as any).payload.user;
+      const { user } = req.body;
       if (!user) {
         throw new Error("User not found");
       }
@@ -165,17 +172,21 @@ usersRouter.get(
   "/match",
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const actualUser = (req as any).payload.user;
+      const { actualUser } = req.body;
 
       const avoidedUsers = await User.find({
         $or: [
-          { _id: { $in: actualUser.avoidedUsers } },
+          { _id: { $in: actualUser.matches.users.declined } },
           {
             $nor: [
-              { techStack: { $elemMatch: { $in: actualUser.techStack } } },
+              {
+                techStack: {
+                  $elemMatch: { $in: actualUser.skills.codingLanguages },
+                },
+              },
               {
                 languagesSpoken: {
-                  $elemMatch: { $in: actualUser.languagesSpoken },
+                  $elemMatch: { $in: actualUser.skills.languagesSpoken },
                 },
               },
             ],
@@ -193,14 +204,17 @@ usersRouter.get(
           $addFields: {
             techStackMatches: {
               $size: {
-                $setIntersection: ["$techStack", actualUser.techStack],
+                $setIntersection: [
+                  "$techStack",
+                  actualUser.skills.codingLanguages,
+                ],
               },
             },
             languagesSpokenMatches: {
               $size: {
                 $setIntersection: [
                   "$languagesSpoken",
-                  actualUser.languagesSpoken,
+                  actualUser.info.languagesSpoken,
                 ],
               },
             },

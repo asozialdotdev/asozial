@@ -367,6 +367,7 @@ const languagesWithColors: {
 
 const contributors = [
   {
+    id: "josé",
     name: "José Copeti",
     email: "jrcopeti@gmail.com",
     github: "https://github.com/jrcopeti",
@@ -374,6 +375,7 @@ const contributors = [
     website: "https://jrcopeti.hashnode.dev/",
   },
   {
+    id: "benjamin",
     name: "Benjamin Elliott",
     email: "hello@benjamin.dev",
     github: "https://github.com/benjamindotdev",
@@ -381,6 +383,7 @@ const contributors = [
     website: "https://benjamin.dev",
   },
   {
+    id: "mirko",
     name: "Mirko Fede",
     email: "mirko@asozial.com",
     github: "https://github.com/mirkoeffe",

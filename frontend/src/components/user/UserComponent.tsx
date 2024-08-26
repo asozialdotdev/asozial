@@ -35,7 +35,7 @@ import {
 import { notFound } from "next/navigation";
 
 function UserComponent({ user }: { user: User }) {
-  //console.log("user on page", user);
+  console.log("user on page", user);
 
   let formattedDate = "Unknown";
   if (user?.github?.createdAt) {
@@ -48,7 +48,7 @@ function UserComponent({ user }: { user: User }) {
   return (
     <section className="flex flex-col gap-8 text-lg font-light">
       <div className="flex items-center justify-evenly gap-4">
-        {user.image ? (
+        {user && user.image && user.image ? (
           <Image
             className="rounded-full border-4 border-dark p-1 dark:border-light"
             src={user.image}

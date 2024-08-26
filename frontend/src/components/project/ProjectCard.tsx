@@ -9,7 +9,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import Link from "next/link";
-import UserAvatar from "../common/ui/UserAvatar";
+import UserAvatar from "../common/ui/image/UserAvatar";
 import { setStatusIcon, techStackClass } from "@/utils";
 
 type ProjectCardProps = {

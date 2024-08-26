@@ -3,7 +3,7 @@ import Image from "next/image";
 
 //Components
 import PageTitle from "../common/ui/PageTitle";
-import UserAvatar from "../common/ui/UserAvatar";
+import UserAvatar from "../common/ui/image/UserAvatar";
 
 //UI
 import github from "/public/socials/github.png";
@@ -20,7 +20,7 @@ import { socialsData } from "@/constants";
 import { checkIsMember } from "@/actions";
 import ProjectPitch from "./ProjectPitch";
 import ProjectMainLanguage from "./ProjectMainLanguage";
-import ButtonBack from "../common/ui/ButtonBack";
+import ButtonBack from "../common/ui/buttons/ButtonBack";
 import ProjectDescription from "./ProjectDescription";
 
 const membersJoined = ["Benjamin", "Mirko", "John", "Jane", "José"];

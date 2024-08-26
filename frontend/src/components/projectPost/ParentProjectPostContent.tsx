@@ -11,13 +11,13 @@ import { useState } from "react";
 import { deleteProjectPost } from "@/actions";
 
 //Components
-import UserAvatar from "../common/ui/UserAvatar";
+import UserAvatar from "../common/ui/image/UserAvatar";
 import PostLikeButtons from "./PostLikeButtons";
 import ProjectPostContent from "./ProjectPostContent";
 import ReplyCount from "./ReplyCount";
-import EditIcon from "../common/ui/EditIcon";
-import DeleteIcon from "../common/ui/DeleteIcon";
-import CancelIcon from "../common/ui/CancelIcon";
+import EditIcon from "../common/ui/icons/EditIcon";
+import DeleteIcon from "../common/ui/icons/DeleteIcon";
+import CancelIcon from "../common/ui/icons/CancelIcon";
 import CustomDialog from "../common/ui/CustomDialog";
 import { ImageT } from "../common/ui/ImageUploader";
 import ButtonForward from "../common/ui/ButtonForward";
