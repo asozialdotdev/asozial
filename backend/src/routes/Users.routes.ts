@@ -2,6 +2,7 @@ import express, { Request, Response, NextFunction } from "express";
 import User from "../models/User.models";
 import Friendship from "../models/Friendship.models";
 import Project from "../models/Project.models";
+import { Types } from "mongoose";
 
 const usersRouter = express.Router();
 
@@ -255,5 +256,7 @@ usersRouter.put("/update", async (req: Request, res: Response) => {
     console.log("Error updating user", error.message);
   }
 });
+
+
 
 export default usersRouter;

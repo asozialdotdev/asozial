@@ -18,13 +18,17 @@ import type { UserId } from "@/types/User";
 
 type UserAvatarProps = {
   src: string;
-  username: string;
+  username: string 
   userId: UserId;
   className?: string;
 };
 
-function UserAvatar({ src, username, userId, className }: UserAvatarProps) {
-  console.log("SRC", src);
+function UserAvatar({
+  src,
+  username = "",
+  userId,
+  className,
+}: UserAvatarProps) {
   return (
     <TooltipProvider key={username}>
       <Tooltip>
@@ -33,7 +37,7 @@ function UserAvatar({ src, username, userId, className }: UserAvatarProps) {
             <Avatar className={cn("flex-shrink-0", className)}>
               <AvatarImage src={src} alt={username} />
               <AvatarFallback>
-                {username.charAt(0).toUpperCase()}
+                {username?.charAt(0).toUpperCase()}
               </AvatarFallback>
             </Avatar>
           </Link>

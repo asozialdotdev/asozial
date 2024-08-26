@@ -6,6 +6,7 @@ import ProjectPost from "../models/ProjectPost.models";
 import ProjectPostReply from "../models/ProjectPostReply.models";
 import User from "../models/User.models";
 import { generateSlug } from "../utils";
+import { Types } from "mongoose";
 
 const projectsRouter = express.Router();
 
@@ -241,6 +242,36 @@ projectsRouter.post(
     }
   }
 );
+// GET all members who have applied to a user's projects
+projectsRouter.get(
+  "/applied-members",
+  async (req: Request, res: Response, next: NextFunction) => {
+    console.log("Applied members is called");
+    const { userId } = req.query;
+
+    if (!userId) {
+      return res
+        .status(400)
+        .json({ error: "userId query parameter is required" });
+    }
+
+    try {
+      // Find all projects owned by the user where there are members in the `membersApplied` array
+      const projects = await Project.find({
+        owner: userId,
+        membersApplied: { $exists: true, $ne: [] }, // Only get projects with members applied
+      })
+        .select("_id slug title membersApplied")
+        .populate("membersApplied", "username name image")
+        .exec();
+
+      res.json(projects);
+    } catch (error) {
+      console.log("Error fetching applied members:", error);
+      next(error);
+    }
+  }
+);
 
 // GET project by ID (detailed information)
 projectsRouter.get(
@@ -323,24 +354,28 @@ projectsRouter.post(
   "/:projectId/join",
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const { userId } = req.body;
-      const project = await Project.findById(req.params.projectId);
+      const { projectId, memberId } = req.body;
+      const project = await Project.findById(projectId)
+        .populate("owner", "username")
+        .exec();
+
       if (!project) {
         return res.status(404).json({ error: "Project not found" });
       }
 
-      if (project.membersApplied.includes(userId)) {
-        return res
-          .status(400)
-          .json({ error: "User already applied to be a memeber" });
-      }
-      if (project.membersJoined.includes(userId)) {
+      if (project.membersJoined.includes(memberId)) {
         return res
           .status(400)
           .json({ error: "User is already a member of this project" });
       }
 
-      project.membersJoined.push(userId);
+      await Project.updateOne(
+        { _id: project._id },
+        {
+          $push: { membersJoined: memberId },
+          $pull: { membersApplied: memberId },
+        }
+      );
       await project.save();
 
       res.json(project);

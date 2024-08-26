@@ -14,4 +14,7 @@ export { searchForProjects } from "./searchForProjects.server";
 export { checkProjectTitle } from "./checkProjectTitle.server";
 export { searchForProjectsThatUserIsMember } from "./searchForProjectsThatUserIsMember.server";
 export { applyForProject } from "./applyForProject.server";
-export {patchDescription} from "./patchDescription.server"
+export { patchDescription } from "./patchDescription.server";
+export { checkMembersApplied } from "./checkMembersApplied.server";
+export { acceptMember } from "./acceptMember.server";
+export {declineMember} from "./declineMember.ts.server"
