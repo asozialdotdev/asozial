@@ -36,7 +36,6 @@ const userSchema = new Schema(
     },
     projects: {
       projectsJoined: [{ type: Schema.Types.ObjectId, ref: "Project" }],
-      projectsSuggested: [{ type: Schema.Types.ObjectId, ref: "Project" }],
       projectsApplied: [{ type: Schema.Types.ObjectId, ref: "Project" }],
       projectsAvoided: [{ type: Schema.Types.ObjectId, ref: "Project" }],
       dashboardPosts: [{ type: Schema.Types.ObjectId, ref: "Post" }],
