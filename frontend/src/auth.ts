@@ -5,8 +5,6 @@ import client from "./lib/db";
 import authConfig from "../auth.config";
 import { baseUrl } from "@/constants";
 import axios from "axios";
-import { ObjectId } from "mongodb";
-import type { User } from "@/types/User";
 import {
   getUserGithubFollowers,
   getUserGithubFollowing,
@@ -16,10 +14,6 @@ import {
   getUserGithubRepos,
   getUserGithubRepoLanguages,
 } from "@/actions/users.server";
-import { GithubUser } from "./types/Github";
-import github from "next-auth/providers/github";
-import { access } from "fs";
-import { CodeSquare } from "lucide-react";
 
 const GITHUB_CLIENT_ID = process.env.GITHUB_CLIENT_ID;
 const GITHUB_CLIENT_SECRET = process.env.GITHUB_CLIENT_SECRET;
@@ -83,16 +77,20 @@ export const {
             account?.access_token as string,
           );
           const newUser = {
-            username: profile?.login,
-            name: user?.name,
-            email: user?.email,
-            notificationEmail: profile?.notification_email,
-            image: profile?.avatar_url,
-            company: profile?.company,
-            website: profile?.blog,
-            location: profile?.location,
-            hireable: profile?.hireable,
-            codingLanguages: githubRepoLanguages,
+            info: {
+              username: profile?.login,
+              name: user?.name,
+              email: user?.email,
+              notificationEmail: profile?.notification_email,
+              image: profile?.avatar_url,
+              company: profile?.company,
+              website: profile?.blog,
+              location: profile?.location,
+              hireable: profile?.hireable,
+            },
+            skills: {
+              codingLanguages: githubRepoLanguages,
+            },
             socials: [
               profile?.twitter_username && {
                 platform: "twitter",
@@ -183,7 +181,9 @@ export const {
 
         const updatedUser = {
           _id: existingUser._id,
-          codingLanguages: githubRepoLanguages,
+          skills: {
+            codingLanguages: githubRepoLanguages,
+          },
           github: {
             followers: githubFollowers,
             following: githubFollowing,
