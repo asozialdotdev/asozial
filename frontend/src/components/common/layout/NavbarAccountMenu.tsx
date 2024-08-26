@@ -12,7 +12,6 @@ import UserAvatar from "../ui/image/UserAvatar";
 import { User, Settings, LogOut } from "lucide-react";
 import { signOut } from "@/actions";
 import { Button } from "@/components/ui/button";
-import ToggleTheme from "../ui/buttons/ToggleTheme";
 
 type NavbarAccountMenuProps = {
   userId: string;
