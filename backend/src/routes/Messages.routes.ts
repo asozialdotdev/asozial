@@ -11,15 +11,12 @@ messagesRouter.post(
   "/:friendshipId",
   async (req: Request, res: Response, next: NextFunction) => {
     const { actualUser, targetUser } = req.body;
+    const { friendshipId } = req.params;
+
     const foundTargetUser = User.findById(targetUser);
 
-    // check if the users are already friends
-
-    const friendshipExists = await Friendship.findOne({
-      $or: [
-        { senderId: actualUser, receiverId: targetUser },
-        { senderId: targetUser, receiverId: actualUser },
-      ],
+    const friendshipExists = await User.findOne({
+      "friends.accepted": targetUser,
     });
 
     if (!foundTargetUser) {
@@ -28,8 +25,7 @@ messagesRouter.post(
 
     if (!friendshipExists) {
       return res.status(403).json({
-        message:
-          "You are not friends with this user and you can't send messages.",
+        message: "You can't send messages to this user.",
       });
     }
 

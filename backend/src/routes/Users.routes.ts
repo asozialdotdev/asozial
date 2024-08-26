@@ -235,21 +235,6 @@ usersRouter.get(
   }
 );
 
-// GET all projects that a user is a member of
-
-// usersRouter.get(
-//   "/:userId/projects",
-//   async (req: Request, res: Response, next: NextFunction) => {
-//     try {
-//       const user = (req as any).payload.user;
-//       const projects = await Project.find({ membersJoined: user._id });
-//       res.json(projects);
-//     } catch (error) {
-//       next(error);
-//     }
-//   }
-// );
-
 usersRouter.put("/update", async (req: Request, res: Response) => {
   try {
     const { _id, codingLanguages, github } = req.body;

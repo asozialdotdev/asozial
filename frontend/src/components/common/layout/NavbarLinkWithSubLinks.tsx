@@ -13,8 +13,8 @@ import { Icon } from "@/types/Ui";
 type NavbarLinkItemWithSubLinksProps = {
   name: string;
   href: string;
-  Icon: React.ComponentType;
-  subLinks: { name: string; href: string; Icon: React.ComponentType }[];
+  Icon: Icon;
+  subLinks: { name: string; href: string; Icon: Icon }[];
 };
 
 function NavbarLinkItemWithSubLinks({

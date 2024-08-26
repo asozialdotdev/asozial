@@ -28,10 +28,7 @@ friendshipsRouter.post(
       }
 
       const friendshipExists = await Friendship.findOne({
-        $or: [
-          { senderId, receiverId },
-          { senderId: receiverId, receiverId: senderId },
-        ],
+        $or: [{ friends: receiverId, senderId }],
       });
 
       if (friendshipExists) return;
@@ -42,7 +39,6 @@ friendshipsRouter.post(
         status: "pending",
       });
 
-      //add friendship to sender and receiver
       await User.findByIdAndUpdate(senderId, {
         $push: { "friends.pending": receiverId },
       });
@@ -87,6 +83,10 @@ friendshipsRouter.patch(
         );
         return;
       }
+
+      friendship.friends.push(userId, friendship.senderId);
+
+      await friendship.save();
 
       res.status(200).json(friendship);
     } catch (error) {
