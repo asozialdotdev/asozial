@@ -2,7 +2,7 @@ import FileUploader from "../common/ui/ImageUploader";
 import DashboardProjects from "./DashboardProjects";
 import DashboardPosts from "./DashboardPosts";
 import DashboardHeader from "./DashboardHeader";
-import DashboardFriends from "./DashboardFriends";
+import FriendStatusCard from "./FriendStatusCard";
 import { auth } from "@/auth";
 import { checkMembersApplied } from "@/actions/projects.server";
 import RequestsTable from "./RequestsTable";
@@ -17,7 +17,7 @@ async function DashboardComponent() {
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
         <RequestsTable projects={projects} />
         <DashboardPosts />
-        <DashboardFriends />
+        <FriendStatusCard />
       </div>
       <FileUploader />
     </section>

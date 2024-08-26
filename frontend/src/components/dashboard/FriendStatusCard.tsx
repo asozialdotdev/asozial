@@ -14,7 +14,7 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import DashboardFriendItem from "./DashboardFriendItem";
 
-async function DashboardFriends() {
+async function FriendStatusCard() {
   const userFriendStatuses = await getUserFriendStatuses();
   const friends = userFriendStatuses.friendsAccepted;
   const pending = userFriendStatuses.friendsPending;
@@ -89,4 +89,4 @@ async function DashboardFriends() {
   );
 }
 
-export default DashboardFriends;
+export default FriendStatusCard;
