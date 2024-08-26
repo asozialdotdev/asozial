@@ -18,15 +18,9 @@ type NavbarAccountMenuProps = {
   userId: string;
   username: string;
   src: string;
-  isInNavbar: boolean;
 };
 
-function NavbarAccountMenu({
-  userId,
-  username,
-  src,
-  isInNavbar,
-}: NavbarAccountMenuProps) {
+function NavbarAccountMenu({ userId, username, src }: NavbarAccountMenuProps) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger className="text-2xl">
