@@ -14,13 +14,8 @@ import { Button } from "@/components/ui/button";
 function NavbarAsozialMenu() {
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger className="text-2xl">
-        <Button
-          variant="ghost"
-          className="flex flex-row flex-nowrap items-center gap-2 text-xl"
-        >
-          asozial
-        </Button>
+      <DropdownMenuTrigger className="text-2xl hover:scale-110">
+        asozial
       </DropdownMenuTrigger>
       <DropdownMenuContent>
         <DropdownMenuLabel className="flex flex-row items-center gap-2 text-xs italic">
