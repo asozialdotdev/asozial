@@ -8,13 +8,13 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
-import { Icon } from "@/types/Ui";
+import React from "react";
 
 type NavbarLinkItemWithSubLinksProps = {
   name: string;
   href: string;
-  Icon: Icon;
-  subLinks: { name: string; href: string; Icon: Icon }[];
+  Icon: React.ComponentType;
+  subLinks: { name: string; href: string; Icon: React.ComponentType }[];
 };
 
 function NavbarLinkItemWithSubLinks({

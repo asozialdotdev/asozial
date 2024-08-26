@@ -9,7 +9,6 @@ import {
 import Link from "next/link";
 import AsozialLogo from "../ui/image/AsozialLogo";
 import ContributorsImages from "./ContributorsImages";
-import { Button } from "@/components/ui/button";
 
 function NavbarAsozialMenu() {
   return (
