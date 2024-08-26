@@ -4,11 +4,10 @@ import { fetchPostByIdAndReplies } from "@/actions";
 //Components
 
 import ProjectPostContainer from "./ProjectPostContainer";
+import ParentProjectPostContent from "./ParentProjectPostContent";
 
 //Types
 import type { ProjectPostId } from "@/types/ProjectPost";
-import ParentProjectPostContent from "./ParentProjectPostContent";
-import ProjectPost from "./ProjectPost";
 
 async function ParentPost({ projectPostId }: { projectPostId: ProjectPostId }) {
   const { post, replies } = await fetchPostByIdAndReplies(projectPostId);

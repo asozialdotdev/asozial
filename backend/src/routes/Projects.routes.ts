@@ -6,6 +6,7 @@ import ProjectPost from "../models/ProjectPost.models";
 import ProjectPostReply from "../models/ProjectPostReply.models";
 import User from "../models/User.models";
 import { generateSlug } from "../utils";
+import { Types } from "mongoose";
 
 const projectsRouter = express.Router();
 
@@ -246,11 +247,15 @@ projectsRouter.post(
       const { name, description, html_url, language } = repoInfo.data;
       const slug = generateSlug(name);
 
+      const sanitizedDescription = description === null ? "" : language;
+      const sanitizedLanguage = language === null ? "Other" : language;
+
       const createProject = await Project.create({
         title: name,
-        description: description,
-        githubRepo: normalizedRepoUrl,
-        techStack: [language],
+        description: sanitizedDescription,
+        githubRepo: html_url,
+        pitch: "",
+        techStack: [sanitizedLanguage],
         owner: userId,
         status: "active",
         slug,
@@ -262,9 +267,38 @@ projectsRouter.post(
     }
   }
 );
+// GET all members who have applied to a user's projects
+projectsRouter.get(
+  "/applied-members",
+  async (req: Request, res: Response, next: NextFunction) => {
+    console.log("Applied members is called");
+    const { userId } = req.query;
+
+    if (!userId) {
+      return res
+        .status(400)
+        .json({ error: "userId query parameter is required" });
+    }
+
+    try {
+      // Find all projects owned by the user where there are members in the `membersApplied` array
+      const projects = await Project.find({
+        owner: userId,
+        membersApplied: { $exists: true, $ne: [] }, // Only get projects with members applied
+      })
+        .select("_id slug title membersApplied")
+        .populate("membersApplied", "username name image")
+        .exec();
+
+      res.json(projects);
+    } catch (error) {
+      console.log("Error fetching applied members:", error);
+      next(error);
+    }
+  }
+);
 
 // GET project by ID (detailed information)
-
 projectsRouter.get(
   "/:projectId",
   async (req: Request, res: Response, next: NextFunction) => {
@@ -282,6 +316,8 @@ projectsRouter.get(
     }
   }
 );
+
+// GET project by slug (not working)
 
 projectsRouter.get(
   "/:slug",
@@ -302,30 +338,181 @@ projectsRouter.get(
   }
 );
 
-// POST request to join a project
-// Change from from users to join to test
+//APPLY, JOIN, DECLINE AND LEAVE PROJECTS
+
+// POST request to apply to a project (APPLY)
 projectsRouter.post(
-  ///:projectId/users,
-  "/:projectId/join",
+  "/:projectId/apply",
   async (req: Request, res: Response, next: NextFunction) => {
+    console.log("Apply is called");
     try {
       const { userId } = req.body;
-      const project = await Project.findById(req.params.projectId);
+      const project = await Project.findById(req.params.projectId)
+        .populate("owner", "username")
+        .exec();
       if (!project) {
         return res.status(404).json({ error: "Project not found" });
       }
 
-      if (
-        project.membersJoined.includes(userId) ||
-        project.membersApplied.includes(userId)
-      ) {
+      if (project.membersApplied.includes(userId)) {
+        return res
+          .status(400)
+          .json({ error: "User already applied to be a memeber" });
+      }
+
+      if (project.membersJoined.includes(userId)) {
         return res
           .status(400)
           .json({ error: "User is already a member of this project" });
       }
 
-      // project.membersApplied.push(userId);
-      project.membersJoined.push(userId); // Change from membersApplied to membersJoined to test
+      await Project.updateOne(
+        { _id: project._id },
+        {
+          $pull: { membersApplied: userId },
+        }
+      );
+      await project.save();
+      console.log("Project applied>>>>>>>>>>", project);
+      res.json(project);
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
+// POST request to accept a user to a project (JOIN)
+projectsRouter.post(
+  "/:projectId/join",
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const { projectId, memberId } = req.body;
+      const project = await Project.findById(projectId)
+        .populate("owner", "username")
+        .exec();
+
+      if (!project) {
+        return res.status(404).json({ error: "Project not found" });
+      }
+
+      if (project.membersJoined.includes(memberId)) {
+        return res
+          .status(400)
+          .json({ error: "User is already a member of this project" });
+      }
+
+      await Project.updateOne(
+        { _id: project._id },
+        {
+          $push: { membersJoined: memberId },
+          $pull: { membersApplied: memberId },
+        }
+      );
+      await project.save();
+
+      res.json(project);
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
+// POST request to DECLINE a user from a project (DECLINE)
+projectsRouter.post(
+  "/:projectId/decline",
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const { projectId, memberId } = req.body;
+      const project = await Project.findById(projectId)
+        .populate("owner", "username")
+        .exec();
+
+      if (!project) {
+        return res.status(404).json({ error: "Project not found" });
+      }
+
+      await Project.updateOne(
+        { _id: project._id },
+        {
+          $pull: { membersApplied: memberId },
+        }
+      );
+      await project.save();
+
+      res.json(project);
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
+// POST request to LEAVE a project (LEAVE)
+projectsRouter.post(
+  "/:projectId/leave",
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const { projectId, userId } = req.body;
+      const project = await Project.findById(projectId)
+        .populate("owner", "username")
+        .exec();
+
+      if (!project) {
+        return res.status(404).json({ error: "Project not found" });
+      }
+
+      if (project.membersJoined.includes(userId)) {
+        return res
+          .status(400)
+          .json({ error: "User is not a member of this project" });
+      }
+
+      await Project.updateOne(
+        { _id: project._id },
+        {
+          $pull: { membersJoined: userId },
+        }
+      );
+      await project.save();
+
+      res.json(project);
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
+// POST request to REMOVE a user from a project (REMOVE)
+projectsRouter.post(
+  "/:projectId/remove",
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const { projectId, userId, memberId } = req.body;
+      const project = await Project.findById(projectId)
+        .populate("owner", "username")
+        .exec();
+
+      if (!project) {
+        return res.status(404).json({ error: "Project not found" });
+      }
+
+      if (project.membersJoined.includes(memberId)) {
+        return res
+          .status(400)
+          .json({ error: "User is not a member of this project" });
+      }
+
+      if (project.owner._id.toString() !== userId) {
+        return res
+          .status(403)
+          .json({ error: "You are not authorized to remove this user" });
+      }
+
+      await Project.updateOne(
+        { _id: project._id },
+        {
+          $pull: { membersJoined: memberId },
+        }
+      );
       await project.save();
 
       res.json(project);
@@ -336,7 +523,6 @@ projectsRouter.post(
 );
 
 // GET check if user is a member of a project
-
 projectsRouter.get(
   "/:projectId/is-member",
   async (req: Request, res: Response, next: NextFunction) => {
@@ -381,10 +567,6 @@ projectsRouter.put(
         userId,
       } = req.body;
 
-      //if projectId, do api call to github to get repo info from backend
-
-      console.log("githubRepo:::::::::::::", githubRepo);
-
       // Find the project first
       const project = await Project.findById(req.params.projectId);
 
@@ -414,6 +596,38 @@ projectsRouter.put(
           placeholder,
           slug,
         },
+        { new: true, runValidators: true }
+      );
+
+      res.status(200).json(updatedProject);
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
+//PATCH to update pitch
+projectsRouter.patch(
+  "/:projectId/description",
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const { description, userId } = req.body;
+
+      const project = await Project.findById(req.params.projectId);
+
+      if (!project) {
+        return res.status(404).json({ message: "Project not found" });
+      }
+
+      if (project.owner.toString() !== userId) {
+        return res
+          .status(403)
+          .json({ message: "You are not authorized to edit this project" });
+      }
+
+      const updatedProject = await Project.findByIdAndUpdate(
+        req.params.projectId,
+        { description },
         { new: true, runValidators: true }
       );
 

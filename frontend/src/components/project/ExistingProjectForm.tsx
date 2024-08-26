@@ -31,14 +31,20 @@ function ExistingProjectForm() {
   const [errorCreating, setErrorCreating] = useState("");
   const [project, setProject] = useState<Project | null>(null);
 
-  const { githubRepos, isLoadingRepos, errorRepos } = useFetchReposFromGithub();
+  const { githubRepos, isLoadingRepos, errorRepos, setErrorRepos } =
+    useFetchReposFromGithub();
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
   const session = useSession();
   const username = session?.data?.user?.githubUsername;
 
-  useOutsideClick(() => {
-    setFilteredRepos([]);
-  }, dropdownRef);
+  useOutsideClick(
+    () => {
+      setFilteredRepos([]);
+    },
+    dropdownRef,
+    inputRef,
+  );
 
   useEffect(() => {
     if (selectedRepo) {
@@ -78,6 +84,7 @@ function ExistingProjectForm() {
     setFilteredRepos([]);
     setHasSelected(true);
     setErrorCreating("");
+    setErrorRepos("");
     setProject(null);
   };
 
@@ -133,10 +140,11 @@ function ExistingProjectForm() {
         placeholder="Start typing the name of your Github repo"
         value={searchTerm}
         onChange={handleInputChange}
-        className="h-14 w-[75%] border-zinc-300 bg-white hover:bg-zinc-50 focus:bg-zinc-50 dark:border-zinc-700 dark:hover:bg-zinc-800 dark:focus:bg-zinc-800"
+        className="h-14 lg:w-[75%] w-full"
+        ref={inputRef}
       />
 
-      <div ref={dropdownRef} className="relative w-[70%]">
+      <div ref={dropdownRef} className="relative lg:w-[70%] w-[95%]">
         {filteredRepos.length > 0 && (
           <ul className="dark:shadow-netral-700/30 absolute z-10 mt-2 h-auto max-h-60 w-full overflow-y-auto rounded-md border border-dashed border-zinc-300 bg-white p-2 shadow-lg dark:border-zinc-600 dark:bg-zinc-800">
             {filteredRepos.map((repo: GithubRepo) => (
@@ -177,7 +185,7 @@ function ExistingProjectForm() {
 
         {selectedRepo && (
           <div className="flex flex-col items-center gap-8">
-            <PageTitle className="font-semibold">Selected Project</PageTitle>
+            <PageTitle className="font-medium">Selected Project</PageTitle>
             <div className="w-full overflow-y-auto rounded-md border border-dashed border-zinc-300 p-6 dark:border-zinc-600">
               <h3 className="text-lg font-semibold">{selectedRepo?.name}</h3>
               <p className="text-base font-light text-neutral-500 dark:text-neutral-400">
@@ -185,7 +193,7 @@ function ExistingProjectForm() {
               </p>
             </div>
             {!project ? (
-              <div className="flex flex-col items-center gap-2">
+              <div className="flex h-[10rem] flex-col items-center gap-2">
                 {errorCreating && <ErrorMessage>{errorCreating}</ErrorMessage>}
                 <Button onClick={handleCreateProject} className="p-8 text-xl">
                   {isLoadingCreating ? (
@@ -196,7 +204,7 @@ function ExistingProjectForm() {
                 </Button>
               </div>
             ) : (
-              <div className="flex flex-col items-center gap-4">
+              <div className="flex h-[10rem] flex-col items-center gap-4">
                 <SuccessMessage>Project created successfully</SuccessMessage>
                 <Link href={`/${username}/${project?.slug}/${project._id}`}>
                   <Button className="p-8 text-xl">Go to project</Button>

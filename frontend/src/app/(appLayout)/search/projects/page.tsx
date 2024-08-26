@@ -28,7 +28,7 @@ async function ProjectsPage({ searchParams }: ProjectsPageProps) {
   ]);
 
   return (
-    <PageContainer className="gap-10 2xl:max-w-screen-xl">
+    <PageContainer className="gap-10 2xl:max-w-screen-lg">
       <section className="flex w-full flex-col items-center gap-8">
         <PageTitle className="text-3xl">Explore Projects</PageTitle>
         <SearchProjects />
