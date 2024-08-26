@@ -15,6 +15,7 @@ const projectSchema = new Schema(
     membersJoined: [{ type: Schema.Types.ObjectId, ref: "User" }],
     membersApplied: [{ type: Schema.Types.ObjectId, ref: "User" }],
     membersInvited: [{ type: Schema.Types.ObjectId, ref: "User" }],
+    membersDeclined: [{ type: Schema.Types.ObjectId, ref: "User" }],
     socials: {
       slack: { type: String },
       discord: { type: String },

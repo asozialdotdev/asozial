@@ -646,6 +646,51 @@ projectsRouter.put(
   }
 );
 
+// PUT REQUEST TO DECLINE A USER IN A PROJECT
+
+projectsRouter.put(
+  "/:projectId/decline",
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const { projectId } = req.params;
+      const { ownerId, matchedUserId } = req.body;
+
+      const project = await Project.findByIdAndUpdate(
+        { _id: projectId, owner: ownerId },
+        {
+          $push: { membersDeclined: matchedUserId },
+          $pull: { membersApplied: matchedUserId },
+        },
+        { new: true }
+      );
+
+      if (!project) {
+        return res.status(404).json({ message: "Project not found" });
+      }
+
+      const updateUser = await User.findByIdAndUpdate(
+        { _id: matchedUserId },
+        {
+          $push: { "matches.projects.declined": project._id },
+          $pull: {
+            "matches.projects.pending": project._id,
+            "matches.projects.suggested": project._id,
+          },
+        },
+        { new: true }
+      );
+
+      res.status(200).json({
+        message: "User declined successfully",
+        project: project,
+        user: updateUser,
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
 // DELETE Project
 
 // Delete a project and associated posts and replies
