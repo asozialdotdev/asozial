@@ -10,11 +10,10 @@ import { FaGithub } from "react-icons/fa";
 async function LandingPage() {
   const session = await auth();
   return (
-    <>
+    <div className="flex h-full w-full flex-col justify-between">
       <PageContainer>
         <div className="flex flex-col items-center gap-4">
           <h1 className="text-7xl">asozial</h1>
-
           <Image width={450} height={450} src={bearlogo} alt="bear-logo" />
           <form action={signIn}>
             <Button className="flex gap-3 px-8" type="submit">
@@ -22,7 +21,6 @@ async function LandingPage() {
               <FaGithub size={24} />
             </Button>
           </form>
-
           <div>
             {session?.user ? (
               <div>You are logged in</div>
@@ -33,7 +31,7 @@ async function LandingPage() {
         </div>
       </PageContainer>
       <Footer />
-    </>
+    </div>
   );
 }
 
