@@ -36,19 +36,19 @@ function NavbarAccountMenu({ userId, username, src }: NavbarAccountMenuProps) {
           {username}
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
-        <DropdownMenuItem className="text-lg">
+        <DropdownMenuItem asChild className="text-lg">
           <Link href="/profile" className="flex flex-row items-center gap-2">
             <User /> profile
           </Link>
         </DropdownMenuItem>
-        <DropdownMenuItem className="text-lg">
+        <DropdownMenuItem asChild className="text-lg">
           <Link href="/settings" className="flex flex-row items-center gap-2">
             <Settings />
             settings
           </Link>
         </DropdownMenuItem>
         <DropdownMenuSeparator />
-        <DropdownMenuItem className="text-lg">
+        <DropdownMenuItem asChild className="text-lg">
           <form action={signOut}>
             <Button type="submit">
               <LogOut />
