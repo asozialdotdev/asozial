@@ -35,8 +35,8 @@ projectsRouter.get(
       const projects = await Project.find(searchQuery)
         .skip((+page - 1) * +limit)
         .limit(+limit)
-        .populate("membersJoined", "username name image")
-        .populate("owner", "username name image")
+        .populate("membersJoined", "info.username info.name info.image")
+        .populate("owner", "info.username info.name info.image")
         .exec();
       const totalProjects = await Project.countDocuments(searchQuery);
       const totalPages = Math.ceil(totalProjects / +limit);
@@ -72,8 +72,8 @@ projectsRouter.get(
       const projects = await Project.find(searchQuery)
         .skip((+page - 1) * +limit)
         .limit(+limit)
-        .populate("membersJoined", "username name image")
-        .populate("owner", "username name image")
+        .populate("membersJoined", "info.username info.name info.image")
+        .populate("owner", "info.username info.name info.image")
         .exec();
 
       const totalProjects = await Project.countDocuments(searchQuery);
@@ -110,8 +110,8 @@ projectsRouter.get(
       const projects = await Project.find(searchQuery)
         .skip((+page - 1) * +limit)
         .limit(+limit)
-        .populate("membersJoined", "username name image")
-        .populate("owner", "username name image")
+        .populate("membersJoined", "info.username info.name info.image")
+        .populate("owner", "info.username info.name info.image")
         .exec();
 
       console.log("memebers projects>>>>>>>>>>>>>", projects);
@@ -289,7 +289,7 @@ projectsRouter.get(
         membersApplied: { $exists: true, $ne: [] }, // Only get projects with members applied
       })
         .select("_id slug title membersApplied")
-        .populate("membersApplied", "username name image")
+        .populate("membersApplied", "info.username info.name info.image")
         .exec();
 
       res.json(projects);
@@ -306,8 +306,8 @@ projectsRouter.get(
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       const project = await Project.findById(req.params.projectId)
-        .populate("membersJoined", "name username image")
-        .populate("owner", "name username image")
+        .populate("membersJoined", "info.name info.username info.image")
+        .populate("owner", "info.name info.username info.image")
         .exec();
       if (!project) {
         return res.status(404).json({ error: "Project not found" });
@@ -327,8 +327,8 @@ projectsRouter.get(
     console.log("Slug>>>>>>>>>>>>>", req.params.slug);
     try {
       const project = await Project.findOne({ slug: req.params.slug })
-        .populate("membersJoined", "name username image")
-        .populate("owner", "name username image")
+        .populate("membersJoined", "info.name info.username info.image")
+        .populate("owner", "info.name info.username info.image")
         .exec();
       if (!project) {
         return res.status(404).json({ error: "Project not found" });
@@ -350,7 +350,7 @@ projectsRouter.post(
     try {
       const { userId } = req.body;
       const project = await Project.findById(req.params.projectId)
-        .populate("owner", "username")
+        .populate("owner", "info.username")
         .exec();
       if (!project) {
         return res.status(404).json({ error: "Project not found" });
@@ -390,7 +390,7 @@ projectsRouter.post(
     try {
       const { projectId, memberId } = req.body;
       const project = await Project.findById(projectId)
-        .populate("owner", "username")
+        .populate("owner", "info.username")
         .exec();
 
       if (!project) {
@@ -426,7 +426,7 @@ projectsRouter.post(
     try {
       const { projectId, memberId } = req.body;
       const project = await Project.findById(projectId)
-        .populate("owner", "username")
+        .populate("owner", "info.username")
         .exec();
 
       if (!project) {
@@ -455,7 +455,7 @@ projectsRouter.post(
     try {
       const { projectId, userId } = req.body;
       const project = await Project.findById(projectId)
-        .populate("owner", "username")
+        .populate("owner", "info.username")
         .exec();
 
       if (!project) {
@@ -490,7 +490,7 @@ projectsRouter.post(
     try {
       const { projectId, userId, memberId } = req.body;
       const project = await Project.findById(projectId)
-        .populate("owner", "username")
+        .populate("owner", "info.username")
         .exec();
 
       if (!project) {

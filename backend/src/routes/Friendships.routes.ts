@@ -228,7 +228,9 @@ friendshipsRouter.get(
       const friendsAcceptedDetails = user.friends?.accepted
         ? await Promise.all(
             user.friends?.accepted.map(async (friend) => {
-              const friendDetails = await User.findById(friend);
+              const friendDetails = await User.findById(friend).select(
+                "info.username info.image"
+              );
               if (!friendDetails) return null;
               const response = {
                 id: friendDetails._id,
@@ -245,7 +247,9 @@ friendshipsRouter.get(
       const friendsPendingDetails = user.friends?.pending
         ? await Promise.all(
             user.friends?.pending.map(async (friend) => {
-              const friendDetails = await User.findById(friend);
+              const friendDetails = await User.findById(friend).select(
+                "info.username info.image"
+              );
               if (!friendDetails) return null;
               const response = {
                 id: friendDetails._id,
@@ -262,14 +266,16 @@ friendshipsRouter.get(
       const friendsRejectedDetails = user.friends?.declined
         ? await Promise.all(
             user.friends?.declined.map(async (friend) => {
-              const friendDetails = await User.findById(friend);
+              const friendDetails = await User.findById(friend).select(
+                "info.username info.image"
+              );
               console.log("friendDetails", friendDetails);
               if (!friendDetails) return null;
               const response = {
                 id: friendDetails._id,
                 info: {
-                  username: friendDetails.info?.username || "",
-                  image: friendDetails.info?.image || "",
+                  username: friendDetails.info?.username,
+                  image: friendDetails.info?.image,
                 },
               };
               return response;
