@@ -1,41 +1,24 @@
+import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { useState } from "react";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 
-type NavBarLinkItemProps = {
+type NavbarLinkItemProps = {
   name: string;
   href: string;
-  subLinks?: { name: string; href: string }[];
+  Icon: React.ComponentType;
 };
 
-function NavBarLinkItem({ name, href, subLinks }: NavBarLinkItemProps) {
+function NavbarLinkItem({ name, href, Icon }: NavbarLinkItemProps) {
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger>
-        <Link href={href}>{name}</Link>
-      </DropdownMenuTrigger>
-      {subLinks && (
-        <DropdownMenuContent>
-          <DropdownMenuLabel>{name}</DropdownMenuLabel>
-          <DropdownMenuSeparator />
-          {subLinks.map((subLink: { name: string; href: string }) => (
-            <DropdownMenuItem>
-              <Link key={subLink.name} href={subLink.href}>
-                {subLink.name}
-              </Link>
-            </DropdownMenuItem>
-          ))}
-        </DropdownMenuContent>
-      )}
-    </DropdownMenu>
+    <Button variant="ghost">
+      <Link
+        href={href}
+        className="flex flex-row flex-nowrap items-center gap-2"
+      >
+        <Icon />
+        {name}
+      </Link>
+    </Button>
   );
 }
 
-export default NavBarLinkItem;
+export default NavbarLinkItem;

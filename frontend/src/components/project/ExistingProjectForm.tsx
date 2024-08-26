@@ -3,13 +3,13 @@ import useFetchReposFromGithub from "@/hooks/projects/useFetchReposFromGithub";
 import PageTitle from "../common/ui/PageTitle";
 import { Input } from "../ui/input";
 import { useEffect, useRef, useState } from "react";
-import LoadingSpinner from "../common/ui/LoadingSpinner";
+import LoadingSpinner from "../common/ui/loading/LoadingSpinner";
 import { Button } from "../ui/button";
 import { useOutsideClick } from "@/hooks/useOutsideClick";
 import { checkProjectTitle, createProjectFromGithub } from "@/actions";
 import Link from "next/link";
 import { Project } from "@/types/Project";
-import LoadingTextButton from "../common/ui/LoadingTextButton";
+import LoadingTextButton from "../common/ui/loading/LoadingTextButton";
 import ErrorMessage from "../common/ui/ErrorMessage";
 import SuccessMessage from "../common/ui/SuccessMessage";
 import { useSession } from "next-auth/react";
@@ -157,7 +157,7 @@ function ExistingProjectForm() {
           searchTerm.length > 0 &&
           !hasSelected &&
           !isLoadingSearch && (
-            <div className="absolute text-center z-10 mt-2 h-auto max-h-80 w-full overflow-y-auto rounded-md border border-dashed border-zinc-300 bg-white p-4 shadow-lg dark:border-zinc-600 dark:bg-zinc-800 dark:shadow-neutral-700/30">
+            <div className="absolute z-10 mt-2 h-auto max-h-80 w-full overflow-y-auto rounded-md border border-dashed border-zinc-300 bg-white p-4 text-center shadow-lg dark:border-zinc-600 dark:bg-zinc-800 dark:shadow-neutral-700/30">
               No Github repos match your search
             </div>
           )}

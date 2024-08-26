@@ -5,8 +5,8 @@ import { createDislikeReply, createLikeReply } from "@/actions";
 import { useEffect, useMemo, useState } from "react";
 
 //Components
-import ThumbsUpIcon from "../common/ui/ThumbsUpIcon";
-import ThumbsDownIcon from "../common/ui/ThumbsDownIcon";
+import ThumbsUpIcon from "../common/ui/icons/ThumbsUpIcon";
+import ThumbsDownIcon from "../common/ui/icons/ThumbsDownIcon";
 
 //Lib
 import FlipNumbers from "react-flip-numbers";

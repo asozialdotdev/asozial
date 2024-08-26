@@ -3,7 +3,7 @@ import Image from "next/image";
 
 //Components
 import PageTitle from "../common/ui/PageTitle";
-import UserAvatar from "../common/ui/UserAvatar";
+import UserAvatar from "../common/ui/image/UserAvatar";
 
 //UI
 import github from "/public/socials/github.png";
@@ -20,7 +20,7 @@ import { socialsData } from "@/constants";
 import { checkIsMember } from "@/actions";
 import ProjectPitch from "./ProjectPitch";
 import ProjectMainLanguage from "./ProjectMainLanguage";
-import ButtonBack from "../common/ui/ButtonBack";
+import ButtonBack from "../common/ui/buttons/ButtonBack";
 
 const membersJoined = ["Benjamin", "Mirko", "John", "Jane", "José"];
 const membersApplied = ["Alice", "Bob", "Charlie"];
@@ -55,7 +55,7 @@ async function ProjectComponent({ project }: { project: Project }) {
         )}
         {/* Title*/}
         <div className="absolute bottom-0 left-0 right-0 flex items-center justify-center bg-gradient-to-t from-black/80 to-transparent px-8 py-6 tracking-wide">
-          <PageTitle className="text-2xl font-bold text-white xs:text-3xl sm:text-4xl md:text-5xl 2xl:text-6xl">
+          <PageTitle className="xs:text-3xl text-2xl font-bold text-white sm:text-4xl md:text-5xl 2xl:text-6xl">
             {project.title}
           </PageTitle>
         </div>
