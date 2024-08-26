@@ -11,7 +11,7 @@ async function RequestsTable({ projects }: RequestsTableProps) {
       <h2 className="text-xl">Members Requests</h2>
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
         {projects.map((project) =>
-          project.membersApplied.map((member) => (
+          project.members?.membersApplied.map((member) => (
             <RequestCard
               key={member._id.toString()}
               member={member}

@@ -35,7 +35,7 @@ projectsRouter.get(
       const projects = await Project.find(searchQuery)
         .skip((+page - 1) * +limit)
         .limit(+limit)
-        .populate("membersJoined", "info.username info.name info.image")
+        .populate("members.membersJoined", "info.username info.name info.image")
         .populate("owner", "info.username info.name info.image")
         .exec();
       const totalProjects = await Project.countDocuments(searchQuery);
@@ -72,7 +72,7 @@ projectsRouter.get(
       const projects = await Project.find(searchQuery)
         .skip((+page - 1) * +limit)
         .limit(+limit)
-        .populate("membersJoined", "info.username info.name info.image")
+        .populate("members.membersJoined", "info.username info.name info.image")
         .populate("owner", "info.username info.name info.image")
         .exec();
 
@@ -98,7 +98,7 @@ projectsRouter.get(
 
     try {
       const searchQuery = {
-        membersJoined: { $in: [userId] },
+        "members.membersJoined": { $in: [userId] },
         ...(query && {
           $or: [
             { title: { $regex: query, $options: "i" } },
@@ -110,7 +110,7 @@ projectsRouter.get(
       const projects = await Project.find(searchQuery)
         .skip((+page - 1) * +limit)
         .limit(+limit)
-        .populate("membersJoined", "info.username info.name info.image")
+        .populate("members.membersJoined", "info.username info.name info.image")
         .populate("owner", "info.username info.name info.image")
         .exec();
 
@@ -286,10 +286,13 @@ projectsRouter.get(
       // Find all projects owned by the user where there are members in the `membersApplied` array
       const projects = await Project.find({
         owner: userId,
-        membersApplied: { $exists: true, $ne: [] }, // Only get projects with members applied
+        "members.membersApplied": { $exists: true, $ne: [] }, // Only get projects with members applied
       })
-        .select("_id slug title membersApplied")
-        .populate("membersApplied", "info.username info.name info.image")
+        .select("_id slug title members.membersApplied")
+        .populate(
+          "members.membersApplied",
+          "info.username info.name info.image"
+        )
         .exec();
 
       res.json(projects);
@@ -306,7 +309,7 @@ projectsRouter.get(
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       const project = await Project.findById(req.params.projectId)
-        .populate("membersJoined", "info.name info.username info.image")
+        .populate("members.membersJoined", "info.name info.username info.image")
         .populate("owner", "info.name info.username info.image")
         .exec();
       if (!project) {
@@ -327,7 +330,7 @@ projectsRouter.get(
     console.log("Slug>>>>>>>>>>>>>", req.params.slug);
     try {
       const project = await Project.findOne({ slug: req.params.slug })
-        .populate("membersJoined", "info.name info.username info.image")
+        .populate("members.membersJoined", "info.name info.username info.image")
         .populate("owner", "info.name info.username info.image")
         .exec();
       if (!project) {
@@ -361,7 +364,7 @@ projectsRouter.post(
         return res.status(404).json({ error: "User not found" });
       }
 
-      if (project.membersApplied.includes(userId)) {
+      if (project.members?.membersApplied.includes(userId)) {
         return res
           .status(400)
           .json({ error: "User already applied to be a memeber" });
@@ -373,7 +376,7 @@ projectsRouter.post(
           .json({ error: "User already applied to this project" });
       }
 
-      if (project.membersJoined.includes(userId)) {
+      if (project.members?.membersJoined.includes(userId)) {
         return res
           .status(400)
           .json({ error: "User is already a member of this project" });
@@ -382,7 +385,7 @@ projectsRouter.post(
       await Project.updateOne(
         { _id: project._id },
         {
-          $push: { membersApplied: userId },
+          $push: { "members.membersApplied": userId },
         }
       );
 
@@ -392,7 +395,7 @@ projectsRouter.post(
           $push: { projectsApplied: project._id },
         }
       );
-    
+
       console.log("Project applied>>>>>>>>>>", project);
       console.log("User applied>>>>>>>>>>", user);
       res.status(200).json({ project, user });
@@ -422,7 +425,7 @@ projectsRouter.post(
           .json({ error: "You are not authorized to accept this user" });
       }
 
-      if (project.membersJoined.includes(memberId)) {
+      if (project.members?.membersJoined.includes(memberId)) {
         return res
           .status(400)
           .json({ error: "User is already a member of this project" });
@@ -437,8 +440,8 @@ projectsRouter.post(
       await Project.updateOne(
         { _id: project._id },
         {
-          $push: { membersJoined: memberId },
-          $pull: { membersApplied: memberId },
+          $push: { "members.membersJoined": memberId },
+          $pull: { "members.membersApplied": memberId },
         }
       );
 
@@ -449,8 +452,6 @@ projectsRouter.post(
           $pull: { projectsApplied: project._id },
         }
       );
-
-
 
       res.status(200).json({ project, member });
     } catch (error) {
@@ -483,8 +484,8 @@ projectsRouter.post(
       await Project.updateOne(
         { _id: project._id },
         {
-          $pull: { membersApplied: memberId },
-          $push: { membersDeclined: memberId },
+          $pull: { "members.membersApplied": memberId },
+          $push: { "members.membersDeclined": memberId },
         }
       );
 
@@ -527,7 +528,7 @@ projectsRouter.post(
         return res.status(404).json({ error: "Project not found" });
       }
 
-      if (project.membersJoined.includes(userId)) {
+      if (project.members?.membersJoined.includes(userId)) {
         return res
           .status(400)
           .json({ error: "User is not a member of this project" });
@@ -542,7 +543,7 @@ projectsRouter.post(
       await Project.updateOne(
         { _id: project._id },
         {
-          $pull: { membersJoined: userId },
+          $pull: { "members.membersJoined": userId },
         }
       );
 
@@ -578,7 +579,7 @@ projectsRouter.post(
         return res.status(404).json({ error: "Project not found" });
       }
 
-      if (project.membersJoined.includes(memberId)) {
+      if (project.members?.membersJoined.includes(memberId)) {
         return res
           .status(400)
           .json({ error: "User is not a member of this project" });
@@ -599,8 +600,8 @@ projectsRouter.post(
       await Project.updateOne(
         { _id: project._id },
         {
-          $pull: { membersJoined: memberId },
-          $push: { membersAvoided: memberId },
+          $pull: { "members.membersJoined": memberId },
+          $push: { "members.membersDeclined": memberId },
         }
       );
 
@@ -637,7 +638,7 @@ projectsRouter.get(
       }
 
       res.json({
-        isMember: project.membersJoined.includes(user?._id!),
+        isMember: project.members?.membersJoined.includes(user?._id!),
       });
     } catch (error) {
       next(error);
@@ -890,7 +891,7 @@ projectsRouter.post(
       actualUser.matches.projects.pending.push(foundProject);
       await actualUser.save();
 
-      foundProject.membersApplied.push(actualUser._id);
+      foundProject.members?.membersApplied.push(actualUser._id);
       await foundProject.save();
 
       const populatedActualUser = await User.findById(actualUser._id).populate(
@@ -899,7 +900,7 @@ projectsRouter.post(
 
       const populatedFoundProject = await Project.findById(
         foundProject._id
-      ).populate("membersApplied");
+      ).populate("members.membersApplied");
 
       res.status(200).json({
         message: "User have matched with a Project",
@@ -924,8 +925,8 @@ projectsRouter.put(
       const project = await Project.findByIdAndUpdate(
         { _id: projectId, owner: ownerId },
         {
-          $push: { membersJoined: matchedUserId },
-          $pull: { membersApplied: matchedUserId },
+          $push: { "members.membersJoined": matchedUserId },
+          $pull: { "members.membersApplied": matchedUserId },
         },
         { new: true }
       );
@@ -969,8 +970,8 @@ projectsRouter.put(
       const project = await Project.findByIdAndUpdate(
         { _id: projectId, owner: ownerId },
         {
-          $push: { membersDeclined: matchedUserId },
-          $pull: { membersApplied: matchedUserId },
+          $push: { "members.membersDeclined": matchedUserId },
+          $pull: { "members.membersApplied": matchedUserId },
         },
         { new: true }
       );

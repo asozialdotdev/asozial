@@ -40,9 +40,12 @@ type Project = {
   placeholder?: string;
   slug: string;
   mainLanguage: string;
-  membersJoined: Member[];
-  membersApplied: Member[];
-  membersInvited: Member[];
+  members?: {
+    membersDeclined: Member[];
+    membersJoined: Member[];
+    membersApplied: Member[];
+    membersInvited: Member[];
+  };
   status: "active" | "inactive" | "completed";
   socials?: Socials;
   createdAt?: Date;
