@@ -15,6 +15,7 @@ import userPostsRouter from "./routes/UserPosts.routes";
 import messagesRouter from "./routes/Messages.routes";
 import fileRouter from "./routes/FileUploader.routes";
 import searchRouter from "./routes/Search.router";
+import matchRouter from "./routes/Match.routes";
 
 const app = express();
 config(app);
@@ -30,6 +31,7 @@ app.use("/api/replies", projectPostReplyRouter);
 app.use("/api/user-posts", userPostsRouter);
 app.use("/api/friends", friendshipsRouter);
 app.use("/api/messages", messagesRouter);
+app.use("/api/match", matchRouter);
 app.use("/api", fileRouter);
 app.use("/search", searchRouter);
 

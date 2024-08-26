@@ -10,7 +10,7 @@ const findMatchingUsers = async (actualUser: {
   console.log("Finding matching users for", actualUser);
 
   try {
-    const res = await axios.get(`${baseUrl}/api/users/match`, {
+    const res = await axios.get(`${baseUrl}/api/match/users`, {
       data: {
         actualUser,
       },

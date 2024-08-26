@@ -6,7 +6,7 @@ const matchUsers = async (actualUserId: string, targetUserId: string) => {
   console.log("Matching users:", actualUserId, "with", targetUserId);
 
   try {
-    const res = await axios.post(`${baseUrl}/api/users/match`, {
+    const res = await axios.post(`${baseUrl}/api/match/users`, {
       actualUser: actualUserId,
       targetUser: targetUserId,
     });
