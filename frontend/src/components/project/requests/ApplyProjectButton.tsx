@@ -1,7 +1,7 @@
 import { useFormStatus } from "react-dom";
 import { SquareCheck } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import LoadingTextButton from "@/components/common/ui/LoadingTextButton";
+import LoadingTextButton from "@/components/common/ui/loading/LoadingTextButton";
 
 function ApplyProjectButton({ hasApplied }: { hasApplied: boolean }) {
   const { pending } = useFormStatus();

@@ -31,10 +31,9 @@ function NavbarLinks() {
   return (
     <ul className="flex items-center gap-6">
       {navbarLinks.map((link) => (
-        <>
+        <li key={link.name}>
           {link.sublinks ? (
             <NavbarLinkItemWithSubLinks
-              key={link.name}
               name={link.name}
               href={link.href}
               Icon={link.Icon}
@@ -42,13 +41,12 @@ function NavbarLinks() {
             />
           ) : (
             <NavbarLinkItem
-              key={link.name}
               name={link.name}
               href={link.href}
               Icon={link.Icon}
             />
           )}
-        </>
+        </li>
       ))}
     </ul>
   );
