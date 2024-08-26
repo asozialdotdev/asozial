@@ -32,12 +32,12 @@ async function Page() {
                 <div className="flex flex-row items-center gap-4">
                   <UserAvatar
                     src={user.info.image}
-                    username={user.username || user.github.username}
+                    username={user.info.username || user.github.username}
                     userId={user._id}
                   />
-                  <a href={`${baseUrl}/${user.username}`}>
+                  <a href={`${baseUrl}/${user.info.username}`}>
                     <h1 className="text-2xl">
-                      {user.username || user.github.username}
+                      {user.info.username || user.github.username}
                     </h1>
                   </a>
                 </div>
