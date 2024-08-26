@@ -231,15 +231,21 @@ function UserComponent({ user }: { user: User }) {
         <div>
           <p>
             Projects joined:{" "}
-            {user.projectsJoined ? user.projectsJoined.length : 0}
+            {user.projects.projectsJoined
+              ? user.projects.projectsJoined.length
+              : 0}
           </p>
           <p>
             Projects suggested:{" "}
-            {user.projectsSuggested ? user.projectsSuggested.length : 0}
+            {user.projects.projectsSuggested
+              ? user.projects.projectsSuggested.length
+              : 0}
           </p>
           <p>
             Projects applied:{" "}
-            {user.projectsApplied ? user.projectsApplied.length : 0}
+            {user.projects.projectsApplied
+              ? user.projects.projectsApplied.length
+              : 0}
           </p>
         </div>
       </div>

@@ -392,7 +392,7 @@ projectsRouter.post(
       await User.updateOne(
         { _id: userId },
         {
-          $push: { projectsApplied: project._id },
+          $push: { "projects.projectsApplied": project._id },
         }
       );
 
@@ -448,8 +448,8 @@ projectsRouter.post(
       await User.updateOne(
         { _id: memberId },
         {
-          $push: { projectsJoined: project._id },
-          $pull: { projectsApplied: project._id },
+          $push: { "projects.projectsJoined": project._id },
+          $pull: { "projects.projectsApplied": project._id },
         }
       );
 
@@ -498,8 +498,8 @@ projectsRouter.post(
       await User.updateOne(
         { _id: memberId },
         {
-          $pull: { projectsApplied: project._id },
-          $push: { projectsDeclined: project._id },
+          $pull: { "projects.projectsApplied": project._id },
+          $push: { "projects.projectsDeclined": project._id },
         }
       );
 
@@ -550,7 +550,7 @@ projectsRouter.post(
       await User.updateOne(
         { _id: userId },
         {
-          $pull: { projectsJoined: project._id },
+          $pull: { "projects.projectsJoined": project._id },
         }
       );
 
@@ -608,8 +608,8 @@ projectsRouter.post(
       await User.updateOne(
         { _id: memberId },
         {
-          $pull: { projectsJoined: project._id },
-          $push: { projectsAvoided: project._id },
+          $pull: { "projects.projectsJoined": project._id },
+          $push: { "projects.projectDeclined": project._id },
         }
       );
       await project.save();
@@ -895,7 +895,7 @@ projectsRouter.post(
       await foundProject.save();
 
       const populatedActualUser = await User.findById(actualUser._id).populate(
-        "projectsApplied"
+        "projects.projectsApplied"
       );
 
       const populatedFoundProject = await Project.findById(
