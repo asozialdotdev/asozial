@@ -4,7 +4,7 @@ import DashboardIcon from "../ui/icons/DashboardIcon";
 import SearchIcon from "../ui/icons/SearchIcon";
 import MatchIcon from "../ui/icons/MatchIcon";
 import ProjectIcon from "../ui/icons/ProjectIcon";
-import UsersIcon from "../ui/UsersIcon";
+import UsersIcon from "../ui/icons/UsersIcon";
 const navbarLinks = [
   {
     name: "Search",

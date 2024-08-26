@@ -3,7 +3,6 @@ import PageTitle from "../common/ui/PageTitle";
 import { auth } from "@/auth";
 import FileUploader from "../common/ui/ImageUploader";
 import { getUserFriendStatuses } from "@/actions/friendships.server/getUserFriendStatuses";
-import { get } from "http";
 import UserAvatar from "../common/ui/image/UserAvatar";
 import { Button } from "../ui/button";
 import { UserRoundCheck, UserRoundX } from "lucide-react";
