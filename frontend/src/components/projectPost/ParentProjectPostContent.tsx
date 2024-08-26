@@ -20,7 +20,7 @@ import DeleteIcon from "../common/ui/icons/DeleteIcon";
 import CancelIcon from "../common/ui/icons/CancelIcon";
 import CustomDialog from "../common/ui/CustomDialog";
 import { ImageT } from "../common/ui/ImageUploader";
-import ButtonForward from "../common/ui/ButtonForward";
+import ButtonForward from "../common/ui/buttons/ButtonForward";
 
 //lib
 import { useSession } from "next-auth/react";
