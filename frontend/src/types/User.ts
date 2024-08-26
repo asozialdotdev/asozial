@@ -76,6 +76,8 @@ type User = {
   };
   github: {
     id: number;
+    nodeId: string;
+    accessToken: string;
     username: string;
     notificationEmail: string;
     bio: string;

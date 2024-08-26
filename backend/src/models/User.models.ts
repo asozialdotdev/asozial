@@ -1,3 +1,4 @@
+import { access } from "fs";
 import { Schema, model } from "mongoose";
 
 const socialSchema = new Schema({
@@ -64,6 +65,8 @@ const userSchema = new Schema(
     },
     github: {
       id: { type: Number },
+      nodeId: { type: String },
+      accessToken: { type: String },
       username: { type: String },
       notificationEmail: { type: String },
       bio: { type: String },
