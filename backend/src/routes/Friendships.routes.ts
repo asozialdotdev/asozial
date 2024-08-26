@@ -276,33 +276,14 @@ friendshipsRouter.get(
           )
         : [];
 
-      // const friendsRejectedByDetails = user.friendsRejectedBy
-      //   ? await Promise.all(
-      //       user.friendsRejectedBy.map(async (friend) => {
-      //         const friendDetails = await User.findById(friend).populate(
-      //           "username image"
-      //         );
-      //         if (!friendDetails) return null;
-      //         const response = {
-      //           id: friendDetails._id,
-      //           username: friendDetails.info?.username,
-      //           image: friendDetails.info?.image,
-      //         };
-      //         return response;
-      //       })
-      //     )
-      //   : [];
-
       console.log("friendsAcceptedDetails", friendsAcceptedDetails);
       console.log("friendsPendingDetails", friendsPendingDetails);
       console.log("friendsRejectedDetails", friendsRejectedDetails);
-      // console.log("friendsRejectedByDetails", friendsRejectedByDetails);
 
       res.json({
         friendsAccepted: friendsAcceptedDetails,
         friendsPending: friendsPendingDetails,
         friendsRejected: friendsRejectedDetails,
-        //   friendsRejectedBy: friendsRejectedByDetails,
       });
     } catch (error: any) {
       console.error("Error fetching user friendships:", error);
