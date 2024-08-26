@@ -18,7 +18,7 @@ type ProjectCardProps = {
   isExplore?: boolean;
 };
 
-const array = [1, 2, 3, 4, 5 ];
+const array = [1, 2, 3, 4, 5];
 
 function ProjectCard({ project }: ProjectCardProps) {
   const username = project?.owner?.username;
@@ -49,12 +49,12 @@ function ProjectCard({ project }: ProjectCardProps) {
             <h4 className="flex gap-2 text-base font-semibold">
               Members
               <span className="font-normal">
-                {`(${project.membersJoined.length})`}
+                {`(${project.members?.membersJoined.length})`}
               </span>
             </h4>
           </CardContent>
 
-          <CardContent className="flex gap-4 flex-wrap">
+          <CardContent className="flex flex-wrap gap-4">
             {/* {project.membersJoined.map((member) => (
               <UserAvatar
                 key={member._id.toString()}

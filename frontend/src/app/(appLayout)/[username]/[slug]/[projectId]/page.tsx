@@ -40,15 +40,15 @@ async function Page({ params }: { params: Params }) {
     fetchProjectPosts(projectId),
   ]);
 
-  const isMember = project.membersJoined?.some(
+  const isMember = project.members.membersJoined?.some(
     (member: UserId) => member === session?.user?.id.toString(),
   );
   const isOwner = project.owner._id === session?.user?.id;
 
-  const hasApplied = project.membersApplied?.some(
+  const hasApplied = project.members.membersApplied?.some(
     (member: UserId) => member === session?.user?.id.toString(),
   );
-  console.log("membersApplied", project.membersApplied);
+  console.log("membersApplied", project.members.membersApplied);
 
   if (!project) {
     notFound();
