@@ -26,6 +26,7 @@ type CodingLanguage = {
 
 type User = {
   _id: UserId;
+  username: string;
   info: {
     bio: string;
     username: string;
@@ -39,8 +40,8 @@ type User = {
   };
   skills: {
     languagesSpoken: string[];
-    codingLanguages: [string, CodingLanguage][];
-    codingLibraries: [string, CodingLanguage][];
+    codingLanguages: CodingLanguage[];
+    codingLibraries: CodingLanguage[];
   };
   projects: {
     projectsJoined: ProjectId[];
