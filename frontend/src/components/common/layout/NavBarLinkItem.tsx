@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import { Icon } from "@/types/Ui";
 
 type NavbarLinkItemProps = {
   name: string;

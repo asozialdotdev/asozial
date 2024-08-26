@@ -8,6 +8,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
+import { Icon } from "@/types/Ui";
 
 type NavbarLinkItemWithSubLinksProps = {
   name: string;
@@ -29,14 +30,14 @@ function NavbarLinkItemWithSubLinks({
           variant="ghost"
           className="flex flex-row flex-nowrap items-center gap-2"
         >
-          <Icon />
+          {/* <Icon /> */}
           {name}
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent>
         <DropdownMenuLabel>
           <Link href={href} className="flex flex-row items-center gap-2">
-            <Icon />
+            {/* <Icon /> */}
             {name}
           </Link>
         </DropdownMenuLabel>
@@ -47,7 +48,7 @@ function NavbarLinkItemWithSubLinks({
               href={subLink.href}
               className="flex flex-row items-center gap-2"
             >
-              <subLink.Icon />
+              {/* <subLink.Icon /> */}
               {subLink.name}
             </Link>
           </DropdownMenuItem>

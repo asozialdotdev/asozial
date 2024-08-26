@@ -1,7 +1,6 @@
 import express, { Request, Response, NextFunction } from "express";
 import UserPost from "../models/UserPost.models";
 import Friendship from "../models/Friendship.models";
-import { isAuthenticated, verifyJWT } from "../middleware/jwt.middleware";
 
 const usersPostRouter = express.Router();
 
