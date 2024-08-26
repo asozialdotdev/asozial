@@ -11,7 +11,7 @@ const codingLanguageSchema = new Schema({
   projects: { type: Number },
   bgColor: { type: String },
   textColor: { type: String },
-  Icon: { type: Schema.Types.Mixed }, // Assuming Icon is a React component
+  Icon: { type: Schema.Types.Mixed },
 });
 
 const userSchema = new Schema(
