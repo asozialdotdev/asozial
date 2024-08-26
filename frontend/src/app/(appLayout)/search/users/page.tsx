@@ -31,13 +31,13 @@ async function Page() {
               <div className="flex flex-row justify-between">
                 <div className="flex flex-row items-center gap-4">
                   <UserAvatar
-                    src={user.image}
-                    username={user.username || user.github.username}
+                    src={user.info.image}
+                    username={user.info.username || user.github.username}
                     userId={user._id}
                   />
-                  <a href={`${baseUrl}/${user.username}`}>
+                  <a href={`${baseUrl}/${user.info.username}`}>
                     <h1 className="text-2xl">
-                      {user.username || user.github.username}
+                      {user.info.username || user.github.username}
                     </h1>
                   </a>
                 </div>
@@ -58,7 +58,7 @@ async function Page() {
                 </div>
                 <div className="flex flex-row items-center justify-start gap-2">
                   <MapPinHouse size={12} />
-                  <p className="text-sm">{user.location}</p>
+                  <p className="text-sm">{user.info.location}</p>
                 </div>
               </div>
             </li>
