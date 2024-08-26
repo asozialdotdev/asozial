@@ -7,11 +7,11 @@ import { deleteReply } from "@/actions";
 
 //Components
 import ReplyForm from "./ReplyForm";
-import UserAvatar from "../common/ui/UserAvatar";
+import UserAvatar from "../common/ui/image/UserAvatar";
 import EditReplyForm from "./EditReplyForm";
 import CustomDialog from "../common/ui/CustomDialog";
-import DeleteIcon from "../common/ui/DeleteIcon";
-import EditIcon from "../common/ui/EditIcon";
+import DeleteIcon from "../common/ui/icons/DeleteIcon";
+import EditIcon from "../common/ui/icons/EditIcon";
 
 //Ui
 import { MessageSquareOff } from "lucide-react";
@@ -54,7 +54,7 @@ function ReplyShow({ replyId, projectPostId, replies, child }: ReplyShowProps) {
     setError("");
   };
 
-  console.log(isDeleting, "reply is deleting")
+  console.log(isDeleting, "reply is deleting");
 
   const handleDelete = async () => {
     setIsDeleting(true);

@@ -1,6 +1,6 @@
 import { useFormStatus } from "react-dom";
 import { Button } from "../ui/button";
-import LoadingTextButton from "../common/ui/LoadingTextButton";
+import LoadingTextButton from "../common/ui/loading/LoadingTextButton";
 
 function ReplyFormButton({
   toggleOpen,
@@ -21,7 +21,7 @@ function ReplyFormButton({
           disabled={pending}
           className={`${startOpen ? "my-6 w-[150px] px-8 text-lg" : "w-[100px] px-4 text-sm"} bg-dark dark:bg-light hover:dark:bg-zinc-300 dark:focus:bg-zinc-300`}
         >
-          {pending ? <LoadingTextButton  /> : "Comment"}
+          {pending ? <LoadingTextButton /> : "Comment"}
         </Button>
       ) : (
         <Button

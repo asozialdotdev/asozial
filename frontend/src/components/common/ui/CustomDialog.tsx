@@ -8,10 +8,10 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import LoadingTextButton from "./LoadingTextButton";
+import LoadingTextButton from "./loading/LoadingTextButton";
 
 type CustomDialogProps = {
-  isDeleting?: boolean
+  isDeleting?: boolean;
   trigger: React.ReactNode;
   title: string;
   description: string;

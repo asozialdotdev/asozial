@@ -1,7 +1,7 @@
 "use client";
 import { useFormStatus } from "react-dom";
 import { Button } from "../ui/button";
-import LoadingTextButton from "../common/ui/LoadingTextButton";
+import LoadingTextButton from "../common/ui/loading/LoadingTextButton";
 
 function ProjectPostFormButton({ editing }: { editing: boolean }) {
   const { pending } = useFormStatus();
