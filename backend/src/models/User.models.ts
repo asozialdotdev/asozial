@@ -43,7 +43,7 @@ const userSchema = new Schema(
       projectsInvited: [
         { type: Schema.Types.ObjectId, ref: "Project", default: [] },
       ],
-      projectsAvoided: [
+      projectsSuggested: [
         { type: Schema.Types.ObjectId, ref: "Project", default: [] },
       ],
       projectsDeclined: [

@@ -47,7 +47,6 @@ type User = {
     projectsJoined: ProjectId[];
     projectsSuggested: ProjectId[];
     projectsApplied: ProjectId[];
-    projectsAvoided: ProjectId[];
     dashboardPosts: ProjectPostId[];
   };
   socials: {
