@@ -37,7 +37,7 @@ function UserSearchContainer({ allUsers }: { allUsers: User[] }) {
       <ul>
         {filteredUsers.map((user: User) => (
           <li key={user._id.toString()}>
-            <a href={`/users/${user.username}`}>{user.name}</a>
+            <a href={`/users/${user.username}`}>{user.info.name}</a>
           </li>
         ))}
       </ul>

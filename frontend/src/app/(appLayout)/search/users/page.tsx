@@ -31,7 +31,7 @@ async function Page() {
               <div className="flex flex-row justify-between">
                 <div className="flex flex-row items-center gap-4">
                   <UserAvatar
-                    src={user.image}
+                    src={user.info.image}
                     username={user.username || user.github.username}
                     userId={user._id}
                   />
@@ -58,7 +58,7 @@ async function Page() {
                 </div>
                 <div className="flex flex-row items-center justify-start gap-2">
                   <MapPinHouse size={12} />
-                  <p className="text-sm">{user.location}</p>
+                  <p className="text-sm">{user.info.location}</p>
                 </div>
               </div>
             </li>

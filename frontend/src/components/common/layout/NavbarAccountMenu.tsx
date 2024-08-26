@@ -12,21 +12,14 @@ import UserAvatar from "../ui/image/UserAvatar";
 import { User, Settings, LogOut } from "lucide-react";
 import { signOut } from "@/actions";
 import { Button } from "@/components/ui/button";
-import ToggleTheme from "../ui/buttons/ToggleTheme";
 
 type NavbarAccountMenuProps = {
   userId: string;
   username: string;
   src: string;
-  isInNavbar: boolean;
 };
 
-function NavbarAccountMenu({
-  userId,
-  username,
-  src,
-  isInNavbar,
-}: NavbarAccountMenuProps) {
+function NavbarAccountMenu({ userId, username, src }: NavbarAccountMenuProps) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger className="text-2xl">
@@ -43,19 +36,19 @@ function NavbarAccountMenu({
           {username}
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
-        <DropdownMenuItem className="text-lg">
+        <DropdownMenuItem asChild className="text-lg">
           <Link href="/profile" className="flex flex-row items-center gap-2">
             <User /> profile
           </Link>
         </DropdownMenuItem>
-        <DropdownMenuItem className="text-lg">
+        <DropdownMenuItem asChild className="text-lg">
           <Link href="/settings" className="flex flex-row items-center gap-2">
             <Settings />
             settings
           </Link>
         </DropdownMenuItem>
         <DropdownMenuSeparator />
-        <DropdownMenuItem className="text-lg">
+        <DropdownMenuItem asChild className="text-lg">
           <form action={signOut}>
             <Button type="submit">
               <LogOut />
