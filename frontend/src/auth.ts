@@ -130,27 +130,18 @@ export const {
               collaboratorsNumber: profile?.collaborators,
             },
           };
-          console.log("newUser", newUser);
           const response = await axios.post(`${baseUrl}/api/auth`, newUser, {
             headers: {
               "Content-Type": "application/json",
             },
           });
-          console.log("response", response.data);
 
-          //**ONCE ACCESS TOKEN GIVEN BY GITHUB, DO THE API CALLS HERE */
-          //make separate api calls to get user details before creation in db
-          // **TIMING OUT DUE TO TOO MANY API CALLS**
-
-          user.id = response.data._id; // Assign the custom user ID to NextAuth's user object
-          //** ADD THE ACCESS TOKEN TO THE USER  */ */
+          user.id = response.data._id;
         } catch (error: any) {
           console.log("Error creating user in database", error.message);
           return false;
         }
       } else {
-        // update user information if they already exist
-
         const githubFollowers = await getUserGithubFollowers(
           profile?.followers_url as string,
           account?.access_token as string,
