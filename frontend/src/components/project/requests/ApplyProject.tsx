@@ -1,17 +1,17 @@
 "use client";
 //Actions
+import { applyForProject } from "@/actions";
 
 //React
 import { useFormState } from "react-dom";
 
 //Components
-import CustomLabel from "../common/ui/Label";
+import CustomLabel from "@/components/common/ui/Label";
 import ApplyProjectButton from "./ApplyProjectButton";
-import ErrorMessage from "../common/ui/ErrorMessage";
+import ErrorMessage from "@/components/common/ui/ErrorMessage";
 
 //Types
 import { Project } from "@/types/Project";
-import { applyForProject } from "@/actions";
 
 type ApplyProjectProps = {
   project: Project;

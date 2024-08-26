@@ -1,24 +1,24 @@
 import { useFormStatus } from "react-dom";
 import { Button } from "../ui/button";
 import LoadingTextButton from "../common/ui/LoadingTextButton";
-import { SquareX } from "lucide-react";
+import { SquareCheck } from "lucide-react";
 
 type AcceptButtonProps = {
-  error: string[] | undefined;
+  acceptSuccess: boolean | undefined;
 };
-function AcceptButtons({ error }: AcceptButtonProps) {
+function AcceptButtons({ acceptSuccess }: AcceptButtonProps) {
   const { pending } = useFormStatus();
   return (
-    <Button size="sm" className=''>
-      {" "}
+    <Button disabled={pending || acceptSuccess} size="sm">
       {pending ? (
         <LoadingTextButton />
-      ) : error ? (
-        <span className="flex items-center text-red-300 dark:text-red-300 gap-1">
-          <SquareX size={15} /> Error
+      ) : acceptSuccess ? (
+        <span className="flex items-center gap-1">
+          <SquareCheck size={18} />
+          <p>Accepted</p>
         </span>
       ) : (
-        "Accept "
+        "Accept"
       )}
     </Button>
   );

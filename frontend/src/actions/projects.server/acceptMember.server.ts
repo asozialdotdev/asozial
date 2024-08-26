@@ -5,9 +5,9 @@ import { baseUrl } from "@/constants";
 import { ProjectId } from "@/types/Project";
 import { revalidatePath } from "next/cache";
 
-type AcceptMemberState = {
+export type AcceptMemberState = {
   errors: {
-    apply?: string[];
+    accept?: string[];
   };
   success?: boolean;
   data?: any;
@@ -36,7 +36,9 @@ const acceptMember = async (
 
     const project = await response.json();
     console.log("project applied:", project);
-    revalidatePath(`/${project.owner.username}/${project.slug}/${projectId}`);
+    // setTimeout(() => {
+    //   revalidatePath(`/${project.owner.username}/${project.slug}/${projectId}`);
+    // }, 5000);
     return {
       errors: {},
       success: true,
@@ -45,7 +47,7 @@ const acceptMember = async (
     console.error("Error accepting a user to a project", error);
     return {
       errors: {
-        apply: ["Error accepting a user to a project. Please try again."],
+        accept: ["Error accepting a user to a project. Please try again."],
       },
     };
   }

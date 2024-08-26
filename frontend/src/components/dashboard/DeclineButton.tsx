@@ -1,20 +1,26 @@
 import { useFormStatus } from "react-dom";
 import { Button } from "../ui/button";
 import LoadingTextButton from "../common/ui/LoadingTextButton";
-import { SquareX } from "lucide-react";
+import { SquareCheck } from "lucide-react";
 type DeclineButtonProps = {
-  error: string[] | undefined;
+  declineSuccess: boolean | undefined;
 };
 
-function DeclineButton({ error }: DeclineButtonProps) {
+function DeclineButton({ declineSuccess }: DeclineButtonProps) {
   const { pending } = useFormStatus();
   return (
-    <Button variant="secondary" size="sm" className="">
+    <Button
+      variant="secondary"
+      disabled={pending || declineSuccess}
+      size="sm"
+      className=""
+    >
       {pending ? (
         <LoadingTextButton />
-      ) : error ? (
-        <span className="flex items-center text-red-700 dark:text-red-700 gap-1">
-          <SquareX size={15} /> Error
+      ) : declineSuccess ? (
+        <span className="flex items-center gap-1">
+          <SquareCheck size={18} />
+          <p>Declined</p>
         </span>
       ) : (
         "Decline"

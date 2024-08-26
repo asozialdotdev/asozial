@@ -22,7 +22,7 @@ const declineMember = async (
   const memberId = formData.get("memberId") as string;
 
   try {
-    const response = await fetch(`${baseUrl}/api/projects/${projectId}/join`, {
+    const response = await fetch(`${baseUrl}/api/projects/${projectId}/decline`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

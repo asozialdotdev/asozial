@@ -1,6 +1,9 @@
 "use server";
 //Next
 import { notFound } from "next/navigation";
+//React
+import { Suspense } from "react";
+
 //Actions
 import { fetchProjectPosts, fetchProjectById } from "@/actions";
 
@@ -8,6 +11,8 @@ import { fetchProjectPosts, fetchProjectById } from "@/actions";
 import PageContainer from "@/components/common/containers/PageContainer";
 import ProjectComponent from "@/components/project/ProjectComponent";
 import ProjectPostsList from "@/components/projectPost/ProjectPostsList";
+import ProjectLoadingSkeleton from "@/components/project/ProjectLoadingSkeleton";
+import ApplyProject from "@/components/project/requests/ApplyProject";
 
 //Ui
 import { Button } from "@/components/ui/button";
@@ -16,10 +21,7 @@ import { Button } from "@/components/ui/button";
 import { auth } from "@/auth";
 
 //Types
-import type { Member, ProjectId } from "@/types/Project";
-import { Suspense } from "react";
-import ProjectLoadingSkeleton from "@/components/project/ProjectLoadingSkeleton";
-import ApplyProject from "@/components/project/ApplyProject";
+import type { ProjectId } from "@/types/Project";
 import { UserId } from "@/types/User";
 
 type Params = {
@@ -31,7 +33,6 @@ type Params = {
 async function Page({ params }: { params: Params }) {
   const session = await auth();
   const paramsObj = params;
-  console.log("paramsOBJ", paramsObj);
   const { projectId } = paramsObj;
 
   const [project, posts] = await Promise.all([

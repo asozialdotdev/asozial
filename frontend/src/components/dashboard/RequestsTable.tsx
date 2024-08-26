@@ -1,13 +1,5 @@
-import { UserId } from "@/types/User";
-import CustomCard from "../common/ui/CustomCard";
 import RequestCard from "./RequestCard";
-import { Member, Project } from "@/types/Project";
-// export type Member = {
-//   _id: UserId;
-//   username: string;
-//   image: string;
-//   name: string;
-// };
+import { Project } from "@/types/Project";
 
 type RequestsTableProps = {
   projects: Project[];

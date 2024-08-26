@@ -1,9 +1,7 @@
 import { useFormStatus } from "react-dom";
-import { Button } from "../ui/button";
-import LoadingTextButton from "../common/ui/LoadingTextButton";
-import SuccessMessage from "../common/ui/SuccessMessage";
-import { useSession } from "next-auth/react";
 import { SquareCheck } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import LoadingTextButton from "@/components/common/ui/LoadingTextButton";
 
 function ApplyProjectButton({ hasApplied }: { hasApplied: boolean }) {
   const { pending } = useFormStatus();
@@ -14,7 +12,7 @@ function ApplyProjectButton({ hasApplied }: { hasApplied: boolean }) {
       ) : !hasApplied ? (
         "Apply to join this project"
       ) : (
-        <span className="items-center flex gap-2">
+        <span className="flex items-center gap-2">
           <SquareCheck />
           <span>You have applied!</span>
         </span>

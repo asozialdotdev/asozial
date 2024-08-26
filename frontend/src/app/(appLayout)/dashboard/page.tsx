@@ -1,5 +1,10 @@
+//Actions
 import { checkMembersApplied } from "@/actions";
+
+//Lib
 import { auth } from "@/auth";
+
+//Components
 import PageContainer from "@/components/common/containers/PageContainer";
 import PageTitle from "@/components/common/ui/PageTitle";
 import RequestsTable from "@/components/dashboard/RequestsTable";
@@ -8,7 +13,6 @@ async function Page() {
   const session = await auth();
   const username = session?.user?.githubUsername;
   const projects = await checkMembersApplied();
-  console.log('Projects>>>>>>>>>>>:', projects, Array.isArray(projects));
   return (
     <PageContainer>
       <section className="flex w-full flex-col gap-4">

@@ -10,7 +10,7 @@ const checkMembersApplied = async () => {
     const res = await fetch(
       `${baseUrl}/api/projects/applied-members?userId=${userId}`,
       {
-        cache: "no-cache",
+        cache: "force-cache",
       },
     );
     if (!res.ok) {
