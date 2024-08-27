@@ -251,11 +251,8 @@ friendshipsRouter.get(
       const acceptedFriendships = userFriendships.filter(
         (friendship) => friendship.status === "accepted"
       );
-      const sentPendingFriendships = userFriendships.filter(
-        (friendship) => friendship.status === "pending" && friendship.senderId
-      );
-      const receivedPendingFriendships = userFriendships.filter(
-        (friendship) => friendship.status === "pending" && friendship.receiverId
+      const pendingFriendships = userFriendships.filter(
+        (friendship) => friendship.status === "pending"
       );
       const declinedFriendships = userFriendships.filter(
         (friendship) => friendship.status === "declined"
@@ -263,14 +260,12 @@ friendshipsRouter.get(
 
       console.log("userFriendships", userFriendships);
       console.log("acceptedFriendships", acceptedFriendships);
-      console.log("sentPendingFriendships", sentPendingFriendships);
-      console.log("receivedPendingFriendships", receivedPendingFriendships);
+      console.log("pendingFriendships", pendingFriendships);
       console.log("declinedFriendships", declinedFriendships);
 
       res.json({
         accepted: acceptedFriendships,
-        sentPending: sentPendingFriendships,
-        receivedPending: receivedPendingFriendships,
+        pending: pendingFriendships,
         declined: declinedFriendships,
       });
 
