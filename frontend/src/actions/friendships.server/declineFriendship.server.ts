@@ -1,17 +1,19 @@
 "use server";
 import { baseUrl } from "@/constants";
-import axios from "axios";
+import { auth } from "@/auth";
 
-const declineFriendship = async (receiverId: string, friendshipId: string) => {
-  console.log("receiverId", receiverId);
+const declineFriendship = async (userId: string, friendshipId: string) => {
+  const session = await auth();
+  console.log("receiverId", userId);
   try {
-    const res = await axios.patch(
-      `${baseUrl}/api/friends/${friendshipId}/decline`,
-      {
-        receiverId,
+    const res = await fetch(`${baseUrl}/api/friends/${friendshipId}/decline`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
       },
-    );
-    return res.data;
+      body: JSON.stringify({ userId: session?.user?.id }),
+    });
+    const data = await res.json();
   } catch (error: any) {
     console.log("Error declining friendship:", error.message);
     return error;

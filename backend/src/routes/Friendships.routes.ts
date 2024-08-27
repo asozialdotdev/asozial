@@ -29,10 +29,15 @@ friendshipsRouter.post(
       }
 
       const friendshipExists = await Friendship.findOne({
-        $or: [{ friends: receiverId, senderId }],
+        $or: [
+          { senderId, receiverId },
+          { senderId: receiverId, receiverId: senderId },
+        ],
       });
 
-      if (friendshipExists) return;
+      if (friendshipExists) {
+        return res.status(409).json({ message: "Friendship already exists" });
+      }
 
       const newFriendship = await Friendship.create({
         senderId,
@@ -57,7 +62,7 @@ friendshipsRouter.post(
 
 // PATCH friends to accept friendship request
 
-friendshipsRouter.patch(
+friendshipsRouter.put(
   "/:friendshipId/accept",
   async (req: Request, res: Response, next: NextFunction) => {
     try {
@@ -109,7 +114,7 @@ friendshipsRouter.patch(
 
 // PATCH friends to decline friendship request
 
-friendshipsRouter.patch(
+friendshipsRouter.put(
   "/:friendshipId/decline",
   async (req: Request, res: Response, next: NextFunction) => {
     try {

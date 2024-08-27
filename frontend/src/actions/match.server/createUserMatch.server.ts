@@ -2,21 +2,10 @@
 import { baseUrl } from "@/constants";
 import { auth } from "@/auth";
 
-const findMatchingUsers = async (actualUser: {
-  _id: string;
-  skills: {
-    codingLanguages: string[];
-    languagesSpoken: string[];
-  };
-  matches: {
-    users: {
-      declined: string[];
-    };
-  };
-}) => {
+const matchUsers = async (actualUserId: string, targetUserId: string) => {
   try {
     const session = await auth();
-    console.log("Finding matching users for", actualUser);
+    console.log("Matching users:", { actualUserId, targetUserId });
 
     const response = await fetch(`${baseUrl}/api/match/users`, {
       method: "POST",
@@ -24,22 +13,23 @@ const findMatchingUsers = async (actualUser: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        actualUser: session?.user.id,
+        actualUserId: session?.user.id,
+        targetUserId,
       }),
     });
 
     if (!response.ok) {
       const errorText = await response.text();
-      console.log("Error finding matching users:", errorText);
+      console.log("Error matching users:", errorText);
       return { error: errorText };
     }
 
     const data = await response.json();
     return data;
   } catch (error: any) {
-    console.log("Error finding matching users:", error.message);
+    console.log("Error matching users:", error.message);
     return { error: error.message };
   }
 };
 
-export { findMatchingUsers };
+export { matchUsers };

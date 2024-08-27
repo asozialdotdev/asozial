@@ -1,23 +1,31 @@
 "use server";
 import { baseUrl } from "@/constants";
-import axios from "axios";
+import { auth } from "@/auth";
 
 const deleteFriendship = async (actualUser: string) => {
   console.log("actualUser", actualUser);
+  const session = await auth();
   try {
-    const res = await axios.delete(`${baseUrl}/api/friends`, {
-      data: { actualUser },
+    const response = await fetch(`${baseUrl}/api/friends`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        actualUser: session?.user?.id,
+      }),
     });
 
-    if (res.status === 204) {
+    if (response.status === 204) {
       console.log("Friendship successfully deleted");
       return { success: true };
     }
 
-    return res.data;
+    const data = await response.json();
+    return data;
   } catch (error: any) {
     console.log("Error deleting friendship:", error.message);
-    return error;
+    return { message: "Error deleting friendship" };
   }
 };
 

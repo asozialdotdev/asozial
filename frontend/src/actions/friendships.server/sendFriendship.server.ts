@@ -1,17 +1,32 @@
 "use server";
+import { auth } from "@/auth";
 import { baseUrl } from "@/constants";
-import axios from "axios";
 
 const sendFriendship = async (senderId: string, receiverId: string) => {
+  const session = await auth();
   try {
-    const res = await axios.post(`${baseUrl}/api/friends`, {
-      senderId,
-      receiverId,
+    const response = await fetch(`${baseUrl}/api/friends`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        senderId: session?.user?.id,
+        receiverId,
+      }),
     });
-    return res.data;
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      console.log("API responded with error:", errorData);
+      return errorData;
+    }
+
+    const data = await response.json();
+    return data;
   } catch (error: any) {
     console.log("Error sending friendship:", error.message);
-    return error;
+    return { message: "Error sending request" };
   }
 };
 
