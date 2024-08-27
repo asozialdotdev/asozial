@@ -1,5 +1,5 @@
 import express, { Request, Response, NextFunction } from "express";
-import User from "../models/User.models";
+import User, { UserDocument } from "../models/User.models";
 import Friendship from "../models/Friendship.models";
 
 const friendshipsRouter = express.Router();
@@ -252,26 +252,61 @@ friendshipsRouter.get(
               return response;
             })
           )
-        : [];
+        : null;
 
-      const friendsPendingDetails = user.friends?.pending
+      const friendsSentPendingDetails = user.friends?.pending
         ? await Promise.all(
             user.friends?.pending.map(async (friend) => {
-              const friendDetails = await User.findById(friend).select(
-                "info.username info.image"
-              );
-              if (!friendDetails) return null;
+              const friendDetails = await Friendship.findOne({
+                senderId: userId,
+                receiverId: friend,
+              }).populate({
+                path: "receiverId",
+                select: "username info.image",
+                model: User,
+              });
+              console.log("friendDetails", friendDetails);
+              if (!friendDetails || !friendDetails.receiverId) return null;
+
+              const receiver =
+                friendDetails.receiverId as unknown as UserDocument;
+
               const response = {
-                id: friendDetails._id,
-                info: {
-                  username: friendDetails.info?.username,
-                  image: friendDetails.info?.image,
-                },
+                id: receiver._id,
+                username: receiver.username,
+                image: receiver.info.image,
               };
               return response;
             })
           )
-        : [];
+        : null;
+
+      const friendsReceivedPendingDetails = user.friends?.pending
+        ? await Promise.all(
+            user.friends?.pending.map(async (friend) => {
+              const friendDetails = await Friendship.findOne({
+                senderId: friend,
+                receiverId: userId,
+              }).populate({
+                path: "senderId",
+                select: "username info.image",
+                model: User,
+              });
+              console.log("friendDetails", friendDetails);
+              if (!friendDetails || !friendDetails.receiverId) return null;
+
+              const receiver =
+                friendDetails.receiverId as unknown as UserDocument;
+
+              const response = {
+                id: receiver._id,
+                username: receiver.username,
+                image: receiver.info.image,
+              };
+              return response;
+            })
+          )
+        : null;
 
       const friendsRejectedDetails = user.friends?.declined
         ? await Promise.all(
@@ -291,15 +326,20 @@ friendshipsRouter.get(
               return response;
             })
           )
-        : [];
+        : null;
 
       console.log("friendsAcceptedDetails", friendsAcceptedDetails);
-      console.log("friendsPendingDetails", friendsPendingDetails);
+      console.log("friendsSentPendingDetails", friendsSentPendingDetails);
+      console.log(
+        "friendsReceivedPendingDetails",
+        friendsReceivedPendingDetails
+      );
       console.log("friendsRejectedDetails", friendsRejectedDetails);
 
       res.json({
         friendsAccepted: friendsAcceptedDetails,
-        friendsPending: friendsPendingDetails,
+        friendsSentPending: friendsSentPendingDetails,
+        friendsReceivedPending: friendsReceivedPendingDetails,
         friendsRejected: friendsRejectedDetails,
       });
     } catch (error: any) {

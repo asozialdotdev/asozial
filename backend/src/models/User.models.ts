@@ -1,4 +1,14 @@
-import { Schema, model } from "mongoose";
+import { Schema, model, Types } from "mongoose";
+
+type UserId = Types.ObjectId | string;
+
+export interface UserDocument extends Document {
+  _id: UserId;
+  username: string;
+  info: {
+    image: string;
+  };
+}
 
 const socialSchema = new Schema({
   platform: { type: String },
