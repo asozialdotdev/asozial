@@ -13,14 +13,23 @@ import {
 } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import DashboardFriendItem from "./DashboardFriendItem";
+import { auth } from "@/auth";
 
 async function FriendStatusCard() {
-  const { accepted, sentPending, receivedPending, declined } =
-    await getUserFriendStatuses();
+  const session = await auth();
+  const { accepted, pending, declined } = await getUserFriendStatuses();
+
+  const sentPending = pending.filter((friendship: any) => {
+    return friendship.senderId._id === session?.user.id;
+  });
+  const receivedPending = pending.filter((friendship: any) => {
+    return friendship.receiverId._id === session?.user.id;
+  });
 
   console.log("accepted", accepted);
   console.log("sentPending", sentPending);
   console.log("receivedPending", receivedPending);
+
   console.log("declined", declined);
 
   return (
