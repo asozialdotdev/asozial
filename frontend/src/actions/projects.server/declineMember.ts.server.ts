@@ -18,25 +18,32 @@ const declineMember = async (
   formState: DeclineMemberState,
   formData: FormData,
 ): Promise<DeclineMemberState> => {
+  const session = await auth();
+  const userId = session?.user?.id;
   const projectId = formData.get("projectId") as ProjectId;
   const memberId = formData.get("memberId") as string;
 
   try {
-    const response = await fetch(`${baseUrl}/api/projects/${projectId}/decline`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
+    const response = await fetch(
+      `${baseUrl}/api/projects/${projectId}/decline`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ memberId, userId }),
       },
-      body: JSON.stringify({ memberId, projectId }),
-    });
+    );
 
     if (!response.ok) {
       throw new Error("Error declining a user to a project");
     }
 
-    const project = await response.json();
+    const { project } = await response.json();
     console.log("project applied:", project);
-    revalidatePath(`/${project.owner.username}/${project.slug}/${projectId}`);
+    revalidatePath(
+      `/${project.owner.info.username}/${project.slug}/${projectId}`,
+    );
     return {
       errors: {},
       success: true,

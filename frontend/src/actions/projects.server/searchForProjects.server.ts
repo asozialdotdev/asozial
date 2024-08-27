@@ -13,7 +13,7 @@ const searchForProjects = async (
     const response = await fetch(
       `${baseUrl}/api/projects/all?&query=${query}&page=${currentPage}&limit=${limit}`,
       {
-        cache: "force-cache",
+        cache: "no-cache",
       },
     );
     if (!response.ok) {

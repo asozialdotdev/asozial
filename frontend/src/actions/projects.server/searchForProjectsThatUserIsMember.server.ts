@@ -15,7 +15,7 @@ const searchForProjectsThatUserIsMember = async (
     const response = await fetch(
       `${baseUrl}/api/projects/member?userId=${userId}&query=${query}&page=${currentPage}&limit=${limit}`,
       {
-        cache: "force-cache",
+        cache: "no-cache",
       },
     );
     if (!response.ok) {

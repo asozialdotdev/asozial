@@ -34,9 +34,11 @@ const applyForProject = async (
       throw new Error("Error applying for a project");
     }
 
-    const project = await response.json();
+    const { project } = await response.json();
     console.log("project applied:", project);
-    revalidatePath(`/${project.owner.username}/${project.slug}/${projectId}`);
+    revalidatePath(
+      `/${project.owner.info.username}/${project.slug}/${projectId}`,
+    );
     return {
       errors: {},
       success: true,

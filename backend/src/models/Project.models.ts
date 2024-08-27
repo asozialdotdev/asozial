@@ -13,9 +13,6 @@ const projectSchema = new Schema(
     slug: { type: String, required: true, unique: true },
     owner: { type: Schema.Types.ObjectId, ref: "User", required: true },
     members: {
-      membersDeclined: [
-        { type: Schema.Types.ObjectId, ref: "User", default: [] },
-      ],
       membersJoined: [
         { type: Schema.Types.ObjectId, ref: "User", default: [] },
       ],
@@ -23,6 +20,12 @@ const projectSchema = new Schema(
         { type: Schema.Types.ObjectId, ref: "User", default: [] },
       ],
       membersInvited: [
+        { type: Schema.Types.ObjectId, ref: "User", default: [] },
+      ],
+      membersDeclined: [
+        { type: Schema.Types.ObjectId, ref: "User", default: [] },
+      ],
+      membersRemoved: [
         { type: Schema.Types.ObjectId, ref: "User", default: [] },
       ],
     },

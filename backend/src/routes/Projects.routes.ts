@@ -213,23 +213,7 @@ projectsRouter.post(
         return res.status(404).json({ error: "User not found" });
       }
 
-      const regex = /https:\/\/api\.github\.com\/repos\/([^\/]+)\/([^\/]+)/;
-      const match = repoUrl.match(regex);
-      if (!match) {
-        return res.status(400).json({ error: "Invalid GitHub API URL format" });
-      }
 
-      const [_, repoOwner, repoName] = match;
-      const normalizedRepoUrl = `https://github.com/${repoOwner}/${repoName}`;
-
-      const existingProject = await Project.findOne({
-        githubRepo: normalizedRepoUrl,
-      });
-      if (existingProject) {
-        return res.status(409).json({
-          error: "Project with this GitHub repository already exists",
-        });
-      }
 
       const repoInfo: any = await axios.get(repoUrl);
       if (repoInfo.status !== 200) {
@@ -237,8 +221,7 @@ projectsRouter.post(
           .status(repoInfo.status)
           .json({ error: "Failed to fetch repository information" });
       }
-      console.log(repoInfo.data.owner.id);
-      console.log(owner?.github?.id);
+
 
       if (owner?.github?.id !== repoInfo.data.owner?.id) {
         return res
@@ -249,7 +232,7 @@ projectsRouter.post(
       const { name, description, html_url, language } = repoInfo.data;
       const slug = generateSlug(name);
 
-      const sanitizedDescription = description === null ? "" : language;
+      const sanitizedDescription = description === null ? "" : description;
       const sanitizedLanguage = language === null ? "Other" : language;
 
       const createProject = await Project.create({
@@ -294,7 +277,7 @@ projectsRouter.get(
           "info.username info.name info.image"
         )
         .exec();
-
+      console.log("Applied members>>>>>>>>>>>>>", projects);
       res.json(projects);
     } catch (error) {
       console.log("Error fetching applied members:", error);
@@ -365,18 +348,21 @@ projectsRouter.post(
       }
 
       if (project.members?.membersApplied.includes(userId)) {
+        console.log("User is in the membersApplied array");
         return res
           .status(400)
-          .json({ error: "User already applied to be a memeber" });
+          .json({ error: "User already applied to be a member" });
       }
 
       if (user.projects?.projectsApplied.includes(project._id)) {
+        console.log("User is in the projectsApplied array");
         return res
           .status(400)
           .json({ error: "User already applied to this project" });
       }
 
       if (project.members?.membersJoined.includes(userId)) {
+        console.log("User is in the membersJoined array");
         return res
           .status(400)
           .json({ error: "User is already a member of this project" });
@@ -405,9 +391,9 @@ projectsRouter.post(
   }
 );
 
-// POST request to accept a user to a project (JOIN)
+// POST request to accept a user to a project (ACCEPT)
 projectsRouter.post(
-  "/:projectId/join",
+  "/:projectId/accept",
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { projectId } = req.params;
@@ -416,10 +402,13 @@ projectsRouter.post(
         .populate("owner", "info.username")
         .exec();
 
+      console.log("Project owner", project?.owner);
+      console.log("User ID", userId);
+
       if (!project) {
         return res.status(404).json({ error: "Project not found" });
       }
-      if (project.owner.toString() !== userId) {
+      if (project.owner._id.toString() !== userId) {
         return res
           .status(403)
           .json({ error: "You are not authorized to accept this user" });
@@ -471,11 +460,13 @@ projectsRouter.post(
         .populate("owner", "info.username")
         .exec();
 
+        console.log("project found in decline", project);
+
       if (!project) {
         return res.status(404).json({ error: "Project not found" });
       }
 
-      if (project.owner.toString() !== userId) {
+      if (project.owner._id.toString() !== userId) {
         return res
           .status(403)
           .json({ error: "You are not authorized to decline this user" });
@@ -502,9 +493,6 @@ projectsRouter.post(
           $push: { "projects.projectsDeclined": project._id },
         }
       );
-
-      await project.save();
-      await member.save();
 
       res.json({ project, member });
     } catch (error) {
@@ -554,8 +542,7 @@ projectsRouter.post(
         }
       );
 
-      await project.save();
-      await user.save();
+
 
       res.json({ project, user });
     } catch (error) {

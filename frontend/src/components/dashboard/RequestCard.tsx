@@ -46,7 +46,6 @@ async function RequestCard({ project, member }: RequestCardProps) {
               </span>
             </Link>
           </CardTitle>
-
           <CardDescription>
             A member has applied to contribute to your project.
           </CardDescription>
