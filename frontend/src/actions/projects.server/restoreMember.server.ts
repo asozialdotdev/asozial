@@ -5,19 +5,19 @@ import { baseUrl } from "@/constants";
 import { ProjectId } from "@/types/Project";
 import { revalidatePath } from "next/cache";
 
-type RemoveMember = {
+type RestoreMember = {
   errors: {
-    remove?: string[];
+    restore?: string[];
   };
   success?: boolean;
   data?: any;
 };
 
 // POST Accept a user to a project
-const removeMember = async (
-  formState: RemoveMember,
+const restoreMember = async (
+  formState: RestoreMember,
   formData: FormData,
-): Promise<RemoveMember> => {
+): Promise<RestoreMember> => {
   const session = await auth();
   const userId = session?.user?.id;
   const projectId = formData.get("projectId") as ProjectId;
@@ -25,7 +25,7 @@ const removeMember = async (
 
   try {
     const response = await fetch(
-      `${baseUrl}/api/projects/${projectId}/remove`,
+      `${baseUrl}/api/projects/${projectId}/restore`,
       {
         method: "POST",
         headers: {
@@ -36,7 +36,7 @@ const removeMember = async (
     );
 
     if (!response.ok) {
-      throw new Error("Error removing user from a project");
+      throw new Error("Error restoring user from a project");
     }
 
     const project = await response.json();
@@ -47,13 +47,13 @@ const removeMember = async (
       success: true,
     };
   } catch (error) {
-    console.error("Error removing user from this project", error);
+    console.error("Error restoring user to this project", error);
     return {
       errors: {
-        remove: ["Error removing user from this project. Please try again."],
+        restore: ["Error restoring user to this project. Please try again."],
       },
     };
   }
 };
 
-export { removeMember };
+export { restoreMember };

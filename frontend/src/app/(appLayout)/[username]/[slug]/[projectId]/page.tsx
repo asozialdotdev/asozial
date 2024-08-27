@@ -18,7 +18,7 @@ import ApplyProject from "@/components/project/requests/ApplyProject";
 import { auth } from "@/auth";
 
 //Types
-import type { ProjectId } from "@/types/Project";
+import type { Member, ProjectId } from "@/types/Project";
 import { UserId } from "@/types/User";
 
 type Params = {
@@ -38,12 +38,12 @@ async function Page({ params }: { params: Params }) {
   ]);
 
   const isMember = project.members.membersJoined?.some(
-    (member: UserId) => member === session?.user?.id.toString(),
+    (member: Member) => member._id.toString() === session?.user?.id.toString(),
   );
-  const isOwner = project.owner._id === session?.user?.id;
+  const isOwner = project.owner._id.toString() === session?.user?.id.toString();
 
   const hasApplied = project.members.membersApplied?.some(
-    (member: UserId) => member === session?.user?.id.toString(),
+    (member: Member) => member._id.toString() === session?.user?.id.toString(),
   );
   console.log("membersApplied", project.members.membersApplied);
 

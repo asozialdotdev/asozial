@@ -8,7 +8,7 @@ function PageTitle({ children, className }: PageTitleProps) {
   return (
     <h1
       className={cn(
-        "tracking-wide' text-1xl font-bold text-dark dark:text-light",
+        "tracking-wide' text-xl font-bold text-dark dark:text-light",
         className,
       )}
     >

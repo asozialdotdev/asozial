@@ -57,7 +57,7 @@ async function RequestCard({ project, member }: RequestCardProps) {
             username={memberUsername}
             userId={memberId}
           />
-          <AcceptDeclineForm project={project} member={member} />
+          <AcceptDeclineForm projectId={project._id} memberId={memberId} />
         </CardContent>
       </Card>
     </>
