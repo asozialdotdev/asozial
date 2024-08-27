@@ -1,6 +1,7 @@
 import express, { Request, Response, NextFunction } from "express";
 import User, { UserDocument } from "../models/User.models";
 import Friendship from "../models/Friendship.models";
+import { ObjectId } from "mongodb"; // Ensure you import ObjectId from mongoose
 
 const friendshipsRouter = express.Router();
 
@@ -235,113 +236,151 @@ friendshipsRouter.get(
         return;
       }
 
-      const friendsAcceptedDetails = user.friends?.accepted
-        ? await Promise.all(
-            user.friends?.accepted.map(async (friend) => {
-              const friendDetails = await User.findById(friend).select(
-                "info.username info.image"
-              );
-              if (!friendDetails) return null;
-              const response = {
-                id: friendDetails._id,
-                info: {
-                  username: friendDetails.info?.username || "Kreuzbär",
-                  image: friendDetails.info?.image || "",
-                },
-              };
-              return response;
-            })
-          )
-        : null;
+      const userFriendships = await Friendship.find({
+        $or: [
+          { senderId: new ObjectId(userId) },
+          { receiverId: new ObjectId(userId) },
+          { friends: { $in: [new ObjectId(userId)] } },
+        ],
+      }).populate({
+        path: "senderId receiverId",
+        select: "username info.image",
+        model: User,
+      });
 
-      const friendsSentPendingDetails = user.friends?.pending
-        ? await Promise.all(
-            user.friends?.pending.map(async (friend) => {
-              const friendDetails = await Friendship.findOne({
-                senderId: userId,
-                receiverId: friend,
-              }).populate({
-                path: "receiverId",
-                select: "username info.image",
-                model: User,
-              });
-              console.log("friendDetails", friendDetails);
-              if (!friendDetails || !friendDetails.receiverId) return null;
-
-              const receiver =
-                friendDetails.receiverId as unknown as UserDocument;
-
-              const response = {
-                id: receiver._id,
-                username: receiver.username,
-                image: receiver.info.image,
-              };
-              return response;
-            })
-          )
-        : null;
-
-      const friendsReceivedPendingDetails = user.friends?.pending
-        ? await Promise.all(
-            user.friends?.pending.map(async (friend) => {
-              const friendDetails = await Friendship.findOne({
-                senderId: friend,
-                receiverId: userId,
-              }).populate({
-                path: "senderId",
-                select: "username info.image",
-                model: User,
-              });
-              console.log("friendDetails", friendDetails);
-              if (!friendDetails || !friendDetails.receiverId) return null;
-
-              const receiver =
-                friendDetails.receiverId as unknown as UserDocument;
-
-              const response = {
-                id: receiver._id,
-                username: receiver.username,
-                image: receiver.info.image,
-              };
-              return response;
-            })
-          )
-        : null;
-
-      const friendsRejectedDetails = user.friends?.declined
-        ? await Promise.all(
-            user.friends?.declined.map(async (friend) => {
-              const friendDetails = await User.findById(friend).select(
-                "info.username info.image"
-              );
-              console.log("friendDetails", friendDetails);
-              if (!friendDetails) return null;
-              const response = {
-                id: friendDetails._id,
-                info: {
-                  username: friendDetails.info?.username,
-                  image: friendDetails.info?.image,
-                },
-              };
-              return response;
-            })
-          )
-        : null;
-
-      console.log("friendsAcceptedDetails", friendsAcceptedDetails);
-      console.log("friendsSentPendingDetails", friendsSentPendingDetails);
-      console.log(
-        "friendsReceivedPendingDetails",
-        friendsReceivedPendingDetails
+      const acceptedFriendships = userFriendships.filter(
+        (friendship) => friendship.status === "accepted"
       );
-      console.log("friendsRejectedDetails", friendsRejectedDetails);
+      const sentPendingFriendships = userFriendships.filter(
+        (friendship) => friendship.status === "pending" && friendship.senderId
+      );
+      const receivedPendingFriendships = userFriendships.filter(
+        (friendship) => friendship.status === "pending" && friendship.receiverId
+      );
+      const declinedFriendships = userFriendships.filter(
+        (friendship) => friendship.status === "declined"
+      );
+
+      console.log("userFriendships", userFriendships);
+      console.log("acceptedFriendships", acceptedFriendships);
+      console.log("sentPendingFriendships", sentPendingFriendships);
+      console.log("receivedPendingFriendships", receivedPendingFriendships);
+      console.log("declinedFriendships", declinedFriendships);
 
       res.json({
-        friendsAccepted: friendsAcceptedDetails,
-        friendsSentPending: friendsSentPendingDetails,
-        friendsReceivedPending: friendsReceivedPendingDetails,
-        friendsRejected: friendsRejectedDetails,
+        accepted: acceptedFriendships,
+        sentPending: sentPendingFriendships,
+        receivedPending: receivedPendingFriendships,
+        declined: declinedFriendships,
       });
+
+      // const friendsAcceptedDetails = user.friends?.accepted
+      //   ? await Promise.all(
+      //       user.friends?.accepted.map(async (friend) => {
+      //         const friendDetails = await User.findById(friend).select(
+      //           "info.username info.image"
+      //         );
+      //         if (!friendDetails) return null;
+      //         const response = {
+      //           id: friendDetails._id,
+      //           info: {
+      //             username: friendDetails.info?.username || "Kreuzbär",
+      //             image: friendDetails.info?.image || "",
+      //           },
+      //         };
+      //         return response;
+      //       })
+      //     )
+      //   : null;
+
+      // const friendsSentPendingDetails = user.friends?.pending
+      //   ? await Promise.all(
+      //       user.friends?.pending.map(async (friend) => {
+      //         const friendDetails = await Friendship.findOne({
+      //           senderId: userId,
+      //           receiverId: friend,
+      //         }).populate({
+      //           path: "receiverId",
+      //           select: "username info.image",
+      //           model: User,
+      //         });
+      //         console.log("friendDetails", friendDetails);
+      //         if (!friendDetails || !friendDetails.receiverId) return null;
+
+      //         const receiver =
+      //           friendDetails.receiverId as unknown as UserDocument;
+
+      //         const response = {
+      //           id: receiver._id,
+      //           username: receiver.username,
+      //           image: receiver.info.image,
+      //         };
+      //         return response;
+      //       })
+      //     )
+      //   : null;
+
+      // const friendsReceivedPendingDetails = user.friends?.pending
+      //   ? await Promise.all(
+      //       user.friends?.pending.map(async (friend) => {
+      //         const friendDetails = await Friendship.findOne({
+      //           senderId: friend,
+      //           receiverId: userId,
+      //         }).populate({
+      //           path: "senderId",
+      //           select: "username info.image",
+      //           model: User,
+      //         });
+      //         console.log("friendDetails", friendDetails);
+      //         if (!friendDetails || !friendDetails.receiverId) return null;
+
+      //         const receiver =
+      //           friendDetails.receiverId as unknown as UserDocument;
+
+      //         const response = {
+      //           id: receiver._id,
+      //           username: receiver.username,
+      //           image: receiver.info.image,
+      //         };
+      //         return response;
+      //       })
+      //     )
+      //   : null;
+
+      // const friendsRejectedDetails = user.friends?.declined
+      //   ? await Promise.all(
+      //       user.friends?.declined.map(async (friend) => {
+      //         const friendDetails = await User.findById(friend).select(
+      //           "info.username info.image"
+      //         );
+      //         console.log("friendDetails", friendDetails);
+      //         if (!friendDetails) return null;
+      //         const response = {
+      //           id: friendDetails._id,
+      //           info: {
+      //             username: friendDetails.info?.username,
+      //             image: friendDetails.info?.image,
+      //           },
+      //         };
+      //         return response;
+      //       })
+      //     )
+      //   : null;
+
+      // console.log("friendsAcceptedDetails", friendsAcceptedDetails);
+      // console.log("friendsSentPendingDetails", friendsSentPendingDetails);
+      // console.log(
+      //   "friendsReceivedPendingDetails",
+      //   friendsReceivedPendingDetails
+      // );
+      // console.log("friendsRejectedDetails", friendsRejectedDetails);
+
+      // res.json({
+      //   friendsAccepted: friendsAcceptedDetails,
+      //   friendsSentPending: friendsSentPendingDetails,
+      //   friendsReceivedPending: friendsReceivedPendingDetails,
+      //   friendsRejected: friendsRejectedDetails,
+      // });
     } catch (error: any) {
       console.error("Error fetching user friendships:", error);
       res.status(500).send("Error fetching user friendships");
