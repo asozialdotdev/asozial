@@ -16,9 +16,10 @@ import DashboardFriendItem from "./DashboardFriendItem";
 
 async function FriendStatusCard() {
   const userFriendStatuses = await getUserFriendStatuses();
-  const friends = userFriendStatuses.friendsAccepted;
-  const pending = userFriendStatuses.friendsPending;
-  const rejected = userFriendStatuses.friendsRejected;
+  const friends = userFriendStatuses.friendsAccepted || [];
+  const sentPending = userFriendStatuses.friendsSentPending || [];
+  const receivedPending = userFriendStatuses.friendsReceivedPending || [];
+  const rejected = userFriendStatuses.friendsRejected || [];
 
   console.log("userFriendStatuses", userFriendStatuses);
   return (
@@ -27,7 +28,8 @@ async function FriendStatusCard() {
       <Tabs defaultValue="accepted">
         <TabsList className="w-full">
           <TabsTrigger value="accepted">Accepted</TabsTrigger>
-          <TabsTrigger value="pending">Pending</TabsTrigger>
+          <TabsTrigger value="sent">Sent</TabsTrigger>
+          <TabsTrigger value="received">Received</TabsTrigger>
           <TabsTrigger value="rejected">Rejected</TabsTrigger>
         </TabsList>
         <TabsContent value="accepted">
@@ -37,33 +39,60 @@ async function FriendStatusCard() {
             </CardHeader>
             <CardContent>
               {friends &&
-                friends.map((friend: any) => (
-                  <DashboardFriendItem key={friend.id} friend={friend} />
-                ))}
+                friends.map(
+                  (friend: any) =>
+                    friend !== null && (
+                      <DashboardFriendItem
+                        key={friend.id}
+                        id={friend.id}
+                        username={friend.username}
+                        image={friend.image}
+                      />
+                    ),
+                )}
             </CardContent>
-            <CardFooter>
-              <Button variant={"ghost"}>
-                <UserRoundX />
-              </Button>
-            </CardFooter>
           </Card>
         </TabsContent>
-        <TabsContent value="pending">
+        <TabsContent value="sent">
           <Card>
             <CardHeader>
-              <CardTitle>Pending</CardTitle>
+              <CardTitle>Sent</CardTitle>
             </CardHeader>
-            <CardContent>
-              {pending &&
-                pending.map((friend: any) => (
-                  <DashboardFriendItem key={friend.id} friend={friend} />
-                ))}
+            <CardContent className="flex flex-col gap-2">
+              {sentPending &&
+                sentPending.map(
+                  (friend: any) =>
+                    friend !== null && (
+                      <DashboardFriendItem
+                        key={friend.id}
+                        id={friend.id}
+                        username={friend.username}
+                        image={friend.image}
+                      />
+                    ),
+                )}
             </CardContent>
-            <CardFooter>
-              <Button variant={"ghost"}>
-                <UserRoundCheck />
-              </Button>
-            </CardFooter>
+          </Card>
+        </TabsContent>
+        <TabsContent value="received">
+          <Card>
+            <CardHeader>
+              <CardTitle>Received</CardTitle>
+            </CardHeader>
+            <CardContent className="flex flex-col gap-2">
+              {receivedPending &&
+                receivedPending.map(
+                  (friend: any) =>
+                    friend !== null && (
+                      <DashboardFriendItem
+                        key={friend.id}
+                        id={friend.id}
+                        username={friend.username}
+                        image={friend.image}
+                      />
+                    ),
+                )}
+            </CardContent>
           </Card>
         </TabsContent>
         <TabsContent value="rejected">
@@ -71,17 +100,20 @@ async function FriendStatusCard() {
             <CardHeader>
               <CardTitle>Rejected</CardTitle>
             </CardHeader>
-            <CardContent>
+            <CardContent className="flex flex-col gap-2">
               {rejected &&
-                rejected.map((friend: any) => (
-                  <DashboardFriendItem key={friend.id} friend={friend} />
-                ))}
+                rejected.map(
+                  (friend: any) =>
+                    friend !== null && (
+                      <DashboardFriendItem
+                        key={friend.id}
+                        id={friend.id}
+                        username={friend.username}
+                        image={friend.image}
+                      />
+                    ),
+                )}
             </CardContent>
-            <CardFooter>
-              <Button variant={"ghost"}>
-                <UserRoundX />
-              </Button>
-            </CardFooter>
           </Card>
         </TabsContent>
       </Tabs>
