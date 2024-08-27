@@ -114,7 +114,7 @@ friendshipsRouter.put(
 
 // PATCH friends to decline friendship request
 
-friendshipsRouter.patch(
+friendshipsRouter.put(
   "/:friendshipId/decline",
   async (req: Request, res: Response, next: NextFunction) => {
     try {
