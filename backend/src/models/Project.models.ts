@@ -22,10 +22,7 @@ const projectSchema = new Schema(
       membersInvited: [
         { type: Schema.Types.ObjectId, ref: "User", default: [] },
       ],
-      membersDeclined: [
-        { type: Schema.Types.ObjectId, ref: "User", default: [] },
-      ],
-      membersRemoved: [
+      membersAvoided: [
         { type: Schema.Types.ObjectId, ref: "User", default: [] },
       ],
     },

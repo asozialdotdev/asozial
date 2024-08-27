@@ -49,7 +49,10 @@ const userSchema = new Schema(
       projectsDeclined: [
         { type: Schema.Types.ObjectId, ref: "Project", default: [] },
       ],
-      dashboardPosts: [{ type: Schema.Types.ObjectId, ref: "Post" }],
+      projectsOwned: [
+        { type: Schema.Types.ObjectId, ref: "Project", default: [] },
+      ],
+      dashboardPosts: [{ type: Schema.Types.ObjectId, ref: "ProjectPost" }],
     },
     socials: [socialSchema],
     friends: {

@@ -14,7 +14,6 @@ import { Button } from "../ui/button";
 import { UserRoundX } from "lucide-react";
 import AcceptDeclineForm from "../dashboard/AcceptDeclineForm";
 import { Member, ProjectId } from "@/types/Project";
-import RemoveMember from "./RemoveMemberForm";
 import RemoveMemberForm from "./RemoveMemberForm";
 
 const array = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
@@ -24,20 +23,14 @@ type MembersTabsProps = {
     membersJoined: Member[];
     membersApplied: Member[];
     membersInvited: Member[];
-    membersDeclined: Member[];
-    membersRemoved: Member[];
+    membersAvoided: Member[];
   };
   projectId: ProjectId;
 };
 
 function MembersTabs({ result, projectId }: MembersTabsProps) {
-  const {
-    membersJoined,
-    membersApplied,
-    membersInvited,
-    membersDeclined,
-    membersRemoved,
-  } = result;
+  const { membersJoined, membersApplied, membersInvited, membersAvoided } =
+    result;
 
   const membersJo = membersJoined.map((member) => member);
   console.log(membersJo, "Members Joined");
@@ -53,7 +46,7 @@ function MembersTabs({ result, projectId }: MembersTabsProps) {
       members.map((member: any, i: number) => (
         <Card
           key={member._id || i}
-          className=" relative mb-4 w-full max-w-md border-dashed border-zinc-300 bg-inherit bg-zinc-100 px-4 hover:bg-zinc-200/10 dark:border-zinc-600 dark:bg-inherit dark:bg-zinc-800 dark:shadow-neutral-700/30 dark:hover:bg-zinc-700/10 lg:min-w-[28rem]"
+          className="relative mb-4 w-full max-w-md border-dashed border-zinc-300 bg-inherit bg-zinc-100 px-4 hover:bg-zinc-200/10 dark:border-zinc-600 dark:bg-inherit dark:bg-zinc-800 dark:shadow-neutral-700/30 dark:hover:bg-zinc-700/10 lg:min-w-[28rem]"
         >
           <div className="flex items-center gap-4">
             <UserAvatar
@@ -75,7 +68,10 @@ function MembersTabs({ result, projectId }: MembersTabsProps) {
                 <RemoveMemberForm projectId={projectId} memberId={member._id} />
               )}
               {activeTab === "applied" && (
-                <AcceptDeclineForm projectId={projectId} memberId={member._id} />
+                <AcceptDeclineForm
+                  projectId={projectId}
+                  memberId={member._id}
+                />
               )}
               {activeTab === "invited" && (
                 <Button variant="ghost">
@@ -110,12 +106,12 @@ function MembersTabs({ result, projectId }: MembersTabsProps) {
       onValueChange={handleTabChange}
       className="flex w-full flex-col items-center gap-4"
     >
-      <TabsList className="grid w-full grid-cols-5">
+      <TabsList className="grid w-full grid-cols-4">
         <TabsTrigger value="joined">Joined</TabsTrigger>
         <TabsTrigger value="applied">Applied</TabsTrigger>
         <TabsTrigger value="invited">Invited</TabsTrigger>
-        <TabsTrigger value="declined">Declined</TabsTrigger>
-        <TabsTrigger value="removed">Removed</TabsTrigger>
+        <TabsTrigger value="declined">Avoided</TabsTrigger>
+
       </TabsList>
 
       <Suspense fallback={<ProjectCardLoadingSkeleton />}>
@@ -138,15 +134,11 @@ function MembersTabs({ result, projectId }: MembersTabsProps) {
 
       <Suspense fallback={<ProjectCardLoadingSkeleton />}>
         <TabsContent value="declined">
-          {renderMembers(membersDeclined, activeTab)}
+          {renderMembers(membersAvoided, activeTab)}
         </TabsContent>
       </Suspense>
 
-      <Suspense fallback={<ProjectCardLoadingSkeleton />}>
-        <TabsContent value="removed">
-          {renderMembers(membersRemoved, activeTab)}
-        </TabsContent>
-      </Suspense>
+
     </Tabs>
   );
 }

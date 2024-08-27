@@ -20,4 +20,5 @@ export { acceptMember } from "./acceptMember.server";
 export { declineMember } from "./declineMember.ts.server";
 export { leaveProject } from "./leaveProject.server";
 export { removeMember } from "./removeMember.server";
+export { restoreMember } from "./restoreMember.server";
 export { fetchAllMembersFromAProject } from "./fetchAllMembersFromAProject.server";
