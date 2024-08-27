@@ -21,7 +21,7 @@ type ProjectCardProps = {
 const array = [1, 2, 3, 4, 5];
 
 function ProjectCard({ project }: ProjectCardProps) {
-  const username = project?.owner?.username;
+  const username = project?.owner?.info.username;
 
   return (
     <>
@@ -55,23 +55,24 @@ function ProjectCard({ project }: ProjectCardProps) {
           </CardContent>
 
           <CardContent className="flex flex-wrap gap-4">
-            {/* {project.membersJoined.map((member) => (
-              <UserAvatar
-                key={member._id.toString()}
-                src={member.image}
-                username={member.username}
-                userId={member._id.toString()}
-              />
-            ))} */}
+            {project.members?.membersJoined &&
+              project.members.membersJoined.map((member) => (
+                <UserAvatar
+                  key={member._id.toString()}
+                  src={member.info.image}
+                  username={member.info.username}
+                  userId={member._id.toString()}
+                />
+              ))}
 
-            {array.map((i) => (
+            {/* {array.map((i) => (
               <UserAvatar
                 key={i}
                 src="https://avatars.dicebear.com/api/avataaars/username.svg"
                 username="username"
                 userId="123"
               />
-            ))}
+            ))} */}
           </CardContent>
         </div>
 
@@ -79,8 +80,8 @@ function ProjectCard({ project }: ProjectCardProps) {
           <div className="flex flex-col items-center gap-2">
             <p className="text-base font-semibold">Owner</p>
             <UserAvatar
-              src={project.owner.image}
-              username={project.owner.username}
+              src={project.owner.info.image}
+              username={project.owner.info.username}
               userId={project.owner._id}
             />
           </div>

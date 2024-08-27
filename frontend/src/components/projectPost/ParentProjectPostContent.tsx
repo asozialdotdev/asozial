@@ -58,7 +58,6 @@ function ParentProjectPostContent({
   const handleDeletePost = async () => {
     setIsDeleting(true);
     const result = await deleteProjectPost(post._id);
-    console.log("Result", result);
     if (result?.error) {
       console.error("Error deleting post", result.error);
       setError(result.message);
@@ -78,8 +77,8 @@ function ParentProjectPostContent({
         {/* Avatar  */}
         <div className="flex w-full flex-col gap-3 pl-2 lg:contents">
           <UserAvatar
-            src={post.userId.image}
-            username={post.userId.username}
+            src={post.userId.info.image}
+            username={post.userId.info.username}
             userId={post.userId._id}
           />
 

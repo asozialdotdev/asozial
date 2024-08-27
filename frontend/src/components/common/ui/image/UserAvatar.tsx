@@ -31,6 +31,7 @@ function UserAvatar({
   className,
   isInNavbar,
 }: UserAvatarProps) {
+  console.log("username", username)
   return (
     <TooltipProvider key={username}>
       <Tooltip>

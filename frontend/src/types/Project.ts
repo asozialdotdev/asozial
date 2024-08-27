@@ -2,6 +2,7 @@ import { createProjectSchema } from "@/lib/schema";
 import { Types } from "mongoose";
 import { StaticImageData } from "next/image";
 import { z } from "zod";
+import { UserId } from "./User";
 
 type SocialPlatforms = "slack" | "discord" | "notion" | "gitlab";
 
@@ -14,11 +15,12 @@ type SocialsData = {
 
 type ProjectId = Types.ObjectId | string;
 type Member = {
-  _id: Types.ObjectId | string;
-  avatarUrl: string;
-  image: string;
-  name: string;
-  username: string;
+  info: {
+    image: string;
+    name: string;
+    username: string;
+  };
+  _id: UserId;
 };
 
 type Socials = {
