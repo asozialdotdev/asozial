@@ -1,27 +1,29 @@
 //Next
 import Image from "next/image";
+import Link from "next/link";
 
 //Components
 import PageTitle from "../common/ui/PageTitle";
 import UserAvatar from "../common/ui/image/UserAvatar";
-
-//UI
-import github from "/public/socials/github.png";
-
-//Utils
-import { techStackClass, setStatusIcon } from "@/utils";
-
-//Types
-import type { Member, Project } from "@/types/Project";
-import Link from "next/link";
-import { auth } from "@/auth";
-import { Button } from "../ui/button";
-import { socialsData } from "@/constants";
 import ProjectPitch from "./ProjectPitch";
 import ProjectMainLanguage from "./ProjectMainLanguage";
 import ProjectDescription from "./ProjectDescription";
+import LeaveProjectForm from "./requests/LeaveProjectForm";
+
+//UI
+import github from "/public/socials/github.png";
+import { Button } from "../ui/button";
 import { Users } from "lucide-react";
-import LeaveProject from "./LeaveProject";
+
+//Lib
+import { auth } from "@/auth";
+
+//Utils
+import { techStackClass, setStatusIcon } from "@/utils";
+import { socialsData } from "@/constants";
+
+//Types
+import type { Member, Project } from "@/types/Project";
 
 async function ProjectComponent({ project }: { project: Project }) {
   const session = await auth();
@@ -179,7 +181,7 @@ async function ProjectComponent({ project }: { project: Project }) {
             </Link>
           </div>
         )}
-        {isMember && <LeaveProject project={project} />}
+        {isMember && <LeaveProjectForm project={project} />}
       </div>
     </section>
   );

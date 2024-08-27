@@ -11,10 +11,10 @@ import {
   CardTitle,
 } from "../ui/card";
 import { Button } from "../ui/button";
-import { UserRoundX } from "lucide-react";
 import AcceptDeclineForm from "../dashboard/AcceptDeclineForm";
 import { Member, ProjectId } from "@/types/Project";
-import RemoveMemberForm from "./RemoveMemberForm";
+import RemoveMemberForm from "./requests/RemoveMemberForm";
+import RestoreMember from "./requests/RestoreMemberForm";
 
 const array = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
@@ -74,22 +74,10 @@ function MembersTabs({ result, projectId }: MembersTabsProps) {
                 />
               )}
               {activeTab === "invited" && (
-                <Button variant="ghost">
-                  {/* Example: Resend Invite button for invited members */}
-                  Resend Invite
-                </Button>
+                <Button variant="secondary">Resend Invite</Button>
               )}
               {activeTab === "declined" && (
-                <Button variant="ghost">
-                  {/* Example: Archive button for declined members */}
-                  Archive
-                </Button>
-              )}
-              {activeTab === "removed" && (
-                <Button variant="ghost">
-                  {/* Example: Restore button for removed members */}
-                  Restore
-                </Button>
+                <RestoreMember projectId={projectId} memberId={member._id} />
               )}
             </CardFooter>
           </div>
@@ -111,7 +99,6 @@ function MembersTabs({ result, projectId }: MembersTabsProps) {
         <TabsTrigger value="applied">Applied</TabsTrigger>
         <TabsTrigger value="invited">Invited</TabsTrigger>
         <TabsTrigger value="declined">Avoided</TabsTrigger>
-
       </TabsList>
 
       <Suspense fallback={<ProjectCardLoadingSkeleton />}>
@@ -137,8 +124,6 @@ function MembersTabs({ result, projectId }: MembersTabsProps) {
           {renderMembers(membersAvoided, activeTab)}
         </TabsContent>
       </Suspense>
-
-
     </Tabs>
   );
 }

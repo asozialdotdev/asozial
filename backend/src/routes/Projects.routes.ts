@@ -181,6 +181,10 @@ projectsRouter.post(
         owner: userId,
       });
 
+      await User.findByIdAndUpdate(userId, {
+        $push: { "projects.projectsOwned": newProject._id },
+      });
+
       res.status(201).json(newProject);
     } catch (error) {
       next(error);
@@ -188,7 +192,7 @@ projectsRouter.post(
   }
 );
 
-// GET request to create a project from Github
+// POST request to create a project from Github
 
 projectsRouter.post(
   "/github",
@@ -241,6 +245,10 @@ projectsRouter.post(
         owner: userId,
         status: "active",
         slug,
+      });
+
+      await User.findByIdAndUpdate(userId, {
+        $push: { "projects.projectsOwned": createProject._id },
       });
 
       res.status(201).json(createProject);
@@ -321,10 +329,6 @@ projectsRouter.get(
           "members.membersAvoided",
           "info.name info.username info.image"
         )
-        .populate(
-          "members.membersAvoided",
-          "info.name info.username info.image"
-        )
         .populate("owner", "info.name info.username info.image")
         .exec();
 
@@ -347,7 +351,7 @@ projectsRouter.get(
   }
 );
 
-//APPLY, JOIN, DECLINE AND LEAVE PROJECTS
+//APPLY, JOIN, DECLINE, LEAVE, REMOVE, RESTORE PROJECTS
 
 // POST request to apply to a project (APPLY)
 projectsRouter.post(
@@ -656,7 +660,7 @@ projectsRouter.post(
         return res.status(404).json({ error: "Project not found" });
       }
 
-      if (project.members?.membersAvoided.includes(memberId)) {
+      if (!project.members?.membersAvoided.includes(memberId)) {
         return res
           .status(401)
           .json({ error: "User is not a member of this project" });
@@ -995,6 +999,11 @@ projectsRouter.delete("/:projectId", async (req, res) => {
     }
 
     await ProjectPost.deleteMany({ projectId });
+
+    await User.findOneAndUpdate(
+      { _id: project.owner._id },
+      { $pull: { "projects.projectsOwned": project._id } }
+    );
 
     await Project.findByIdAndDelete(projectId);
 
