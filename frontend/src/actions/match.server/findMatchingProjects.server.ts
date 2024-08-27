@@ -1,28 +1,47 @@
 "use server";
+import { auth } from "@/auth";
 import { baseUrl } from "@/constants";
-import axios from "axios";
 
-const findMatchingProjects = async (actualUser: {
-  avoidedProjects: string[];
-  joinedProjects: string[];
-  appliedProjects: string[];
-  languagesSpoken: string[];
-  techStack: string[];
-}) => {
-  console.log("Finding matching projects for", actualUser);
-
+const getMatchedProjects = async (
+  actualUser: string,
+  targetProject: string,
+) => {
+  const session = await auth();
   try {
-    const res = await axios.get(`${baseUrl}/api/match/projects`, {
-      data: {
-        actualUser,
-      },
+    console.log("Fetching matched projects for user:", {
+      actualUser,
+      targetProject,
     });
 
-    return res.data;
+    const actualUserId = session?.user?.id || "";
+
+    const queryParams = new URLSearchParams({
+      actualUser: actualUserId,
+      targetProject,
+    });
+
+    const response = await fetch(
+      `${baseUrl}/api/match/projects?${queryParams.toString()}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      },
+    );
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.log("Error fetching matched projects:", errorText);
+      return { error: errorText };
+    }
+
+    const data = await response.json();
+    return data;
   } catch (error: any) {
-    console.log("Error finding matching projects:", error.message);
-    return error;
+    console.log("Error fetching matched projects:", error.message);
+    return { error: error.message };
   }
 };
 
-export { findMatchingProjects };
+export { getMatchedProjects };
