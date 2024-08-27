@@ -370,7 +370,7 @@ projectsRouter.post(
           .json({ error: "User already applied to be a memeber" });
       }
 
-      if (user.projects?.projectsApplied.includes(project._id)) {
+      if (user.projects?.projectsApplied.includes(project.id)) {
         return res
           .status(400)
           .json({ error: "User already applied to this project" });
@@ -383,7 +383,7 @@ projectsRouter.post(
       }
 
       await Project.updateOne(
-        { _id: project._id },
+        { _id: project.id },
         {
           $push: { "members.membersApplied": userId },
         }
@@ -392,7 +392,7 @@ projectsRouter.post(
       await User.updateOne(
         { _id: userId },
         {
-          $push: { "projects.projectsApplied": project._id },
+          $push: { "projects.projectsApplied": project.id },
         }
       );
 
@@ -438,7 +438,7 @@ projectsRouter.post(
       }
 
       await Project.updateOne(
-        { _id: project._id },
+        { _id: project.id },
         {
           $push: { "members.membersJoined": memberId },
           $pull: { "members.membersApplied": memberId },
@@ -448,8 +448,8 @@ projectsRouter.post(
       await User.updateOne(
         { _id: memberId },
         {
-          $push: { "projects.projectsJoined": project._id },
-          $pull: { "projects.projectsApplied": project._id },
+          $push: { "projects.projectsJoined": project.id },
+          $pull: { "projects.projectsApplied": project.id },
         }
       );
 
@@ -482,7 +482,7 @@ projectsRouter.post(
       }
 
       await Project.updateOne(
-        { _id: project._id },
+        { _id: project.id },
         {
           $pull: { "members.membersApplied": memberId },
           $push: { "members.membersDeclined": memberId },
@@ -498,8 +498,8 @@ projectsRouter.post(
       await User.updateOne(
         { _id: memberId },
         {
-          $pull: { "projects.projectsApplied": project._id },
-          $push: { "projects.projectsDeclined": project._id },
+          $pull: { "projects.projectsApplied": project.id },
+          $push: { "projects.projectsDeclined": project.id },
         }
       );
 
@@ -541,7 +541,7 @@ projectsRouter.post(
       }
 
       await Project.updateOne(
-        { _id: project._id },
+        { _id: project.id },
         {
           $pull: { "members.membersJoined": userId },
         }
@@ -550,7 +550,7 @@ projectsRouter.post(
       await User.updateOne(
         { _id: userId },
         {
-          $pull: { "projects.projectsJoined": project._id },
+          $pull: { "projects.projectsJoined": project.id },
         }
       );
 
@@ -585,7 +585,7 @@ projectsRouter.post(
           .json({ error: "User is not a member of this project" });
       }
 
-      if (project.owner._id.toString() !== userId) {
+      if (project.owner.id.toString() !== userId) {
         return res
           .status(403)
           .json({ error: "You are not authorized to remove this user" });
@@ -598,7 +598,7 @@ projectsRouter.post(
       }
 
       await Project.updateOne(
-        { _id: project._id },
+        { _id: project.id },
         {
           $pull: { "members.membersJoined": memberId },
           $push: { "members.membersDeclined": memberId },
@@ -608,8 +608,8 @@ projectsRouter.post(
       await User.updateOne(
         { _id: memberId },
         {
-          $pull: { "projects.projectsJoined": project._id },
-          $push: { "projects.projectDeclined": project._id },
+          $pull: { "projects.projectsJoined": project.id },
+          $push: { "projects.projectDeclined": project.id },
         }
       );
       await project.save();
@@ -638,7 +638,7 @@ projectsRouter.get(
       }
 
       res.json({
-        isMember: project.members?.membersJoined.includes(user?._id!),
+        isMember: project.members?.membersJoined.includes(user?.id!),
       });
     } catch (error) {
       next(error);
@@ -828,10 +828,10 @@ projectsRouter.put(
       const updateUser = await User.findByIdAndUpdate(
         { _id: matchedUserId },
         {
-          $push: { "matches.projects.accepted": project._id },
+          $push: { "matches.projects.accepted": project.id },
           $pull: {
-            "matches.projects.pending": project._id,
-            "matches.projects.suggested": project._id,
+            "matches.projects.pending": project.id,
+            "matches.projects.suggested": project.id,
           },
         },
         { new: true }
@@ -873,10 +873,10 @@ projectsRouter.put(
       const updateUser = await User.findByIdAndUpdate(
         { _id: matchedUserId },
         {
-          $push: { "matches.projects.declined": project._id },
+          $push: { "matches.projects.declined": project.id },
           $pull: {
-            "matches.projects.pending": project._id,
-            "matches.projects.suggested": project._id,
+            "matches.projects.pending": project.id,
+            "matches.projects.suggested": project.id,
           },
         },
         { new: true }
@@ -907,7 +907,7 @@ projectsRouter.delete("/:projectId", async (req, res) => {
       return res.status(404).json({ message: "Project not found" });
     }
 
-    if (userId !== project.owner._id.toString()) {
+    if (userId !== project.owner.id.toString()) {
       return res
         .status(403)
         .json({ message: "You are not authorized to delete this project" });
@@ -916,7 +916,7 @@ projectsRouter.delete("/:projectId", async (req, res) => {
     const posts = await ProjectPost.find({ projectId });
 
     for (const post of posts) {
-      await ProjectPostReply.deleteMany({ projectPostId: post._id });
+      await ProjectPostReply.deleteMany({ projectPostId: post.id });
     }
 
     await ProjectPost.deleteMany({ projectId });

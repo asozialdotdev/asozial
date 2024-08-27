@@ -243,7 +243,7 @@ friendshipsRouter.get(
               );
               if (!friendDetails) return null;
               const response = {
-                id: friendDetails._id,
+                id: friendDetails.id,
                 info: {
                   username: friendDetails.info?.username || "Kreuzbär",
                   image: friendDetails.info?.image || "",
@@ -262,7 +262,7 @@ friendshipsRouter.get(
               );
               if (!friendDetails) return null;
               const response = {
-                id: friendDetails._id,
+                id: friendDetails.id,
                 info: {
                   username: friendDetails.info?.username,
                   image: friendDetails.info?.image,
@@ -282,7 +282,7 @@ friendshipsRouter.get(
               console.log("friendDetails", friendDetails);
               if (!friendDetails) return null;
               const response = {
-                id: friendDetails._id,
+                id: friendDetails.id,
                 info: {
                   username: friendDetails.info?.username,
                   image: friendDetails.info?.image,

@@ -48,7 +48,7 @@ matchRouter.get(
             techStackMatches: {
               $size: {
                 $setIntersection: [
-                  "$techStack",
+                  "$codingLanguages",
                   actualUser.skills.codingLanguages,
                 ],
               },
@@ -74,7 +74,7 @@ matchRouter.get(
       const suggestedUserIds = filteredUsers.map((user) => user._id);
 
       await User.updateOne(
-        { _id: actualUser._id },
+        { _id: actualUser.id },
         {
           $addToSet: { "matches.users.suggested": { $each: suggestedUserIds } },
         }
@@ -144,10 +144,10 @@ matchRouter.post(
 
       await newUserMatch.save();
 
-      const populatedActualUser = await User.findById(actualUser._id).populate(
+      const populatedActualUser = await User.findById(actualUser.id).populate(
         "matches.users.pending"
       );
-      const populatedTargetUser = await User.findById(targetUser._id).populate(
+      const populatedTargetUser = await User.findById(targetUser.id).populate(
         "matches.users.pending"
       );
 
@@ -311,7 +311,7 @@ matchRouter.get(
             techStackMatches: {
               $size: {
                 $setIntersection: [
-                  "$techStack",
+                  "$codignLanguages",
                   user.skills?.codingLanguages.map((cl: any) => cl.language),
                 ],
               },
@@ -384,7 +384,7 @@ matchRouter.post(
 
       await newProjectMatch.save();
 
-      const populatedActualUser = await User.findById(actualUser._id).populate(
+      const populatedActualUser = await User.findById(actualUser.id).populate(
         "matches.projects.pending"
       );
       const populatedFoundProject = await Project.findById(projectId).populate(
@@ -494,13 +494,13 @@ matchRouter.put(
       await User.updateOne(
         { _id: projectMatch.user },
         {
-          $pull: { "matches.projects.pending": project._id },
-          $addToSet: { "matches.projects.declined": project._id },
+          $pull: { "matches.projects.pending": project.id },
+          $addToSet: { "matches.projects.declined": project.id },
         }
       );
 
       await Project.updateOne(
-        { _id: project._id },
+        { _id: project.id },
         {
           $pull: { "members.membersApplied": projectMatch.user },
           $addToSet: { "members.membersDeclined": projectMatch.user },
