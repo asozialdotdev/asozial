@@ -9,7 +9,7 @@ const matchUserWithProject = async (
   console.log("Matching user", actualUserId, "with project", projectId);
 
   try {
-    const res = await axios.post(`${baseUrl}/api/projects/match`, {
+    const res = await axios.post(`${baseUrl}/api/match/projects`, {
       actualUser: actualUserId,
       projectId: projectId,
     });

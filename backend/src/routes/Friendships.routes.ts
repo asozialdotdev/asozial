@@ -88,6 +88,16 @@ friendshipsRouter.patch(
 
       await friendship.save();
 
+      await User.findByIdAndUpdate(friendship.senderId, {
+        $pull: { "friends.pending": friendship.receiverId },
+        $push: { "friends.accepted": friendship.senderId },
+      });
+
+      await User.findByIdAndUpdate(friendship.receiverId, {
+        $pull: { "friends.pending": friendship.senderId },
+        $push: { "friends.accepted": friendship.receiverId },
+      });
+
       res.status(200).json(friendship);
     } catch (error) {
       console.error("Error accepting friendship:", error);
@@ -126,6 +136,16 @@ friendshipsRouter.patch(
         return;
       }
 
+      await User.findByIdAndUpdate(friendship.senderId, {
+        $pull: { "friends.pending": friendship.receiverId },
+        $push: { "friends.declined": friendship.senderId },
+      });
+
+      await User.findByIdAndUpdate(friendship.receiverId, {
+        $pull: { "friends.pending": friendship.senderId },
+        $push: { "friends.declined": friendship.receiverId },
+      });
+
       res.status(200).json(friendship);
     } catch (error) {
       console.error("Error declining friendship:", error);
@@ -142,20 +162,15 @@ friendshipsRouter.get(
     try {
       const { actualUser } = req.body;
 
-      const pendingFriendships = await Friendship.find({
-        $or: [
-          { receiverId: actualUser, status: "pending" },
-          { senderId: actualUser, status: "pending" },
-        ],
-      });
+      const user = await User.findById(actualUser).populate("friends.pending");
 
-      if (!pendingFriendships) {
+      if (!user || !user.friends?.pending.length) {
         res.status(404).send("You don't have any pending friendships!");
         console.error("No pending friendships found");
         return;
       }
 
-      res.json(pendingFriendships);
+      res.json(user.friends.pending);
     } catch (error) {
       next(error);
     }
@@ -170,20 +185,15 @@ friendshipsRouter.get(
     try {
       const { actualUser } = req.body;
 
-      const declinedFriendships = await Friendship.find({
-        $or: [
-          { receiverId: actualUser, status: "declined" },
-          { senderId: actualUser, status: "declined" },
-        ],
-      });
+      const user = await User.findById(actualUser).populate("friends.declined");
 
-      if (!declinedFriendships) {
+      if (!user || !user.friends?.declined.length) {
         res.status(404).send("You don't have any declined friendships!");
         console.error("No declined friendships found");
         return;
       }
 
-      res.json(declinedFriendships);
+      res.json(user.friends.declined);
     } catch (error) {
       next(error);
     }

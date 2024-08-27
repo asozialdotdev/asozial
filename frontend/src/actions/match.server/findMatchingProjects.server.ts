@@ -12,7 +12,7 @@ const findMatchingProjects = async (actualUser: {
   console.log("Finding matching projects for", actualUser);
 
   try {
-    const res = await axios.get(`${baseUrl}/api/projects/match`, {
+    const res = await axios.get(`${baseUrl}/api/match/projects`, {
       data: {
         actualUser,
       },
