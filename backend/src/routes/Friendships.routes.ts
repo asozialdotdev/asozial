@@ -29,10 +29,12 @@ friendshipsRouter.post(
       }
 
       const friendshipExists = await Friendship.findOne({
-        $or: [{ friends: receiverId, senderId }],
+        friends: { $all: [senderId, receiverId] },
       });
 
-      if (friendshipExists) return;
+      if (friendshipExists) {
+        return res.status(409).json({ message: "Friendship already exists" });
+      }
 
       const newFriendship = await Friendship.create({
         senderId,
