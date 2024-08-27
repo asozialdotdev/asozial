@@ -17,21 +17,20 @@ import Link from "next/link";
 import { auth } from "@/auth";
 import { Button } from "../ui/button";
 import { socialsData } from "@/constants";
-import { checkIsMember } from "@/actions";
 import ProjectPitch from "./ProjectPitch";
 import ProjectMainLanguage from "./ProjectMainLanguage";
-import ButtonBack from "../common/ui/buttons/ButtonBack";
 import ProjectDescription from "./ProjectDescription";
-
-const userIdTest = "1234567890";
+import { Users } from "lucide-react";
+import LeaveProject from "./LeaveProject";
 
 async function ProjectComponent({ project }: { project: Project }) {
   const session = await auth();
   const username = session?.user?.githubUsername;
   const isMember = project.members?.membersJoined.some(
-    (member: Member) => member._id === session?.user?.id,
+    (member: Member) => member._id.toString() === session?.user?.id,
   );
-  const isOwner = project.owner._id === session?.user?.id;
+  console.log("isMember", isMember);
+  const isOwner = project.owner._id.toString() === session?.user?.id;
 
   console.log("project owner", project.owner);
 
@@ -100,7 +99,6 @@ async function ProjectComponent({ project }: { project: Project }) {
           {project.members?.membersJoined &&
           project.members.membersJoined.length > 0 ? (
             project.members?.membersJoined.map((member) => {
-              console.log("member>>>>>>>>>>>", member);
               return (
                 <UserAvatar
                   key={member.info.name}
@@ -167,10 +165,21 @@ async function ProjectComponent({ project }: { project: Project }) {
       {/* Edit Button */}
       <div className="mb-6">
         {isOwner && (
-          <Link href={`/${username}/${project.slug}/${project._id}/edit`}>
-            <Button>Edit project</Button>
-          </Link>
+          <div className="flex w-full items-end justify-end gap-4">
+            <Link href={`/${username}/${project.slug}/${project._id}/edit`}>
+              <Button>Edit project</Button>
+            </Link>
+            <Link href={`/${username}/${project.slug}/${project._id}/members`}>
+              <Button variant="secondary" className="self-end">
+                <span className="flex items-center gap-2">
+                  <Users />
+                  <p>Manage Members</p>
+                </span>
+              </Button>
+            </Link>
+          </div>
         )}
+        {isMember && <LeaveProject project={project} />}
       </div>
     </section>
   );
