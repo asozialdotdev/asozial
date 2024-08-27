@@ -31,7 +31,8 @@ async function RequestCard({ project, member }: RequestCardProps) {
   console.log("member>>>>>>>>>>", member);
   const session = await auth();
   const username = session?.user?.githubUsername as string;
-  const { username: memberUsername, image, _id: memberId } = member;
+  const { _id: memberId, info } = member;
+  const { image, username: memberUsername } = info;
   const { title, slug, _id } = project;
   return (
     <>

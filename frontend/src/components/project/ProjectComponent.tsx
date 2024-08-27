@@ -23,10 +23,6 @@ import ProjectMainLanguage from "./ProjectMainLanguage";
 import ButtonBack from "../common/ui/buttons/ButtonBack";
 import ProjectDescription from "./ProjectDescription";
 
-const membersJoined = ["Benjamin", "Mirko", "John", "Jane", "José"];
-const membersApplied = ["Alice", "Bob", "Charlie"];
-const membersInvited = ["David", "Eve", "Frank"];
-
 const userIdTest = "1234567890";
 
 async function ProjectComponent({ project }: { project: Project }) {
@@ -36,6 +32,8 @@ async function ProjectComponent({ project }: { project: Project }) {
     (member: Member) => member._id === session?.user?.id,
   );
   const isOwner = project.owner._id === session?.user?.id;
+
+  console.log("project owner", project.owner);
 
   return (
     <section className="relative -mt-4 flex w-full flex-col gap-4 border-b border-b-neutral-300 px-4 dark:border-b-neutral-600">
@@ -99,15 +97,19 @@ async function ProjectComponent({ project }: { project: Project }) {
           </span>
         </div>
         <div className="flex gap-4">
-          {project.members?.membersJoined?.length > 0 ? (
-            project.members?.membersJoined.map((member) => (
-              <UserAvatar
-                key={member.name}
-                src={member.image}
-                username={member.username}
-                userId={userIdTest}
-              />
-            ))
+          {project.members?.membersJoined &&
+          project.members.membersJoined.length > 0 ? (
+            project.members?.membersJoined.map((member) => {
+              console.log("member>>>>>>>>>>>", member);
+              return (
+                <UserAvatar
+                  key={member.info.name}
+                  src={member.info.image}
+                  username={member.info.username}
+                  userId={member._id}
+                />
+              );
+            })
           ) : (
             <p className="text-neutral-500 dark:text-neutral-400">
               No members joined yet
@@ -120,8 +122,8 @@ async function ProjectComponent({ project }: { project: Project }) {
       <div className="flex flex-col items-start gap-2">
         <p className="text-base font-semibold">Owner</p>
         <UserAvatar
-          src={project.owner.image}
-          username={project.owner.username}
+          src={project.owner.info.image}
+          username={project.owner.info.username}
           userId={project.owner._id}
         />
       </div>

@@ -98,8 +98,8 @@ function ReplyShow({ replyId, projectPostId, replies, child }: ReplyShowProps) {
                 {/* Avatar on the left side */}
 
                 <UserAvatar
-                  src={reply.userId.image}
-                  username={reply.userId.username}
+                  src={reply.userId.info.image}
+                  username={reply.userId.info.username}
                   userId={reply.userId._id}
                 />
 
@@ -107,7 +107,7 @@ function ReplyShow({ replyId, projectPostId, replies, child }: ReplyShowProps) {
 
                 <div className="flex-grow">
                   <p className="font-medium text-neutral-500 dark:text-neutral-400">
-                    {reply.userId.username}
+                    {reply.userId.info.username}
                   </p>
                   <p className="mt-2 text-justify text-sm font-light text-dark dark:text-light">
                     {reply.content}

@@ -14,9 +14,6 @@ import ProjectPostsList from "@/components/projectPost/ProjectPostsList";
 import ProjectLoadingSkeleton from "@/components/project/ProjectLoadingSkeleton";
 import ApplyProject from "@/components/project/requests/ApplyProject";
 
-//Ui
-import { Button } from "@/components/ui/button";
-
 //Lib
 import { auth } from "@/auth";
 
