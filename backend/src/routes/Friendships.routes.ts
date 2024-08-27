@@ -62,7 +62,7 @@ friendshipsRouter.post(
 
 // PATCH friends to accept friendship request
 
-friendshipsRouter.patch(
+friendshipsRouter.put(
   "/:friendshipId/accept",
   async (req: Request, res: Response, next: NextFunction) => {
     try {

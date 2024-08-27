@@ -1,20 +1,26 @@
 "use server";
+import { auth } from "@/auth";
 import { baseUrl } from "@/constants";
-import axios from "axios";
 
 const acceptFriendship = async (userId: string, friendshipId: string) => {
-  console.log("userId", userId);
+  const session = await auth();
   try {
-    const res = await axios.patch(
+    const response = await fetch(
       `${baseUrl}/api/friends/${friendshipId}/accept`,
       {
-        userId,
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ userId: session?.user?.id, friendshipId }),
       },
     );
-    return res.data;
+
+    const data = await response.json();
+    return data;
   } catch (error: any) {
     console.log("Error accepting friendship:", error.message);
-    return error;
+    return { message: "Error accepting friendship" };
   }
 };
 
