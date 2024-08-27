@@ -1,6 +1,7 @@
 import express, { Request, Response, NextFunction } from "express";
-import User from "../models/User.models";
+import User, { UserDocument } from "../models/User.models";
 import Friendship from "../models/Friendship.models";
+import { ObjectId } from "mongodb"; // Ensure you import ObjectId from mongoose
 
 const friendshipsRouter = express.Router();
 
@@ -9,21 +10,26 @@ const friendshipsRouter = express.Router();
 friendshipsRouter.post(
   "/",
   async (req: Request, res: Response, next: NextFunction) => {
+    console.log("req.body", req.body);
     try {
-      const senderId = (req as any).payload.user;
-      const receiverId = await User.findById(req.params.userId);
+      const { senderId, receiverId } = req.body;
+      console.log("senderId", senderId);
+      console.log("receiverId", receiverId);
+
+      if (!senderId) {
+        res.status(404).send("Sender not found");
+        console.error("Sender not found");
+        return;
+      }
 
       if (!receiverId) {
-        res.status(404).send("User not found");
-        console.error("User not found");
+        res.status(404).send("Receiver not found");
+        console.error("Receiver not found");
         return;
       }
 
       const friendshipExists = await Friendship.findOne({
-        $or: [
-          { senderId, receiverId },
-          { senderId: receiverId, receiverId: senderId },
-        ],
+        $or: [{ friends: receiverId, senderId }],
       });
 
       if (friendshipExists) return;
@@ -32,6 +38,14 @@ friendshipsRouter.post(
         senderId,
         receiverId,
         status: "pending",
+      });
+
+      await User.findByIdAndUpdate(senderId, {
+        $push: { "friends.pending": receiverId },
+      });
+
+      await User.findByIdAndUpdate(receiverId, {
+        $push: { "friends.pending": senderId },
       });
 
       res.status(201).json(newFriendship);
@@ -47,28 +61,47 @@ friendshipsRouter.patch(
   "/:friendshipId/accept",
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const friendshipId = req.params.friendshipId;
-      const friendship = await Friendship.findById(friendshipId);
+      const { userId } = req.body;
+      const { friendshipId } = req.params;
+
+      const friendship = await Friendship.findOneAndUpdate(
+        {
+          _id: friendshipId,
+          receiverId: userId,
+        },
+        { status: "accepted" },
+        { new: true }
+      );
 
       if (!friendship) {
-        res.status(404).send("Friendship not found");
-        console.error("Friendship not found");
-        return;
-      }
-
-      if (friendship.receiverId.toString() !== (req as any).payload.user) {
         res
-          .status(403)
-          .send("You are not authorized to accept this friendship");
-        console.error("Unauthorized to accept friendship");
+          .status(404)
+          .send(
+            "Friendship not found or you are not authorized to accept this request."
+          );
+        console.error(
+          "Friendship not found or unauthorized attempt to accept."
+        );
         return;
       }
 
-      friendship.status = "accepted";
+      friendship.friends.push(userId, friendship.senderId);
+
       await friendship.save();
+
+      await User.findByIdAndUpdate(friendship.senderId, {
+        $pull: { "friends.pending": friendship.receiverId },
+        $push: { "friends.accepted": friendship.senderId },
+      });
+
+      await User.findByIdAndUpdate(friendship.receiverId, {
+        $pull: { "friends.pending": friendship.senderId },
+        $push: { "friends.accepted": friendship.receiverId },
+      });
 
       res.status(200).json(friendship);
     } catch (error) {
+      console.error("Error accepting friendship:", error);
       next(error);
     }
   }
@@ -80,30 +113,47 @@ friendshipsRouter.patch(
   "/:friendshipId/decline",
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const friendshipId = req.params.friendshipId;
+      const { userId } = req.body;
+      const { friendshipId } = req.params;
 
       const friendship = await Friendship.findOneAndUpdate(
         {
           _id: friendshipId,
-          receiverId: (req as any).payload.user._id,  // Ensures only the receiver can decline
+          receiverId: userId,
         },
         { status: "declined" },
-        { new: true }  // Return the updated document
+        { new: true }
       );
 
       if (!friendship) {
-        res.status(404).send("Friendship not found or unauthorized");
-        console.error("Friendship not found or unauthorized");
+        res
+          .status(404)
+          .send(
+            "Friendship not found or you are not authorized to decline this request."
+          );
+        console.error(
+          "Friendship not found or unauthorized attempt to decline."
+        );
         return;
       }
 
+      await User.findByIdAndUpdate(friendship.senderId, {
+        $pull: { "friends.pending": friendship.receiverId },
+        $push: { "friends.declined": friendship.senderId },
+      });
+
+      await User.findByIdAndUpdate(friendship.receiverId, {
+        $pull: { "friends.pending": friendship.senderId },
+        $push: { "friends.declined": friendship.receiverId },
+      });
+
       res.status(200).json(friendship);
     } catch (error) {
+      console.error("Error declining friendship:", error);
       next(error);
     }
   }
 );
-
 
 // GET all pending friendships
 
@@ -111,22 +161,17 @@ friendshipsRouter.get(
   "/pending",
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const actualUser = (req as any).payload.user;
+      const { actualUser } = req.body;
 
-      const pendingFriendships = await Friendship.find({
-        $or: [
-          { receiverId: actualUser, status: "pending" },
-          { senderId: actualUser, status: "pending" },
-        ],
-      });
+      const user = await User.findById(actualUser).populate("friends.pending");
 
-      if (!pendingFriendships) {
+      if (!user || !user.friends?.pending.length) {
         res.status(404).send("You don't have any pending friendships!");
         console.error("No pending friendships found");
         return;
       }
 
-      res.json(pendingFriendships);
+      res.json(user.friends.pending);
     } catch (error) {
       next(error);
     }
@@ -139,22 +184,17 @@ friendshipsRouter.get(
   "/declined",
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const actualUser = (req as any).payload.user;
+      const { actualUser } = req.body;
 
-      const declinedFriendships = await Friendship.find({
-        $or: [
-          { receiverId: actualUser, status: "declined" },
-          { senderId: actualUser, status: "declined" },
-        ],
-      });
+      const user = await User.findById(actualUser).populate("friends.declined");
 
-      if (!declinedFriendships) {
+      if (!user || !user.friends?.declined.length) {
         res.status(404).send("You don't have any declined friendships!");
         console.error("No declined friendships found");
         return;
       }
 
-      res.json(declinedFriendships);
+      res.json(user.friends.declined);
     } catch (error) {
       next(error);
     }
@@ -167,23 +207,178 @@ friendshipsRouter.delete(
   "/",
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const deleteResult = await Friendship.deleteMany({
-        $or: [
-          { senderId: req.body.senderId, receiverId: req.body.receiverId },
-          { senderId: req.body.receiverId, receiverId: req.body.senderId },
-        ],
+      const { actualUser } = req.body;
+      const deleteFriendship = await Friendship.findOneAndDelete({
+        $or: [{ senderId: actualUser }, { receiverId: actualUser }],
         status: "accepted",
       });
+      if (!deleteFriendship) {
+        res.status(404).send("Friendship not found or unauthorized");
+        console.error("Friendship not found or unauthorized");
+        return;
+      }
+      res.status(204);
+    } catch (error) {
+      next(error);
+    }
+  }
+);
 
-      if (deleteResult.deletedCount === 0) {
-        res.status(404).send("Friendship not found or not accepted");
-        console.error("Friendship not found or not accepted");
+friendshipsRouter.get(
+  "/:userId/status",
+  async (req: Request, res: Response, next: NextFunction) => {
+    const userId = req.params.userId;
+    try {
+      const user = await User.findById(userId);
+      if (!user) {
+        res.status(404).send("User not found");
+        console.error("User not found");
         return;
       }
 
-      res.status(200).json({ message: "Friendship deleted" });
-    } catch (error) {
-      next(error);
+      const userFriendships = await Friendship.find({
+        $or: [
+          { senderId: new ObjectId(userId) },
+          { receiverId: new ObjectId(userId) },
+          { friends: { $in: [new ObjectId(userId)] } },
+        ],
+      }).populate({
+        path: "senderId receiverId",
+        select: "username info.image",
+        model: User,
+      });
+
+      const acceptedFriendships = userFriendships.filter(
+        (friendship) => friendship.status === "accepted"
+      );
+      const pendingFriendships = userFriendships.filter(
+        (friendship) => friendship.status === "pending"
+      );
+      const declinedFriendships = userFriendships.filter(
+        (friendship) => friendship.status === "declined"
+      );
+
+      console.log("userFriendships", userFriendships);
+      console.log("acceptedFriendships", acceptedFriendships);
+      console.log("pendingFriendships", pendingFriendships);
+      console.log("declinedFriendships", declinedFriendships);
+
+      res.json({
+        accepted: acceptedFriendships,
+        pending: pendingFriendships,
+        declined: declinedFriendships,
+      });
+
+      // const friendsAcceptedDetails = user.friends?.accepted
+      //   ? await Promise.all(
+      //       user.friends?.accepted.map(async (friend) => {
+      //         const friendDetails = await User.findById(friend).select(
+      //           "info.username info.image"
+      //         );
+      //         if (!friendDetails) return null;
+      //         const response = {
+      //           id: friendDetails._id,
+      //           info: {
+      //             username: friendDetails.info?.username || "Kreuzbär",
+      //             image: friendDetails.info?.image || "",
+      //           },
+      //         };
+      //         return response;
+      //       })
+      //     )
+      //   : null;
+
+      // const friendsSentPendingDetails = user.friends?.pending
+      //   ? await Promise.all(
+      //       user.friends?.pending.map(async (friend) => {
+      //         const friendDetails = await Friendship.findOne({
+      //           senderId: userId,
+      //           receiverId: friend,
+      //         }).populate({
+      //           path: "receiverId",
+      //           select: "username info.image",
+      //           model: User,
+      //         });
+      //         console.log("friendDetails", friendDetails);
+      //         if (!friendDetails || !friendDetails.receiverId) return null;
+
+      //         const receiver =
+      //           friendDetails.receiverId as unknown as UserDocument;
+
+      //         const response = {
+      //           id: receiver._id,
+      //           username: receiver.username,
+      //           image: receiver.info.image,
+      //         };
+      //         return response;
+      //       })
+      //     )
+      //   : null;
+
+      // const friendsReceivedPendingDetails = user.friends?.pending
+      //   ? await Promise.all(
+      //       user.friends?.pending.map(async (friend) => {
+      //         const friendDetails = await Friendship.findOne({
+      //           senderId: friend,
+      //           receiverId: userId,
+      //         }).populate({
+      //           path: "senderId",
+      //           select: "username info.image",
+      //           model: User,
+      //         });
+      //         console.log("friendDetails", friendDetails);
+      //         if (!friendDetails || !friendDetails.receiverId) return null;
+
+      //         const receiver =
+      //           friendDetails.receiverId as unknown as UserDocument;
+
+      //         const response = {
+      //           id: receiver._id,
+      //           username: receiver.username,
+      //           image: receiver.info.image,
+      //         };
+      //         return response;
+      //       })
+      //     )
+      //   : null;
+
+      // const friendsRejectedDetails = user.friends?.declined
+      //   ? await Promise.all(
+      //       user.friends?.declined.map(async (friend) => {
+      //         const friendDetails = await User.findById(friend).select(
+      //           "info.username info.image"
+      //         );
+      //         console.log("friendDetails", friendDetails);
+      //         if (!friendDetails) return null;
+      //         const response = {
+      //           id: friendDetails._id,
+      //           info: {
+      //             username: friendDetails.info?.username,
+      //             image: friendDetails.info?.image,
+      //           },
+      //         };
+      //         return response;
+      //       })
+      //     )
+      //   : null;
+
+      // console.log("friendsAcceptedDetails", friendsAcceptedDetails);
+      // console.log("friendsSentPendingDetails", friendsSentPendingDetails);
+      // console.log(
+      //   "friendsReceivedPendingDetails",
+      //   friendsReceivedPendingDetails
+      // );
+      // console.log("friendsRejectedDetails", friendsRejectedDetails);
+
+      // res.json({
+      //   friendsAccepted: friendsAcceptedDetails,
+      //   friendsSentPending: friendsSentPendingDetails,
+      //   friendsReceivedPending: friendsReceivedPendingDetails,
+      //   friendsRejected: friendsRejectedDetails,
+      // });
+    } catch (error: any) {
+      console.error("Error fetching user friendships:", error);
+      res.status(500).send("Error fetching user friendships");
     }
   }
 );

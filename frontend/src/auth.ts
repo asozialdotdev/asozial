@@ -5,8 +5,6 @@ import client from "./lib/db";
 import authConfig from "../auth.config";
 import { baseUrl } from "@/constants";
 import axios from "axios";
-import { ObjectId } from "mongodb";
-import type { User } from "@/types/User";
 import {
   getUserGithubFollowers,
   getUserGithubFollowing,
@@ -16,10 +14,6 @@ import {
   getUserGithubRepos,
   getUserGithubRepoLanguages,
 } from "@/actions/users.server";
-import { GithubUser } from "./types/Github";
-import github from "next-auth/providers/github";
-import { access } from "fs";
-import { CodeSquare } from "lucide-react";
 
 const GITHUB_CLIENT_ID = process.env.GITHUB_CLIENT_ID;
 const GITHUB_CLIENT_SECRET = process.env.GITHUB_CLIENT_SECRET;
@@ -46,11 +40,15 @@ export const {
   ],
   callbacks: {
     async signIn({ user, profile, account }) {
+      console.log("Account:", account);
+      console.log("Profile:", profile);
+      console.log("User:", user);
+
       const db = client.db();
 
       const existingUser = await db
         .collection("User")
-        .findOne({ email: user.email });
+        .findOne({ "info.email": user.email });
 
       if (!existingUser) {
         try {
@@ -83,16 +81,21 @@ export const {
             account?.access_token as string,
           );
           const newUser = {
-            username: profile?.login,
-            name: user?.name,
-            email: user?.email,
-            notificationEmail: profile?.notification_email,
-            image: profile?.avatar_url,
-            company: profile?.company,
-            website: profile?.blog,
-            location: profile?.location,
-            hireable: profile?.hireable,
-            codingLanguages: githubRepoLanguages,
+            username: profile?.login || "",
+            info: {
+              username: profile?.login || "",
+              name: user?.name,
+              email: user?.email,
+              notificationEmail: profile?.notification_email,
+              image: profile?.avatar_url,
+              company: profile?.company,
+              website: profile?.blog,
+              location: profile?.location,
+              hireable: profile?.hireable,
+            },
+            skills: {
+              codingLanguages: githubRepoLanguages,
+            },
             socials: [
               profile?.twitter_username && {
                 platform: "twitter",
@@ -102,7 +105,7 @@ export const {
             github: {
               id: profile?.id,
               nodeId: profile?.node_id,
-              username: profile?.login,
+              login: profile?.login,
               accessToken: account?.access_token,
               bio: profile?.bio,
               apiUrl: profile?.url,
@@ -130,8 +133,8 @@ export const {
               updatedAt: profile?.updated_at,
               collaboratorsNumber: profile?.collaborators,
             },
+            lastLogin: null,
           };
-          console.log("newUser", newUser);
           const response = await axios.post(`${baseUrl}/api/auth`, newUser, {
             headers: {
               "Content-Type": "application/json",
@@ -139,19 +142,12 @@ export const {
           });
           console.log("response", response.data);
 
-          //**ONCE ACCESS TOKEN GIVEN BY GITHUB, DO THE API CALLS HERE */
-          //make separate api calls to get user details before creation in db
-          // **TIMING OUT DUE TO TOO MANY API CALLS**
-
-          user.id = response.data._id; // Assign the custom user ID to NextAuth's user object
-          //** ADD THE ACCESS TOKEN TO THE USER  */ */
+          user.id = response.data._id;
         } catch (error: any) {
           console.log("Error creating user in database", error.message);
           return false;
         }
       } else {
-        // update user information if they already exist
-
         const githubFollowers = await getUserGithubFollowers(
           profile?.followers_url as string,
           account?.access_token as string,
@@ -183,7 +179,9 @@ export const {
 
         const updatedUser = {
           _id: existingUser._id,
-          codingLanguages: githubRepoLanguages,
+          skills: {
+            codingLanguages: githubRepoLanguages,
+          },
           github: {
             followers: githubFollowers,
             following: githubFollowing,
@@ -192,6 +190,7 @@ export const {
             organizations: githubOrganizations,
             publicRepos: githubRepos,
           },
+          lastLogin: Date.now(),
         };
 
         const response = await axios.put(

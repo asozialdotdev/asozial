@@ -5,12 +5,32 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useSession } from "next-auth/react";
 import { Button } from "../ui/button";
 import { signOut } from "@/actions";
-import ButtonBack from "../common/ui/ButtonBack";
+import ButtonBack from "../common/ui/buttons/ButtonBack";
+import SidebarTitle from "../common/sidebar/SidebarTitle";
+import SidebarFriendsList from "../common/sidebar/SidebarFriendsList";
+import SidebarButtons from "../common/sidebar/SidebarButtons";
+import { SearchIcon } from "lucide-react";
+import MatchIcon from "../common/ui/icons/MatchIcon";
+import FriendStatusCard from "../dashboard/FriendStatusCard";
 
 function UserSidebar() {
   const { userSidebarRef, isUserSidebarOpen, projectSidebarRef } =
     useSidebarsContext();
-  const session = useSession();
+  const { data: session } = useSession();
+  const links = [
+    {
+      name: "search",
+      href: `/search/users`,
+      Icon: SearchIcon,
+      action: "",
+    },
+    {
+      name: "match",
+      href: `/match/users`,
+      Icon: MatchIcon,
+      action: "",
+    },
+  ];
 
   return (
     <aside
@@ -18,16 +38,9 @@ function UserSidebar() {
       ref={userSidebarRef}
     >
       <ButtonBack className="absolute right-3 top-1 z-20" size={30} />
-      <Avatar className="h-28 w-28 flex-shrink-0">
-        <AvatarImage src={session?.data?.user?.image || ""} alt="User Avatar" />
-        <AvatarFallback>
-          {session?.data?.user?.name?.toString().charAt(0)}
-        </AvatarFallback>
-      </Avatar>
-
-      <form action={signOut}>
-        <Button type="submit">Sign Out</Button>
-      </form>
+      <SidebarTitle>Friends</SidebarTitle>
+      <SidebarButtons links={links} />
+      <SidebarFriendsList />
     </aside>
   );
 }

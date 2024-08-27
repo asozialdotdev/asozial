@@ -14,6 +14,7 @@ const updateProjectPost = async (
   formData: FormData,
 ): Promise<CreatePostFormState> => {
   const session = await auth();
+  const username = session?.user?.githubUsername;
 
   const result = createPostSchema.safeParse({
     title: formData.get("title"),
@@ -54,7 +55,9 @@ const updateProjectPost = async (
     );
     const updatedPost = await response.json();
     console.log("Updated post:", updatedPost);
-    revalidatePath(`/projects/${post.projectId}/posts/${projectPostId}`);
+    revalidatePath(
+      `/${username}/${post.projectId.slug}/${post.projectId._id}/posts/${projectPostId}`,
+    );
     return {
       errors: {},
       success: true,

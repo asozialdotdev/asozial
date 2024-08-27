@@ -16,6 +16,7 @@ import useSpokenLanguages from "@/hooks/useSpokenLanguages";
 import { patchMainLanguage } from "@/actions";
 import { Button } from "../ui/button";
 import { useSession } from "next-auth/react";
+import CustomLabel from "../common/ui/Label";
 
 type Input = z.infer<typeof mainLanguageSchema>;
 
@@ -51,23 +52,30 @@ function ProjectMainLanguage({ project }: { project: Project }) {
   };
 
   const isOwner = project.owner._id === session.data?.user?.id;
+  console.log("isOwner", isOwner);
 
   return (
-    <div>
+    <div
+      className={`${project.mainLanguage ? "h-auto" : "h-[9rem]"} mt-4 flex flex-col gap-2`}
+    >
       {!isEditing ? (
         <>
           <h4 className="text-lg font-semibold">Language</h4>
           {!project.mainLanguage ? (
             <div>
               <p className="mb-4 text-justify text-base font-light text-neutral-500 dark:text-neutral-400">
-                {isOwner ? "Here you can add the main language of your project" : "No language provided yet."}
+                {isOwner
+                  ? "Here you can add the main language of your project"
+                  : "No language provided yet."}
               </p>
-              <Button
-                className="bg-dark dark:bg-light hover:dark:bg-zinc-300 dark:focus:bg-zinc-300"
-                onClick={toggleEditing}
-              >
-                Add Language
-              </Button>
+              {isOwner && (
+                <Button
+                  className="bg-dark dark:bg-light hover:dark:bg-zinc-300 dark:focus:bg-zinc-300"
+                  onClick={toggleEditing}
+                >
+                  Add Language
+                </Button>
+              )}
             </div>
           ) : (
             <>
@@ -78,11 +86,9 @@ function ProjectMainLanguage({ project }: { project: Project }) {
       ) : (
         <form
           onSubmit={handleSubmit(processForm)}
-          className="mt-4 flex flex-col gap-2"
+          className="flex flex-col gap-2"
         >
-          <label htmlFor="mainLanguage" className="font-semibold">
-            Language
-          </label>
+          <CustomLabel htmlFor="mainLanguage">Language</CustomLabel>
           <Controller
             name="mainLanguage"
             control={control}

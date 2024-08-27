@@ -1,9 +1,9 @@
 import { Types } from "mongoose";
 import { ProjectId } from "./Project";
 import { ProjectPostId } from "./ProjectPost";
+import Friendship from "./Friendship";
 
 // next-auth.d.ts
-import NextAuth from "next-auth";
 
 type UserId = Types.ObjectId | string;
 
@@ -15,11 +15,6 @@ type TechStackEntry = {
   Icon: React.ComponentType<{ className: string }>;
 };
 
-type Social = {
-  platform: string;
-  url: string;
-};
-
 type CodingLanguage = {
   language: string;
   lines: number;
@@ -29,60 +24,90 @@ type CodingLanguage = {
   Icon: React.ComponentType<{ className: string }>;
 };
 
-type Github = {
-  id: number;
-  username: string;
-  bio: string;
-  apiUrl: string;
-  url: string;
-  eventsUrl: string;
-  followersUrl: string;
-  followers: object[];
-  followerNumber: number;
-  followingUrl: string;
-  following: object[];
-  followingNumber: number;
-  publicGistsUrl: string;
-  publicGists: object[];
-  publicGistsNumber: number;
-  privateGistsNumber: string;
-  starredUrl: string;
-  subscriptionsUrl: string;
-  subscriptions: object[];
-  subscriptionsNumber: number;
-  organizationsUrl: string;
-  organizations: object[];
-  organizationsNumber: number;
-  publicReposUrl: string;
-  publicRepos: object[];
-  publicReposNumber: number;
-  createdAt: string;
-  updatedAt: string;
-  collaboratorsNumber: number;
-};
-
 type User = {
+  _id: UserId;
   username: string;
-  name: string;
-  email: string;
-  notificationEmail: string;
-  image: string;
-  company: string;
-  website: string;
-  location: string;
-  hireable: boolean;
-  socials: Social[];
-  languagesSpoken: string[];
-  codingLanguages: [string, CodingLanguage][];
-  codingLibraries: [string, CodingLanguage][];
-  projectsJoined: ProjectId[];
-  projectsSuggested: ProjectId[];
-  projectsApplied: ProjectId[];
-  projectsAvoided: ProjectId[];
-  dashboardPosts: ProjectPostId[];
-  usersMatched: UserId[];
-  usersAvoided: UserId[];
-  github: Github;
+  info: {
+    bio: string;
+    username: string;
+    name: string;
+    email: string;
+    image: string;
+    company: string;
+    website: string;
+    location: string;
+    hireable: boolean;
+  };
+  skills: {
+    languagesSpoken: string[];
+    codingLanguages: CodingLanguage[];
+    codingLibraries: CodingLanguage[];
+  };
+  projects: {
+    projectsJoined: ProjectId[];
+    projectsSuggested: ProjectId[];
+    projectsApplied: ProjectId[];
+    dashboardPosts: ProjectPostId[];
+  };
+  socials: {
+    platform: string;
+    url: string;
+  };
+  friends: {
+    accepted: Friendship[];
+    incomingPending: Friendship[];
+    incomingDeclined: Friendship[];
+    outgoingPending: Friendship[];
+    outgoingDeclined: Friendship[];
+  };
+  matches: {
+    users: {
+      suggested: UserId[];
+      pending: UserId[];
+      accepted: UserId[];
+      declined: UserId[];
+    };
+    projects: {
+      suggested: ProjectId[];
+      pending: ProjectId[];
+      accepted: ProjectId[];
+      declined: ProjectId[];
+    };
+  };
+  github: {
+    id: number;
+    nodeId: string;
+    accessToken: string;
+    username: string;
+    notificationEmail: string;
+    bio: string;
+    apiUrl: string;
+    url: string;
+    eventsUrl: string;
+    followersUrl: string;
+    followers: object[];
+    followerNumber: number;
+    followingUrl: string;
+    following: object[];
+    followingNumber: number;
+    publicGistsUrl: string;
+    publicGists: object[];
+    publicGistsNumber: number;
+    privateGistsNumber: string;
+    starredUrl: string;
+    subscriptionsUrl: string;
+    subscriptions: object[];
+    subscriptionsNumber: number;
+    organizationsUrl: string;
+    organizations: object[];
+    organizationsNumber: number;
+    publicReposUrl: string;
+    publicRepos: object[];
+    publicReposNumber: number;
+    createdAt: string;
+    updatedAt: string;
+    collaboratorsNumber: number;
+  };
 };
 
-export type { User, UserId, TechStackEntry };
+export type { User, UserId, CodingLanguage, TechStackEntry };

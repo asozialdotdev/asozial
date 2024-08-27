@@ -3,13 +3,16 @@ import useFetchReposFromGithub from "@/hooks/projects/useFetchReposFromGithub";
 import PageTitle from "../common/ui/PageTitle";
 import { Input } from "../ui/input";
 import { useEffect, useRef, useState } from "react";
-import LoadingSpinner from "../common/ui/LoadingSpinner";
+import LoadingSpinner from "../common/ui/loading/LoadingSpinner";
 import { Button } from "../ui/button";
 import { useOutsideClick } from "@/hooks/useOutsideClick";
-import { createProjectFromGithub } from "@/actions";
+import { checkProjectTitle, createProjectFromGithub } from "@/actions";
 import Link from "next/link";
 import { Project } from "@/types/Project";
-import LoadingTextButton from "../common/ui/LoadingTextButton";
+import LoadingTextButton from "../common/ui/loading/LoadingTextButton";
+import ErrorMessage from "../common/ui/ErrorMessage";
+import SuccessMessage from "../common/ui/SuccessMessage";
+import { useSession } from "next-auth/react";
 
 type GithubRepo = {
   id: number;
@@ -25,15 +28,23 @@ function ExistingProjectForm() {
   const [hasSelected, setHasSelected] = useState(false);
   const [isLoadingSearch, setIsLoadingSearch] = useState(false);
   const [isLoadingCreating, setIsLoadingCreating] = useState(false);
-
+  const [errorCreating, setErrorCreating] = useState("");
   const [project, setProject] = useState<Project | null>(null);
 
   const { githubRepos, isLoadingRepos, errorRepos, setErrorRepos } =
     useFetchReposFromGithub();
   const dropdownRef = useRef<HTMLDivElement>(null);
-  useOutsideClick(() => {
-    setFilteredRepos([]);
-  }, dropdownRef);
+  const inputRef = useRef<HTMLInputElement>(null);
+  const session = useSession();
+  const username = session?.data?.user?.githubUsername;
+
+  useOutsideClick(
+    () => {
+      setFilteredRepos([]);
+    },
+    dropdownRef,
+    inputRef,
+  );
 
   useEffect(() => {
     if (selectedRepo) {
@@ -42,7 +53,13 @@ function ExistingProjectForm() {
       return;
     }
 
-    if (searchTerm.length < 3) {
+    if (searchTerm.length === 0) {
+      setFilteredRepos(githubRepos);
+      setIsLoadingSearch(false);
+      return;
+    }
+
+    if (searchTerm.length < 1) {
       setFilteredRepos([]);
       setIsLoadingSearch(false);
       return;
@@ -66,20 +83,34 @@ function ExistingProjectForm() {
     setSelectedRepo(repo);
     setFilteredRepos([]);
     setHasSelected(true);
+    setErrorCreating("");
+    setErrorRepos("");
+    setProject(null);
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(e.target.value);
     setSelectedRepo(null);
     setHasSelected(false);
+    setErrorCreating("");
   };
 
   const handleCreateProject = async () => {
     setIsLoadingCreating(true);
+    setErrorCreating("");
+    const { isUnique } = await checkProjectTitle(selectedRepo?.name as string);
+    console.log("isUnique", isUnique);
+    if (!isUnique) {
+      setErrorCreating(
+        "A project with this name already exists for your account.",
+      );
+      setIsLoadingCreating(false);
+      return;
+    }
     const result = await createProjectFromGithub(selectedRepo?.url as string);
     if (result?.error) {
-      console.error("Error creating project from Github");
-      setErrorRepos(result.message);
+      console.error(result.message);
+      setErrorCreating(result.message);
     } else {
       setProject(result);
     }
@@ -109,10 +140,11 @@ function ExistingProjectForm() {
         placeholder="Start typing the name of your Github repo"
         value={searchTerm}
         onChange={handleInputChange}
-        className="h-14 w-[75%] border-zinc-300 bg-white hover:bg-zinc-50 focus:bg-zinc-50 dark:border-zinc-700 dark:hover:bg-zinc-800 dark:focus:bg-zinc-800"
+        className="h-14 lg:w-[75%] w-full"
+        ref={inputRef}
       />
 
-      <div ref={dropdownRef} className="relative w-[70%]">
+      <div ref={dropdownRef} className="relative lg:w-[70%] w-[95%]">
         {filteredRepos.length > 0 && (
           <ul className="dark:shadow-netral-700/30 absolute z-10 mt-2 h-auto max-h-60 w-full overflow-y-auto rounded-md border border-dashed border-zinc-300 bg-white p-2 shadow-lg dark:border-zinc-600 dark:bg-zinc-800">
             {filteredRepos.map((repo: GithubRepo) => (
@@ -130,10 +162,10 @@ function ExistingProjectForm() {
           </ul>
         )}
         {filteredRepos.length === 0 &&
-          searchTerm.length > 3 &&
+          searchTerm.length > 0 &&
           !hasSelected &&
           !isLoadingSearch && (
-            <div className="absolute z-10 mt-2 h-auto max-h-60 w-full overflow-y-auto rounded-md border border-dashed border-zinc-300 bg-white p-2 shadow-lg dark:border-zinc-600 dark:bg-zinc-800 dark:shadow-neutral-700/30">
+            <div className="absolute z-10 mt-2 h-auto max-h-80 w-full overflow-y-auto rounded-md border border-dashed border-zinc-300 bg-white p-4 text-center shadow-lg dark:border-zinc-600 dark:bg-zinc-800 dark:shadow-neutral-700/30">
               No Github repos match your search
             </div>
           )}
@@ -149,15 +181,11 @@ function ExistingProjectForm() {
       </div>
 
       <div>
-        {errorRepos && (
-          <span className="text-base font-light text-red-700 dark:text-red-700">
-            {errorRepos}
-          </span>
-        )}
+        {errorRepos && <ErrorMessage>{errorRepos}</ErrorMessage>}
 
         {selectedRepo && (
           <div className="flex flex-col items-center gap-8">
-            <PageTitle className="font-semibold">Selected Project</PageTitle>
+            <PageTitle className="font-medium">Selected Project</PageTitle>
             <div className="w-full overflow-y-auto rounded-md border border-dashed border-zinc-300 p-6 dark:border-zinc-600">
               <h3 className="text-lg font-semibold">{selectedRepo?.name}</h3>
               <p className="text-base font-light text-neutral-500 dark:text-neutral-400">
@@ -165,7 +193,8 @@ function ExistingProjectForm() {
               </p>
             </div>
             {!project ? (
-              <div>
+              <div className="flex h-[10rem] flex-col items-center gap-2">
+                {errorCreating && <ErrorMessage>{errorCreating}</ErrorMessage>}
                 <Button onClick={handleCreateProject} className="p-8 text-xl">
                   {isLoadingCreating ? (
                     <LoadingTextButton text="Creating Project" />
@@ -175,11 +204,9 @@ function ExistingProjectForm() {
                 </Button>
               </div>
             ) : (
-              <div className="flex flex-col items-center gap-4">
-                <span className="text-lg font-semibold text-green-700 dark:text-green-700">
-                  Project created successfully
-                </span>
-                <Link href={`/projects/${project?._id}`}>
+              <div className="flex h-[10rem] flex-col items-center gap-4">
+                <SuccessMessage>Project created successfully</SuccessMessage>
+                <Link href={`/${username}/${project?.slug}/${project._id}`}>
                   <Button className="p-8 text-xl">Go to project</Button>
                 </Link>
               </div>

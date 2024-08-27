@@ -2,7 +2,7 @@ import discord from "/public/socials/discord.png";
 import slack from "/public/socials/slack.png";
 import notion from "/public/socials/notion.png";
 import gitlab from "/public/socials/gitlab.png";
-import { SocialsData } from "@/types/Project";
+import { Project, SocialsData } from "@/types/Project";
 import React from "react";
 import {
   FaLaravel,
@@ -356,10 +356,18 @@ const languagesWithColors: {
     library: "fa",
     Icon: RiSvelteFill,
   },
+  {
+    language: "Other",
+    bgColor: "bg-gray-500",
+    textColor: "text-gray-500",
+    library: "",
+    Icon: "",
+  },
 ];
 
 const contributors = [
   {
+    id: "josé",
     name: "José Copeti",
     email: "jrcopeti@gmail.com",
     github: "https://github.com/jrcopeti",
@@ -367,6 +375,7 @@ const contributors = [
     website: "https://jrcopeti.hashnode.dev/",
   },
   {
+    id: "benjamin",
     name: "Benjamin Elliott",
     email: "hello@benjamin.dev",
     github: "https://github.com/benjamindotdev",
@@ -374,6 +383,7 @@ const contributors = [
     website: "https://benjamin.dev",
   },
   {
+    id: "mirko",
     name: "Mirko Fede",
     email: "mirko@asozial.com",
     github: "https://github.com/mirkoeffe",
@@ -409,7 +419,7 @@ const socialsData: SocialsData[] = [
   },
 ];
 
-const projectStatus = ["active", "inactive", "completed"];
+const projectStatus: Project["status"][] = ["active", "inactive", "completed"];
 
 export {
   baseUrl,

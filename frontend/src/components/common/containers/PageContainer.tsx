@@ -11,7 +11,12 @@ const PageContainer: React.FC<PageContainerProps> = ({
   className,
 }) => {
   return (
-    <div className={cn("px-8 py-4 mx-auto my-0 flex flex-col items-center w-full max-w-screen-md", className)}>
+    <div
+      className={cn(
+        "mx-auto my-0 flex w-full max-w-screen-md flex-col items-center gap-10 px-8 py-4",
+        className,
+      )}
+    >
       {children}
     </div>
   );

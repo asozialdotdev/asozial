@@ -22,20 +22,28 @@ function ProjectPostsList({ projectPosts, projectId }: ProjectPostsListProps) {
     notFound();
   }
 
+  const sortedPosts = posts.sort((a, b) => {
+    return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+  });
+
   return (
     <>
       <section className="mt-4 flex w-full flex-col gap-4 pb-6">
         {/* Post Form */}
         <ProjectPostForm projectId={projectId} />
 
-        <PageTitle>Threads</PageTitle>
+        <PageTitle>
+          {posts.length && posts.length > 0
+            ? `${posts.length} Thread${posts.length > 1 ? "s" : ""}`
+            : "Threads"}
+        </PageTitle>
         {posts.length === 0 && (
           <p className="text-lg text-neutral-500 dark:text-neutral-400">
             No threads yet. Be the first to start one!
           </p>
         )}
         {/* Posts */}
-        {posts.map((post) => (
+        {sortedPosts.map((post) => (
           <ProjectPost key={post._id.toString()} projectPost={post} />
         ))}
       </section>

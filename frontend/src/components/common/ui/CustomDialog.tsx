@@ -8,8 +8,10 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
+import LoadingTextButton from "./loading/LoadingTextButton";
 
 type CustomDialogProps = {
+  isDeleting?: boolean;
   trigger: React.ReactNode;
   title: string;
   description: string;
@@ -18,6 +20,7 @@ type CustomDialogProps = {
 };
 
 function CustomDialog({
+  isDeleting,
   trigger,
   title,
   description,
@@ -37,8 +40,8 @@ function CustomDialog({
           </DialogDescription>
         </DialogHeader>
         <div className="flex items-center gap-4">
-          <Button variant="destructive" onClick={handler}>
-            Confirm
+          <Button disabled={isDeleting} variant="destructive" onClick={handler}>
+            {isDeleting ? <LoadingTextButton text="Deleting" /> : "Confirm"}
           </Button>
           <DialogClose asChild>
             <Button variant="outline">Cancel</Button>

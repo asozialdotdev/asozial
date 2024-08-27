@@ -7,11 +7,11 @@ import { deleteReply } from "@/actions";
 
 //Components
 import ReplyForm from "./ReplyForm";
-import UserAvatar from "../common/ui/UserAvatar";
+import UserAvatar from "../common/ui/image/UserAvatar";
 import EditReplyForm from "./EditReplyForm";
 import CustomDialog from "../common/ui/CustomDialog";
-import DeleteIcon from "../common/ui/DeleteIcon";
-import EditIcon from "../common/ui/EditIcon";
+import DeleteIcon from "../common/ui/icons/DeleteIcon";
+import EditIcon from "../common/ui/icons/EditIcon";
 
 //Ui
 import { MessageSquareOff } from "lucide-react";
@@ -39,6 +39,7 @@ function ReplyShow({ replyId, projectPostId, replies, child }: ReplyShowProps) {
   const [open, setOpen] = useState<boolean>(startOpen);
   const [edit, setEdit] = useState(false);
   const [error, setError] = useState("");
+  const [isDeleting, setIsDeleting] = useState(false);
 
   const reply = replies.find((r: Reply) => r._id === replyId);
 
@@ -53,18 +54,21 @@ function ReplyShow({ replyId, projectPostId, replies, child }: ReplyShowProps) {
     setError("");
   };
 
+  console.log(isDeleting, "reply is deleting");
+
   const handleDelete = async () => {
+    setIsDeleting(true);
     console.log("delete called");
     const result = await deleteReply(replyId);
     if (result.error) {
       console.error("Error deleting reply", result.error);
       setError(result.message);
+      setIsDeleting(false);
     } else {
       console.log("Reply deleted successfully");
+      setIsDeleting(false);
     }
   };
-
-  const handleCancelDelete = () => {};
 
   const childrenArr = replies.filter((r: Reply) => r.parentId === replyId);
   const isLastChild = childrenArr.length === 0;
@@ -75,14 +79,6 @@ function ReplyShow({ replyId, projectPostId, replies, child }: ReplyShowProps) {
 
   return (
     <>
-      {/* <div
-        key={reply._id?.toString()}
-        className={`mt-6 flex w-full flex-col items-start gap-4 pl-6 pr-1 lg:max-w-[96%] lg:space-x-4 lg:pl-2 ${
-          !isTopLevel
-            ? "border-dashed border-zinc-300 pl-2 dark:border-zinc-600"
-            : "border border-dashed border-zinc-300 pl-2 pt-6 dark:border-zinc-600 lg:pl-6"
-        } ${isLastChild ? "px-4 pb-4" : ""} `} */}
-      {/* > */}
       <div
         key={reply._id?.toString()}
         className={`mt-6 flex w-full flex-col items-start gap-4 pr-1 lg:max-w-[96%] lg:space-x-4 ${!isTopLevel ? "border-l border-dashed border-zinc-300 pl-4 dark:border-zinc-600" : "border-b border-dashed border-zinc-300 dark:border-zinc-600"} ${isLastChild ? "mb-6" : ""} `}
@@ -102,8 +98,8 @@ function ReplyShow({ replyId, projectPostId, replies, child }: ReplyShowProps) {
                 {/* Avatar on the left side */}
 
                 <UserAvatar
-                  src={reply.userId.image}
-                  username={reply.userId.username}
+                  src={reply.userId.info.image}
+                  username={reply.userId.info.username}
                   userId={reply.userId._id}
                 />
 
@@ -111,7 +107,7 @@ function ReplyShow({ replyId, projectPostId, replies, child }: ReplyShowProps) {
 
                 <div className="flex-grow">
                   <p className="font-medium text-neutral-500 dark:text-neutral-400">
-                    {reply.userId.username}
+                    {reply.userId.info.username}
                   </p>
                   <p className="mt-2 text-justify text-sm font-light text-dark dark:text-light">
                     {reply.content}

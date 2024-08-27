@@ -5,10 +5,17 @@ type ProjectPostId = Types.ObjectId | string;
 type ReplyId = Types.ObjectId | string | null | undefined;
 
 type User = {
+  info: {
+    image: string;
+    name: string;
+    username: string;
+  };
+  _id: UserId;
+};
+
+type ProjectInPost = {
   _id: Types.ObjectId;
-  image: string;
-  name: string;
-  username: string;
+  slug: string;
 };
 
 type ProjectPost = {
@@ -16,7 +23,7 @@ type ProjectPost = {
   title: string;
   content: string;
   userId: User;
-  projectId: Types.ObjectId;
+  projectId: ProjectInPost;
   replies: Reply[];
   likes: UserId[];
   dislikes: UserId[];

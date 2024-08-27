@@ -23,7 +23,7 @@ import { GoComment } from "react-icons/go";
 
 //Types
 import type { ProjectPostId, Reply, ReplyId } from "@/types/ProjectPost";
-import ReplyIcon from "../common/ui/ReplyIcon";
+import ReplyIcon from "../common/ui/icons/ReplyIcon";
 
 type ReplyFormProps = {
   projectPostId: ProjectPostId;
@@ -71,8 +71,7 @@ function ReplyForm({
             <ReplyLikeButtons reply={reply} />
           </div>
           <div>
-
-          <ReplyIcon toggleOpen={toggleOpen} />
+            <ReplyIcon toggleOpen={toggleOpen} />
           </div>
         </div>
       ) : (

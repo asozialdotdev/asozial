@@ -1,16 +1,13 @@
-import { auth } from "@/auth";
-import DashboardContainer from "@/components/dashboard/DashboardContainer";
+import PageContainer from "@/components/common/containers/PageContainer";
+import PageTitle from "@/components/common/sidebar/SidebarTitle";
+import DashboardComponent from "@/components/dashboard/DashboardComponent";
 
 async function Page() {
-  const session = await auth();
-  console.log("session:", session);
-  if (!session) {
-    return <div>must be logged in</div>;
-  }
   return (
-    <>
-      <DashboardContainer />
-    </>
+    <PageContainer>
+      <PageTitle>Dashboard</PageTitle>
+      <DashboardComponent />
+    </PageContainer>
   );
 }
 

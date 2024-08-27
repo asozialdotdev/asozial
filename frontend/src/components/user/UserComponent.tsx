@@ -1,4 +1,4 @@
-import type { User } from "../../types/User";
+import type { CodingLanguage, User } from "../../types/User";
 import {
   Mail,
   Building,
@@ -35,7 +35,7 @@ import {
 import { notFound } from "next/navigation";
 
 function UserComponent({ user }: { user: User }) {
-  //console.log("user on page", user);
+  console.log("user on page", user);
 
   let formattedDate = "Unknown";
   if (user?.github?.createdAt) {
@@ -48,10 +48,10 @@ function UserComponent({ user }: { user: User }) {
   return (
     <section className="flex flex-col gap-8 text-lg font-light">
       <div className="flex items-center justify-evenly gap-4">
-        {user.image ? (
+        {user && user.info.image && user.info.image ? (
           <Image
             className="rounded-full border-4 border-dark p-1 dark:border-light"
-            src={user.image}
+            src={user.info.image}
             alt={user.username}
             loading="lazy"
             width={100}
@@ -137,16 +137,16 @@ function UserComponent({ user }: { user: User }) {
           <div className="flex flex-row items-center gap-8">
             <Globe size={16} />
             <a
-              href={"https://" + user.website}
+              href={"https://" + user.info.website}
               target="_blank"
               rel="noreferrer"
             >
-              {user.website}
+              {user.info.website}
             </a>
           </div>
           <div className="flex flex-row items-center gap-8">
             <Mail size={16} />
-            {user.email}
+            {user.info.email}
           </div>
           {/* {user.socials && (
               <div className="flex flex-row items-center gap-8">
@@ -164,12 +164,12 @@ function UserComponent({ user }: { user: User }) {
         <div>
           <div className="flex flex-row items-center gap-8">
             <Building size={16} />
-            {user.company}
+            {user.info.company}
           </div>
 
           <div className="flex flex-row items-center gap-8">
             <MapPinHouse size={16} />
-            {user.location}
+            {user.info.location}
           </div>
         </div>
       </div>
@@ -195,8 +195,14 @@ function UserComponent({ user }: { user: User }) {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {user.codingLanguages.map(
-              ([language, { lines, projects, textColor, bgColor, Icon }]) => (
+            {user.skills.codingLanguages.map(
+              ({
+                language,
+                lines,
+                projects,
+                textColor,
+                Icon,
+              }: CodingLanguage) => (
                 <TableRow key={language}>
                   <TableCell>
                     {Icon ? (
@@ -231,15 +237,21 @@ function UserComponent({ user }: { user: User }) {
         <div>
           <p>
             Projects joined:{" "}
-            {user.projectsJoined ? user.projectsJoined.length : 0}
+            {user.projects.projectsJoined
+              ? user.projects.projectsJoined.length
+              : 0}
           </p>
           <p>
             Projects suggested:{" "}
-            {user.projectsSuggested ? user.projectsSuggested.length : 0}
+            {user.projects.projectsSuggested
+              ? user.projects.projectsSuggested.length
+              : 0}
           </p>
           <p>
             Projects applied:{" "}
-            {user.projectsApplied ? user.projectsApplied.length : 0}
+            {user.projects.projectsApplied
+              ? user.projects.projectsApplied.length
+              : 0}
           </p>
         </div>
       </div>

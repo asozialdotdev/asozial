@@ -2,12 +2,14 @@
 import { auth } from "@/auth";
 import { baseUrl } from "@/constants";
 import { CreateUpdateProject } from "@/types/Project";
+import { generateSlug } from "@/utils";
 import { redirect } from "next/navigation";
 
 // POST create a new project
 const createProject = async (data: CreateUpdateProject) => {
   const session = await auth();
-  console.log("GITHUB REPO", data);
+  const username = session?.user?.githubUsername;
+  const slug = generateSlug(data.title);
   let project;
   try {
     const response = await fetch(`${baseUrl}/api/projects/new`, {
@@ -15,16 +17,20 @@ const createProject = async (data: CreateUpdateProject) => {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ ...data, userId: session?.user?.id }),
+      body: JSON.stringify({ ...data, slug, userId: session?.user?.id }),
     });
+
+    if (!response.ok) {
+      throw new Error(`Failed to create project: ${response.statusText}`);
+    }
 
     project = await response.json();
     console.log("project", project);
   } catch (error) {
     console.error("Error creating project:", error);
-    return "Error creating project";
+    return { error: true, message: "Failed to create project" };
   }
-  redirect(`/projects/${project._id}`);
+  redirect(`/${username}/${project.slug}/${project._id}`);
 };
 
 export { createProject };

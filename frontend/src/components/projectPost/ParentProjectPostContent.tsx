@@ -11,23 +11,21 @@ import { useState } from "react";
 import { deleteProjectPost } from "@/actions";
 
 //Components
-import UserAvatar from "../common/ui/UserAvatar";
+import UserAvatar from "../common/ui/image/UserAvatar";
 import PostLikeButtons from "./PostLikeButtons";
 import ProjectPostContent from "./ProjectPostContent";
 import ReplyCount from "./ReplyCount";
-import EditIcon from "../common/ui/EditIcon";
-import DeleteIcon from "../common/ui/DeleteIcon";
-import CancelIcon from "../common/ui/CancelIcon";
+import EditIcon from "../common/ui/icons/EditIcon";
+import DeleteIcon from "../common/ui/icons/DeleteIcon";
+import CancelIcon from "../common/ui/icons/CancelIcon";
 import CustomDialog from "../common/ui/CustomDialog";
 import { ImageT } from "../common/ui/ImageUploader";
+import ButtonForward from "../common/ui/buttons/ButtonForward";
 
-//Ui
-import { FaRegArrowAltCircleRight } from "react-icons/fa";
 //lib
 import { useSession } from "next-auth/react";
 //Types
 import { ProjectPost, Reply } from "@/types/ProjectPost";
-import ButtonForward from "../common/ui/ButtonForward";
 
 type ParentProjectPostContent = {
   post: ProjectPost;
@@ -42,25 +40,31 @@ function ParentProjectPostContent({
 }: ParentProjectPostContent) {
   const session = useSession();
   const userId = session.data?.user?.id;
+  const username = session.data?.user?.githubUsername;
   const isAuthor = userId === post.userId._id.toString();
   const router = useRouter();
 
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const [image, setImage] = useState<ImageT | undefined>(undefined);
   const [error, setError] = useState("");
+  const [isDeleting, setIsDeleting] = useState(false);
 
   const toggleEditing = () => {
     setIsEditing((prev) => !prev);
   };
 
+  console.log(post);
+
   const handleDeletePost = async () => {
+    setIsDeleting(true);
     const result = await deleteProjectPost(post._id);
-    console.log("Result", result);
-    if (result.error) {
+    if (result?.error) {
       console.error("Error deleting post", result.error);
       setError(result.message);
+      setIsDeleting(false);
     } else {
-      router.push(`/projects/${post.projectId}`);
+      router.push(`/${username}/${post.projectId.slug}/${post.projectId._id}`);
+      setIsDeleting(false);
     }
   };
 
@@ -73,8 +77,8 @@ function ParentProjectPostContent({
         {/* Avatar  */}
         <div className="flex w-full flex-col gap-3 pl-2 lg:contents">
           <UserAvatar
-            src={post.userId.image}
-            username={post.userId.username}
+            src={post.userId.info.image}
+            username={post.userId.info.username}
             userId={post.userId._id}
           />
 
@@ -120,6 +124,7 @@ function ParentProjectPostContent({
             {!isProjectPage && (
               <>
                 <CustomDialog
+                  isDeleting={isDeleting}
                   trigger={<DeleteIcon key="delete-post" />}
                   title="Are you sure?"
                   description="There's no turning back once you delete this post"
@@ -142,7 +147,7 @@ function ParentProjectPostContent({
             <Link
               className="mb-3 ml-4 font-semibold hover:opacity-75"
               key={post._id.toString()}
-              href={`/projects/${post.projectId}/posts/${post._id}`}
+              href={`/${username}/${post.projectId.slug}/${post.projectId._id}/posts/${post._id}`}
             >
               <span>
                 <ButtonForward size={30} text="Check full thread" />

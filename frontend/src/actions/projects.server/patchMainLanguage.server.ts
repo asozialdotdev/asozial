@@ -1,4 +1,4 @@
-'use server'
+"use server";
 import { auth } from "@/auth";
 import { fetchProjectById } from "./fetchProjectById.server";
 import { baseUrl } from "@/constants";
@@ -11,6 +11,7 @@ const patchMainLanguage = async (
   mainLanguage: string,
 ) => {
   const session = await auth();
+  const username = session?.user?.githubUsername;
 
   try {
     const project = await fetchProjectById(projectId);
@@ -31,7 +32,7 @@ const patchMainLanguage = async (
 
     const updateMainLanguage = await response.json();
     console.log("Updated main language:", updateMainLanguage);
-    revalidatePath(`/projects/${projectId}`);
+    revalidatePath(`/${username}/${project.slug}/${project._id}`);
     return { error: false, message: "Main language updated" };
   } catch (error) {
     console.error("Error updating main language:", error);

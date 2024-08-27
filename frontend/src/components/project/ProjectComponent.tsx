@@ -3,7 +3,7 @@ import Image from "next/image";
 
 //Components
 import PageTitle from "../common/ui/PageTitle";
-import UserAvatar from "../common/ui/UserAvatar";
+import UserAvatar from "../common/ui/image/UserAvatar";
 
 //UI
 import github from "/public/socials/github.png";
@@ -20,21 +20,20 @@ import { socialsData } from "@/constants";
 import { checkIsMember } from "@/actions";
 import ProjectPitch from "./ProjectPitch";
 import ProjectMainLanguage from "./ProjectMainLanguage";
-import ButtonBack from "../common/ui/ButtonBack";
-
-const membersJoined = ["Benjamin", "Mirko", "John", "Jane", "José"];
-const membersApplied = ["Alice", "Bob", "Charlie"];
-const membersInvited = ["David", "Eve", "Frank"];
+import ButtonBack from "../common/ui/buttons/ButtonBack";
+import ProjectDescription from "./ProjectDescription";
 
 const userIdTest = "1234567890";
 
 async function ProjectComponent({ project }: { project: Project }) {
   const session = await auth();
-  const isMember = project.membersJoined.some(
+  const username = session?.user?.githubUsername;
+  const isMember = project.members?.membersJoined.some(
     (member: Member) => member._id === session?.user?.id,
   );
   const isOwner = project.owner._id === session?.user?.id;
-  console.log("PROJECT.MEMBERSJOINED", project.membersJoined);
+
+  console.log("project owner", project.owner);
 
   return (
     <section className="relative -mt-4 flex w-full flex-col gap-4 border-b border-b-neutral-300 px-4 dark:border-b-neutral-600">
@@ -61,14 +60,8 @@ async function ProjectComponent({ project }: { project: Project }) {
         </div>
       </div>
 
-
       {/* Description */}
-      <div className="mt-4 flex flex-col gap-2">
-        <h4 className="text-lg font-semibold">Description</h4>
-        <h3 className="font-semibold text-zinc-500 first-letter:capitalize dark:text-zinc-400">
-          {project.description}
-        </h3>
-      </div>
+      <ProjectDescription project={project} />
 
       {/* Pitch*/}
       <ProjectPitch project={project} />
@@ -100,19 +93,23 @@ async function ProjectComponent({ project }: { project: Project }) {
         <div className="flex items-center gap-2">
           <h4 className="text-lg font-semibold">Members</h4>
           <span className="font-normal">
-            {`(${project.membersJoined.length})`}
+            {`(${project.members?.membersJoined.length})`}
           </span>
         </div>
         <div className="flex gap-4">
-          {project.membersJoined.length > 0 ? (
-            project.membersJoined.map((member) => (
-              <UserAvatar
-                key={member.name}
-                src={member.image}
-                username={member.username}
-                userId={userIdTest}
-              />
-            ))
+          {project.members?.membersJoined &&
+          project.members.membersJoined.length > 0 ? (
+            project.members?.membersJoined.map((member) => {
+              console.log("member>>>>>>>>>>>", member);
+              return (
+                <UserAvatar
+                  key={member.info.name}
+                  src={member.info.image}
+                  username={member.info.username}
+                  userId={member._id}
+                />
+              );
+            })
           ) : (
             <p className="text-neutral-500 dark:text-neutral-400">
               No members joined yet
@@ -125,8 +122,8 @@ async function ProjectComponent({ project }: { project: Project }) {
       <div className="flex flex-col items-start gap-2">
         <p className="text-base font-semibold">Owner</p>
         <UserAvatar
-          src={project.owner.image}
-          username={project.owner.username}
+          src={project.owner.info.image}
+          username={project.owner.info.username}
           userId={project.owner._id}
         />
       </div>
@@ -170,7 +167,7 @@ async function ProjectComponent({ project }: { project: Project }) {
       {/* Edit Button */}
       <div className="mb-6">
         {isOwner && (
-          <Link href={`/projects/${project._id}/edit`}>
+          <Link href={`/${username}/${project.slug}/${project._id}/edit`}>
             <Button>Edit project</Button>
           </Link>
         )}

@@ -1,10 +1,11 @@
 "use client";
+//React
 
+import React, { Dispatch, SetStateAction, useEffect, useRef } from "react";
 //Actions
-import { createProjectPost, updateProjectPost } from "@/actions";
+import { updateProjectPost } from "@/actions";
 //Hooks
 import { useFormState } from "react-dom";
-import React, { Dispatch, SetStateAction, useEffect, useRef } from "react";
 
 //Components
 import ProjectPostFormButton from "../project/ProjectPostFormButton";
@@ -12,7 +13,6 @@ import ProjectPostFormButton from "../project/ProjectPostFormButton";
 //Ui
 import { Input } from "../ui/input";
 import { Textarea } from "../ui/textarea";
-import type { ProjectId } from "@/types/Project";
 import { ProjectPost } from "@/types/ProjectPost";
 import ImageUploader, { ImageT } from "../common/ui/ImageUploader";
 
@@ -23,7 +23,12 @@ type EditPostFormProps = {
   setImage: Dispatch<SetStateAction<ImageT | undefined>>;
 };
 
-function EditPostForm({ projectPost, setIsEditing, image, setImage }: EditPostFormProps) {
+function EditPostForm({
+  projectPost,
+  setIsEditing,
+  image,
+  setImage,
+}: EditPostFormProps) {
   const postId = projectPost._id;
   const [formState, action] = useFormState(
     updateProjectPost.bind(null, postId),
@@ -40,7 +45,7 @@ function EditPostForm({ projectPost, setIsEditing, image, setImage }: EditPostFo
       formRef.current?.reset();
       setIsEditing(false);
     }
-  }, [formState]);
+  }, [formState, setIsEditing]);
   return (
     <form ref={formRef} className="w-full" action={action}>
       <div className="flex w-full flex-col gap-2">
@@ -95,6 +100,7 @@ function EditPostForm({ projectPost, setIsEditing, image, setImage }: EditPostFo
           <ImageUploader
             variant="outline"
             onUploadSucess={setImage}
+            edit
             className="my-1"
           />
         </div>

@@ -44,32 +44,34 @@ function ProjectPitch({ project }: { project: Project }) {
   };
 
   const isOwner = project.owner._id === session.data?.user?.id;
+  console.log("project Pitch", project.pitch);
 
   return (
-    <div className="flex flex-col gap-2">
+    <div
+      className={`${project.pitch ? "h-auto" : "h-[12rem]"} mt-4 flex flex-col gap-2`}
+    >
       {!isEditing ? (
         <>
           <h4 className="text-lg font-semibold">Pitch</h4>
           {project.pitch ? (
             <p className="text-justify text-base font-light">{project.pitch}</p>
+          ) : isOwner ? (
+            <div>
+              <p className="mb-4 text-justify text-base font-light text-neutral-500 dark:text-neutral-400">
+                No pitch provided yet. Here you should tell everyone why they
+                should join your project.
+              </p>
+              <Button
+                className="bg-dark dark:bg-light hover:dark:bg-zinc-300 dark:focus:bg-zinc-300"
+                onClick={toggleEditing}
+              >
+                Add a pitch
+              </Button>
+            </div>
           ) : (
-            isOwner && (
-              <div>
-                <p className="mb-4 text-justify text-base font-light text-neutral-500 dark:text-neutral-400">
-                  {isOwner
-                    ? "No pitch provided yet. Here you should tell everyone why they should join your project"
-                    : "No pitch provided yet. Ask the owner for more information."}
-                </p>
-                {!project.pitch && (
-                  <Button
-                    className="bg-dark dark:bg-light hover:dark:bg-zinc-300 dark:focus:bg-zinc-300"
-                    onClick={toggleEditing}
-                  >
-                    Add a pitch
-                  </Button>
-                )}
-              </div>
-            )
+            <p className="mb-4 text-justify text-base font-light text-neutral-500 dark:text-neutral-400">
+              No pitch provided yet. Ask the owner for more information.
+            </p>
           )}
         </>
       ) : (

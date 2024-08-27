@@ -8,35 +8,31 @@ const messagesRouter = express.Router();
 // POST request to create a new message
 
 messagesRouter.post(
-  "/new",
+  "/:friendshipId",
   async (req: Request, res: Response, next: NextFunction) => {
-    const actualUser = (req as any).payload.user;
-    const targetUser = User.findById(req.params.id);
+    const { actualUser, targetUser } = req.body;
+    const { friendshipId } = req.params;
 
-    // check if the users are already friends
+    const foundTargetUser = User.findById(targetUser);
 
-    const friendshipExists = await Friendship.findOne({
-      $or: [
-        { senderId: actualUser, receiverId: targetUser },
-        { senderId: targetUser, receiverId: actualUser },
-      ],
+    const friendshipExists = await User.findOne({
+      "friends.accepted": targetUser,
     });
 
-    if (!targetUser) {
+    if (!foundTargetUser) {
       return res.status(404).json({ message: "User not found" });
     }
 
     if (!friendshipExists) {
       return res.status(403).json({
-        message:
-          "You are not friends with this user and you can't send messages.",
+        message: "You can't send messages to this user.",
       });
     }
 
     try {
       const newMessage = await Message.create({
         senderId: actualUser,
-        receiverId: targetUser,
+        receiverId: foundTargetUser,
         title: req.body.title,
         content: req.body.content,
         isRead: false,
@@ -54,26 +50,26 @@ messagesRouter.post(
 // frontend should send a request when the chat window is opened
 
 messagesRouter.get(
-  "/:userId",
+  "/:friendshipId",
   async (req: Request, res: Response, next: NextFunction) => {
-    const actualUser = (req as any).payload.user;
-    const targetUser = User.findById(req.params.id);
+    const { actualUser, targetUser } = req.body;
+    const foundTargetUser = User.findById(targetUser);
 
-    if (!targetUser) {
+    if (!foundTargetUser) {
       return res.status(404).json({ message: "User not found" });
     }
 
     try {
       const messages = await Message.find({
         $or: [
-          { senderId: actualUser._id, receiverId: targetUser },
-          { senderId: targetUser, receiverId: actualUser._id },
+          { senderId: actualUser, receiverId: foundTargetUser },
+          { senderId: foundTargetUser, receiverId: actualUser },
         ],
       });
 
       await Message.updateMany(
         {
-          receiverId: actualUser._id,
+          receiverId: actualUser,
           senderId: targetUser,
           isRead: false,
         },

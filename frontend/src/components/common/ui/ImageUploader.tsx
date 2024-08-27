@@ -6,9 +6,10 @@ import { uploadFile } from "@/actions";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
-import LoadingSpinner from "./LoadingSpinner";
+import LoadingSpinner from "./loading/LoadingSpinner";
 import { SquareCheckBig, Upload } from "lucide-react";
-import LoadingTextButton from "./LoadingTextButton";
+import LoadingTextButton from "./loading/LoadingTextButton";
+import ErrorMessage from "./ErrorMessage";
 
 export type ImageT = {
   url: string;
@@ -26,12 +27,14 @@ type ImageUploaderProps = {
     | "outline"
     | "link";
   onUploadSucess?: (image: ImageT) => void;
+  edit?: boolean;
 };
 
 export default function ImageUploader({
   className,
   variant = "outline",
   onUploadSucess,
+  edit,
 }: ImageUploaderProps) {
   const [uploadedFile, setUploadedFile] = useState<ImageT | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -74,12 +77,14 @@ export default function ImageUploader({
     <div className="mt-4">
       <Input
         type="file"
+        name="image"
         onChange={handleFileChange}
         className="hidden"
         ref={fileInputRef}
       />
       <Button
         type="button"
+        name="image"
         variant={variant}
         disabled={isLoading}
         onClick={handleButtonClick}
@@ -90,16 +95,17 @@ export default function ImageUploader({
         ) : !success ? (
           <span className="flex items-center gap-3">
             <Upload />
-            <span>Upload an image</span>
+            <span>{!edit ? "Upload an image" : "Update image"}</span>
           </span>
         ) : (
           <span className="flex items-center gap-3">
-            <SquareCheckBig /> <span>Image uploaded</span>
+            <SquareCheckBig />
+            <span>{!edit ? "Image uploaded" : "Image updated"}</span>
           </span>
         )}
       </Button>
 
-      {error && <p className="mt-2 text-red-700">{error}</p>}
+      {error && <ErrorMessage>{error}</ErrorMessage>}
     </div>
   );
 }

@@ -14,8 +14,8 @@ import { useTheme } from "next-themes";
 
 //Types
 import { ProjectPost, User } from "@/types/ProjectPost";
-import ThumbsUpIcon from "../common/ui/ThumbsUpIcon";
-import ThumbsDownIcon from "../common/ui/ThumbsDownIcon";
+import ThumbsUpIcon from "../common/ui/icons/ThumbsUpIcon";
+import ThumbsDownIcon from "../common/ui/icons/ThumbsDownIcon";
 
 type ProjectPostLikeButtonsProps = {
   projectPost: ProjectPost;
@@ -110,7 +110,6 @@ function ProjectPostLikeButtons({ projectPost }: ProjectPostLikeButtonsProps) {
             />
           </div>
 
-
           <FlipNumbers
             height={16}
             width={16}
@@ -118,8 +117,7 @@ function ProjectPostLikeButtons({ projectPost }: ProjectPostLikeButtonsProps) {
             play
             perspective={100}
             numbers={dislikes.toString()}
-            />
-
+          />
         </div>
       </div>
     </>

@@ -6,6 +6,7 @@ import { revalidatePath } from "next/cache";
 
 const deleteReply = async (replyId: ReplyId) => {
   const session = await auth();
+  const username = session?.user?.githubUsername;
 
   try {
     const response = await fetch(`${baseUrl}/api/replies/${replyId}`, {
@@ -20,9 +21,11 @@ const deleteReply = async (replyId: ReplyId) => {
     if (!response.ok) {
       throw new Error(`Failed to delete reply: ${response.statusText}`);
     }
-    const data = await response.json();
-
-    revalidatePath(`/projects/${data.projectId}/posts/${data.projectPostId}`);
+    const { reply } = await response.json();
+    console.log("Deleted reply:", reply);
+    revalidatePath(
+      `/${username}/${reply.projectPostId.projectId.slug}/${reply.projectPostId.projectId._id}/posts/${reply.projectPostId._id}`,
+    );
     return { error: false, message: "Reply deleted" };
   } catch (error) {
     console.error("Error deleting reply:", error);

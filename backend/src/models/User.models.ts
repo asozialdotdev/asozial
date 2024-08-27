@@ -1,35 +1,93 @@
-import { Schema, model } from "mongoose";
+import { Schema, model, Types } from "mongoose";
+
+type UserId = Types.ObjectId | string;
+
+export interface UserDocument extends Document {
+  _id: UserId;
+  username: string;
+  info: {
+    image: string;
+  };
+}
 
 const socialSchema = new Schema({
   platform: { type: String },
   url: { type: String },
 });
 
+const codingLanguageSchema = new Schema({
+  language: { type: String },
+  lines: { type: Number },
+  projects: { type: Number },
+  bgColor: { type: String },
+  textColor: { type: String },
+  Icon: { type: Schema.Types.Mixed },
+});
+
 const userSchema = new Schema(
   {
-    username: { type: String },
-    name: { type: String },
-    email: { type: String },
-    notificationEmail: { type: String },
-    image: { type: String },
-    company: { type: String },
-    website: { type: String },
-    location: { type: String },
-    hireable: { type: Boolean },
-    socials: [socialSchema],
-    languagesSpoken: [{ type: String }],
-    codingLanguages: [{ type: Object }],
-    codingLibraries: [{ type: Object }],
-    projectsJoined: [{ type: Schema.Types.ObjectId, ref: "Project" }],
-    projectsSuggested: [{ type: Schema.Types.ObjectId, ref: "Project" }],
-    projectsApplied: [{ type: Schema.Types.ObjectId, ref: "Project" }],
-    projectsAvoided: [{ type: Schema.Types.ObjectId, ref: "Project" }],
-    dashboardPosts: [{ type: Schema.Types.ObjectId, ref: "Post" }],
-    usersMatched: [{ type: Schema.Types.ObjectId, ref: "User" }],
-    usersAvoided: [{ type: Schema.Types.ObjectId, ref: "User" }],
-    github: {
-      iD: { type: Number },
+    username: { type: String, required: true, unique: true },
+    info: {
+      bio: { type: String },
       username: { type: String },
+      name: { type: String },
+      email: { type: String },
+      image: { type: String },
+      company: { type: String },
+      website: { type: String },
+      location: { type: String },
+      hireable: { type: Boolean },
+    },
+    skills: {
+      languagesSpoken: [{ type: String }],
+      codingLanguages: [codingLanguageSchema],
+      codingLibraries: [codingLanguageSchema],
+    },
+    projects: {
+      projectsJoined: [
+        { type: Schema.Types.ObjectId, ref: "Project", default: [] },
+      ],
+      projectsApplied: [
+        { type: Schema.Types.ObjectId, ref: "Project", default: [] },
+      ],
+      projectsInvited: [
+        { type: Schema.Types.ObjectId, ref: "Project", default: [] },
+      ],
+      projectsSuggested: [
+        { type: Schema.Types.ObjectId, ref: "Project", default: [] },
+      ],
+      projectsDeclined: [
+        { type: Schema.Types.ObjectId, ref: "Project", default: [] },
+      ],
+      dashboardPosts: [{ type: Schema.Types.ObjectId, ref: "Post" }],
+    },
+    socials: [socialSchema],
+    friends: {
+      accepted: [{ type: Schema.Types.ObjectId, ref: "Friendship" }],
+      pending: [{ type: Schema.Types.ObjectId, ref: "Friendship" }],
+      declined: [{ type: Schema.Types.ObjectId, ref: "Friendship" }],
+    },
+    matches: {
+      users: {
+        suggested: [{ type: Schema.Types.ObjectId, ref: "User" }],
+        pending: [{ type: Schema.Types.ObjectId, ref: "User" }],
+        accepted: [{ type: Schema.Types.ObjectId, ref: "User" }],
+        declined: [{ type: Schema.Types.ObjectId, ref: "User" }],
+      },
+      projects: {
+        suggested: [{ type: Schema.Types.ObjectId, ref: "Project" }],
+        pending: [{ type: Schema.Types.ObjectId, ref: "Project" }],
+        accepted: [{ type: Schema.Types.ObjectId, ref: "Project" }],
+        declined: [{ type: Schema.Types.ObjectId, ref: "Project" }],
+      },
+    },
+    posts: { type: Schema.Types.ObjectId, ref: "UserPosts" },
+    github: {
+      id: { type: Number },
+      nodeId: { type: String },
+      accessToken: { type: String },
+      login: { type: String },
+      notificationEmail: { type: String },
       bio: { type: String },
       apiUrl: { type: String },
       url: { type: String },
@@ -58,6 +116,7 @@ const userSchema = new Schema(
       updatedAt: { type: String },
       collaboratorsNumber: { type: Number },
     },
+    lastLogin: { type: Date },
   },
   {
     collection: "User",
