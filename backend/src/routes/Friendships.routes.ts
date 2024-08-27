@@ -29,7 +29,10 @@ friendshipsRouter.post(
       }
 
       const friendshipExists = await Friendship.findOne({
-        friends: { $all: [senderId, receiverId] },
+        $or: [
+          { senderId, receiverId },
+          { senderId: receiverId, receiverId: senderId },
+        ],
       });
 
       if (friendshipExists) {
