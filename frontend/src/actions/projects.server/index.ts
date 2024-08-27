@@ -17,5 +17,7 @@ export { applyForProject } from "./applyForProject.server";
 export { patchDescription } from "./patchDescription.server";
 export { checkMembersApplied } from "./checkMembersApplied.server";
 export { acceptMember } from "./acceptMember.server";
-export {declineMember} from "./declineMember.ts.server"
+export { declineMember } from "./declineMember.ts.server";
 export { leaveProject } from "./leaveProject.server";
+export { removeMember } from "./removeMember.server";
+export { fetchAllMembersFromAProject } from "./fetchAllMembersFromAProject.server";

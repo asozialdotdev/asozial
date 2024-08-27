@@ -11,14 +11,15 @@ import DeclineButton from "./DeclineButton";
 import AcceptButton from "./AcceptButton";
 
 //Types
-import { Member, Project } from "@/types/Project";
+import { ProjectId } from "@/types/Project";
+import { UserId } from "@/types/User";
 
 type AcceptDeclineFormProps = {
-  project: Project;
-  member: Member;
+  projectId: ProjectId;
+  memberId: UserId;
 };
 
-function AcceptDeclineForm({ project, member }: AcceptDeclineFormProps) {
+function AcceptDeclineForm({ projectId, memberId }: AcceptDeclineFormProps) {
   const [acceptFormState, acceptAction] = useFormState(acceptMember, {
     errors: {},
   });
@@ -39,8 +40,8 @@ function AcceptDeclineForm({ project, member }: AcceptDeclineFormProps) {
       {/* Accept form */}
       <form className="flex flex-col gap-2" action={acceptAction}>
         <CustomLabel htmlFor="accept"></CustomLabel>
-        <input type="hidden" name="projectId" value={project._id.toString()} />
-        <input type="hidden" name="memberId" value={member._id.toString()} />
+        <input type="hidden" name="projectId" value={projectId?.toString()} />
+        <input type="hidden" name="memberId" value={memberId?.toString()} />
         {!declineSuccess && <AcceptButton acceptSuccess={acceptSuccess} />}
         {acceptErrors && (
           <ErrorMessage
@@ -55,8 +56,8 @@ function AcceptDeclineForm({ project, member }: AcceptDeclineFormProps) {
       {/* Decline form */}
       <form className="flex w-full flex-col gap-2" action={declineAction}>
         <CustomLabel htmlFor="decline"></CustomLabel>
-        <input type="hidden" name="projectId" value={project._id.toString()} />
-        <input type="hidden" name="memberId" value={member._id.toString()} />
+        <input type="hidden" name="projectId" value={projectId?.toString()} />
+        <input type="hidden" name="memberId" value={memberId?.toString()} />
         {!acceptSuccess && <DeclineButton declineSuccess={declineSuccess} />}
         {declineErrors && (
           <ErrorMessage

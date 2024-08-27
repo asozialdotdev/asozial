@@ -18,6 +18,8 @@ const removeMember = async (
   formState: RemoveMember,
   formData: FormData,
 ): Promise<RemoveMember> => {
+  const session = await auth();
+  const userId = session?.user?.id;
   const projectId = formData.get("projectId") as ProjectId;
   const memberId = formData.get("memberId") as string;
 
@@ -29,7 +31,7 @@ const removeMember = async (
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ memberId, projectId }),
+        body: JSON.stringify({ memberId, userId }),
       },
     );
 
@@ -39,7 +41,7 @@ const removeMember = async (
 
     const project = await response.json();
     console.log("project applied:", project);
-    revalidatePath(`/${project.owner.username}/${project.slug}/${projectId}`);
+    // revalidatePath(`/${project.owner.username}/${project.slug}/${projectId}`);
     return {
       errors: {},
       success: true,
