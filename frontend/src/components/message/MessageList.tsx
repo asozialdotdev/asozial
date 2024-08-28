@@ -9,7 +9,7 @@ function MessageList({ messages }: { messages: Message[] }) {
           <p>No messages</p>
         </li>
       )}
-      {messages &&
+      {messages.length > 0 &&
         messages.map((message: Message) => (
           <li
             key={message.id.toString()}
