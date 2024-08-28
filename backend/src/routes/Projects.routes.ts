@@ -903,11 +903,11 @@ projectsRouter.put(
       const updateUser = await User.findByIdAndUpdate(
         { _id: matchedUserId },
         {
-          $push: { "matches.projects.accepted": project._id },
-          $pull: {
-            "matches.projects.pending": project._id,
-            "matches.projects.suggested": project._id,
-          },
+          $push: { "projects.projectsJoined": project._id },
+          // $pull: {
+          //   "matches.projects.pending": project._id,
+          //   "matches.projects.suggested": project._id,
+          // },
         },
         { new: true }
       );
@@ -948,11 +948,11 @@ projectsRouter.put(
       const updateUser = await User.findByIdAndUpdate(
         { _id: matchedUserId },
         {
-          $push: { "matches.projects.declined": project._id },
-          $pull: {
-            "matches.projects.pending": project._id,
-            "matches.projects.suggested": project._id,
-          },
+          $push: { "projects.projectsDeclined": project._id },
+          // $pull: {
+          //   "matches.projects.pending": project._id,
+          //   "matches.projects.suggested": project._id,
+          // },
         },
         { new: true }
       );
