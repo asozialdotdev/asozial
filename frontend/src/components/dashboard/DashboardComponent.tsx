@@ -1,6 +1,5 @@
-
 import DashboardHeader from "./DashboardHeader";
-import FriendStatusCard from "./FriendStatusCard";
+import FriendStatusCard from "../friendship/FriendStatusTab";
 import { auth } from "@/auth";
 import { checkMembersApplied } from "@/actions/projects.server";
 // import RequestsTable from "./RequestsTable";

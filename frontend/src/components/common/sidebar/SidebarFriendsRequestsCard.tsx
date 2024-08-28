@@ -1,16 +1,14 @@
+import Link from "next/link";
 import { Card, CardDescription } from "@/components/ui/card";
 import UserAvatar from "../ui/image/UserAvatar";
-import Link from "next/link";
-
-import { Friendship } from "@/types/Friendship";
 import AcceptDeclineFriendshipForm from "@/components/requests/AcceptDeclineFriendshipForm";
+import { Friendship } from "@/types/Friendship";
 type SidebarFriendsRequestsCardProps = {
   friendship: Friendship;
 };
 function SidebarFriendsRequestsCard({
   friendship,
 }: SidebarFriendsRequestsCardProps) {
-  console.log(friendship.senderId?.info.username, "friends username");
   return (
     <Card
       key={friendship._id.toString()}
