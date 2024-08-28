@@ -13,27 +13,6 @@ usersRouter.get("/:username", async (req: Request, res: Response) => {
     }
 
     res.json(user);
-
-    // const friendships = await Friendship.find({
-    //   $or: [
-    //     { senderId: foundUser._id, status: "accepted" },
-    //     { receiverId: foundUser._id, status: "accepted" },
-    //   ],
-    // });
-
-    // const friendIds = friendships
-    //   .flatMap((friendship) => [
-    //     friendship.senderId.toString(),
-    //     friendship.receiverId.toString(),
-    //   ])
-    //   .filter((id) => id !== foundUser._id.toString());
-
-    // const friends = await User.find({ _id: { $in: friendIds } });
-
-    // return res.json({
-    //   user: foundUser,
-    //   friends: friends,
-    // });
   } catch (error: any) {
     console.log("Error fetching user by username:", error);
   }

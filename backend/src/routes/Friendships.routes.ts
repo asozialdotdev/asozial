@@ -13,8 +13,6 @@ friendshipsRouter.post(
     console.log("req.body", req.body);
     try {
       const { senderId, receiverId } = req.body;
-      console.log("senderId", senderId);
-      console.log("receiverId", receiverId);
 
       if (!senderId) {
         res.status(404).send("Sender not found");
