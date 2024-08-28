@@ -66,7 +66,7 @@ function RequestsProvider({ children }: { children: React.ReactNode }) {
         const response = await getPendingFriendsRequests();
         console.log("Response pending friends request", response);
         if (!response.error) {
-          setFriendsRequests(response.pendingFriendships);
+          setFriendsRequests(response);
         } else {
           setFriendsError(response.message);
         }
