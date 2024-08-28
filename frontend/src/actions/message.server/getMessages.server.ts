@@ -1,28 +1,16 @@
 "use server";
 import { baseUrl } from "@/constants";
 
-const getMessages = async (
-  friendshipId: string,
-  actualUser: string,
-  targetUser: string,
-) => {
+const getMessages = async (friendshipId: string) => {
   try {
-    console.log("Fetching messages between users:", { actualUser, targetUser });
+    console.log("Fetching messages from friendship :", { friendshipId });
 
-    const queryParams = new URLSearchParams({
-      actualUser,
-      targetUser,
-    });
-
-    const response = await fetch(
-      `${baseUrl}/api/messages/${friendshipId}?${queryParams.toString()}`,
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
+    const response = await fetch(`${baseUrl}/api/messages/${friendshipId}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
       },
-    );
+    });
 
     if (!response.ok) {
       const errorText = await response.text();

@@ -52,26 +52,26 @@ export const {
 
       if (!existingUser) {
         try {
-          const githubFollowers = await getUserGithubFollowers(
-            profile?.followers_url as string,
-            account?.access_token as string,
-          );
-          const githubFollowing = await getUserGithubFollowing(
-            profile?.following_url as string,
-            account?.access_token as string,
-          );
-          const githubSubscriptions = await getUserGithubSubscriptions(
-            profile?.subscriptions_url as string,
-            account?.access_token as string,
-          );
-          const githubPublicGists = await getUserGithubPublicGists(
-            profile?.gists_url as string,
-            account?.access_token as string,
-          );
-          const githubOrganizations = await getUserGithubOrganizations(
-            profile?.organizations_url as string,
-            account?.access_token as string,
-          );
+          // const githubFollowers = await getUserGithubFollowers(
+          //   profile?.followers_url as string,
+          //   account?.access_token as string,
+          // );
+          // const githubFollowing = await getUserGithubFollowing(
+          //   profile?.following_url as string,
+          //   account?.access_token as string,
+          // );
+          // const githubSubscriptions = await getUserGithubSubscriptions(
+          //   profile?.subscriptions_url as string,
+          //   account?.access_token as string,
+          // );
+          // const githubPublicGists = await getUserGithubPublicGists(
+          //   profile?.gists_url as string,
+          //   account?.access_token as string,
+          // );
+          // const githubOrganizations = await getUserGithubOrganizations(
+          //   profile?.organizations_url as string,
+          //   account?.access_token as string,
+          // );
           const githubRepos = await getUserGithubRepos(
             profile?.repos_url as string,
             account?.access_token as string,
@@ -110,24 +110,24 @@ export const {
               bio: profile?.bio,
               apiUrl: profile?.url,
               followersUrl: profile?.followers_url,
-              followers: githubFollowers,
+              //followers: githubFollowers,
               followersNumber: profile?.followers,
               followingUrl: profile?.following_url,
-              following: githubFollowing,
+              //following: githubFollowing,
               followingNumber: profile?.following,
               publicGistsUrl: profile?.gists_url,
-              publicGists: githubPublicGists,
+              //publicGists: githubPublicGists,
               publicGistsNumber: profile?.public_gists,
               privateGistsNumber: profile?.private_gists,
               starredUrl: profile?.starred_url,
               subscriptionsUrl: profile?.subscriptions_url,
-              subscriptions: githubSubscriptions,
-              subscriptionsNumber: githubSubscriptions.length,
+              //subscriptions: githubSubscriptions,
+              //subscriptionsNumber: githubSubscriptions.length,
               organizationsUrl: profile?.organizations_url,
-              organizations: githubOrganizations,
-              organizationsNumber: githubOrganizations.length,
+              //organizations: githubOrganizations,
+              //organizationsNumber: githubOrganizations.length,
               reposUrl: profile?.repos_url,
-              publicRepos: githubRepos,
+              //publicRepos: githubRepos,
               publicReposNumber: profile?.public_repos,
               createdAt: profile?.created_at,
               updatedAt: profile?.updated_at,
@@ -183,6 +183,7 @@ export const {
             codingLanguages: githubRepoLanguages,
           },
           github: {
+            ...existingUser.github,
             followers: githubFollowers,
             following: githubFollowing,
             subscriptions: githubSubscriptions,

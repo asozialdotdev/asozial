@@ -2,6 +2,7 @@ import express, { Request, Response, NextFunction } from "express";
 import Message from "../models/Message.models";
 import User from "../models/User.models";
 import Friendship from "../models/Friendship.models";
+import { ObjectId } from "mongodb";
 
 const messagesRouter = express.Router();
 
@@ -52,29 +53,30 @@ messagesRouter.post(
 messagesRouter.get(
   "/:friendshipId",
   async (req: Request, res: Response, next: NextFunction) => {
-    const { actualUser, targetUser } = req.body;
-    const foundTargetUser = User.findById(targetUser);
-
-    if (!foundTargetUser) {
-      return res.status(404).json({ message: "User not found" });
-    }
-
+    const { friendshipId } = req.params;
+    console.log("friendshipId", friendshipId);
     try {
-      const messages = await Message.find({
-        $or: [
-          { senderId: actualUser, receiverId: foundTargetUser },
-          { senderId: foundTargetUser, receiverId: actualUser },
-        ],
-      });
+      const messages = await Friendship.findById(friendshipId)
+        .populate({
+          path: "messages",
+          populate: {
+            path: "user", // Assuming each message has a reference to a user
+            select: "username image", // Select only the username and image fields
+          },
+        })
+        .populate({
+          path: "friends",
+          select: "username image", // Select only the username and image fields
+        });
 
       await Message.updateMany(
         {
-          receiverId: actualUser,
-          senderId: targetUser,
           isRead: false,
         },
         { $set: { isRead: true } }
       );
+
+      console.log("messages", messages);
 
       res.status(200).json(messages);
     } catch (error) {
