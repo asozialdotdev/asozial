@@ -2,8 +2,9 @@
 import { baseUrl } from "@/constants";
 import { auth } from "@/auth";
 
-const declineFriendship = async (userId: string, friendshipId: string) => {
+const declineFriendship = async (friendshipId: string) => {
   const session = await auth();
+  const userId = session?.user?.id;
   console.log("receiverId", userId);
   try {
     const res = await fetch(`${baseUrl}/api/friends/${friendshipId}/decline`, {

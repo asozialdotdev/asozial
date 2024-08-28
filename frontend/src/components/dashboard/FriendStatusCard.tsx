@@ -19,12 +19,16 @@ async function FriendStatusCard() {
   const session = await auth();
   const { accepted, pending, declined } = await getUserFriendStatuses();
 
-  const sentPending = pending.filter((friendship: any) => {
-    return friendship.senderId._id === session?.user.id;
-  });
-  const receivedPending = pending.filter((friendship: any) => {
-    return friendship.receiverId._id === session?.user.id;
-  });
+  const sentPending =
+    pending &&
+    pending.filter((friendship: any) => {
+      return friendship.senderId._id === session?.user.id;
+    });
+  const receivedPending =
+    pending &&
+    pending.filter((friendship: any) => {
+      return friendship.receiverId._id === session?.user.id;
+    });
 
   console.log("accepted", accepted);
   console.log("sentPending", sentPending);
@@ -34,36 +38,13 @@ async function FriendStatusCard() {
 
   return (
     <div className="rounded bg-white p-4 shadow dark:bg-black">
-      <h2 className="text-lg font-bold">Friends</h2>
+      <h2 className="text-lg font-bold">Friend requests</h2>
       <Tabs defaultValue="accepted">
         <TabsList className="w-full">
-          <TabsTrigger value="accepted">Accepted</TabsTrigger>
           <TabsTrigger value="sent">Sent</TabsTrigger>
           <TabsTrigger value="received">Received</TabsTrigger>
           <TabsTrigger value="rejected">Rejected</TabsTrigger>
         </TabsList>
-        <TabsContent value="accepted">
-          <Card>
-            <CardHeader>
-              <CardTitle>Friends</CardTitle>
-            </CardHeader>
-            <CardContent>
-              {/* //needs to map through friendships, filter friends for the userId */}
-              {/* {accepted.friends &&
-                accepted.map(
-                  (friendship: any) =>
-                    friendship !== null && (
-                      <DashboardFriendItem
-                        key={friendship.id}
-                        id={friendship.id}
-                        username={friend.username}
-                        image={friend.image}
-                      />
-                    ),
-                )} */}
-            </CardContent>
-          </Card>
-        </TabsContent>
         <TabsContent value="sent">
           <Card>
             <CardHeader>
@@ -76,9 +57,11 @@ async function FriendStatusCard() {
                     friendship !== null && (
                       <DashboardFriendItem
                         key={friendship.receiverId._id}
+                        friendshipId={friendship._id}
                         id={friendship.receiverId._id}
                         username={friendship.receiverId.username}
                         image={friendship.receiverId.info.image}
+                        status="sent"
                       />
                     ),
                 )}
@@ -97,9 +80,11 @@ async function FriendStatusCard() {
                     friendship !== null && (
                       <DashboardFriendItem
                         key={friendship.senderId._id}
+                        friendshipId={friendship._id}
                         id={friendship.senderId._id}
                         username={friendship.senderId.username}
                         image={friendship.senderId.info.image}
+                        status="received"
                       />
                     ),
                 )}
@@ -119,8 +104,10 @@ async function FriendStatusCard() {
                       <DashboardFriendItem
                         key={friendship._id}
                         id={friendship._id}
+                        friendshipId={friendship._id}
                         username={friendship.username}
                         image={friendship.info.image}
+                        status="declined"
                       />
                     ),
                 )}
