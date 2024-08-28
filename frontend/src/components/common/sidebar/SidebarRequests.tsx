@@ -20,10 +20,10 @@ function SidebarProjectRequestsCard({
   return (
     <Card
       key={member._id.toString()}
-      className="relative mb-4 w-full max-w-xs border-dashed border-zinc-300 bg-inherit bg-zinc-100 p-2 hover:bg-zinc-200/10 dark:border-zinc-600 dark:bg-inherit dark:bg-zinc-800 dark:shadow-neutral-700/30 dark:hover:bg-zinc-700/10"
+      className="relative mb-4 w-full border-dashed border-zinc-300 bg-inherit bg-zinc-100 py-2 pl-4 pr-[.4rem] hover:bg-zinc-200/10 dark:border-zinc-600 dark:bg-inherit dark:bg-zinc-800 dark:shadow-neutral-700/30 dark:hover:bg-zinc-700/10"
     >
-      <div className="flex flex-col items-center justify-center gap-2">
-        <CardDescription>
+      <div className="flex flex-col items-center gap-2">
+        <CardDescription className="text-center">
           <Link
             href={`/${project.owner.info.username}/${project.slug}/${project._id}`}
           >

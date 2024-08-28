@@ -6,16 +6,21 @@ import LoadingTextButton from "../common/ui/loading/LoadingTextButton";
 
 type AcceptButtonProps = {
   acceptSuccess: boolean | undefined;
+  sidebar?: boolean;
 };
-function AcceptButtons({ acceptSuccess }: AcceptButtonProps) {
+function AcceptButtons({ acceptSuccess, sidebar }: AcceptButtonProps) {
   const { pending } = useFormStatus();
   return (
-    <Button disabled={pending || acceptSuccess} size="sm">
+    <Button
+      disabled={pending || acceptSuccess}
+      className={sidebar ? "h-6 w-auto text-xs" : "text-sm"}
+      size="sm"
+    >
       {pending ? (
         <LoadingTextButton />
       ) : acceptSuccess ? (
         <span className="flex items-center gap-1">
-          <SquareCheck size={18} />
+          <SquareCheck size={sidebar ? 14 : 18} />
           <p>Accepted</p>
         </span>
       ) : (
