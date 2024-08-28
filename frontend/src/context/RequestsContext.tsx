@@ -25,7 +25,6 @@ function RequestsProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     const getAllProjectsRequests = async () => {
-      console.log("getAllProjectsRequests bein called");
       try {
         setProjectsLoading(true);
         setProjectsError("");

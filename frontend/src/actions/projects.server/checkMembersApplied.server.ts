@@ -20,7 +20,7 @@ const checkMembersApplied = async () => {
     return { error: false, message: "Sucess", projects };
   } catch (error) {
     console.error("Failed to fetch members applied", error);
-    return { error: true, message: "Failed to fetch members applied" };
+    return { error: true, message: "Failed to get requests. Please try again." };
   }
 };
 

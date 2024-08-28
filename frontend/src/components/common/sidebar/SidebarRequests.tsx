@@ -9,6 +9,9 @@ import {
 import UserAvatar from "../ui/image/UserAvatar";
 import { Member, Project, ProjectId } from "@/types/Project";
 import Link from "next/link";
+import { useRequests } from "@/context/RequestsContext";
+import SidebarCardSkeleton from "./SidebarCardSkeleton";
+import { Suspense } from "react";
 type SidebarProjectRequestsCardProps = {
   member: Member;
   project: Project;
@@ -43,10 +46,6 @@ function SidebarProjectRequestsCard({
             userId={member._id || "123"}
             className="h-12 w-12"
           />
-
-          {/* <CardTitle className="text-base">
-          {member.info?.username || "Username"}
-          </CardTitle> */}
 
           <AcceptDeclineForm
             projectId={project._id}
