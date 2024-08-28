@@ -10,15 +10,14 @@ import RequestsTable from "./RequestsTable";
 async function DashboardComponent() {
   const session = await auth();
   const username = session?.user?.githubUsername;
-  const projects = await checkMembersApplied();
+  // const { projects } = await checkMembersApplied();
   return (
     <section className="flex w-full flex-col">
       <DashboardHeader />
 
       <div className="flex items-center gap-8 pb-8">
         <FriendStatusCard />
-        <RequestsTable projects={projects} />
-
+        {/* <RequestsTable projects={projects} /> */}
       </div>
     </section>
   );

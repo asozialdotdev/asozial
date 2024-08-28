@@ -17,9 +17,14 @@ import { UserId } from "@/types/User";
 type AcceptDeclineFormProps = {
   projectId: ProjectId;
   memberId: UserId;
+  sidebar?: boolean;
 };
 
-function AcceptDeclineForm({ projectId, memberId }: AcceptDeclineFormProps) {
+function AcceptDeclineForm({
+  projectId,
+  memberId,
+  sidebar,
+}: AcceptDeclineFormProps) {
   const [acceptFormState, acceptAction] = useFormState(acceptMember, {
     errors: {},
   });
@@ -29,7 +34,6 @@ function AcceptDeclineForm({ projectId, memberId }: AcceptDeclineFormProps) {
   });
   const acceptSuccess = acceptFormState.success;
   const acceptErrors = acceptFormState.errors?.accept;
-
 
   const declineSuccess = declineFormState.success;
   const declineErrors = declineFormState.errors?.decline;
@@ -41,11 +45,13 @@ function AcceptDeclineForm({ projectId, memberId }: AcceptDeclineFormProps) {
         <CustomLabel htmlFor="accept"></CustomLabel>
         <input type="hidden" name="projectId" value={projectId?.toString()} />
         <input type="hidden" name="memberId" value={memberId?.toString()} />
-        {!declineSuccess && <AcceptButton acceptSuccess={acceptSuccess} />}
-        {acceptErrors && (
+        {!declineSuccess && (
+          <AcceptButton sidebar={sidebar} acceptSuccess={acceptSuccess} />
+        )}
+        {acceptErrors && !declineErrors && (
           <ErrorMessage
-            size={15}
-            className="absolute bottom-4 right-10 text-[11px]"
+            size={sidebar ? 11 : 15}
+            className={`absolute ${sidebar ? "-bottom-1 right-10 text-[10px]" : "bottom-4 right-10 text-[11px]"}`}
           >
             Error accepting member
           </ErrorMessage>
@@ -57,11 +63,13 @@ function AcceptDeclineForm({ projectId, memberId }: AcceptDeclineFormProps) {
         <CustomLabel htmlFor="decline"></CustomLabel>
         <input type="hidden" name="projectId" value={projectId?.toString()} />
         <input type="hidden" name="memberId" value={memberId?.toString()} />
-        {!acceptSuccess && <DeclineButton declineSuccess={declineSuccess} />}
-        {declineErrors && (
+        {!acceptSuccess && (
+          <DeclineButton sidebar={sidebar} declineSuccess={declineSuccess} />
+        )}
+        {declineErrors && !acceptErrors && (
           <ErrorMessage
-            size={15}
-            className="absolute bottom-4 right-10 text-[11px]"
+            size={sidebar ? 11 : 15}
+            className={`absolute ${sidebar ? "-bottom-1 right-10 text-[10px]" : "bottom-4 right-10 text-[11px]"}`}
           >
             Error declining member
           </ErrorMessage>

@@ -47,7 +47,7 @@ const leaveProject = async (
       },
     };
   }
-  redirect(`/${memberLeft.info.username}/search/projects`);
+  redirect(`/search/projects`);
 };
 
 export { leaveProject };
