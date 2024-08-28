@@ -5,12 +5,10 @@ import PageContainer from "@/components/common/containers/PageContainer";
 import PageTitle from "@/components/common/ui/PageTitle";
 import type { User } from "@/types/User";
 import { baseUrl } from "@/constants";
-import ButtonAddFriend from "@/components/common/ui/buttons/ButtonAddFriend";
 import UserAvatar from "@/components/common/ui/image/UserAvatar";
 import { MapPinHouse, FolderGit } from "lucide-react";
-import { send } from "process";
 import { auth } from "@/auth";
-import sendFriendship from "@/actions/friendships.server/sendFriendship.server";
+import AddFriend from "@/components/project/requests/AddFriend";
 
 //api/friends POST  => add friend
 
@@ -42,11 +40,9 @@ async function Page() {
                   </a>
                 </div>
                 {userId && userId !== user._id.toString() && (
-                  <ButtonAddFriend
-                    sendFriendship={sendFriendship}
-                    userId={userId}
-                    friendId={user._id.toString()}
-                  />
+                  <>
+                    <AddFriend receiverId={user._id.toString()} />
+                  </>
                 )}
               </div>
               <div className="flex flex-col gap-2">
