@@ -2,9 +2,8 @@
 
 import React from "react";
 import UserAvatar from "../common/ui/image/UserAvatar";
-import acceptFriendship from "@/actions/friendships.server/acceptFriendship.server";
-import declineFriendship from "@/actions/friendships.server/declineFriendship.server";
 import { Button } from "../ui/button";
+import { acceptFriendship, declineFriendship } from "@/actions";
 
 function DashboardFriendItem({
   id,
@@ -19,6 +18,7 @@ function DashboardFriendItem({
   friendshipId: string;
   status: string;
 }) {
+
   return (
     <div
       key={username}

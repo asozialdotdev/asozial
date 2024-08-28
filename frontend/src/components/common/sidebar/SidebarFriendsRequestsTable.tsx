@@ -3,8 +3,7 @@ import { useRequests } from "@/context/RequestsContext";
 import SidebarProjectRequestsCard from "./SidebarProjectRequestsCard";
 import SidebarCardSkeleton from "./SidebarCardSkeleton";
 import ErrorMessage from "../ui/ErrorMessage";
-import Friendship from "@/types/Friendship";
-
+import { Friendship } from "@/types/Friendship";
 function SidebarFriendsRequestsTable() {
   const { friendsRequests, friendsError, friendsLoading } = useRequests();
   console.log("FriendssRequests", friendsRequests);
@@ -46,11 +45,11 @@ function SidebarFriendsRequestsTable() {
     );
   };
 
-  return (
-    <div className="flex flex-col">
-      {friendsRequests.map((friend) => renderRequests(friend))}
-    </div>
-  );
+  // return (
+  //   <div className="flex flex-col">
+  //     {friendsRequests.map((friend) => renderRequests(friend))}
+  //   </div>
+  // );
 }
 
 export default SidebarFriendsRequestsTable;

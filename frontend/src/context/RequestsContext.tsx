@@ -4,9 +4,10 @@ import {
   getPendingFriendsRequests,
   getUserFriendStatuses,
 } from "@/actions";
-import Friendship from "@/types/Friendship";
+
 import { Project } from "@/types/Project";
 import { createContext, useContext, useEffect, useState } from "react";
+import { Friendship } from "@/types/Friendship";
 
 type RequestsContextType = {
   projectsRequests: Project[];
@@ -63,7 +64,7 @@ function RequestsProvider({ children }: { children: React.ReactNode }) {
       try {
         setFriendsLoading(true);
         setFriendsError("");
-        const response = await getPendingFriendsRequests();
+        const response = await getUserFriendStatuses();
         console.log("Response pending friends request", response);
         if (!response.error) {
           setFriendsRequests(response);
