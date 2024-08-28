@@ -3,7 +3,7 @@ import PageTitle from "@/components/common/ui/PageTitle";
 import MessageList from "@/components/message/MessageList";
 import React from "react";
 import { getMessages } from "@/actions/message.server/getMessages.server";
-import MessageInput from "@/components/message/MessageInput";
+import MessageForm from "@/components/message/MessageForm";
 
 async function Page({ params }: { params: { friendshipId: string } }) {
   const { friendshipId } = params;
@@ -16,7 +16,7 @@ async function Page({ params }: { params: { friendshipId: string } }) {
     <PageContainer>
       <PageTitle>Message</PageTitle>
       <MessageList messages={messages.messages} />
-      <MessageInput friendshipId={friendshipId} />
+      <MessageForm friendshipId={friendshipId} />
     </PageContainer>
   );
 }
