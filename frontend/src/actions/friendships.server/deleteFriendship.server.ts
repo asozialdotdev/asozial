@@ -2,52 +2,49 @@
 import { auth } from "@/auth";
 import { baseUrl } from "@/constants";
 
-export type SendFriendshipState = {
+export type DeleteFriendshipState = {
   errors: {
-    send?: string[];
+    delete?: string[];
   };
   success?: boolean;
   data?: any;
 };
 
-const sendFriendship = async (
-  formState: SendFriendshipState,
+const deleteFriendship = async (
+  formState: DeleteFriendshipState,
   formData: FormData,
-): Promise<SendFriendshipState> => {
+): Promise<DeleteFriendshipState> => {
   const session = await auth();
-  const senderId = session?.user?.id;
-  const receiverId = formData.get("receiverId") as string;
+  const userId = session?.user?.id;
   try {
     const response = await fetch(`${baseUrl}/api/friends`, {
-      method: "POST",
+      method: "DELETE",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        senderId,
-        receiverId,
+        actualUser: userId,
       }),
     });
 
-    if (!response.ok) {
-      throw new Error(`Failed to send friend request: ${response.statusText}`);
+    if (response.status === 204) {
+      console.log("Friendship successfully deleted");
     }
 
     const data = await response.json();
-
     return {
       errors: {},
       success: true,
       data,
     };
   } catch (error: any) {
-    console.log("Error sending friendship:", error.message);
+    console.log("Error declining friendship:", error.message);
     return {
       errors: {
-        send: ["Error sending friendship. Please try again."],
+        delete: ["Error declining friendship. Please try again."],
       },
     };
   }
 };
 
-export { sendFriendship };
+export { deleteFriendship };

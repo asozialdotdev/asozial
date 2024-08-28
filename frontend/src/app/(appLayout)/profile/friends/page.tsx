@@ -1,7 +1,7 @@
 import PageContainer from "@/components/common/containers/PageContainer";
 import PageTitle from "@/components/common/ui/PageTitle";
 import React from "react";
-import { getUserFriendStatuses } from "@/actions/friendships.server/getUserFriendStatuses";
+import { getUserFriendStatuses } from "@/actions/friendships.server/getUserFriendStatuses.server";
 
 async function page() {
   const { accepted } = await getUserFriendStatuses();

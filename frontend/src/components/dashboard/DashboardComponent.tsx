@@ -5,7 +5,7 @@ import DashboardHeader from "./DashboardHeader";
 import FriendStatusCard from "./FriendStatusCard";
 import { auth } from "@/auth";
 import { checkMembersApplied } from "@/actions/projects.server";
-import RequestsTable from "./RequestsTable";
+// import RequestsTable from "./RequestsTable";
 
 async function DashboardComponent() {
   const session = await auth();

@@ -7,12 +7,12 @@ import { acceptMember, declineMember } from "@/actions";
 //Ui
 import CustomLabel from "../common/ui/Label";
 import ErrorMessage from "../common/ui/ErrorMessage";
-import DeclineButton from "./DeclineButton";
-import AcceptButton from "./AcceptButton";
+import AcceptButton from "../requests/AcceptButton";
 
 //Types
 import { ProjectId } from "@/types/Project";
 import { UserId } from "@/types/User";
+import DeclineButton from "./DeclineButton";
 
 type AcceptDeclineFormProps = {
   projectId: ProjectId;
