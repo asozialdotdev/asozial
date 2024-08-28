@@ -6,7 +6,6 @@ const sendMessage = async (
   friendshipId: string,
   actualUser: string,
   targetUser: string,
-  title: string,
   content: string,
 ) => {
   const session = await auth();
@@ -21,7 +20,6 @@ const sendMessage = async (
       body: JSON.stringify({
         actualUser: session?.user.id,
         targetUser,
-        title,
         content,
       }),
     });

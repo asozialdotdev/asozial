@@ -34,10 +34,15 @@ messagesRouter.post(
       const newMessage = await Message.create({
         senderId: actualUser,
         receiverId: foundTargetUser,
-        title: req.body.title,
         content: req.body.content,
         isRead: false,
       });
+
+      const updatedFriendship = await Friendship.findByIdAndUpdate(
+        friendshipId,
+        { $push: { messages: newMessage._id } },
+        { new: true }
+      );
 
       res.status(201).json(newMessage);
     } catch (error) {
