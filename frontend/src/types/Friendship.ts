@@ -5,16 +5,16 @@ type FriendshipId = Types.ObjectId | string;
 type SenderId = {
   info: {
     image: string;
-    username: string;
-    _id: Types.ObjectId;
   };
+  username: string;
+  _id: Types.ObjectId;
 };
 type ReceiverId = {
   info: {
     image: string;
-    username: string;
-    _id: Types.ObjectId;
   };
+  username: string;
+  _id: Types.ObjectId;
 };
 
 type Friendship = {
