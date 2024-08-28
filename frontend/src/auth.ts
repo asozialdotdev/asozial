@@ -148,26 +148,26 @@ export const {
           return false;
         }
       } else {
-        const githubFollowers = await getUserGithubFollowers(
-          profile?.followers_url as string,
-          account?.access_token as string,
-        );
-        const githubFollowing = await getUserGithubFollowing(
-          profile?.following_url as string,
-          account?.access_token as string,
-        );
-        const githubSubscriptions = await getUserGithubSubscriptions(
-          profile?.subscriptions_url as string,
-          account?.access_token as string,
-        );
-        const githubPublicGists = await getUserGithubPublicGists(
-          profile?.gists_url as string,
-          account?.access_token as string,
-        );
-        const githubOrganizations = await getUserGithubOrganizations(
-          profile?.organizations_url as string,
-          account?.access_token as string,
-        );
+        // const githubFollowers = await getUserGithubFollowers(
+        //   profile?.followers_url as string,
+        //   account?.access_token as string,
+        // );
+        // const githubFollowing = await getUserGithubFollowing(
+        //   profile?.following_url as string,
+        //   account?.access_token as string,
+        // );
+        // const githubSubscriptions = await getUserGithubSubscriptions(
+        //   profile?.subscriptions_url as string,
+        //   account?.access_token as string,
+        // );
+        // const githubPublicGists = await getUserGithubPublicGists(
+        //   profile?.gists_url as string,
+        //   account?.access_token as string,
+        // );
+        // const githubOrganizations = await getUserGithubOrganizations(
+        //   profile?.organizations_url as string,
+        //   account?.access_token as string,
+        // );
         const githubRepos = await getUserGithubRepos(
           profile?.repos_url as string,
           account?.access_token as string,
@@ -181,15 +181,6 @@ export const {
           _id: existingUser._id,
           skills: {
             codingLanguages: githubRepoLanguages,
-          },
-          github: {
-            ...existingUser.github,
-            followers: githubFollowers,
-            following: githubFollowing,
-            subscriptions: githubSubscriptions,
-            publicGists: githubPublicGists,
-            organizations: githubOrganizations,
-            publicRepos: githubRepos,
           },
           lastLogin: Date.now(),
         };
