@@ -13,21 +13,33 @@ import {
 } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import DashboardFriendItem from "./DashboardFriendItem";
+import { auth } from "@/auth";
 
 async function FriendStatusCard() {
-  const userFriendStatuses = await getUserFriendStatuses();
-  const friends = userFriendStatuses.friendsAccepted;
-  const pending = userFriendStatuses.friendsPending;
-  const rejected = userFriendStatuses.friendsRejected;
+  const session = await auth();
+  const { accepted, pending, declined } = await getUserFriendStatuses();
 
-  console.log("userFriendStatuses", userFriendStatuses);
+  const sentPending = pending.filter((friendship: any) => {
+    return friendship.senderId._id === session?.user.id;
+  });
+  const receivedPending = pending.filter((friendship: any) => {
+    return friendship.receiverId._id === session?.user.id;
+  });
+
+  console.log("accepted", accepted);
+  console.log("sentPending", sentPending);
+  console.log("receivedPending", receivedPending);
+
+  console.log("declined", declined);
+
   return (
     <div className="rounded bg-white p-4 shadow dark:bg-black">
       <h2 className="text-lg font-bold">Friends</h2>
       <Tabs defaultValue="accepted">
         <TabsList className="w-full">
           <TabsTrigger value="accepted">Accepted</TabsTrigger>
-          <TabsTrigger value="pending">Pending</TabsTrigger>
+          <TabsTrigger value="sent">Sent</TabsTrigger>
+          <TabsTrigger value="received">Received</TabsTrigger>
           <TabsTrigger value="rejected">Rejected</TabsTrigger>
         </TabsList>
         <TabsContent value="accepted">
@@ -36,34 +48,62 @@ async function FriendStatusCard() {
               <CardTitle>Friends</CardTitle>
             </CardHeader>
             <CardContent>
-              {friends &&
-                friends.map((friend: any) => (
-                  <DashboardFriendItem key={friend.id} friend={friend} />
-                ))}
+              {/* //needs to map through friendships, filter friends for the userId */}
+              {/* {accepted.friends &&
+                accepted.map(
+                  (friendship: any) =>
+                    friendship !== null && (
+                      <DashboardFriendItem
+                        key={friendship.id}
+                        id={friendship.id}
+                        username={friend.username}
+                        image={friend.image}
+                      />
+                    ),
+                )} */}
             </CardContent>
-            <CardFooter>
-              <Button variant={"ghost"}>
-                <UserRoundX />
-              </Button>
-            </CardFooter>
           </Card>
         </TabsContent>
-        <TabsContent value="pending">
+        <TabsContent value="sent">
           <Card>
             <CardHeader>
-              <CardTitle>Pending</CardTitle>
+              <CardTitle>Sent</CardTitle>
             </CardHeader>
-            <CardContent>
-              {pending &&
-                pending.map((friend: any) => (
-                  <DashboardFriendItem key={friend.id} friend={friend} />
-                ))}
+            <CardContent className="flex flex-col gap-2">
+              {sentPending &&
+                sentPending.map(
+                  (friendship: any) =>
+                    friendship !== null && (
+                      <DashboardFriendItem
+                        key={friendship.receiverId._id}
+                        id={friendship.receiverId._id}
+                        username={friendship.receiverId.username}
+                        image={friendship.receiverId.info.image}
+                      />
+                    ),
+                )}
             </CardContent>
-            <CardFooter>
-              <Button variant={"ghost"}>
-                <UserRoundCheck />
-              </Button>
-            </CardFooter>
+          </Card>
+        </TabsContent>
+        <TabsContent value="received">
+          <Card>
+            <CardHeader>
+              <CardTitle>Received</CardTitle>
+            </CardHeader>
+            <CardContent className="flex flex-col gap-2">
+              {receivedPending &&
+                receivedPending.map(
+                  (friendship: any) =>
+                    friendship !== null && (
+                      <DashboardFriendItem
+                        key={friendship.senderId._id}
+                        id={friendship.senderId._id}
+                        username={friendship.senderId.username}
+                        image={friendship.senderId.info.image}
+                      />
+                    ),
+                )}
+            </CardContent>
           </Card>
         </TabsContent>
         <TabsContent value="rejected">
@@ -71,17 +111,20 @@ async function FriendStatusCard() {
             <CardHeader>
               <CardTitle>Rejected</CardTitle>
             </CardHeader>
-            <CardContent>
-              {rejected &&
-                rejected.map((friend: any) => (
-                  <DashboardFriendItem key={friend.id} friend={friend} />
-                ))}
+            <CardContent className="flex flex-col gap-2">
+              {declined &&
+                declined.map(
+                  (friendship: any) =>
+                    friendship !== null && (
+                      <DashboardFriendItem
+                        key={friendship._id}
+                        id={friendship._id}
+                        username={friendship.username}
+                        image={friendship.info.image}
+                      />
+                    ),
+                )}
             </CardContent>
-            <CardFooter>
-              <Button variant={"ghost"}>
-                <UserRoundX />
-              </Button>
-            </CardFooter>
           </Card>
         </TabsContent>
       </Tabs>
