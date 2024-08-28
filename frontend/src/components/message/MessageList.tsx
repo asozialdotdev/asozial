@@ -9,9 +9,6 @@ function MessageList({ messages }: { messages: Message[] }) {
   const { data: session } = useSession();
   const userId = session?.user.id;
 
-  console.log("the session is:", session);
-
-  console.log("the messages are:", messages);
   return (
     <div className="flex w-full flex-col gap-2">
       {messages &&

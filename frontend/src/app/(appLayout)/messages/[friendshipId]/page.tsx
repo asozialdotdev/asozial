@@ -9,9 +9,6 @@ async function Page({ params }: { params: { friendshipId: string } }) {
   const { friendshipId } = params;
   const messages = await getMessages(friendshipId);
 
-  console.log("Messages:", messages);
-  console.log("Messages.messages:", messages.messages);
-
   return (
     <PageContainer>
       <PageTitle>Message</PageTitle>

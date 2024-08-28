@@ -16,17 +16,17 @@ messagesRouter.get(
     const { friendshipId } = req.params;
     console.log("friendshipId", friendshipId);
     try {
-      const messages = await Friendship.findById(friendshipId)
+      const friendship = await Friendship.findById(friendshipId)
         .populate({
           path: "messages",
           select: "senderId content createdAt",
         })
         .populate({
-          path: "senderId",
+          path: "friends",
           select: "username info.image",
         });
 
-      console.log("messages", messages);
+      console.log("friendship at server", friendship);
 
       //only updating when one user reads the messages
 
@@ -36,9 +36,7 @@ messagesRouter.get(
         { $set: { isRead: true } }
       );
 
-      console.log("messages", messages);
-
-      res.status(200).json(messages);
+      res.status(200).json(friendship);
     } catch (error) {
       next(error);
     }
