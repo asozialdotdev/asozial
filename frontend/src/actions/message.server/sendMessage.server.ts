@@ -2,16 +2,11 @@
 import { auth } from "@/auth";
 import { baseUrl } from "@/constants";
 
-const sendMessage = async (
-  friendshipId: string,
-  actualUser: string,
-  targetUser: string,
-  title: string,
-  content: string,
-) => {
+const sendMessage = async (friendshipId: string, content: string) => {
   const session = await auth();
   try {
-    console.log("Sending message to user:", { actualUser, targetUser });
+    console.log("Sending message from:", session?.user.id);
+    console.log(content);
 
     const response = await fetch(`${baseUrl}/api/messages/${friendshipId}`, {
       method: "POST",
@@ -19,10 +14,8 @@ const sendMessage = async (
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        actualUser: session?.user.id,
-        targetUser,
-        title,
-        content,
+        senderId: session?.user.id,
+        content: content,
       }),
     });
 

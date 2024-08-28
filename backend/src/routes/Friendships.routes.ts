@@ -96,12 +96,12 @@ friendshipsRouter.put(
 
       await User.findByIdAndUpdate(friendship.senderId, {
         $pull: { "friends.pending": friendship.receiverId },
-        $push: { "friends.accepted": friendship.senderId },
+        $addToSet: { "friends.accepted": friendship.senderId },
       });
 
       await User.findByIdAndUpdate(friendship.receiverId, {
         $pull: { "friends.pending": friendship.senderId },
-        $push: { "friends.accepted": friendship.receiverId },
+        $addToSet: { "friends.accepted": friendship.receiverId },
       });
 
       res.status(200).json(friendship);
