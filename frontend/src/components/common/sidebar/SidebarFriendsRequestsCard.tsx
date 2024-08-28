@@ -10,6 +10,7 @@ type SidebarFriendsRequestsCardProps = {
 function SidebarFriendsRequestsCard({
   friendship,
 }: SidebarFriendsRequestsCardProps) {
+  console.log(friendship.senderId?.info.username, "friends username");
   return (
     <Card
       key={friendship._id.toString()}
@@ -17,9 +18,9 @@ function SidebarFriendsRequestsCard({
     >
       <div className="flex flex-col items-center gap-2">
         <CardDescription className="text-center">
-          <Link href={`/${friendship.senderId?.info.username}`}>
+          <Link href={`/${friendship.senderId?.username}`}>
             <span className="text-dark hover:opacity-75 dark:text-light">
-              {friendship.senderId?.info.username}
+              {friendship.senderId?.username}
             </span>{" "}
             wants to be friends
           </Link>
@@ -31,11 +32,10 @@ function SidebarFriendsRequestsCard({
               friendship.senderId?.info.image ||
               "https://avatars.dicebear.com/api/avataaars/username.svg"
             }
-            username={friendship.senderId?.info.username || "username"}
-            userId={friendship.senderId?.info._id || "123"}
+            username={friendship.senderId?.username || "username"}
+            userId={friendship.senderId?._id || "123"}
             className="h-12 w-12"
           />
-
         </div>
       </div>
     </Card>
