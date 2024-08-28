@@ -5,6 +5,46 @@ import Project from "../models/Project.models";
 
 const usersRouter = express.Router();
 
+usersRouter.get(
+  "/search",
+  async (req: Request, res: Response, next: NextFunction) => {
+    const { query, page = 1, limit = 10 } = req.query;
+
+    try {
+      const searchQuery = query
+        ? {
+            $or: [
+              { "info.username": { $regex: query, $options: "i" } },
+              { "info.name": { $regex: query, $options: "i" } },
+            ],
+          }
+        : {};
+
+      const users = await User.find(searchQuery)
+        .skip((+page - 1) * +limit)
+        .limit(+limit)
+        .select(
+          "info.username info.name info.image github.publicReposNumber github.bio info.location"
+        )
+        .exec();
+
+      const totalUsers = await User.countDocuments(searchQuery);
+      const totalPages = Math.ceil(totalUsers / +limit);
+
+      console.log({ users, totalPages, currentPage: +page });
+
+      res.json({
+        users,
+        totalPages,
+        currentPage: +page,
+      });
+    } catch (error) {
+      console.error("Error fetching users:", error);
+      next(error);
+    }
+  }
+);
+
 usersRouter.get("/:username", async (req: Request, res: Response) => {
   try {
     const user = await User.findOne({ "info.username": req.params.username });
@@ -20,17 +60,17 @@ usersRouter.get("/:username", async (req: Request, res: Response) => {
 
 // GET all users for the global search
 
-usersRouter.get(
-  "/search",
-  async (req: Request, res: Response, next: NextFunction) => {
-    try {
-      const foundUser = await User.find();
-      res.json(foundUser);
-    } catch (error) {
-      next(error);
-    }
-  }
-);
+// usersRouter.get(
+//   "/search",
+//   async (req: Request, res: Response, next: NextFunction) => {
+//     try {
+//       const foundUser = await User.find();
+//       res.json(foundUser);
+//     } catch (error) {
+//       next(error);
+//     }
+//   }
+// );
 
 // GET 1 user to display with friendship condition
 

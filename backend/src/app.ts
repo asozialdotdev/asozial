@@ -29,6 +29,6 @@ app.use("/api/friends", friendshipsRouter);
 app.use("/api/messages", messagesRouter);
 app.use("/api/match", matchRouter);
 app.use("/api", fileRouter);
-app.use("/search", searchRouter);
+app.use("/api/search", searchRouter);
 
 export default app;
