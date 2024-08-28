@@ -1,11 +1,11 @@
 "use client";
 import { sendFriendship } from "@/actions";
-import ButtonAddFriend from "@/components/common/ui/buttons/ButtonAddFriend";
 import ErrorMessage from "@/components/common/ui/ErrorMessage";
 import CustomLabel from "@/components/common/ui/Label";
 import { useFormState } from "react-dom";
+import ButtonAddFriend from "./ButtonAddFriend";
 
-function AddFriend({ receiverId }: { receiverId: string }) {
+function AddFriendForm({ receiverId }: { receiverId: string }) {
   const [formState, action] = useFormState(sendFriendship, {
     errors: {},
   });
@@ -22,4 +22,4 @@ function AddFriend({ receiverId }: { receiverId: string }) {
   );
 }
 
-export default AddFriend;
+export default AddFriendForm;

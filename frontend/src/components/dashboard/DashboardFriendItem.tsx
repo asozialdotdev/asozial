@@ -4,6 +4,8 @@ import React from "react";
 import UserAvatar from "../common/ui/image/UserAvatar";
 import { Button } from "../ui/button";
 import { acceptFriendship, declineFriendship } from "@/actions";
+import AcceptFriendshipForm from "../requests/AcceptDeclineFriendshipForm";
+import AcceptDeclineFriendshipForm from "../requests/AcceptDeclineFriendshipForm";
 
 function DashboardFriendItem({
   id,
@@ -18,7 +20,6 @@ function DashboardFriendItem({
   friendshipId: string;
   status: string;
 }) {
-
   return (
     <div
       key={username}
@@ -30,18 +31,7 @@ function DashboardFriendItem({
       </div>
 
       {status === "received" && (
-        <div className="flex flex-row items-center gap-4">
-          <form action={() => acceptFriendship(friendshipId)}>
-            <Button type="submit" variant="ghost">
-              Accept
-            </Button>
-          </form>
-          <form action={() => declineFriendship(friendshipId)}>
-            <Button type="submit" variant="ghost">
-              Decline
-            </Button>
-          </form>
-        </div>
+        <AcceptDeclineFriendshipForm friendshipId={friendshipId} />
       )}
     </div>
   );
