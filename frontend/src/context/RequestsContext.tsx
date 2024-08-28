@@ -1,5 +1,9 @@
 "use client";
-import { checkMembersApplied, getUserFriendStatuses } from "@/actions";
+import {
+  checkMembersApplied,
+  getPendingFriendsRequests,
+  getUserFriendStatuses,
+} from "@/actions";
 import Friendship from "@/types/Friendship";
 import { Project } from "@/types/Project";
 import { createContext, useContext, useEffect, useState } from "react";
@@ -59,7 +63,8 @@ function RequestsProvider({ children }: { children: React.ReactNode }) {
       try {
         setFriendsLoading(true);
         setFriendsError("");
-        const response = await getUserFriendStatuses();
+        const response = await getPendingFriendsRequests();
+        console.log("Response pending friends request", response);
         if (!response.error) {
           setFriendsRequests(response.pendingFriendships);
         } else {

@@ -161,27 +161,36 @@ friendshipsRouter.put(
 );
 
 // GET all pending friendships
-
 friendshipsRouter.get(
   "/pending",
   async (req: Request, res: Response, next: NextFunction) => {
+    console.log("Friendships pending is called");
     try {
-      const { actualUser } = req.body;
+      const { actualUser } = req.query;
+      console.log("actualUser>>>>>>>>>", actualUser);
 
-      const user = await User.findById(actualUser).populate("friends.pending");
+      const user = await User.findById(actualUser)
+        .populate({
+          path: "friends.pending", // Populate the 'friends.pending' array
+          select: "info.username info.image", // Select only username and image fields
+        })
+        .exec();
 
-      if (!user || !user.friends?.pending.length) {
-        res.status(404).send("You don't have any pending friendships!");
-        console.error("No pending friendships found");
-        return;
+      if (!user) {
+        console.error("No user found");
+        return res.status(404).send("No user found");
       }
 
-      res.json(user.friends.pending);
+      console.log("use pending>>>>>>>>>", user.friends?.pending);
+
+      res.json(user.friends?.pending || []); // Return the pending friends or an empty array if none
     } catch (error) {
+      console.error("Error fetching pending friendships:", error);
       next(error);
     }
   }
 );
+
 
 // GET all declined friendships
 
