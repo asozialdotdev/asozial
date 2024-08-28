@@ -12,9 +12,10 @@ import AcceptButton from "./AcceptButton";
 //Types
 
 import DeclineButton from "./DeclineButton";
+import { FriendshipId } from "@/types/Friendship";
 
 type AcceptDeclineFriendshipProps = {
-  friendshipId: string;
+  friendshipId: FriendshipId;
   sidebar?: boolean;
 };
 
@@ -40,7 +41,11 @@ function AcceptDeclineFriendshipForm({
       {/* Accept form */}
       <form className="flex flex-col gap-2" action={acceptAction}>
         <CustomLabel htmlFor="accept"></CustomLabel>
-        <input type="hidden" name="friendshipId" value={friendshipId} />
+        <input
+          type="hidden"
+          name="friendshipId"
+          value={friendshipId.toString()}
+        />
         {!declineSuccess && (
           <AcceptButton sidebar={sidebar} acceptSuccess={acceptSuccess} />
         )}
@@ -57,7 +62,11 @@ function AcceptDeclineFriendshipForm({
       {/* Decline form */}
       <form className="flex w-full flex-col gap-2" action={declineAction}>
         <CustomLabel htmlFor="decline"></CustomLabel>
-        <input type="hidden" name="friendshipId" value={friendshipId} />
+        <input
+          type="hidden"
+          name="friendshipId"
+          value={friendshipId.toString()}
+        />
         {!acceptSuccess && (
           <DeclineButton sidebar={sidebar} declineSuccess={declineSuccess} />
         )}

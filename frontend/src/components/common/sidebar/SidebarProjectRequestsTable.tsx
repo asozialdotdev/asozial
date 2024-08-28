@@ -11,9 +11,9 @@ function SidebarProjectRequestsTable() {
   if (projectsLoading) {
     return (
       <>
-        <SidebarCardSkeleton />
-        <SidebarCardSkeleton />
-        <SidebarCardSkeleton />
+        <SidebarCardSkeleton project />
+        <SidebarCardSkeleton project />
+        <SidebarCardSkeleton project />
       </>
     );
   }

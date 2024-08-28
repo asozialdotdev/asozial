@@ -2,9 +2,6 @@
 
 import React from "react";
 import UserAvatar from "../common/ui/image/UserAvatar";
-import { Button } from "../ui/button";
-import { acceptFriendship, declineFriendship } from "@/actions";
-import AcceptFriendshipForm from "../requests/AcceptDeclineFriendshipForm";
 import AcceptDeclineFriendshipForm from "../requests/AcceptDeclineFriendshipForm";
 
 function DashboardFriendItem({
