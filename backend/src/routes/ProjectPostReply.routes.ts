@@ -122,10 +122,6 @@ projectPostReplyRouter.patch("/:replyId", async (req, res, next) => {
       { $set: { deleted: true, deletedAt: new Date() } }
     );
 
-    console.log(
-      ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>Reply marked as deleted"
-    );
-
     res.json({ message: "Reply marked as deleted", reply });
   } catch (error) {
     console.error("Error deleting reply:", error);

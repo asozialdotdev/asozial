@@ -17,8 +17,6 @@ fileRouter.post(
         message: "File uploaded successfully",
         url: req.file.path,
       });
-
-      console.log("this is the link of the image", req.file.path);
     } catch (error: any) {
       console.error("Upload error:", error);
 
