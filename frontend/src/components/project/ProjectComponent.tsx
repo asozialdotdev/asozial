@@ -1,36 +1,43 @@
 //Next
 import Image from "next/image";
+import Link from "next/link";
 
 //Components
 import PageTitle from "../common/ui/PageTitle";
 import UserAvatar from "../common/ui/image/UserAvatar";
-
-//UI
-import github from "/public/socials/github.png";
-
-//Utils
-import { techStackClass, setStatusIcon } from "@/utils";
-
-//Types
-import type { Member, Project } from "@/types/Project";
-import Link from "next/link";
-import { auth } from "@/auth";
-import { Button } from "../ui/button";
-import { socialsData } from "@/constants";
 import ProjectPitch from "./ProjectPitch";
 import ProjectMainLanguage from "./ProjectMainLanguage";
 import ProjectDescription from "./ProjectDescription";
-import { Users } from "lucide-react";
-import LeaveProject from "./LeaveProject";
+import LeaveProjectForm from "./requests/LeaveProjectForm";
 
-async function ProjectComponent({ project }: { project: Project }) {
+//UI
+import github from "/public/socials/github.png";
+import { Button } from "../ui/button";
+import { Users } from "lucide-react";
+
+//Lib
+import { auth } from "@/auth";
+
+//Utils
+import { techStackClass, setStatusIcon } from "@/utils";
+import { socialsData } from "@/constants";
+
+//Types
+import type { Member, Project } from "@/types/Project";
+
+type ProjectComponentProps = {
+  project: Project;
+  isMember: boolean;
+  isOwner: boolean;
+};
+
+async function ProjectComponent({
+  project,
+  isMember,
+  isOwner,
+}: ProjectComponentProps) {
   const session = await auth();
   const username = session?.user?.githubUsername;
-  const isMember = project.members?.membersJoined.some(
-    (member: Member) => member._id.toString() === session?.user?.id,
-  );
-  console.log("isMember", isMember);
-  const isOwner = project.owner._id.toString() === session?.user?.id;
 
   console.log("project owner", project.owner);
 
@@ -86,7 +93,6 @@ async function ProjectComponent({ project }: { project: Project }) {
 
       {/* Language */}
       <ProjectMainLanguage project={project} />
-
       {/* Members */}
       <div className="flex flex-col">
         <div className="flex items-center gap-2">
@@ -179,7 +185,7 @@ async function ProjectComponent({ project }: { project: Project }) {
             </Link>
           </div>
         )}
-        {isMember && <LeaveProject project={project} />}
+        {isMember && <LeaveProjectForm project={project} />}
       </div>
     </section>
   );

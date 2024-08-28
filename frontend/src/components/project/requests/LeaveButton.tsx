@@ -1,7 +1,7 @@
 import { FileOutput, SquareCheck } from "lucide-react";
-import { Button } from "../ui/button";
-import LoadingTextButton from "../common/ui/loading/LoadingTextButton";
 import { useFormStatus } from "react-dom";
+import LoadingTextButton from "@/components/common/ui/loading/LoadingTextButton";
+import { Button } from "@/components/ui/button";
 
 function LeaveButton() {
   const { pending } = useFormStatus();

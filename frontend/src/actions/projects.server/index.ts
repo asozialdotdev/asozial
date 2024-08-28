@@ -5,6 +5,8 @@ export { searchForUserProjects } from "./searchForUserProjects.server";
 export { createProjectFromGithub } from "./createProjectFromGithub.server";
 export { createProject } from "./createProject.server";
 export { checkIsMember } from "./checkIsMember.server";
+export { checkIsOwner } from "./checkIsOwner.server";
+export { checkMemberHasApplied } from "./checkMemberHasApplied.server";
 export { updateProject } from "./updateProject.server";
 export { patchPitch } from "./patchPitch.server.";
 export { deleteProject } from "./deleteProject.server";

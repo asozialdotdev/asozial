@@ -2,12 +2,14 @@
 
 import { useFormState } from "react-dom";
 import { leaveProject } from "@/actions";
-import ErrorMessage from "../common/ui/ErrorMessage";
-import LeaveButton from "./LeaveButton";
-import CustomLabel from "../common/ui/Label";
-import { Project } from "@/types/Project";
 
-function LeaveProject({ project }: { project: Project }) {
+import LeaveButton from "./LeaveButton";
+
+import { Project } from "@/types/Project";
+import CustomLabel from "@/components/common/ui/Label";
+import ErrorMessage from "@/components/common/ui/ErrorMessage";
+
+function LeaveProjectForm({ project }: { project: Project }) {
   const [formState, action] = useFormState(leaveProject, {
     errors: {},
   });
@@ -22,4 +24,4 @@ function LeaveProject({ project }: { project: Project }) {
   );
 }
 
-export default LeaveProject;
+export default LeaveProjectForm;
