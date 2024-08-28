@@ -43,7 +43,6 @@ import { GiButterfly } from "react-icons/gi";
 import { RiSvelteFill } from "react-icons/ri";
 
 const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:5005";
-console.log("baseUrl in CONSTANTS:", baseUrl);
 
 const languagesWithColors: {
   language: string;
