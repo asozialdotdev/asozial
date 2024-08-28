@@ -1,6 +1,9 @@
 import { Types } from "mongoose";
 
+type FriendshipId = Types.ObjectId | string;
+
 type Friendship = {
+  _id: FriendshipId;
   senderId?: Types.ObjectId;
   receiverId?: Types.ObjectId;
   friends?: Types.ObjectId[];
@@ -10,4 +13,4 @@ type Friendship = {
   updatedAt?: Date;
 };
 
-export default Friendship;
+export type { Friendship, FriendshipId };

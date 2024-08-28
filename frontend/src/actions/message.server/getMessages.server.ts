@@ -3,13 +3,12 @@ import { baseUrl } from "@/constants";
 
 const getMessages = async (friendshipId: string) => {
   try {
-    console.log("Fetching messages from friendship :", { friendshipId });
-
     const response = await fetch(`${baseUrl}/api/messages/${friendshipId}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
       },
+      cache: "no-cache",
     });
 
     if (!response.ok) {
