@@ -27,7 +27,7 @@ const navbarLinks = [
     ],
   },
   {
-    name: "Message",
+    name: "Messages",
     href: "/messages",
     Icon: ReplyIcon,
   },
