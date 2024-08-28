@@ -1,19 +1,19 @@
-import { Member, Project } from "@/types/Project";
 import { useRequests } from "@/context/RequestsContext";
-import SidebarProjectRequestsCard from "./SidebarProjectRequestsCard";
 import SidebarCardSkeleton from "./SidebarCardSkeleton";
 import ErrorMessage from "../ui/ErrorMessage";
 import { Friendship } from "@/types/Friendship";
+import SidebarFriendsRequestsCard from "./SidebarFriendsRequestsCard";
+
 function SidebarFriendsRequestsTable() {
   const { friendsRequests, friendsError, friendsLoading } = useRequests();
-  console.log("FriendssRequests", friendsRequests);
+  const { pending } = friendsRequests;
 
   if (friendsLoading) {
     return (
       <>
-        <SidebarCardSkeleton />
-        <SidebarCardSkeleton />
-        <SidebarCardSkeleton />
+        <SidebarCardSkeleton user />
+        <SidebarCardSkeleton user />
+        <SidebarCardSkeleton user />
       </>
     );
   }
@@ -22,7 +22,7 @@ function SidebarFriendsRequestsTable() {
     return <ErrorMessage>{friendsError}</ErrorMessage>;
   }
 
-  if (friendsRequests.length === 0 || !friendsRequests) {
+  if (pending.length === 0 || !pending) {
     return (
       <p className="text-sm text-neutral-500 dark:text-neutral-400">
         No requests yet
@@ -30,26 +30,19 @@ function SidebarFriendsRequestsTable() {
     );
   }
 
-  const renderRequests = (friend: Friendship) => {
+  const renderRequests = (friendship: Friendship) => {
     return (
-      // <SidebarProjectRequestsCard
-      //   key={`${project._id.toString()}-${member._id.toString()}`}
-      //   member={member}
-      //   project={project}
-      // />
-      <div>
-        <p>{friend.senderId?.info.username} wants to be your friend</p>
-        <button>Accept</button>
-        <button>Decline</button>
-      </div>
+      <SidebarFriendsRequestsCard
+        key={friendship._id.toString()}
+        friendship={friendship}
+      />
     );
   };
-
-  // return (
-  //   <div className="flex flex-col">
-  //     {friendsRequests.map((friend) => renderRequests(friend))}
-  //   </div>
-  // );
+  return (
+    <div className="flex flex-col">
+      {pending.map((friendship) => renderRequests(friendship))}
+    </div>
+  );
 }
 
 export default SidebarFriendsRequestsTable;

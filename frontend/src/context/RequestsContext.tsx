@@ -9,11 +9,18 @@ import { Project } from "@/types/Project";
 import { createContext, useContext, useEffect, useState } from "react";
 import { Friendship } from "@/types/Friendship";
 
+type FriendsRequest = {
+  accepted: Friendship[];
+  pending: Friendship[];
+  declined: Friendship[];
+};
+
 type RequestsContextType = {
   projectsRequests: Project[];
   projectsLoading: boolean;
   projectsError: string;
-  friendsRequests: Friendship[];
+  friendsRequests: FriendsRequest;
+
   friendsLoading: boolean;
   friendsError: string;
 };
@@ -22,7 +29,11 @@ const defaultContextValue: RequestsContextType = {
   projectsRequests: [],
   projectsLoading: true,
   projectsError: "",
-  friendsRequests: [],
+  friendsRequests: {
+    accepted: [],
+    pending: [],
+    declined: [],
+  },
   friendsLoading: true,
   friendsError: "",
 };
@@ -34,7 +45,11 @@ function RequestsProvider({ children }: { children: React.ReactNode }) {
   const [projectsError, setProjectsError] = useState("");
   const [projectsLoading, setProjectsLoading] = useState(true);
 
-  const [friendsRequests, setFriendsRequests] = useState([]);
+  const [friendsRequests, setFriendsRequests] = useState<FriendsRequest>({
+    accepted: [],
+    pending: [],
+    declined: [],
+  });
   const [friendsError, setFriendsError] = useState("");
   const [friendsLoading, setFriendsLoading] = useState(true);
 

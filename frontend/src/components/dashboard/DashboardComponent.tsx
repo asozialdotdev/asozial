@@ -1,6 +1,4 @@
-import FileUploader from "../common/ui/ImageUploader";
-import DashboardProjects from "./DashboardProjects";
-import DashboardPosts from "./DashboardPosts";
+
 import DashboardHeader from "./DashboardHeader";
 import FriendStatusCard from "./FriendStatusCard";
 import { auth } from "@/auth";

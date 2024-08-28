@@ -19,7 +19,7 @@ function SidebarRequests({
       )}
       {user && (
         <>
-          <SidebarTitle className="self-end">Requests</SidebarTitle>\
+          <SidebarTitle className="self-end">Requests</SidebarTitle>
           <SidebarFriendsRequestsTable />
         </>
       )}
