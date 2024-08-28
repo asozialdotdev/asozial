@@ -2,7 +2,7 @@ import RequestCard from "@/components/dashboard/RequestCard";
 import SidebarTitle from "./SidebarTitle";
 import { Member, Project } from "@/types/Project";
 import { useRequests } from "@/context/RequestsContext";
-import SidebarProjectRequestsCard from "./SidebarRequests";
+import SidebarProjectRequestsCard from "./SidebarProjectRequestsCard";
 import LoadingSpinner from "../ui/loading/LoadingSpinner";
 import { Suspense } from "react";
 import SidebarCardSkeleton from "./SidebarCardSkeleton";

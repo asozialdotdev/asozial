@@ -1,17 +1,9 @@
-import AcceptDeclineForm from "@/components/dashboard/AcceptDeclineForm";
-import {
-  Card,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardDescription } from "@/components/ui/card";
 import UserAvatar from "../ui/image/UserAvatar";
-import { Member, Project, ProjectId } from "@/types/Project";
+import { Member, Project } from "@/types/Project";
 import Link from "next/link";
-import { useRequests } from "@/context/RequestsContext";
-import SidebarCardSkeleton from "./SidebarCardSkeleton";
-import { Suspense } from "react";
+
+import AcceptDeclineForm from "@/components/requests/AcceptDeclineForm";
 type SidebarProjectRequestsCardProps = {
   member: Member;
   project: Project;

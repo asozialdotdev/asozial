@@ -1,7 +1,7 @@
 import React from "react";
 import UserAvatar from "../common/ui/image/UserAvatar";
 import { UserRoundCheck, UserRoundX } from "lucide-react";
-import { getUserFriendStatuses } from "@/actions/friendships.server/getUserFriendStatuses";
+import { getUserFriendStatuses } from "@/actions/friendships.server/getUserFriendStatuses.server";
 import { Button } from "@/components/ui/button";
 import {
   Card,
