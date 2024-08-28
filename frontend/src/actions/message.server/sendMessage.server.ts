@@ -2,7 +2,9 @@
 import { auth } from "@/auth";
 import { baseUrl } from "@/constants";
 
+
 const sendMessage = async (friendshipId: string, content: string) => {
+
   const session = await auth();
   try {
     console.log("Sending message from:", session?.user.id);

@@ -24,7 +24,6 @@ function ButtonAddFriend({
   userId,
   friendId,
 }: ButtonAddFriendProps) {
-  console.log("ButtonAddFriend", userId, friendId);
   return (
     <TooltipProvider>
       <Tooltip>
