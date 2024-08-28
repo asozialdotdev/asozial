@@ -17,9 +17,10 @@ import { UserId } from "@/types/User";
 type AcceptDeclineFormProps = {
   projectId: ProjectId;
   memberId: UserId;
+  sidebar?: boolean;
 };
 
-function AcceptDeclineForm({ projectId, memberId }: AcceptDeclineFormProps) {
+function AcceptDeclineForm({ projectId, memberId, sidebar }: AcceptDeclineFormProps) {
   const [acceptFormState, acceptAction] = useFormState(acceptMember, {
     errors: {},
   });

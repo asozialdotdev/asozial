@@ -274,18 +274,19 @@ projectsRouter.get(
 
     try {
       // Find all projects owned by the user where there are members in the `membersApplied` array
-      const projects = await Project.find({
+      const membersApplied = await Project.find({
         owner: userId,
-        "members.membersApplied": { $exists: true, $ne: [] }, // Only get projects with members applied
+        "members.membersApplied": { $exists: true, $ne: [] }, // Only get membersApplied with members applied
       })
-        .select("_id slug title members.membersApplied")
+        .select("_id slug title owner members.membersApplied")
         .populate(
           "members.membersApplied",
           "info.username info.name info.image"
         )
+        .populate("owner", "info.username")
         .exec();
-      console.log("Applied members>>>>>>>>>>>>>", projects);
-      res.json(projects);
+      console.log("Applied members>>>>>>>>>>>>>", membersApplied);
+      res.json(membersApplied);
     } catch (error) {
       console.log("Error fetching applied members:", error);
       next(error);
