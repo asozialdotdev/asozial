@@ -26,6 +26,8 @@ messagesRouter.get(
           select: "username info.image",
         });
 
+      console.log("messages", messages);
+
       //only updating when one user reads the messages
 
       await Message.updateMany(

@@ -7,11 +7,11 @@ import { sendMessage } from "@/actions/message.server/sendMessage.server";
 function MessageInput({ friendshipId }: { friendshipId: string }) {
   const [message, setMessage] = useState("");
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
     console.log("Sending message to friendship:", { friendshipId });
     console.log("Message:", message);
     sendMessage(friendshipId, message);
   };
+
   return (
     <form onSubmit={handleSubmit}>
       <label htmlFor="message">Message</label>

@@ -10,6 +10,7 @@ const getMessages = async (friendshipId: string) => {
       headers: {
         "Content-Type": "application/json",
       },
+      cache: "no-cache",
     });
 
     if (!response.ok) {
