@@ -29,12 +29,15 @@ const sendFriendship = async (
       }),
     });
 
-    if (!response.ok) {
-      throw new Error(`Failed to send friend request: ${response.statusText}`);
-    }
-
     const data = await response.json();
 
+    if (response.status === 409) {
+      return {
+        errors: {
+          send: ["You are already send a request or you are already friends."],
+        },
+      };
+    }
     return {
       errors: {},
       success: true,

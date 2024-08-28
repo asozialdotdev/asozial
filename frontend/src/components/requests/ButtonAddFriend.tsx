@@ -9,7 +9,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { useFormStatus } from "react-dom";
-import LoadingTextButton from "../loading/LoadingTextButton";
+import LoadingTextButton from "../common/ui/loading/LoadingTextButton";
 
 type ButtonAddFriendProps = {
   className?: string;
@@ -31,6 +31,7 @@ function ButtonAddFriend({
             variant={"ghost"}
             size="icon"
             className={`flex flex-row ${cn(className)}`}
+            disabled={pending || success}
           >
             {pending ? (
               <LoadingTextButton />

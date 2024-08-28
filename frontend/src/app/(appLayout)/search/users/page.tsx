@@ -8,7 +8,7 @@ import { baseUrl } from "@/constants";
 import UserAvatar from "@/components/common/ui/image/UserAvatar";
 import { MapPinHouse, FolderGit } from "lucide-react";
 import { auth } from "@/auth";
-import AddFriend from "@/components/project/requests/AddFriend";
+import AddFriendForm from "@/components/requests/AddFriendForm";
 
 //api/friends POST  => add friend
 
@@ -40,9 +40,7 @@ async function Page() {
                   </a>
                 </div>
                 {userId && userId !== user._id.toString() && (
-                  <>
-                    <AddFriend receiverId={user._id.toString()} />
-                  </>
+                  <AddFriendForm receiverId={user._id.toString()} />
                 )}
               </div>
               <div className="flex flex-col gap-2">
