@@ -10,8 +10,7 @@ const checkMembersApplied = async () => {
     const res = await fetch(
       `${baseUrl}/api/projects/applied-members?userId=${userId}`,
 
-      { next: { revalidate: 60 } },
-      // { cache: "no-cache" },
+      { cache: "no-cache" },
     );
     if (!res.ok) {
       throw new Error("Failed to fetch members applied");

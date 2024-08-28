@@ -29,8 +29,7 @@ function AcceptDeclineForm({ projectId, memberId }: AcceptDeclineFormProps) {
   });
   const acceptSuccess = acceptFormState.success;
   const acceptErrors = acceptFormState.errors?.accept;
-  console.log("acceptErrors", acceptErrors);
-  console.log("acceptSuccess", acceptSuccess);
+
 
   const declineSuccess = declineFormState.success;
   const declineErrors = declineFormState.errors?.decline;

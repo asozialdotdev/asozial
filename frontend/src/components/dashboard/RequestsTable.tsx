@@ -1,3 +1,4 @@
+import SidebarTitle from "../common/sidebar/SidebarTitle";
 import RequestCard from "./RequestCard";
 import { Project } from "@/types/Project";
 
@@ -8,7 +9,7 @@ type RequestsTableProps = {
 async function RequestsTable({ projects }: RequestsTableProps) {
   return (
     <div className="flex w-full flex-col gap-4 font-semibold">
-      <h2 className="text-xl">Members Requests</h2>
+      <SidebarTitle>Project Requests</SidebarTitle>
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
         {projects.map((project) =>
           project.members?.membersApplied.map((member) => (
@@ -19,12 +20,6 @@ async function RequestsTable({ projects }: RequestsTableProps) {
             />
           )),
         )}
-        {/* <RequestCard />
-        <RequestCard />
-        <RequestCard />
-        <RequestCard />
-        <RequestCard />
-        <RequestCard /> */}
       </div>
     </div>
   );

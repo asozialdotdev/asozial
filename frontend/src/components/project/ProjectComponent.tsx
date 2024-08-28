@@ -25,14 +25,19 @@ import { socialsData } from "@/constants";
 //Types
 import type { Member, Project } from "@/types/Project";
 
-async function ProjectComponent({ project }: { project: Project }) {
+type ProjectComponentProps = {
+  project: Project;
+  isMember: boolean;
+  isOwner: boolean;
+};
+
+async function ProjectComponent({
+  project,
+  isMember,
+  isOwner,
+}: ProjectComponentProps) {
   const session = await auth();
   const username = session?.user?.githubUsername;
-  const isMember = project.members?.membersJoined.some(
-    (member: Member) => member._id.toString() === session?.user?.id,
-  );
-  console.log("isMember", isMember);
-  const isOwner = project.owner._id.toString() === session?.user?.id;
 
   console.log("project owner", project.owner);
 
@@ -88,7 +93,6 @@ async function ProjectComponent({ project }: { project: Project }) {
 
       {/* Language */}
       <ProjectMainLanguage project={project} />
-
       {/* Members */}
       <div className="flex flex-col">
         <div className="flex items-center gap-2">
