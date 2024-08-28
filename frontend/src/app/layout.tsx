@@ -2,13 +2,13 @@ import React from "react";
 import type { Metadata } from "next";
 import { Kanit } from "next/font/google";
 import "./globals.css";
-import Navbar from "@/components/common/layout/Navbar";
-import Footer from "@/components/common/layout/Footer";
+
 import Providers from "./providers";
 
 const kanit = Kanit({
   subsets: ["latin"],
   weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
+  display: 'swap',
 });
 
 export const metadata: Metadata = {

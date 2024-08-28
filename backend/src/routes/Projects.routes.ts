@@ -181,6 +181,10 @@ projectsRouter.post(
         owner: userId,
       });
 
+      await User.findByIdAndUpdate(userId, {
+        $push: { "projects.projectsOwned": newProject._id },
+      });
+
       res.status(201).json(newProject);
     } catch (error) {
       next(error);
@@ -188,7 +192,7 @@ projectsRouter.post(
   }
 );
 
-// GET request to create a project from Github
+// POST request to create a project from Github
 
 projectsRouter.post(
   "/github",
@@ -220,11 +224,13 @@ projectsRouter.post(
           .json({ error: "Failed to fetch repository information" });
       }
 
-      if (owner?.github?.id !== repoInfo.data.owner?.id) {
-        return res
-          .status(403)
-          .json({ error: "User is not the owner of this repository" });
-      }
+      // if (owner?.github?.id !== repoInfo.data.owner?.id) {
+      //   return res
+      //     .status(403)
+      //     .json({ error: "User is not the owner of this repository" });
+      // }
+
+      console.log("Repo Info", repoInfo.data);
 
       const { name, description, html_url, language } = repoInfo.data;
       const slug = generateSlug(name);
@@ -241,6 +247,10 @@ projectsRouter.post(
         owner: userId,
         status: "active",
         slug,
+      });
+
+      await User.findByIdAndUpdate(userId, {
+        $push: { "projects.projectsOwned": createProject._id },
       });
 
       res.status(201).json(createProject);
@@ -321,10 +331,6 @@ projectsRouter.get(
           "members.membersAvoided",
           "info.name info.username info.image"
         )
-        .populate(
-          "members.membersAvoided",
-          "info.name info.username info.image"
-        )
         .populate("owner", "info.name info.username info.image")
         .exec();
 
@@ -347,7 +353,7 @@ projectsRouter.get(
   }
 );
 
-//APPLY, JOIN, DECLINE AND LEAVE PROJECTS
+//APPLY, JOIN, DECLINE, LEAVE, REMOVE, RESTORE PROJECTS
 
 // POST request to apply to a project (APPLY)
 projectsRouter.post(
@@ -656,7 +662,7 @@ projectsRouter.post(
         return res.status(404).json({ error: "Project not found" });
       }
 
-      if (project.members?.membersAvoided.includes(memberId)) {
+      if (!project.members?.membersAvoided.includes(memberId)) {
         return res
           .status(401)
           .json({ error: "User is not a member of this project" });
@@ -714,6 +720,58 @@ projectsRouter.get(
 
       res.json({
         isMember: project.members?.membersJoined.includes(user?._id!),
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
+// GET check if user is owner of a project
+projectsRouter.get(
+  "/:projectId/is-owner",
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const project = await Project.findById(req.params.projectId);
+      if (!project) {
+        return res.status(404).json({ error: "Project not found" });
+      }
+      const { userId } = req.query;
+      const user = await User.findById(userId);
+      if (!user) {
+        return res.status(404).json({ error: "User not found" });
+      }
+
+      const isOwner = project.owner._id.toString() === user?._id!.toString();
+
+      res.json({
+        isOwner,
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
+// Check ig user has applied to a project
+projectsRouter.get(
+  "/:projectId/has-applied",
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const project = await Project.findById(req.params.projectId);
+      if (!project) {
+        return res.status(404).json({ error: "Project not found" });
+      }
+      const { userId } = req.query;
+      const user = await User.findById(userId);
+      if (!user) {
+        return res.status(404).json({ error: "User not found" });
+      }
+
+      const hasApplied = project.members?.membersApplied.includes(user?._id!);
+
+      res.json({
+        hasApplied,
       });
     } catch (error) {
       next(error);
@@ -995,6 +1053,11 @@ projectsRouter.delete("/:projectId", async (req, res) => {
     }
 
     await ProjectPost.deleteMany({ projectId });
+
+    await User.findOneAndUpdate(
+      { _id: project.owner._id },
+      { $pull: { "projects.projectsOwned": project._id } }
+    );
 
     await Project.findByIdAndDelete(projectId);
 

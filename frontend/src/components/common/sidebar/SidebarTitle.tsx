@@ -1,10 +1,10 @@
 import { cn } from "@/lib/utils";
 
-type PageTitleProps = {
+type SidebarTitleProps = {
   children: React.ReactNode;
   className?: string;
 };
-function PageTitle({ children, className }: PageTitleProps) {
+function SidebarTitle({ children, className }: SidebarTitleProps) {
   return (
     <h1
       className={cn(
@@ -17,4 +17,4 @@ function PageTitle({ children, className }: PageTitleProps) {
   );
 }
 
-export default PageTitle;
+export default SidebarTitle;

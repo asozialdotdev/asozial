@@ -5,7 +5,13 @@ import { notFound } from "next/navigation";
 import { Suspense } from "react";
 
 //Actions
-import { fetchProjectPosts, fetchProjectById } from "@/actions";
+import {
+  fetchProjectPosts,
+  fetchProjectById,
+  checkIsMember,
+  checkIsOwner,
+  checkMemberHasApplied,
+} from "@/actions";
 
 //Components
 import PageContainer from "@/components/common/containers/PageContainer";
@@ -32,20 +38,15 @@ async function Page({ params }: { params: Params }) {
   const paramsObj = params;
   const { projectId } = paramsObj;
 
-  const [project, posts] = await Promise.all([
+  const [project, posts, isMember, isOwner, hasApplied] = await Promise.all([
     fetchProjectById(projectId),
     fetchProjectPosts(projectId),
+    checkIsMember(projectId),
+    checkIsOwner(projectId),
+    checkMemberHasApplied(projectId),
   ]);
 
-  const isMember = project.members.membersJoined?.some(
-    (member: Member) => member._id.toString() === session?.user?.id.toString(),
-  );
-  const isOwner = project.owner._id.toString() === session?.user?.id.toString();
-
-  const hasApplied = project.members.membersApplied?.some(
-    (member: Member) => member._id.toString() === session?.user?.id.toString(),
-  );
-  console.log("membersApplied", project.members.membersApplied);
+  console.log("HasApplied", hasApplied);
 
   if (!project) {
     notFound();
@@ -58,7 +59,11 @@ async function Page({ params }: { params: Params }) {
     <PageContainer className="gap-4">
       {/* Project */}
       <Suspense fallback={<ProjectLoadingSkeleton />}>
-        <ProjectComponent project={project} />
+        <ProjectComponent
+          project={project}
+          isMember={isMember}
+          isOwner={isOwner}
+        />
       </Suspense>
 
       {isMember || isOwner ? (

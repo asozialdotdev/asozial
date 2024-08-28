@@ -1,13 +1,13 @@
 "use client";
 
 import { useFormState } from "react-dom";
-import { removeMember, restoreMember } from "@/actions";
-import ErrorMessage from "../common/ui/ErrorMessage";
-import LeaveButton from "./LeaveButton";
-import CustomLabel from "../common/ui/Label";
-import { Project, ProjectId } from "@/types/Project";
+import { restoreMember } from "@/actions";
+import ErrorMessage from "../../common/ui/ErrorMessage";
+import CustomLabel from "../../common/ui/Label";
+import { ProjectId } from "@/types/Project";
 import RemoveButton from "./RemoveButton";
 import { UserId } from "@/types/User";
+import RestoreButton from "./RestoreButton";
 
 type RestoreMemberProps = {
   projectId: ProjectId;
@@ -25,8 +25,12 @@ function RestoreMember({ projectId, memberId }: RestoreMemberProps) {
       <CustomLabel htmlFor="restore"></CustomLabel>
       <input type="hidden" name="projectId" value={projectId?.toString()} />
       <input type="hidden" name="memberId" value={memberId?.toString()} />
-      <RemoveButton success={success} />
-      {errors && <ErrorMessage size={15} className='absolute text-xs bottom-1'>{errors.join(", ")}</ErrorMessage>}
+      <RestoreButton success={success} />
+      {errors && (
+        <ErrorMessage size={15} className="absolute bottom-1 text-xs">
+          {errors.join(", ")}
+        </ErrorMessage>
+      )}
     </form>
   );
 }

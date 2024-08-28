@@ -2,6 +2,7 @@ import express, { Request, Response, NextFunction } from "express";
 import ProjectPost from "../models/ProjectPost.models";
 import ProjectPostReply from "../models/ProjectPostReply.models";
 import Project from "../models/Project.models";
+import User from "../models/User.models";
 
 const projectPostRouter = express.Router();
 
@@ -66,6 +67,10 @@ projectPostRouter.post(
         placeholder,
         userId,
         projectId,
+      });
+
+      await User.findByIdAndUpdate(userId, {
+        $push: { dashboardPosts: newPost._id },
       });
 
       res.status(201).json(newPost);
@@ -159,7 +164,8 @@ projectPostRouter.post(
   }
 );
 
-// POST Toggle Like projectPost
+// POST Toggle Like a project post
+
 projectPostRouter.post("/:projectPostId/like", async (req, res, next) => {
   const { userId } = req.body;
 
@@ -170,23 +176,23 @@ projectPostRouter.post("/:projectPostId/like", async (req, res, next) => {
       return res.status(404).json({ error: "Post not found" });
     }
 
-    // no null values in the arrays
-    post.likes = post.likes.filter((id) => id && id.toString() !== null);
-    post.dislikes = post.dislikes.filter((id) => id && id.toString() !== null);
+    const hasLiked = post.likes.includes(userId);
 
-    // If user already liked the post, remove the like
-    if (post.likes.includes(userId)) {
-      post.likes = post.likes.filter((id) => id.toString() !== userId);
+    if (hasLiked) {
+      await post.updateOne({ $pull: { likes: userId } });
     } else {
-      // Otherwise, add the like
-      post.likes.push(userId);
-
-      // If the user had already disliked the post, remove the dislike
-      post.dislikes = post.dislikes.filter((id) => id.toString() !== userId);
+      await post.updateOne({
+        $push: { likes: userId },
+        $pull: { dislikes: userId },
+      });
     }
 
-    await post.save();
-    res.json({ likes: post.likes.length, dislikes: post.dislikes.length });
+    const updatedPost = await ProjectPost.findById(req.params.projectPostId);
+
+    res.json({
+      likes: updatedPost?.likes.length,
+      dislikes: updatedPost?.dislikes.length,
+    });
   } catch (error) {
     console.error("Error liking post:", error);
     next(error);
@@ -204,23 +210,24 @@ projectPostRouter.post("/:projectPostId/dislike", async (req, res, next) => {
       return res.status(404).json({ error: "Post not found" });
     }
 
-    //  no null values in the arrays
-    post.likes = post.likes.filter((id) => id && id.toString() !== null);
-    post.dislikes = post.dislikes.filter((id) => id && id.toString() !== null);
+    const hasDisliked = post.dislikes.includes(userId);
 
-    // If user already disliked the post, remove the dislike
-    if (post.dislikes.includes(userId)) {
-      post.dislikes = post.dislikes.filter((id) => id.toString() !== userId);
+    if (hasDisliked) {
+      await post.updateOne({ $pull: { dislikes: userId } });
     } else {
-      // Otherwise, add the dislike
-      post.dislikes.push(userId);
-
-      // If the user had already liked the post, remove the like
-      post.likes = post.likes.filter((id) => id.toString() !== userId);
+      await post.updateOne({
+        $push: { dislikes: userId },
+        $pull: { likes: userId },
+      });
     }
 
-    await post.save();
-    res.json({ likes: post.likes.length, dislikes: post.dislikes.length });
+    // Re-fetch the post to get the updated likes and dislikes count
+    const updatedPost = await ProjectPost.findById(req.params.projectPostId);
+
+    res.json({
+      likes: updatedPost?.likes.length,
+      dislikes: updatedPost?.dislikes.length,
+    });
   } catch (error) {
     console.error("Error disliking post:", error);
     next(error);
@@ -275,6 +282,11 @@ projectPostRouter.delete("/:projectPostId", async (req, res, next) => {
     await ProjectPostReply.deleteMany({
       projectPostId: req.params.projectPostId,
     });
+
+    await User.findOneAndUpdate(
+      { _id: post.userId },
+      { $pull: { "projects.dashboardPosts": post._id } }
+    );
 
     await ProjectPost.findByIdAndDelete(req.params.projectPostId);
 

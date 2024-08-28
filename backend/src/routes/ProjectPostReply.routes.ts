@@ -4,7 +4,7 @@ import ProjectPostReply from "../models/ProjectPostReply.models";
 
 const projectPostReplyRouter = express.Router();
 
-// POST Like a reply
+// POST Toggle Like a project post reply
 projectPostReplyRouter.post("/:replyId/like", async (req, res, next) => {
   const { userId } = req.body;
 
@@ -15,32 +15,30 @@ projectPostReplyRouter.post("/:replyId/like", async (req, res, next) => {
       return res.status(404).json({ error: "Reply not found" });
     }
 
-    // no null values in the arrays
-    reply.likes = reply.likes.filter((id) => id && id.toString() !== null);
-    reply.dislikes = reply.dislikes.filter(
-      (id) => id && id.toString() !== null
-    );
+    const hasLiked = reply.likes.includes(userId);
 
-    // If user already liked the post, remove the like
-    if (reply.likes.includes(userId)) {
-      reply.likes = reply.likes.filter((id) => id.toString() !== userId);
+    if (hasLiked) {
+      await reply.updateOne({ $pull: { likes: userId } });
     } else {
-      // Otherwise, add the like
-      reply.likes.push(userId);
-
-      // If the user had disliked the post, remove the dislike
-      reply.dislikes = reply.dislikes.filter((id) => id.toString() !== userId);
+      await reply.updateOne({
+        $push: { likes: userId },
+        $pull: { dislikes: userId },
+      });
     }
 
-    await reply.save();
-    res.json({ likes: reply.likes.length, dislikes: reply.dislikes.length });
+    const updatedReply = await ProjectPostReply.findById(req.params.replyId);
+
+    res.json({
+      likes: updatedReply?.likes.length,
+      dislikes: updatedReply?.dislikes.length,
+    });
   } catch (error) {
     console.error("Error liking reply:", error);
     next(error);
   }
 });
 
-// POST Dislike a reply
+// POST Toggle Dislike a project post reply
 projectPostReplyRouter.post("/:replyId/dislike", async (req, res, next) => {
   const { userId } = req.body;
 
@@ -51,25 +49,23 @@ projectPostReplyRouter.post("/:replyId/dislike", async (req, res, next) => {
       return res.status(404).json({ error: "Reply not found" });
     }
 
-    // no null values in the arrays
-    reply.likes = reply.likes.filter((id) => id && id.toString() !== null);
-    reply.dislikes = reply.dislikes.filter(
-      (id) => id && id.toString() !== null
-    );
+    const hasDisliked = reply.dislikes.includes(userId);
 
-    // If user already disliked the post, remove the dislike (toggle off)
-    if (reply.dislikes.includes(userId)) {
-      reply.dislikes = reply.dislikes.filter((id) => id.toString() !== userId);
+    if (hasDisliked) {
+      await reply.updateOne({ $pull: { dislikes: userId } });
     } else {
-      // Otherwise, add the dislike
-      reply.dislikes.push(userId);
-
-      // If the user had liked the post, remove the like
-      reply.likes = reply.likes.filter((id) => id.toString() !== userId);
+      await reply.updateOne({
+        $push: { dislikes: userId },
+        $pull: { likes: userId },
+      });
     }
 
-    await reply.save();
-    res.json({ likes: reply.likes.length, dislikes: reply.dislikes.length });
+    const updatedReply = await ProjectPostReply.findById(req.params.replyId);
+
+    res.json({
+      likes: updatedReply?.likes.length,
+      dislikes: updatedReply?.dislikes.length,
+    });
   } catch (error) {
     console.error("Error disliking reply:", error);
     next(error);

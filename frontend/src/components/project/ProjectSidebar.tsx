@@ -11,6 +11,8 @@ import MatchIcon from "../common/ui/icons/MatchIcon";
 import ProjectCreateIcon from "../common/ui/icons/ProjectCreateIcon";
 import SidebarButtons from "../common/sidebar/SidebarButtons";
 import SidebarFriendsList from "../common/sidebar/SidebarFriendsList";
+import { checkMembersApplied } from "@/actions";
+import { useEffect } from "react";
 
 function ProjectSidebar() {
   const { projectSidebarRef, isProjectSidebarOpen } = useSidebarsContext();

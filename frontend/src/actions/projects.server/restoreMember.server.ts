@@ -39,9 +39,11 @@ const restoreMember = async (
       throw new Error("Error restoring user from a project");
     }
 
-    const project = await response.json();
+    const {project} = await response.json();
     console.log("project applied:", project);
-    // revalidatePath(`/${project.owner.username}/${project.slug}/${projectId}`);
+    // setTimeout(() => {
+    // }, 2000);
+    revalidatePath(`/${project.owner.info.username}/${project.slug}/${projectId}/members`);
     return {
       errors: {},
       success: true,
