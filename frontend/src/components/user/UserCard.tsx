@@ -20,10 +20,10 @@ import { techStackClass } from "@/utils";
 
 type UserCardProps = {
   user: User & {
-    isFriend: boolean;
-    totalFriends: number;
-    totalProjectsOwned: number;
-    totalProjectsMembers: number;
+    isFriend?: boolean;
+    totalFriends?: number;
+    totalProjectsOwned?: number;
+    totalProjectsMembers?: number;
   };
   actualUserId?: UserId;
 };
@@ -33,7 +33,7 @@ function UserCard({ user, actualUserId }: UserCardProps) {
     <li className="relative flex w-full flex-col gap-4 rounded-lg border-2 border-dashed border-zinc-300 bg-inherit bg-zinc-100 px-8 py-8 hover:bg-zinc-200/10 dark:border-zinc-600 dark:bg-inherit dark:bg-zinc-800 dark:shadow-neutral-700/30 dark:hover:bg-zinc-700/10">
       <div className="flex flex-col gap-4">
         {/* User Card on the Left */}
-        <div className="flex items-center gap-4 flex-wrap">
+        <div className="flex flex-wrap items-center gap-4">
           <UserAvatar
             src={user.info.image}
             username={user.info.username || user.github.username}
@@ -51,29 +51,28 @@ function UserCard({ user, actualUserId }: UserCardProps) {
         </div>
 
         {/* Content on the Right */}
-        <div className="flex items-center gap-4 justify-between">
-          <section className='flex items-center gap-4'>
+        <div className="flex items-center justify-between gap-4">
+          <section className="flex items-center gap-4">
+            <div className="flex items-center gap-2">
+              <GithubReposIcon />
+              <p className="text-sm">{user.github.publicReposNumber || "?"}</p>
+            </div>
 
-          <div className="flex items-center gap-2">
-            <GithubReposIcon />
-            <p className="text-sm">{user.github.publicReposNumber || "?"}</p>
-          </div>
+            <div className="flex items-center gap-2">
+              <TotalProjectsOwned />
+              <p className="text-sm">{user.totalProjectsOwned}</p>
+            </div>
+            <div className="flex items-center gap-2">
+              <TotalProjectsJoinedIcon />
+              <p className="text-sm">{user.totalProjectsMembers}</p>
+            </div>
+            <div className="flex items-center gap-2">
+              <TotalFriendsIcon />
+              <p className="text-sm">{user.totalFriends}</p>
+            </div>
+          </section>
 
-          <div className="flex items-center gap-2">
-            <TotalProjectsOwned />
-            <p className="text-sm">{user.totalProjectsOwned}</p>
-          </div>
-          <div className="flex items-center gap-2">
-            <TotalProjectsJoinedIcon />
-            <p className="text-sm">{user.totalProjectsMembers}</p>
-          </div>
-          <div className="flex items-center gap-2">
-            <TotalFriendsIcon />
-            <p className="text-sm">{user.totalFriends}</p>
-          </div>
-            </section>
-
-          <div className=''>
+          <div className="">
             {/* Friend Form on the Right */}
             {actualUserId &&
               actualUserId !== user._id.toString() &&
@@ -84,7 +83,7 @@ function UserCard({ user, actualUserId }: UserCardProps) {
         </div>
       </div>
 
-      <div className="flex items-center gap-2 flex-wrap">
+      <div className="flex flex-wrap items-center gap-2">
         {user.skills.codingLanguages.slice(0, 5).map((language, i) => (
           <ul key={language.language + i}>
             <li className={techStackClass(language.language)}>

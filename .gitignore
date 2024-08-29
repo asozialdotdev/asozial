@@ -1,3 +1,7 @@
 node_modules
 .env
 .env.local
+
+# mac
+.DS_Store
+.github

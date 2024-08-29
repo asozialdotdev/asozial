@@ -32,7 +32,7 @@ import type { CreateUpdateProject, Inputs, Project } from "@/types/Project";
 import { ImageT } from "../common/ui/ImageUploader";
 
 function EditProjectForm({ project }: { project: Project }) {
-  const username = project.owner.username;
+  const username = project.owner.info.username;
   const [error, setError] = useState<string | null>(null);
   const [uploadedImage, setUploadedImage] = useState<ImageT | null>(null);
   const [isDeleting, setIsDeleting] = useState(false);
