@@ -1,9 +1,7 @@
 import { Types } from "mongoose";
 import { ProjectId } from "./Project";
 import { ProjectPostId } from "./ProjectPost";
-import Friendship from "./Friendship";
-
-// next-auth.d.ts
+import { Friendship } from "./Friendship";
 
 type UserId = Types.ObjectId | string;
 
@@ -38,6 +36,7 @@ type User = {
     location: string;
     hireable: boolean;
   };
+  topics: string[];
   skills: {
     languagesSpoken: string[];
     codingLanguages: CodingLanguage[];
@@ -85,24 +84,18 @@ type User = {
     url: string;
     eventsUrl: string;
     followersUrl: string;
-    followers: object[];
-    followerNumber: number;
+    followersNumber: number;
     followingUrl: string;
-    following: object[];
     followingNumber: number;
     publicGistsUrl: string;
-    publicGists: object[];
     publicGistsNumber: number;
     privateGistsNumber: string;
     starredUrl: string;
     subscriptionsUrl: string;
-    subscriptions: object[];
     subscriptionsNumber: number;
     organizationsUrl: string;
-    organizations: object[];
     organizationsNumber: number;
     publicReposUrl: string;
-    publicRepos: object[];
     publicReposNumber: number;
     createdAt: string;
     updatedAt: string;

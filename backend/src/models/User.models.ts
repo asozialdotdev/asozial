@@ -43,6 +43,7 @@ const userSchema = new Schema(
       codingLanguages: [codingLanguageSchema],
       codingLibraries: [codingLanguageSchema],
     },
+    topics: [{ type: String }],
     projects: {
       projectsJoined: [
         { type: Schema.Types.ObjectId, ref: "Project", default: [] },
