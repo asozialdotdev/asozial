@@ -37,8 +37,8 @@ import { notFound } from "next/navigation";
 // import sendFriendship from "@/actions/friendships.server/sendFriendship.server";
 import { auth } from "@/auth";
 
-function UserComponent({ user }: { user: User }) {
-  const session = auth();
+async function UserComponent({ user }: { user: User }) {
+  const session = await auth();
   const userId = session?.user?.id;
 
   let formattedDate = "Unknown";
