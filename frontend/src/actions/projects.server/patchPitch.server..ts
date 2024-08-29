@@ -25,7 +25,6 @@ const patchPitch = async (projectId: ProjectId, pitch: string) => {
     });
 
     const updatePitch = await response.json();
-    console.log("Updated pitch:", updatePitch);
     revalidatePath(`/${username}/${project.slug}/${project._id}`);
     return { error: false, message: "Pitch updated" };
   } catch (error) {

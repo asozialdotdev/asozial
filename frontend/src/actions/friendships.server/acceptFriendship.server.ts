@@ -36,7 +36,7 @@ const acceptFriendship = async (
       data,
     };
   } catch (error: any) {
-    console.log("Error accepting friendship:", error.message);
+    console.error("Error accepting friendship:", error.message);
     return {
       errors: {
         accept: ["Error accepting friendship. Please try again."],

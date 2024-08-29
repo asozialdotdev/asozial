@@ -38,7 +38,6 @@ import sendFriendship from "@/actions/friendships.server/sendFriendship.server";
 import { auth } from "@/auth";
 
 function UserComponent({ user }: { user: User }) {
-  console.log("user on page", user);
   const session = auth();
   const userId = session?.user?.id;
 

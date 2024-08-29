@@ -17,7 +17,6 @@ const checkMemberHasApplied = async (projectId: ProjectId) => {
       );
     }
     const data = await response.json();
-    console.log("HasApplied", data);
     return data.hasApplied;
   } catch (error) {
     console.error("Error checking if user has applied:", error);

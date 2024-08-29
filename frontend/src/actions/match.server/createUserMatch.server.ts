@@ -5,7 +5,6 @@ import { auth } from "@/auth";
 const matchUsers = async (actualUserId: string, targetUserId: string) => {
   try {
     const session = await auth();
-    console.log("Matching users:", { actualUserId, targetUserId });
 
     const response = await fetch(`${baseUrl}/api/match/users`, {
       method: "POST",
@@ -20,14 +19,13 @@ const matchUsers = async (actualUserId: string, targetUserId: string) => {
 
     if (!response.ok) {
       const errorText = await response.text();
-      console.log("Error matching users:", errorText);
       return { error: errorText };
     }
 
     const data = await response.json();
     return data;
   } catch (error: any) {
-    console.log("Error matching users:", error.message);
+    console.error("Error matching users:", error.message);
     return { error: error.message };
   }
 };

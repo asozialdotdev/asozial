@@ -20,8 +20,6 @@ function MessageInput({ friendshipId }: { friendshipId: FriendshipId }) {
   );
   const formRef = useRef<HTMLFormElement>(null);
 
-  console.log("formState", formState.success);
-
   useEffect(() => {
     if (formState.success) {
       formRef.current?.reset();

@@ -54,7 +54,6 @@ const updateProjectPost = async (
       },
     );
     const updatedPost = await response.json();
-    console.log("Updated post:", updatedPost);
     revalidatePath(
       `/${username}/${post.projectId.slug}/${post.projectId._id}/posts/${projectPostId}`,
     );

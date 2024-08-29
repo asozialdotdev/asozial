@@ -19,7 +19,6 @@ dotenv.config();
 projectsRouter.get(
   "/all",
   async (req: Request, res: Response, next: NextFunction) => {
-    console.log("Explore is called");
     const { query, page = 1, limit = 12 } = req.query;
 
     try {
@@ -40,7 +39,6 @@ projectsRouter.get(
         .exec();
       const totalProjects = await Project.countDocuments(searchQuery);
       const totalPages = Math.ceil(totalProjects / +limit);
-      console.log({ projects, totalPages, currentPage: +page });
       res.json({
         projects,
         totalPages,
@@ -114,8 +112,6 @@ projectsRouter.get(
         .populate("owner", "info.username info.name info.image")
         .exec();
 
-      console.log("memebers projects>>>>>>>>>>>>>", projects);
-
       const totalProjects = await Project.countDocuments(searchQuery);
       const totalPages = Math.ceil(totalProjects / +limit);
 
@@ -136,7 +132,6 @@ projectsRouter.get(
   "/check-title",
   async (req: Request, res: Response, next: NextFunction) => {
     const { title, userId } = req.query;
-    console.log("Title", title, "User ID", userId);
     try {
       const existingProject = await Project.findOne({ title, owner: userId });
       res.json({ isUnique: !existingProject });
@@ -165,7 +160,6 @@ projectsRouter.post(
         slug,
         userId,
       } = req.body;
-      console.log("githubRepo:::::::::::::", githubRepo);
 
       const newProject = await Project.create({
         title,
@@ -197,7 +191,6 @@ projectsRouter.post(
 projectsRouter.post(
   "/github",
   async (req: Request, res: Response, next: NextFunction) => {
-    console.log("Request Body in Github function", req.body);
     try {
       const { repoUrl, userId } = req.body;
 
@@ -230,8 +223,6 @@ projectsRouter.post(
       //     .json({ error: "User is not the owner of this repository" });
       // }
 
-      console.log("Repo Info", repoInfo.data);
-
       const { name, description, html_url, language } = repoInfo.data;
       const slug = generateSlug(name);
 
@@ -263,7 +254,6 @@ projectsRouter.post(
 projectsRouter.get(
   "/applied-members",
   async (req: Request, res: Response, next: NextFunction) => {
-    console.log("Applied members is called");
     const { userId } = req.query;
 
     if (!userId) {
@@ -285,10 +275,8 @@ projectsRouter.get(
         )
         .populate("owner", "info.username")
         .exec();
-      console.log("Applied members>>>>>>>>>>>>>", membersApplied);
       res.json(membersApplied);
     } catch (error) {
-      console.log("Error fetching applied members:", error);
       next(error);
     }
   }
@@ -360,7 +348,6 @@ projectsRouter.get(
 projectsRouter.post(
   "/:projectId/apply",
   async (req: Request, res: Response, next: NextFunction) => {
-    console.log("Apply is called");
     try {
       const { userId } = req.body;
       const project = await Project.findById(req.params.projectId)
@@ -376,21 +363,18 @@ projectsRouter.post(
       }
 
       if (project.members?.membersApplied.includes(userId)) {
-        console.log("User is in the membersApplied array");
         return res
           .status(400)
           .json({ error: "User already applied to be a member" });
       }
 
       if (project.members?.membersJoined.includes(userId)) {
-        console.log("User is in the membersJoined array");
         return res
           .status(400)
           .json({ error: "User is already a member of this project" });
       }
 
       if (user.projects?.projectsApplied.includes(project._id)) {
-        console.log("User is in the projectsApplied array");
         return res
           .status(400)
           .json({ error: "User already applied to this project" });

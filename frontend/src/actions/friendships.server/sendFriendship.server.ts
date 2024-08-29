@@ -44,7 +44,7 @@ const sendFriendship = async (
       data,
     };
   } catch (error: any) {
-    console.log("Error sending friendship:", error.message);
+    console.error("Error sending friendship:", error.message);
     return {
       errors: {
         send: ["Error sending friendship. Please try again."],

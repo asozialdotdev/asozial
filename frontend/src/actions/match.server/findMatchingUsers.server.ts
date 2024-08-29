@@ -16,7 +16,6 @@ const findMatchingUsers = async (actualUser: {
 }) => {
   try {
     const session = await auth();
-    console.log("Finding matching users for", actualUser);
 
     const response = await fetch(`${baseUrl}/api/match/users`, {
       method: "POST",
@@ -30,14 +29,13 @@ const findMatchingUsers = async (actualUser: {
 
     if (!response.ok) {
       const errorText = await response.text();
-      console.log("Error finding matching users:", errorText);
       return { error: errorText };
     }
 
     const data = await response.json();
     return data;
   } catch (error: any) {
-    console.log("Error finding matching users:", error.message);
+    console.error("Error finding matching users:", error.message);
     return { error: error.message };
   }
 };

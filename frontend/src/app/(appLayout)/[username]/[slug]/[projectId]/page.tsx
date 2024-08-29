@@ -46,15 +46,9 @@ async function Page({ params }: { params: Params }) {
     checkMemberHasApplied(projectId),
   ]);
 
-  console.log("HasApplied", hasApplied);
-
   if (!project) {
     notFound();
   }
-
-  // if (project) {
-  //   return <ParentPostLoading/>;
-  // }
   return (
     <PageContainer className="gap-4">
       {/* Project */}

@@ -39,8 +39,6 @@ async function ProjectComponent({
   const session = await auth();
   const username = session?.user?.githubUsername;
 
-  console.log("project owner", project.owner);
-
   return (
     <section className="relative -mt-4 flex w-full flex-col gap-4 border-b border-b-neutral-300 px-4 dark:border-b-neutral-600">
       {/* Header Section */}

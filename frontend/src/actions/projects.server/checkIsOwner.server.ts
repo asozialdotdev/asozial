@@ -17,7 +17,6 @@ const checkIsOwner = async (projectId: ProjectId) => {
       );
     }
     const data = await response.json();
-    console.log("Is Owner", data);
     return data.isOwner;
   } catch (error) {
     console.error("Error checking if user is owner:", error);

@@ -4,7 +4,6 @@ const getAllProjects = async () => {
     method: "GET",
   });
   if (!projects) {
-    console.log("Projects not found");
   } else {
     return projects;
   }

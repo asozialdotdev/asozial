@@ -6,7 +6,6 @@ import ErrorMessage from "../ui/ErrorMessage";
 
 function SidebarProjectRequestsTable() {
   const { projectsRequests, projectsLoading, projectsError } = useRequests();
-  console.log("ProjectsRequests", projectsRequests);
 
   if (projectsLoading) {
     return (

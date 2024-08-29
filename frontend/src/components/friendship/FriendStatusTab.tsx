@@ -23,12 +23,6 @@ async function FriendStatusTab() {
       return friendship.receiverId?._id === session?.user.id;
     });
 
-  console.log("accepted", accepted);
-  console.log("sentPending", sentPending);
-  console.log("receivedPending", receivedPending);
-
-  console.log("declined", declined);
-
   return (
     <div className="h-auto w-full rounded bg-white p-4 shadow dark:bg-black">
       <Tabs defaultValue="accepted">

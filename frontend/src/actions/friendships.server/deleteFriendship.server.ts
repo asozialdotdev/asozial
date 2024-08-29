@@ -28,7 +28,6 @@ const deleteFriendship = async (
     });
 
     if (response.status === 204) {
-      console.log("Friendship successfully deleted");
     }
 
     const data = await response.json();
@@ -38,7 +37,7 @@ const deleteFriendship = async (
       data,
     };
   } catch (error: any) {
-    console.log("Error declining friendship:", error.message);
+    console.error("Error declining friendship:", error.message);
     return {
       errors: {
         delete: ["Error declining friendship. Please try again."],

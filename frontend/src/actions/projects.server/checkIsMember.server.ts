@@ -17,7 +17,6 @@ const checkIsMember = async (projectId: ProjectId) => {
       );
     }
     const data = await response.json();
-    console.log("Is member:", data);
     return data.isMember;
   } catch (error) {
     console.error("Error checking if user is a member:", error);

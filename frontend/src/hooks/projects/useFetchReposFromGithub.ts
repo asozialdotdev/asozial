@@ -6,7 +6,6 @@ function useFetchReposFromGithub() {
   const [githubRepos, setGithubRepos] = useState([]);
   const [isLoadingRepos, setIsLoadingRepos] = useState(true);
   const [errorRepos, setErrorRepos] = useState("");
-  console.log("githubERRORRepos", errorRepos);
   useEffect(() => {
     const getGithubRepos = async () => {
       setIsLoadingRepos(true);
