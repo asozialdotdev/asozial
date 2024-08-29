@@ -13,8 +13,11 @@ import ContributorsImages from "./ContributorsImages";
 function NavbarAsozialMenu() {
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger className="text-2xl hover:scale-110">
-        asozial
+      <DropdownMenuTrigger className="hover:scale-110">
+        <span className="xs:hidden sm:hidden md:hidden">asozial</span>
+        <span className="lg:hidden xl:hidden">
+          <AsozialLogo />
+        </span>
       </DropdownMenuTrigger>
       <DropdownMenuContent>
         <DropdownMenuLabel className="flex flex-row items-center gap-2 text-xs italic">
