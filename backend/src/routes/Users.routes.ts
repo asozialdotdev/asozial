@@ -1,14 +1,13 @@
 import express, { Request, Response, NextFunction } from "express";
 import User from "../models/User.models";
 import Friendship from "../models/Friendship.models";
-import Project from "../models/Project.models";
 
 const usersRouter = express.Router();
 
 usersRouter.get(
   "/search",
   async (req: Request, res: Response, next: NextFunction) => {
-    const { query, page = 1, limit = 10 } = req.query;
+    const { query, page = 1, limit = 10, actualUserId } = req.query; // Accept actualUserId as a query parameter
 
     try {
       const searchQuery = query
@@ -20,21 +19,76 @@ usersRouter.get(
           }
         : {};
 
-      const users = await User.find(searchQuery)
-        .skip((+page - 1) * +limit)
-        .limit(+limit)
-        .select(
-          "info.username info.name info.image github.publicReposNumber github.bio info.location"
-        )
+      // Use aggregation to fetch user data along with additional computed fields
+      const usersAggregation = await User.aggregate([
+        { $match: searchQuery }, // Apply the search query
+
+        // Calculate total projects owned and joined by counting the array length
+        {
+          $addFields: {
+            totalProjectsOwned: {
+              $size: { $ifNull: ["$projects.projectsOwned", []] },
+            }, // Calculate total owned projects
+            totalProjectsMembers: {
+              $size: { $ifNull: ["$projects.projectsJoined", []] },
+            }, // Calculate total member projects
+            totalFriends: { $size: { $ifNull: ["$friends.accepted", []] } }, // Calculate total friends from accepted friendships
+          },
+        },
+        {
+          $project: {
+            "info.username": 1,
+            "info.name": 1,
+            "info.image": 1,
+            "github.publicReposNumber": 1,
+            "github.bio": 1,
+            "info.location": 1,
+            "skills.codingLanguages": 1,
+            totalProjectsOwned: 1,
+            totalProjectsMembers: 1,
+            totalFriends: 1,
+          },
+        },
+        { $skip: (+page - 1) * +limit }, // Pagination
+        { $limit: +limit }, // Limit
+      ]);
+
+      // Fetch friendships to determine if the users found are friends with the actual user
+      const friendshipStatus = await Friendship.find({
+        $or: [{ senderId: actualUserId }, { receiverId: actualUserId }],
+        status: "accepted", // Only check for accepted friendships
+      })
+        .select("senderId receiverId")
+        .lean()
         .exec();
+
+      // Create a set of friend IDs
+      const friendIds = new Set();
+      friendshipStatus.forEach((friendship) => {
+        if (friendship.senderId.toString() === actualUserId) {
+          friendIds.add(friendship.receiverId.toString());
+        } else {
+          friendIds.add(friendship.senderId.toString());
+        }
+      });
+
+      // Add friendship status to the users aggregation result
+      const usersWithFriendshipStatus = usersAggregation.map((user) => ({
+        ...user,
+        isFriend: friendIds.has(user._id.toString()), // Check if user ID is in the friendIds set
+      }));
 
       const totalUsers = await User.countDocuments(searchQuery);
       const totalPages = Math.ceil(totalUsers / +limit);
 
-      console.log({ users, totalPages, currentPage: +page });
+      console.log({
+        users: usersWithFriendshipStatus,
+        totalPages,
+        currentPage: +page,
+      });
 
       res.json({
-        users,
+        users: usersWithFriendshipStatus,
         totalPages,
         currentPage: +page,
       });
@@ -57,20 +111,6 @@ usersRouter.get("/:username", async (req: Request, res: Response) => {
     console.log("Error fetching user by username:", error);
   }
 });
-
-// GET all users for the global search
-
-// usersRouter.get(
-//   "/search",
-//   async (req: Request, res: Response, next: NextFunction) => {
-//     try {
-//       const foundUser = await User.find();
-//       res.json(foundUser);
-//     } catch (error) {
-//       next(error);
-//     }
-//   }
-// );
 
 // GET 1 user to display with friendship condition
 
