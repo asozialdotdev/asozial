@@ -6,7 +6,7 @@ import { useEffect, useRef, useState } from "react";
 import ErrorMessage from "../common/ui/ErrorMessage";
 import CustomLabel from "../common/ui/Label";
 import MessageFormButton from "./MessageFormButton";
-import { Textarea } from "../ui/textarea";
+import { Input } from "../ui/input";
 import type { FriendshipId } from "@/types/Friendship";
 
 function MessageInput({ friendshipId }: { friendshipId: FriendshipId }) {
@@ -31,7 +31,7 @@ function MessageInput({ friendshipId }: { friendshipId: FriendshipId }) {
           Message
         </CustomLabel>
 
-        <Textarea
+        <Input
           name="content"
           placeholder="undefined"
           className="h-12 w-full border-zinc-300 bg-white hover:bg-zinc-50 focus:bg-zinc-50 dark:border-zinc-700 dark:hover:bg-zinc-800 dark:focus:bg-zinc-800"

@@ -16,7 +16,7 @@ function MessageList({ messages }: { messages: Message[] }) {
           return (
             <PageCard
               key={message._id.toString()}
-              className={`flex w-3/4 flex-row items-center gap-4 ${message.senderId.toString() === userId ? "justify-end" : "justify-start"}`}
+              className={`flex w-3/4 flex-row items-center gap-4 ${message.senderId.toString() === userId ? "justify-end bg-zinc-400 dark:bg-zinc-700" : "justify-start bg-gray-400 dark:bg-gray-700"}`}
             >
               <p>{message.content}</p>
             </PageCard>
