@@ -36,7 +36,7 @@ const declineFriendship = async (
       data,
     };
   } catch (error: any) {
-    console.log("Error declining friendship:", error.message);
+    console.error("Error declining friendship:", error.message);
     return {
       errors: {
         decline: ["Error declining friendship. Please try again."],

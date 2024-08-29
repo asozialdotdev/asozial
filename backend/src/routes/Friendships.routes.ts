@@ -10,7 +10,6 @@ const friendshipsRouter = express.Router();
 friendshipsRouter.post(
   "/",
   async (req: Request, res: Response, next: NextFunction) => {
-    console.log("req.body", req.body);
     try {
       const { senderId, receiverId } = req.body;
 
@@ -162,10 +161,8 @@ friendshipsRouter.put(
 friendshipsRouter.get(
   "/pending",
   async (req: Request, res: Response, next: NextFunction) => {
-    console.log("Friendships pending is called");
     try {
       const { actualUser } = req.query;
-      console.log("actualUser>>>>>>>>>", actualUser);
 
       const user = await User.findById(actualUser)
         .populate({
@@ -178,8 +175,6 @@ friendshipsRouter.get(
         console.error("No user found");
         return res.status(404).send("No user found");
       }
-
-      console.log("use pending>>>>>>>>>", user.friends?.pending);
 
       res.json(user.friends?.pending || []); // Return the pending friends or an empty array if none
     } catch (error) {
@@ -268,11 +263,6 @@ friendshipsRouter.get(
       const declinedFriendships = userFriendships.filter(
         (friendship) => friendship.status === "declined"
       );
-
-      console.log("userFriendships", userFriendships);
-      console.log("acceptedFriendships", acceptedFriendships);
-      console.log("pendingFriendships", pendingFriendships);
-      console.log("declinedFriendships", declinedFriendships);
 
       res.json({
         accepted: acceptedFriendships,

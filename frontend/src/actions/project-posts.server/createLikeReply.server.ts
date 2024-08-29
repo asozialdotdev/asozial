@@ -1,4 +1,4 @@
-'use server'
+"use server";
 import { auth } from "@/auth";
 import { baseUrl } from "@/constants";
 import { ReplyId } from "@/types/ProjectPost";
@@ -20,7 +20,6 @@ const createLikeReply = async (replyId: ReplyId) => {
       throw new Error(`Failed to like post: ${response.statusText}`);
     }
     const data = await response.json();
-    console.log("REPLY LIKE:", data);
     return data.likes;
   } catch (error) {
     console.error("Error liking reply:", error);

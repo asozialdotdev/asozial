@@ -38,7 +38,6 @@ const leaveProject = async (
 
     const { user } = await response.json();
     memberLeft = user;
-    console.log("project left:", user);
   } catch (error) {
     console.error("Error leaving this project", error);
     return {

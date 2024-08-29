@@ -28,7 +28,6 @@ const patchDescription = async (projectId: ProjectId, description: string) => {
     );
 
     const updateDescription = await response.json();
-    console.log("Updated description:", updateDescription);
     revalidatePath(`/${username}/${project.slug}/${project._id}`);
     return { error: false, message: "Description updated" };
   } catch (error) {

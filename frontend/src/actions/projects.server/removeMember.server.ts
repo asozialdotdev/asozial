@@ -40,8 +40,7 @@ const removeMember = async (
     }
 
     const project = await response.json();
-    console.log("project applied:", project);
-  
+
     revalidatePath(
       `/${project.owner.info.username}/${project.slug}/${projectId}/members`,
     );

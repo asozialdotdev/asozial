@@ -10,7 +10,6 @@ type UserCardProps = {
 };
 
 function UserCard({ user, actualUserId }: UserCardProps) {
-  console.log("UserCARD>>>>", user.isFriend);
   return (
     <li className="flex w-full flex-col gap-4 rounded-lg border-2 border-dashed border-zinc-300 bg-inherit bg-zinc-100 p-12 hover:bg-zinc-200/10 dark:border-zinc-600 dark:bg-inherit dark:bg-zinc-800 dark:shadow-neutral-700/30 dark:hover:bg-zinc-700/10">
       <div className="flex flex-row items-center justify-between gap-8">

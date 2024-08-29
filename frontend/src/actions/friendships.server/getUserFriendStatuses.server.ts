@@ -24,10 +24,9 @@ const getUserFriendStatuses = async () => {
       );
     }
     const data = await response.json();
-    console.log("data", data);
     return data;
   } catch (error: any) {
-    console.log("Error fetching friend requests:", error.message);
+    console.error("Error fetching friend requests:", error.message);
     return {
       error: true,
       message: "Error getting friends requests. Please try again.",

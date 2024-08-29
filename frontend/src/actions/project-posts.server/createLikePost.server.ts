@@ -23,7 +23,6 @@ const createLikePost = async (projectPostId: ProjectPostId) => {
       throw new Error(`Failed to like post: ${response.statusText}`);
     }
     const data = await response.json();
-    console.log("data LIKE:", data);
     return data.likes;
   } catch (error) {
     console.error("Error liking post:", error);

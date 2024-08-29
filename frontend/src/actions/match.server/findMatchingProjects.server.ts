@@ -8,11 +8,6 @@ const getMatchedProjects = async (
 ) => {
   const session = await auth();
   try {
-    console.log("Fetching matched projects for user:", {
-      actualUser,
-      targetProject,
-    });
-
     const actualUserId = session?.user?.id || "";
 
     const queryParams = new URLSearchParams({
@@ -32,14 +27,13 @@ const getMatchedProjects = async (
 
     if (!response.ok) {
       const errorText = await response.text();
-      console.log("Error fetching matched projects:", errorText);
       return { error: errorText };
     }
 
     const data = await response.json();
     return data;
   } catch (error: any) {
-    console.log("Error fetching matched projects:", error.message);
+    console.error("Error fetching matched projects:", error.message);
     return { error: error.message };
   }
 };

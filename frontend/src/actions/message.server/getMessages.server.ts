@@ -13,14 +13,13 @@ const getMessages = async (friendshipId: string) => {
 
     if (!response.ok) {
       const errorText = await response.text();
-      console.log("Error fetching messages:", errorText);
       return { error: errorText };
     }
 
     const data = await response.json();
     return data;
   } catch (error: any) {
-    console.log("Error fetching messages:", error.message);
+    console.error("Error fetching messages:", error.message);
     return { error: error.message };
   }
 };

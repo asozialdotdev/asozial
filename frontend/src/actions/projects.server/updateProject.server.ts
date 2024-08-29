@@ -29,7 +29,6 @@ const updateProject = async (
     });
 
     const updateProject = await response.json();
-    console.log("Updated updateProject:", updateProject);
     revalidatePath(`/${username}/${project.slug}/${project._id}`);
     return "Project updated";
   } catch (error) {

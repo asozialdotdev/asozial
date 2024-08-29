@@ -29,8 +29,6 @@ const createMessage = async (
   }
 
   try {
-    console.log("Sending message from:", session?.user.id);
-
     const response = await fetch(`${baseUrl}/api/messages/${friendshipId}`, {
       method: "POST",
       headers: {

@@ -1,4 +1,4 @@
-'use server'
+"use server";
 import { auth } from "@/auth";
 import { baseUrl } from "@/constants";
 
@@ -7,7 +7,6 @@ const fetchAllProjectsFromAUser = async (
   currentPage: number,
   limit: number,
 ) => {
-  console.log("Fetching all projects from a user");
   const session = await auth();
   const userId = session?.user?.id;
   try {
@@ -18,7 +17,6 @@ const fetchAllProjectsFromAUser = async (
       throw new Error("Failed to fetch projects");
     }
     const projects = await response.json();
-    console.log("All projects from a user:", projects);
   } catch (error) {
     console.error("Error fetching projects:", error);
     return { projects: [], totalPages: 1 };

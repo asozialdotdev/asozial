@@ -22,7 +22,6 @@ const deleteReply = async (replyId: ReplyId) => {
       throw new Error(`Failed to delete reply: ${response.statusText}`);
     }
     const { reply } = await response.json();
-    console.log("Deleted reply:", reply);
     revalidatePath(
       `/${username}/${reply.projectPostId.projectId.slug}/${reply.projectPostId.projectId._id}/posts/${reply.projectPostId._id}`,
     );

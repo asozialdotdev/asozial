@@ -1,6 +1,7 @@
 import express, { Request, Response, NextFunction } from "express";
 import User from "../models/User.models";
 import Friendship from "../models/Friendship.models";
+import { ObjectId } from "mongodb";
 
 const usersRouter = express.Router();
 
@@ -81,7 +82,7 @@ usersRouter.get(
       const totalUsers = await User.countDocuments(searchQuery);
       const totalPages = Math.ceil(totalUsers / +limit);
 
-      console.log({
+      ({
         users: usersWithFriendshipStatus,
         totalPages,
         currentPage: +page,
@@ -103,55 +104,94 @@ usersRouter.get("/:username", async (req: Request, res: Response) => {
   try {
     const user = await User.findOne({ "info.username": req.params.username });
     if (!user) {
-      console.log("User not found");
+      ("User not found");
     }
 
     res.json(user);
-  } catch (error: any) {
-    console.log("Error fetching user by username:", error);
-  }
+  } catch (error: any) {}
 });
 
-// GET 1 user to display with friendship condition
+// GET 1 user with with friendship status
 
 usersRouter.get(
   "/:userId",
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const currentUserId = req.params._id;
-      const targetUserId = req.params.userId;
+      const { userId } = req.params;
 
-      const targetUser = await User.findById(targetUserId);
-      if (!targetUser) {
-        res.status(404).send("User not found");
-        console.error("User not found");
-        return;
+      const results = await User.aggregate([
+        {
+          $match: { _id: new ObjectId(userId) },
+        },
+        {
+          $lookup: {
+            from: "users",
+            localField: "friends.accepted",
+            foreignField: "_id",
+            as: "friendsAccepted",
+          },
+        },
+        {
+          $lookup: {
+            from: "projects",
+            localField: "projects.projectsOwned",
+            foreignField: "_id",
+            as: "projectsOwned",
+          },
+        },
+        {
+          $lookup: {
+            from: "projects",
+            localField: "projects.projectsJoined",
+            foreignField: "_id",
+            as: "projectsJoined",
+          },
+        },
+        {
+          $addFields: {
+            friendsCount: { $size: "$friendsAccepted" },
+            projectsOwnedCount: { $size: "$projectsOwned" },
+            projectsJoinedCount: { $size: "$projectsJoined" },
+          },
+        },
+        {
+          $project: {
+            _id: 1,
+            name: 1,
+            friendsAccepted: 1,
+            projectsOwned: 1,
+            projectsJoined: 1,
+            friendsCount: 1,
+            projectsOwnedCount: 1,
+            projectsJoinedCount: 1,
+          },
+        },
+      ]);
+
+      if (!results || results.length === 0) {
+        throw new Error("User not found");
       }
 
-      const friendships = await Friendship.findOne({
-        $or: [
-          { senderId: currentUserId, receiverId: targetUserId },
-          { senderId: targetUserId, receiverId: currentUserId },
-        ],
+      const user = results[0];
+
+      const friendshipStatus = await Friendship.findOne({
+        $or: [{ senderId: userId }, { receiverId: userId }],
         status: "accepted",
       });
 
-      if (friendships) {
-        res.json({
-          user: targetUser,
-        });
-      } else {
-        res.json({
-          message: "You are not friend with this user",
-          basicInfo: {
-            username: targetUser.info?.username,
-            name: targetUser.info?.name,
-            email: targetUser.info?.email,
-            image: targetUser.info?.image,
-          },
-        });
-      }
+      const isFriend = !!friendshipStatus;
+
+      res.json({
+        user,
+        counts: {
+          friendsCount: user.friendsCount,
+          projectsOwnedCount: user.projectsOwnedCount,
+          projectsJoinedCount: user.projectsJoinedCount,
+        },
+        isFriend,
+      });
     } catch (error) {
+      console.error("Error fetching user by ID:", error);
       next(error);
     }
   }
@@ -177,9 +217,9 @@ usersRouter.get(
 usersRouter.put("/update", async (req: Request, res: Response) => {
   try {
     const { _id, codingLanguages, github } = req.body;
-    console.log("received");
-    console.log(codingLanguages);
-    console.log(github);
+    ("received");
+    codingLanguages;
+    github;
     const updatedUser = await User.findByIdAndUpdate(
       _id,
       {
@@ -188,11 +228,9 @@ usersRouter.put("/update", async (req: Request, res: Response) => {
       },
       { new: true }
     );
-    console.log("updated");
+    ("updated");
     res.json(updatedUser);
-  } catch (error: any) {
-    console.log("Error updating user", error.message);
-  }
+  } catch (error: any) {}
 });
 
 export default usersRouter;

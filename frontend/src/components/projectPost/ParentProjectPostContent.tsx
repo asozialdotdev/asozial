@@ -53,8 +53,6 @@ function ParentProjectPostContent({
     setIsEditing((prev) => !prev);
   };
 
-  console.log(post);
-
   const handleDeletePost = async () => {
     setIsDeleting(true);
     const result = await deleteProjectPost(post._id);

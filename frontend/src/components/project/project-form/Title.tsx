@@ -29,8 +29,6 @@ function Title({ errors, setValue, editTitle, syncTitle }: TitleProps) {
   const [isValidating, setIsValidating] = useState(false);
   const hasChanged = useRef(false);
 
-  console.log("isValidating", isValidating);
-
   const handleValidation = useCallback(async () => {
     setIsValidating(true);
     if (!title) {
@@ -48,18 +46,7 @@ function Title({ errors, setValue, editTitle, syncTitle }: TitleProps) {
       setSuccess("");
       setIsValidating(false);
     }
-    console.log(response);
   }, [title, setError, setSuccess, setValue]);
-
-  console.log(
-    "edit title",
-    editTitle,
-    "syncTitle",
-    syncTitle,
-    "title",
-    title,
-    hasChanged.current,
-  );
 
   useEffect(() => {
     if (syncTitle && !hasChanged.current) {

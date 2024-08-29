@@ -14,7 +14,6 @@ messagesRouter.get(
   "/:friendshipId",
   async (req: Request, res: Response, next: NextFunction) => {
     const { friendshipId } = req.params;
-    console.log("friendshipId", friendshipId);
     try {
       const friendship = await Friendship.findById(friendshipId)
         .populate({
@@ -25,8 +24,6 @@ messagesRouter.get(
           path: "friends",
           select: "username info.image",
         });
-
-      console.log("friendship at server", friendship);
 
       //only updating when one user reads the messages
 

@@ -35,9 +35,6 @@ export const {
   ],
   callbacks: {
     async signIn({ user, profile, account }) {
-      //console.log("Account:", account);
-      console.log("Profile:", profile);
-      //console.log("User:", user);
 
       const db = client.db();
 
@@ -109,11 +106,9 @@ export const {
               "Content-Type": "application/json",
             },
           });
-          console.log("response", response.data);
 
           user.id = response.data._id;
         } catch (error: any) {
-          console.log("Error creating user in database", error.message);
           return false;
         }
       } else {
@@ -159,7 +154,6 @@ export const {
             maxBodyLength: 1000000000,
           },
         );
-        console.log("response", response.data);
 
         user.id = existingUser._id.toString();
       }

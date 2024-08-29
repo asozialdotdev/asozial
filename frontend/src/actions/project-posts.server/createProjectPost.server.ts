@@ -55,8 +55,6 @@ const createProjectPost = async (
       throw new Error(`Failed to create post: ${response.statusText}`);
     }
     const post = await response.json();
-    console.log("post Project Slug", post.projectId.slug);
-    console.log("Created post:", post);
     revalidatePath(`/${username}/${post.projectId.slug}/${post.projectId._id}`);
     return {
       errors: {},

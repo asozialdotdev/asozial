@@ -5,7 +5,6 @@ import LoadingTextButton from "../common/ui/loading/LoadingTextButton";
 
 function MessageFormButton({ editing }: { editing: boolean }) {
   const { pending } = useFormStatus();
-  console.log("pending:", pending);
   return (
     <>
       <Button

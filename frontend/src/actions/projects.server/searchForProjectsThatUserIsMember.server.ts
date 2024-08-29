@@ -8,7 +8,6 @@ const searchForProjectsThatUserIsMember = async (
   currentPage: number,
   limit: number,
 ) => {
-  console.log("member projects with query:", query);
   const session = await auth();
   const userId = session?.user?.id;
   try {
@@ -22,7 +21,6 @@ const searchForProjectsThatUserIsMember = async (
       throw new Error("Failed to fetch projects");
     }
     const projects = await response.json();
-    console.log("MEMBER PROJECTS:", projects);
     return projects;
   } catch (error) {
     console.error("Error fetching projects:", error);
