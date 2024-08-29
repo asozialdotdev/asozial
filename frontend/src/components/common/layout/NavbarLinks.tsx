@@ -18,6 +18,11 @@ const navbarLinks = [
   },
   { name: "Dashboard", href: "/dashboard", Icon: DashboardIcon },
   {
+    name: "Messages",
+    href: "/messages",
+    Icon: ReplyIcon,
+  },
+  {
     name: "Match",
     href: "/match",
     Icon: MatchIcon,
@@ -26,16 +31,11 @@ const navbarLinks = [
       { name: "Projects", href: "/match/projects", Icon: ProjectIcon },
     ],
   },
-  {
-    name: "Messages",
-    href: "/messages",
-    Icon: ReplyIcon,
-  },
 ];
 
 function NavbarLinks() {
   return (
-    <ul className="flex items-center gap-6">
+    <ul className="flex items-center gap-6 xs:gap-2 sm:gap-2 md:gap-2">
       {navbarLinks.map((link) => (
         <li key={link.name}>
           {link.sublinks ? (

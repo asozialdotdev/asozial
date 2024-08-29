@@ -31,7 +31,7 @@ function NavbarLinkItemWithSubLinks({
           className="flex flex-row flex-nowrap items-center gap-2"
         >
           <Icon />
-          {name}
+          <span className="xs:hidden sm:hidden md:hidden">{name}</span>
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent>
