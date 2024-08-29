@@ -24,7 +24,6 @@ const createDislikePost = async (projectPostId: ProjectPostId) => {
       throw new Error(`Failed to dislike post: ${response.statusText}`);
     }
     const data = await response.json();
-    console.log("Disliked data:", data);
     return data.dislikes;
   } catch (error) {
     console.error("Error disliking post:", error);

@@ -3,7 +3,6 @@ import slack from "/public/socials/slack.png";
 import notion from "/public/socials/notion.png";
 import gitlab from "/public/socials/gitlab.png";
 import { Project, SocialsData } from "@/types/Project";
-import React from "react";
 import {
   FaLaravel,
   FaPython,
@@ -43,7 +42,6 @@ import { GiButterfly } from "react-icons/gi";
 import { RiSvelteFill } from "react-icons/ri";
 
 const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:5005";
-console.log("baseUrl in CONSTANTS:", baseUrl);
 
 const languagesWithColors: {
   language: string;

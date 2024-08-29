@@ -13,7 +13,10 @@ const uploadFile = async (formData: FormData) => {
         return { error: true, message: "Image is too large" };
       }
       if (response.status === 400 || response.status === 500) {
-        return { error: true, message: "Accepted only images JPG, PNG or WEBP" };
+        return {
+          error: true,
+          message: "Accepted only images JPG, PNG or WEBP",
+        };
       }
       throw new Error("Failed to upload file");
     }
@@ -36,7 +39,6 @@ const uploadFile = async (formData: FormData) => {
       placeholder: base64,
     };
 
-    console.log("File uploaded:", finalData);
     return finalData;
   } catch (error) {
     console.error("Error uploading file:", error);

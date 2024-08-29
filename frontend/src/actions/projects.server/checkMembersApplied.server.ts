@@ -10,18 +10,19 @@ const checkMembersApplied = async () => {
     const res = await fetch(
       `${baseUrl}/api/projects/applied-members?userId=${userId}`,
 
-      { next: { revalidate: 60 } },
-      // { cache: "no-cache" },
+      { cache: "no-cache" },
     );
     if (!res.ok) {
       throw new Error("Failed to fetch members applied");
     }
-    const membersApplied = await res.json();
-    console.log("appliedProjects", membersApplied);
-    return membersApplied;
+    const projects = await res.json();
+    return { error: false, message: "Sucess", projects };
   } catch (error) {
     console.error("Failed to fetch members applied", error);
-    return { error: true, message: "Failed to fetch members applied" };
+    return {
+      error: true,
+      message: "Failed to get requests. Please try again.",
+    };
   }
 };
 

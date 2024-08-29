@@ -2,7 +2,6 @@
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { SquareChevronRight } from "lucide-react";
-import { useRouter } from "next/navigation";
 import {
   Tooltip,
   TooltipContent,

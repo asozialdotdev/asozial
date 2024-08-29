@@ -54,18 +54,14 @@ function ReplyShow({ replyId, projectPostId, replies, child }: ReplyShowProps) {
     setError("");
   };
 
-  console.log(isDeleting, "reply is deleting");
-
   const handleDelete = async () => {
     setIsDeleting(true);
-    console.log("delete called");
     const result = await deleteReply(replyId);
     if (result.error) {
       console.error("Error deleting reply", result.error);
       setError(result.message);
       setIsDeleting(false);
     } else {
-      console.log("Reply deleted successfully");
       setIsDeleting(false);
     }
   };

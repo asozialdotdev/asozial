@@ -1,6 +1,5 @@
 //Components
 import PageContainer from "@/components/common/containers/PageContainer";
-import SearchProjects from "@/components/project/SearchProjects";
 import PageTitle from "@/components/common/ui/PageTitle";
 import ProjectTabs from "@/components/project/ProjectTabs";
 import {
@@ -8,6 +7,7 @@ import {
   searchForProjectsThatUserIsMember,
   searchForUserProjects,
 } from "@/actions";
+import SearchComponent from "@/components/common/ui/SearchComponent";
 
 type ProjectsPageProps = {
   searchParams: {
@@ -31,7 +31,7 @@ async function ProjectsPage({ searchParams }: ProjectsPageProps) {
     <PageContainer className="gap-10 2xl:max-w-screen-lg">
       <section className="flex w-full flex-col items-center gap-8">
         <PageTitle className="text-3xl">Explore Projects</PageTitle>
-        <SearchProjects />
+        <SearchComponent />
       </section>
       <ProjectTabs
         projects={projects.projects}

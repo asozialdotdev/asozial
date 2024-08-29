@@ -8,8 +8,6 @@ import projectsRouter from "./routes/Projects.routes";
 import projectPostRouter from "./routes/ProjectPosts.routes";
 import projectPostReplyRouter from "./routes/ProjectPostReply.routes";
 import githubRouter from "./routes/Auth.routes";
-import accountRouter from "./routes/Account.routes";
-import verifyRouter from "./routes/Verify.routes";
 import friendshipsRouter from "./routes/Friendships.routes";
 import userPostsRouter from "./routes/UserPosts.routes";
 import messagesRouter from "./routes/Messages.routes";
@@ -21,8 +19,6 @@ const app = express();
 config(app);
 
 app.use("/api/auth", githubRouter);
-app.use("/account", accountRouter);
-app.use("/verify", verifyRouter);
 app.use("/dashboard", dashboardRouter);
 app.use("/api/users", usersRouter);
 app.use("/api/projects", projectsRouter);
@@ -33,6 +29,6 @@ app.use("/api/friends", friendshipsRouter);
 app.use("/api/messages", messagesRouter);
 app.use("/api/match", matchRouter);
 app.use("/api", fileRouter);
-app.use("/search", searchRouter);
+app.use("/api/search", searchRouter);
 
 export default app;

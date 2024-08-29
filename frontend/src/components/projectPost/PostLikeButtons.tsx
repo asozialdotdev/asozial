@@ -5,15 +5,12 @@ import { createDislikePost, createLikePost } from "@/actions";
 //React
 import { useEffect, useMemo, useState } from "react";
 
-//Ui
-import { GoThumbsdown, GoThumbsup } from "react-icons/go";
-
 //Lib
 import FlipNumbers from "react-flip-numbers";
 import { useTheme } from "next-themes";
 
 //Types
-import { ProjectPost, User } from "@/types/ProjectPost";
+import { ProjectPost } from "@/types/ProjectPost";
 import ThumbsUpIcon from "../common/ui/icons/ThumbsUpIcon";
 import ThumbsDownIcon from "../common/ui/icons/ThumbsDownIcon";
 
@@ -27,9 +24,6 @@ function ProjectPostLikeButtons({ projectPost }: ProjectPostLikeButtonsProps) {
   const [dislikes, setDislikes] = useState(projectPost.dislikes.length ?? 0);
   const [userLiked, setUserLiked] = useState(false);
   const [userDisliked, setUserDisliked] = useState(false);
-
-  const { theme } = useTheme();
-  console.log("theme", theme);
 
   const userId = useMemo(
     () => projectPost.userId._id.toString(),

@@ -15,7 +15,7 @@ const getUserGithubEvents = async (url: string, accessToken: string) => {
     });
     return data.json();
   } catch (error: any) {
-    console.log("Error fetching GitHub events:", error);
+    console.error("Error fetching GitHub events:", error);
     return error;
   }
 };
@@ -34,7 +34,7 @@ const getUserGithubFollowers = async (url: string, accessToken: string) => {
     });
     return data.json();
   } catch (error: any) {
-    console.log("Error fetching GitHub followers:", error);
+    console.error("Error fetching GitHub followers:", error);
     return error;
   }
 };
@@ -53,7 +53,7 @@ const getUserGithubFollowing = async (url: string, accessToken: string) => {
     });
     return data.json();
   } catch (error: any) {
-    console.log("Error fetching GitHub following:", error);
+    console.error("Error fetching GitHub following:", error);
     return error;
   }
 };
@@ -72,7 +72,7 @@ const getUserGithubSubscriptions = async (url: string, accessToken: string) => {
     });
     return data.json();
   } catch (error: any) {
-    console.log("Error fetching GitHub subscriptions:", error);
+    console.error("Error fetching GitHub subscriptions:", error);
     return error;
   }
 };
@@ -91,7 +91,7 @@ const getUserGithubOrganizations = async (url: string, accessToken: string) => {
     });
     return data.json();
   } catch (error: any) {
-    console.log("Error fetching GitHub organizations:", error);
+    console.error("Error fetching GitHub organizations:", error);
     return error;
   }
 };
@@ -111,7 +111,7 @@ const getUserGithubPublicGists = async (url: string, accessToken: string) => {
     });
     return data.json();
   } catch (error: any) {
-    console.log("Error fetching GitHub gists:", error);
+    console.error("Error fetching GitHub gists:", error);
     return error;
   }
 };
@@ -128,10 +128,9 @@ const getUserGithubRepos = async (url: string, accessToken: string) => {
         Authorization: `token ${accessToken}`,
       },
     });
-    console.log(data);
     return data.json();
   } catch (error: any) {
-    console.log("Error fetching GitHub repos:", error);
+    console.error("Error fetching GitHub repos:", error);
     return error;
   }
 };
@@ -156,7 +155,7 @@ const getUserGithubRepoLanguages = async (
   } = {};
 
   if (!repos) {
-    console.log("repo is undefined");
+    console.error("repo is undefined");
     return languages;
   }
 
@@ -179,7 +178,7 @@ const getUserGithubRepoLanguages = async (
       }
     }
   } catch (error: any) {
-    console.log("Error fetching GitHub repo languages:", error);
+    console.error("Error fetching GitHub repo languages:", error);
   }
 
   const sortedUserTechStack = Object.entries(languages).sort(
@@ -208,22 +207,7 @@ const getUserGithubRepoLanguages = async (
     },
   );
 
-  const languagesObject = sortedUserTechStackWithColors.reduce(
-    (acc, data) => {
-      acc[data.language] = {
-        language: data.language,
-        lines: data.lines,
-        projects: data.projects,
-        bgColor: data.bgColor,
-        textColor: data.textColor,
-        Icon: data.Icon,
-      };
-      return acc;
-    },
-    {} as { [key: string]: LanguageData },
-  );
-
-  return { languages: languagesObject };
+  return sortedUserTechStackWithColors;
 };
 
 export {

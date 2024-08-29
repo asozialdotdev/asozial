@@ -83,7 +83,6 @@ function EditProjectForm({ project }: { project: Project }) {
 
   const processForm: SubmitHandler<Inputs> = async (data) => {
     const { title, description, pitch, socials, techStack } = data;
-    console.log(data);
 
     const formattedTitle = title.trim();
     const formattedDescription = description.trim();
@@ -111,7 +110,6 @@ function EditProjectForm({ project }: { project: Project }) {
       image,
       placeholder,
     };
-    console.log(finalData);
     const result = await updateProject(project._id, finalData);
 
     if (result === "Error updating project") {
@@ -135,8 +133,6 @@ function EditProjectForm({ project }: { project: Project }) {
       setIsDeleting(false);
     }
   };
-
-  console.log("erros", errors.techStack)
 
   return (
     <div className="w-full pb-6">

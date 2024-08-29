@@ -2,7 +2,6 @@ import CustomLabel from "@/components/common/ui/Label";
 import { Control, Controller, FieldErrors } from "react-hook-form";
 import { Inputs } from "@/types/Project";
 import ErrorMessage from "@/components/common/ui/ErrorMessage";
-import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 
 type DescriptionProps = {
@@ -25,7 +24,7 @@ function Description({ control, errors }: DescriptionProps) {
             id="description"
             name="description"
             placeholder="What is your project about?"
-            className='h-20'
+            className="h-20"
           />
         )}
       />

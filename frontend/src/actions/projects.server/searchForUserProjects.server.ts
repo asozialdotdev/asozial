@@ -8,7 +8,6 @@ const searchForUserProjects = async (
   currentPage: number,
   limit: number,
 ) => {
-  console.log("Searching for projects with query:", query);
   const session = await auth();
   const userId = session?.user?.id;
   try {
@@ -22,7 +21,6 @@ const searchForUserProjects = async (
       throw new Error("Failed to fetch projects");
     }
     const projects = await response.json();
-    console.log("Searched projects:", projects);
     return projects;
   } catch (error) {
     console.error("Error fetching projects:", error);

@@ -1,12 +1,12 @@
 import { Types } from "mongoose";
 
 type Message = {
+  _id: Types.ObjectId;
   senderId: Types.ObjectId;
   receiverId: Types.ObjectId;
-  title?: string;
   content?: string;
-  createdDate?: Date;
-  updatedDate?: Date;
+  createdAt?: Date | string;
+  updatedAt?: Date | string;
   isRead?: boolean;
 };
 

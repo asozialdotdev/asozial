@@ -8,7 +8,6 @@ const searchForProjects = async (
   currentPage: number,
   limit: number,
 ) => {
-  console.log("Exploring for projects with query:", query);
   try {
     const response = await fetch(
       `${baseUrl}/api/projects/all?&query=${query}&page=${currentPage}&limit=${limit}`,
@@ -20,7 +19,6 @@ const searchForProjects = async (
       throw new Error("Failed to fetch projects");
     }
     const projects = await response.json();
-    console.log("Explored projects:", projects);
     return projects;
   } catch (error) {
     console.error("Error fetching projects:", error);

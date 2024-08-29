@@ -3,8 +3,6 @@
 import { auth } from "@/auth";
 import { baseUrl } from "@/constants";
 import { ProjectPostId } from "@/types/ProjectPost";
-import { revalidatePath } from "next/cache";
-import { redirect } from "next/dist/server/api-utils";
 
 //DELETE a project post
 
@@ -28,7 +26,6 @@ const deleteProjectPost = async (projectPostId: ProjectPostId) => {
       throw new Error(`Failed to delete post: ${response.statusText}`);
     }
     const { post } = await response.json();
-    console.log("Deleted post:", post);
     return { error: false, message: "Post deleted" };
   } catch (error) {
     console.error("Error deleting post:", error);

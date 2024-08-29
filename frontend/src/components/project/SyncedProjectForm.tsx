@@ -42,7 +42,7 @@ type SyncedProjectFormProps = {
 
 function SyncedProjectForm({ project, syncedData }: SyncedProjectFormProps) {
   const { name, html_url, description, language } = syncedData;
-  const username = project.owner.username;
+  const username = project.owner.info.username;
 
   const [error, setError] = useState<string | null>(null);
   const [uploadedImage, setUploadedImage] = useState<ImageT | null>(null);
@@ -139,8 +139,6 @@ function SyncedProjectForm({ project, syncedData }: SyncedProjectFormProps) {
   };
 
   const image = watch("image");
-  console.log("image", image);
-  console.log("uploadedImage", uploadedImage);
 
   const handleDeleteProject = async () => {
     setIsDeleting(true);

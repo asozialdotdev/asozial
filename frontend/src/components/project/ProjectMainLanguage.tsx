@@ -52,7 +52,6 @@ function ProjectMainLanguage({ project }: { project: Project }) {
   };
 
   const isOwner = project.owner._id === session.data?.user?.id;
-  console.log("isOwner", isOwner);
 
   return (
     <div

@@ -8,7 +8,6 @@ const getUserByUsername = async (username: string) => {
     const res = await axios.get(`${baseUrl}/api/users/${username}`);
     return res.data;
   } catch (error: any) {
-    console.log("Error fetching user by username:", error.message);
     return error;
   }
 };

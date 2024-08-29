@@ -1,7 +1,6 @@
 "use server";
 import { auth } from "@/auth";
 import { baseUrl } from "@/constants";
-import { checkProjectTitle } from "./checkProjectTitle.server";
 
 // POST create a project from Github
 const createProjectFromGithub = async (repoUrl: string) => {
@@ -21,7 +20,6 @@ const createProjectFromGithub = async (repoUrl: string) => {
     });
 
     project = await result.json();
-    console.log("project", project);
     return project;
   } catch (error) {
     console.error("Error creating project", error);

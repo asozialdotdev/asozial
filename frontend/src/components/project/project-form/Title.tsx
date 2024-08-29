@@ -12,7 +12,7 @@ import { Inputs } from "@/types/Project";
 import { SquareCheck } from "lucide-react";
 
 //Lib
-import { Control, FieldErrors, UseFormSetValue } from "react-hook-form";
+import { FieldErrors, UseFormSetValue } from "react-hook-form";
 import SuccessMessage from "@/components/common/ui/SuccessMessage";
 import LoadingTextButton from "@/components/common/ui/loading/LoadingTextButton";
 
@@ -28,8 +28,6 @@ function Title({ errors, setValue, editTitle, syncTitle }: TitleProps) {
   const [error, setError] = useState("");
   const [isValidating, setIsValidating] = useState(false);
   const hasChanged = useRef(false);
-
-  console.log("isValidating", isValidating);
 
   const handleValidation = useCallback(async () => {
     setIsValidating(true);
@@ -48,18 +46,7 @@ function Title({ errors, setValue, editTitle, syncTitle }: TitleProps) {
       setSuccess("");
       setIsValidating(false);
     }
-    console.log(response);
   }, [title, setError, setSuccess, setValue]);
-
-  console.log(
-    "edit title",
-    editTitle,
-    "syncTitle",
-    syncTitle,
-    "title",
-    title,
-    hasChanged.current,
-  );
 
   useEffect(() => {
     if (syncTitle && !hasChanged.current) {

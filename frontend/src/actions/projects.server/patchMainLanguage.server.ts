@@ -31,7 +31,6 @@ const patchMainLanguage = async (
     );
 
     const updateMainLanguage = await response.json();
-    console.log("Updated main language:", updateMainLanguage);
     revalidatePath(`/${username}/${project.slug}/${project._id}`);
     return { error: false, message: "Main language updated" };
   } catch (error) {

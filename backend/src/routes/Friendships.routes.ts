@@ -10,11 +10,8 @@ const friendshipsRouter = express.Router();
 friendshipsRouter.post(
   "/",
   async (req: Request, res: Response, next: NextFunction) => {
-    console.log("req.body", req.body);
     try {
       const { senderId, receiverId } = req.body;
-      console.log("senderId", senderId);
-      console.log("receiverId", receiverId);
 
       if (!senderId) {
         res.status(404).send("Sender not found");
@@ -29,10 +26,15 @@ friendshipsRouter.post(
       }
 
       const friendshipExists = await Friendship.findOne({
-        $or: [{ friends: receiverId, senderId }],
+        $or: [
+          { senderId, receiverId },
+          { senderId: receiverId, receiverId: senderId },
+        ],
       });
 
-      if (friendshipExists) return;
+      if (friendshipExists) {
+        return res.status(409).json({ message: "Friendship already exists" });
+      }
 
       const newFriendship = await Friendship.create({
         senderId,
@@ -57,7 +59,7 @@ friendshipsRouter.post(
 
 // PATCH friends to accept friendship request
 
-friendshipsRouter.patch(
+friendshipsRouter.put(
   "/:friendshipId/accept",
   async (req: Request, res: Response, next: NextFunction) => {
     try {
@@ -91,12 +93,12 @@ friendshipsRouter.patch(
 
       await User.findByIdAndUpdate(friendship.senderId, {
         $pull: { "friends.pending": friendship.receiverId },
-        $push: { "friends.accepted": friendship.senderId },
+        $addToSet: { "friends.accepted": friendship.senderId },
       });
 
       await User.findByIdAndUpdate(friendship.receiverId, {
         $pull: { "friends.pending": friendship.senderId },
-        $push: { "friends.accepted": friendship.receiverId },
+        $addToSet: { "friends.accepted": friendship.receiverId },
       });
 
       res.status(200).json(friendship);
@@ -109,7 +111,7 @@ friendshipsRouter.patch(
 
 // PATCH friends to decline friendship request
 
-friendshipsRouter.patch(
+friendshipsRouter.put(
   "/:friendshipId/decline",
   async (req: Request, res: Response, next: NextFunction) => {
     try {
@@ -156,23 +158,27 @@ friendshipsRouter.patch(
 );
 
 // GET all pending friendships
-
 friendshipsRouter.get(
   "/pending",
   async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const { actualUser } = req.body;
+      const { actualUser } = req.query;
 
-      const user = await User.findById(actualUser).populate("friends.pending");
+      const user = await User.findById(actualUser)
+        .populate({
+          path: "friends.pending", // Populate the 'friends.pending' array
+          select: "info.username info.image", // Select only username and image fields
+        })
+        .exec();
 
-      if (!user || !user.friends?.pending.length) {
-        res.status(404).send("You don't have any pending friendships!");
-        console.error("No pending friendships found");
-        return;
+      if (!user) {
+        console.error("No user found");
+        return res.status(404).send("No user found");
       }
 
-      res.json(user.friends.pending);
+      res.json(user.friends?.pending || []); // Return the pending friends or an empty array if none
     } catch (error) {
+      console.error("Error fetching pending friendships:", error);
       next(error);
     }
   }
@@ -242,11 +248,17 @@ friendshipsRouter.get(
           { receiverId: new ObjectId(userId) },
           { friends: { $in: [new ObjectId(userId)] } },
         ],
-      }).populate({
-        path: "senderId receiverId",
-        select: "username info.image",
-        model: User,
-      });
+      })
+        .populate({
+          path: "friends",
+          select: "username info.image",
+          model: User,
+        })
+        .populate({
+          path: "senderId receiverId",
+          select: "username info.image",
+          model: User,
+        });
 
       const acceptedFriendships = userFriendships.filter(
         (friendship) => friendship.status === "accepted"
@@ -258,129 +270,66 @@ friendshipsRouter.get(
         (friendship) => friendship.status === "declined"
       );
 
-      console.log("userFriendships", userFriendships);
-      console.log("acceptedFriendships", acceptedFriendships);
-      console.log("pendingFriendships", pendingFriendships);
-      console.log("declinedFriendships", declinedFriendships);
-
       res.json({
         accepted: acceptedFriendships,
         pending: pendingFriendships,
         declined: declinedFriendships,
       });
-
-      // const friendsAcceptedDetails = user.friends?.accepted
-      //   ? await Promise.all(
-      //       user.friends?.accepted.map(async (friend) => {
-      //         const friendDetails = await User.findById(friend).select(
-      //           "info.username info.image"
-      //         );
-      //         if (!friendDetails) return null;
-      //         const response = {
-      //           id: friendDetails._id,
-      //           info: {
-      //             username: friendDetails.info?.username || "Kreuzbär",
-      //             image: friendDetails.info?.image || "",
-      //           },
-      //         };
-      //         return response;
-      //       })
-      //     )
-      //   : null;
-
-      // const friendsSentPendingDetails = user.friends?.pending
-      //   ? await Promise.all(
-      //       user.friends?.pending.map(async (friend) => {
-      //         const friendDetails = await Friendship.findOne({
-      //           senderId: userId,
-      //           receiverId: friend,
-      //         }).populate({
-      //           path: "receiverId",
-      //           select: "username info.image",
-      //           model: User,
-      //         });
-      //         console.log("friendDetails", friendDetails);
-      //         if (!friendDetails || !friendDetails.receiverId) return null;
-
-      //         const receiver =
-      //           friendDetails.receiverId as unknown as UserDocument;
-
-      //         const response = {
-      //           id: receiver._id,
-      //           username: receiver.username,
-      //           image: receiver.info.image,
-      //         };
-      //         return response;
-      //       })
-      //     )
-      //   : null;
-
-      // const friendsReceivedPendingDetails = user.friends?.pending
-      //   ? await Promise.all(
-      //       user.friends?.pending.map(async (friend) => {
-      //         const friendDetails = await Friendship.findOne({
-      //           senderId: friend,
-      //           receiverId: userId,
-      //         }).populate({
-      //           path: "senderId",
-      //           select: "username info.image",
-      //           model: User,
-      //         });
-      //         console.log("friendDetails", friendDetails);
-      //         if (!friendDetails || !friendDetails.receiverId) return null;
-
-      //         const receiver =
-      //           friendDetails.receiverId as unknown as UserDocument;
-
-      //         const response = {
-      //           id: receiver._id,
-      //           username: receiver.username,
-      //           image: receiver.info.image,
-      //         };
-      //         return response;
-      //       })
-      //     )
-      //   : null;
-
-      // const friendsRejectedDetails = user.friends?.declined
-      //   ? await Promise.all(
-      //       user.friends?.declined.map(async (friend) => {
-      //         const friendDetails = await User.findById(friend).select(
-      //           "info.username info.image"
-      //         );
-      //         console.log("friendDetails", friendDetails);
-      //         if (!friendDetails) return null;
-      //         const response = {
-      //           id: friendDetails._id,
-      //           info: {
-      //             username: friendDetails.info?.username,
-      //             image: friendDetails.info?.image,
-      //           },
-      //         };
-      //         return response;
-      //       })
-      //     )
-      //   : null;
-
-      // console.log("friendsAcceptedDetails", friendsAcceptedDetails);
-      // console.log("friendsSentPendingDetails", friendsSentPendingDetails);
-      // console.log(
-      //   "friendsReceivedPendingDetails",
-      //   friendsReceivedPendingDetails
-      // );
-      // console.log("friendsRejectedDetails", friendsRejectedDetails);
-
-      // res.json({
-      //   friendsAccepted: friendsAcceptedDetails,
-      //   friendsSentPending: friendsSentPendingDetails,
-      //   friendsReceivedPending: friendsReceivedPendingDetails,
-      //   friendsRejected: friendsRejectedDetails,
-      // });
     } catch (error: any) {
       console.error("Error fetching user friendships:", error);
       res.status(500).send("Error fetching user friendships");
     }
   }
 );
+
+// friendshipsRouter.get(
+//   "/:userId/isFriend/:friendId",
+//   async (req: Request, res: Response, next: NextFunction) => {
+//     const { userId, friendId } = req.params;
+
+//     try {
+//       const user = await User.findById(userId);
+//       const friend = await User.findById(friendId);
+//       if (!user || !friend) {
+//         return res.status(404).json({ message: "User not found" });
+//       }
+
+//       const friendship = await Friendship.findOne({
+//         $or: [
+//           {
+//             senderId: new ObjectId(userId),
+//             receiverId: new ObjectId(friendId),
+//           },
+//           {
+//             senderId: new ObjectId(friendId),
+//             receiverId: new ObjectId(userId),
+//           },
+//         ],
+//       }).populate({
+//         path: "senderId receiverId",
+//         select: "username info.image",
+//         model: User,
+//       });
+
+//       if (!friendship) {
+//         return res.json({ isFriend: false, status: "none" });
+//       }
+
+//       let status = "none";
+//       if (friendship.status === "accepted") {
+//         status = "friend";
+//       } else if (friendship.status === "pending") {
+//         status = "pending";
+//       } else if (friendship.status === "declined") {
+//         status = "rejected";
+//       }
+
+//       res.json({ isFriend: status === "friend", status });
+//     } catch (error: any) {
+//       console.error("Error checking friendship status:", error);
+//       res.status(500).send("Error checking friendship status");
+//     }
+//   }
+// );
 
 export default friendshipsRouter;

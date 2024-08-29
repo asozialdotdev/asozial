@@ -44,7 +44,6 @@ function ProjectPitch({ project }: { project: Project }) {
   };
 
   const isOwner = project.owner._id === session.data?.user?.id;
-  console.log("project Pitch", project.pitch);
 
   return (
     <div

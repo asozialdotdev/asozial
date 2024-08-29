@@ -4,7 +4,6 @@ import PageContainer from "@/components/common/containers/PageContainer";
 import ButtonBack from "@/components/common/ui/buttons/ButtonBack";
 import PageTitle from "@/components/common/ui/PageTitle";
 import EditProject from "@/components/project/EditProject";
-import { Button } from "@/components/ui/button";
 import { ProjectId } from "@/types/Project";
 
 async function EditProjectPage({

@@ -2,48 +2,9 @@ import express, { Request, Response, NextFunction } from "express";
 import Message from "../models/Message.models";
 import User from "../models/User.models";
 import Friendship from "../models/Friendship.models";
+import { ObjectId } from "mongodb";
 
 const messagesRouter = express.Router();
-
-// POST request to create a new message
-
-messagesRouter.post(
-  "/:friendshipId",
-  async (req: Request, res: Response, next: NextFunction) => {
-    const { actualUser, targetUser } = req.body;
-    const { friendshipId } = req.params;
-
-    const foundTargetUser = User.findById(targetUser);
-
-    const friendshipExists = await User.findOne({
-      "friends.accepted": targetUser,
-    });
-
-    if (!foundTargetUser) {
-      return res.status(404).json({ message: "User not found" });
-    }
-
-    if (!friendshipExists) {
-      return res.status(403).json({
-        message: "You can't send messages to this user.",
-      });
-    }
-
-    try {
-      const newMessage = await Message.create({
-        senderId: actualUser,
-        receiverId: foundTargetUser,
-        title: req.body.title,
-        content: req.body.content,
-        isRead: false,
-      });
-
-      res.status(201).json(newMessage);
-    } catch (error) {
-      next(error);
-    }
-  }
-);
 
 // GET request to get all messages between two users
 // the :userId refers to the target user not the actual User
@@ -52,31 +13,59 @@ messagesRouter.post(
 messagesRouter.get(
   "/:friendshipId",
   async (req: Request, res: Response, next: NextFunction) => {
-    const { actualUser, targetUser } = req.body;
-    const foundTargetUser = User.findById(targetUser);
-
-    if (!foundTargetUser) {
-      return res.status(404).json({ message: "User not found" });
-    }
-
+    const { friendshipId } = req.params;
     try {
-      const messages = await Message.find({
-        $or: [
-          { senderId: actualUser, receiverId: foundTargetUser },
-          { senderId: foundTargetUser, receiverId: actualUser },
-        ],
-      });
+      const friendship = await Friendship.findById(friendshipId)
+        .populate({
+          path: "messages",
+          select: "senderId content createdAt",
+        })
+        .populate({
+          path: "friends",
+          select: "username info.image",
+        });
+
+      //only updating when one user reads the messages
 
       await Message.updateMany(
-        {
-          receiverId: actualUser,
-          senderId: targetUser,
-          isRead: false,
-        },
+        { friendshipId: friendshipId, isRead: false },
+
         { $set: { isRead: true } }
       );
 
-      res.status(200).json(messages);
+      res.status(200).json(friendship);
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
+// POST request to create a new message
+
+messagesRouter.post(
+  "/:friendshipId",
+  async (req: Request, res: Response, next: NextFunction) => {
+    const { senderId, content } = req.body;
+    const { friendshipId } = req.params;
+
+    if (!senderId || !content) {
+      res.status(400).json({ error: "Missing required fields" });
+      return;
+    }
+
+    try {
+      const newMessage = await Message.create({
+        senderId: senderId,
+        friendshipId: friendshipId,
+        content: content,
+        isRead: false,
+      });
+
+      await Friendship.findByIdAndUpdate(friendshipId, {
+        $push: { messages: newMessage._id },
+      });
+
+      res.status(201).json(newMessage);
     } catch (error) {
       next(error);
     }

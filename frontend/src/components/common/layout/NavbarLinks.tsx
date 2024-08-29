@@ -5,6 +5,7 @@ import SearchIcon from "../ui/icons/SearchIcon";
 import MatchIcon from "../ui/icons/MatchIcon";
 import ProjectIcon from "../ui/icons/ProjectIcon";
 import UsersIcon from "../ui/icons/UsersIcon";
+import ReplyIcon from "../ui/icons/ReplyIcon";
 const navbarLinks = [
   {
     name: "Search",
@@ -24,6 +25,11 @@ const navbarLinks = [
       { name: "Users", href: "/match/users", Icon: UsersIcon },
       { name: "Projects", href: "/match/projects", Icon: ProjectIcon },
     ],
+  },
+  {
+    name: "Messages",
+    href: "/messages",
+    Icon: ReplyIcon,
   },
 ];
 

@@ -5,7 +5,13 @@ import { notFound } from "next/navigation";
 import { Suspense } from "react";
 
 //Actions
-import { fetchProjectPosts, fetchProjectById } from "@/actions";
+import {
+  fetchProjectPosts,
+  fetchProjectById,
+  checkIsMember,
+  checkIsOwner,
+  checkMemberHasApplied,
+} from "@/actions";
 
 //Components
 import PageContainer from "@/components/common/containers/PageContainer";
@@ -18,8 +24,7 @@ import ApplyProject from "@/components/project/requests/ApplyProject";
 import { auth } from "@/auth";
 
 //Types
-import type { ProjectId } from "@/types/Project";
-import { UserId } from "@/types/User";
+import type { Member, ProjectId } from "@/types/Project";
 
 type Params = {
   username: string;
@@ -32,33 +37,26 @@ async function Page({ params }: { params: Params }) {
   const paramsObj = params;
   const { projectId } = paramsObj;
 
-  const [project, posts] = await Promise.all([
+  const [project, posts, isMember, isOwner, hasApplied] = await Promise.all([
     fetchProjectById(projectId),
     fetchProjectPosts(projectId),
+    checkIsMember(projectId),
+    checkIsOwner(projectId),
+    checkMemberHasApplied(projectId),
   ]);
-
-  const isMember = project.members.membersJoined?.some(
-    (member: UserId) => member === session?.user?.id.toString(),
-  );
-  const isOwner = project.owner._id === session?.user?.id;
-
-  const hasApplied = project.members.membersApplied?.some(
-    (member: UserId) => member === session?.user?.id.toString(),
-  );
-  console.log("membersApplied", project.members.membersApplied);
 
   if (!project) {
     notFound();
   }
-
-  // if (project) {
-  //   return <ParentPostLoading/>;
-  // }
   return (
     <PageContainer className="gap-4">
       {/* Project */}
       <Suspense fallback={<ProjectLoadingSkeleton />}>
-        <ProjectComponent project={project} />
+        <ProjectComponent
+          project={project}
+          isMember={isMember}
+          isOwner={isOwner}
+        />
       </Suspense>
 
       {isMember || isOwner ? (

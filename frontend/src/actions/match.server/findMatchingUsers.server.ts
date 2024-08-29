@@ -1,25 +1,42 @@
 "use server";
 import { baseUrl } from "@/constants";
-import axios from "axios";
+import { auth } from "@/auth";
 
 const findMatchingUsers = async (actualUser: {
-  avoidedUsers: string[];
-  techStack: string[];
-  languagesSpoken: string[];
+  _id: string;
+  skills: {
+    codingLanguages: string[];
+    languagesSpoken: string[];
+  };
+  matches: {
+    users: {
+      declined: string[];
+    };
+  };
 }) => {
-  console.log("Finding matching users for", actualUser);
-
   try {
-    const res = await axios.get(`${baseUrl}/api/match/users`, {
-      data: {
-        actualUser,
+    const session = await auth();
+
+    const response = await fetch(`${baseUrl}/api/match/users`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
       },
+      body: JSON.stringify({
+        actualUser: session?.user.id,
+      }),
     });
 
-    return res.data;
+    if (!response.ok) {
+      const errorText = await response.text();
+      return { error: errorText };
+    }
+
+    const data = await response.json();
+    return data;
   } catch (error: any) {
-    console.log("Error finding matching users:", error.message);
-    return error;
+    console.error("Error finding matching users:", error.message);
+    return { error: error.message };
   }
 };
 

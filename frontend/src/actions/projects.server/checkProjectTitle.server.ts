@@ -10,7 +10,6 @@ const checkProjectTitle = async (title: string | undefined) => {
       `${baseUrl}/api/projects/check-title?title=${title}&userId=${userId}`,
     );
     const data = await result.json();
-    console.log("CHECKING TITLE", data);
     return data;
   } catch (error) {
     console.error("Error checking project title:", error);

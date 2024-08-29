@@ -1,18 +1,56 @@
 "use server";
+import { auth } from "@/auth";
 import { baseUrl } from "@/constants";
-import axios from "axios";
 
-const sendFriendship = async (senderId: string, receiverId: string) => {
+export type SendFriendshipState = {
+  errors: {
+    send?: string[];
+  };
+  success?: boolean;
+  data?: any;
+};
+
+const sendFriendship = async (
+  formState: SendFriendshipState,
+  formData: FormData,
+): Promise<SendFriendshipState> => {
+  const session = await auth();
+  const senderId = session?.user?.id;
+  const receiverId = formData.get("receiverId") as string;
   try {
-    const res = await axios.post(`${baseUrl}/api/friends`, {
-      senderId,
-      receiverId,
+    const response = await fetch(`${baseUrl}/api/friends`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        senderId,
+        receiverId,
+      }),
     });
-    return res.data;
+
+    const data = await response.json();
+
+    if (response.status === 409) {
+      return {
+        errors: {
+          send: ["You are already send a request or you are already friends."],
+        },
+      };
+    }
+    return {
+      errors: {},
+      success: true,
+      data,
+    };
   } catch (error: any) {
-    console.log("Error sending friendship:", error.message);
-    return error;
+    console.error("Error sending friendship:", error.message);
+    return {
+      errors: {
+        send: ["Error sending friendship. Please try again."],
+      },
+    };
   }
 };
 
-export default sendFriendship;
+export { sendFriendship };

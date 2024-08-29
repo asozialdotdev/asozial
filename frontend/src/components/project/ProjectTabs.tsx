@@ -15,7 +15,6 @@ type ProjectTabsProps = {
   memberProjects: Project[];
   memberTotalPages: number;
   currentPage: number;
-  query: string;
 };
 
 function ProjectTabs({
@@ -26,7 +25,6 @@ function ProjectTabs({
   memberProjects,
   memberTotalPages,
   currentPage,
-  query,
 }: ProjectTabsProps) {
   const [activeTab, setActiveTab] = useState("all-projects");
 

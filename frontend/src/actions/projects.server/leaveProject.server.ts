@@ -2,8 +2,9 @@
 
 import { auth } from "@/auth";
 import { baseUrl } from "@/constants";
-import { ProjectId } from "@/types/Project";
+import { Member, Project, ProjectId } from "@/types/Project";
 import { revalidatePath } from "next/cache";
+import { redirect } from "next/navigation";
 
 type LeaveProject = {
   errors: {
@@ -21,27 +22,22 @@ const leaveProject = async (
   const session = await auth();
   const userId = session?.user?.id;
   const projectId = formData.get("projectId") as ProjectId;
-
+  let memberLeft: Member;
   try {
     const response = await fetch(`${baseUrl}/api/projects/${projectId}/leave`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ userId, projectId }),
+      body: JSON.stringify({ userId }),
     });
 
     if (!response.ok) {
       throw new Error("Error leaving this  project");
     }
 
-    const project = await response.json();
-    console.log("project left:", project);
-    revalidatePath(`/${project.owner.username}/${project.slug}/${projectId}`);
-    return {
-      errors: {},
-      success: true,
-    };
+    const { user } = await response.json();
+    memberLeft = user;
   } catch (error) {
     console.error("Error leaving this project", error);
     return {
@@ -50,6 +46,7 @@ const leaveProject = async (
       },
     };
   }
+  redirect(`/search/projects`);
 };
 
 export { leaveProject };

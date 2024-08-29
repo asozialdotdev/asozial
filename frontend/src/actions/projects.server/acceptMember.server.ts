@@ -24,23 +24,27 @@ const acceptMember = async (
   const memberId = formData.get("memberId") as string;
 
   try {
-    const response = await fetch(`${baseUrl}/api/projects/${projectId}/accept`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
+    const response = await fetch(
+      `${baseUrl}/api/projects/${projectId}/accept`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ memberId, userId }),
       },
-      body: JSON.stringify({ memberId, userId }),
-    });
+    );
 
     if (!response.ok) {
       throw new Error("Error accepting a user to a project");
     }
 
-    const project = await response.json();
-    console.log("project applied:", project);
-    // setTimeout(() => {
-    //   revalidatePath(`/${project.owner.username}/${project.slug}/${projectId}`);
-    // }, 5000);
+    const { project } = await response.json();
+
+    revalidatePath(
+      `/${project.owner.info.username}/${project.slug}/${projectId}/members`,
+    );
+
     return {
       errors: {},
       success: true,

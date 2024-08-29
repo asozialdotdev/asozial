@@ -7,6 +7,7 @@ const projectSchema = new Schema(
     pitch: { type: String },
     githubRepo: { type: String },
     techStack: [{ type: String, default: [] }],
+    topics: [{ type: String }],
     mainLanguage: { type: String },
     image: { type: String },
     placeholder: { type: String },
@@ -22,10 +23,7 @@ const projectSchema = new Schema(
       membersInvited: [
         { type: Schema.Types.ObjectId, ref: "User", default: [] },
       ],
-      membersDeclined: [
-        { type: Schema.Types.ObjectId, ref: "User", default: [] },
-      ],
-      membersRemoved: [
+      membersAvoided: [
         { type: Schema.Types.ObjectId, ref: "User", default: [] },
       ],
     },

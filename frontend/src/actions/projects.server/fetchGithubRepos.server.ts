@@ -5,7 +5,6 @@ import { auth } from "@/auth";
 const fetchGithubRepos = async () => {
   const session = await auth();
   const owner = session?.user?.githubUsername;
-  console.log("owner", owner);
 
   try {
     const response = await fetch(
@@ -20,8 +19,6 @@ const fetchGithubRepos = async () => {
     }
     const data = await response.json();
 
-    console.log("data", data);
-    console.log("Github repo:", data);
     return data;
   } catch (error) {
     console.error("Error fetching Github repos:", error);

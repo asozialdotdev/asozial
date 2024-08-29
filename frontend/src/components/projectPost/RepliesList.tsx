@@ -1,6 +1,5 @@
 //Types
-import type { ProjectPostId, Reply, ReplyId } from "@/types/ProjectPost";
-import ReplyShow from "./ReplyShow";
+import type { ProjectPostId } from "@/types/ProjectPost";
 import { fetchPostByIdAndReplies } from "@/actions";
 import TopLevelReplies from "./TopLevelReplies";
 
