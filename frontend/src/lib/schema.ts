@@ -84,6 +84,14 @@ const createMessageSchema = z.object({
     .max(1000, "Maximum of 1000 characters, bitte 🙏"),
 });
 
+const updateUserInfoSchema = z.object({
+  website: z.string().optional(),
+  company: z.string().optional(),
+  location: z.string().optional(),
+  email: z.string().email("Invalid email format").optional(),
+  bio: z.string().optional(),
+});
+
 export {
   createProjectSchema,
   createPostSchema,
@@ -93,4 +101,5 @@ export {
   syncGithubRepoSchema,
   descriptionSchema,
   createMessageSchema,
+  updateUserInfoSchema,
 };

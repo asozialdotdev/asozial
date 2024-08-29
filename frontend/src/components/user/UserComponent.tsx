@@ -36,10 +36,12 @@ import { notFound } from "next/navigation";
 // import ButtonAddFriend from "../common/ui/buttons/ButtonAddFriend";
 // import sendFriendship from "@/actions/friendships.server/sendFriendship.server";
 import { auth } from "@/auth";
+import AddFriendForm from "../requests/AddFriendForm";
+import UserInfo from "./UserInfo";
 
 async function UserComponent({ user }: { user: User }) {
   const session = await auth();
-  const userId = session?.user?.id;
+  const actualUserId = session?.user?.id;
 
   let formattedDate = "Unknown";
   if (user?.github?.createdAt) {
@@ -50,8 +52,9 @@ async function UserComponent({ user }: { user: User }) {
     });
   }
   return (
-    <section className="flex flex-col gap-8 text-lg font-light">
-      <div className="flex items-center justify-evenly gap-4">
+    <section className="flex flex-col gap-8 text-lg font-light w-full">
+      <div className="flex items-center justify-center gap-4 w-full">
+        {/* Avatar */}
         {user && user.info.image && user.info.image ? (
           <Image
             className="rounded-full border-4 border-dark p-1 dark:border-light"
@@ -65,47 +68,51 @@ async function UserComponent({ user }: { user: User }) {
           <div className="h-24 w-24 rounded-full bg-gray-200 dark:bg-gray-800"></div>
         )}
 
-        <div className="flex flex-col justify-evenly gap-2">
+        <div className="flex flex-col justify-evenly gap-4">
+          {/* Username */}
           <h3 className="text-2xl font-semibold">{user.username}</h3>
           <p className="text-xs">Github user since {formattedDate}</p>
           <div className="flex flex-row justify-start gap-6 text-xs">
+            {/* Followers, Subscriptions, Organizations, Public Repos, Public Gists */}
             <TooltipProvider>
               <Tooltip>
                 <TooltipTrigger>
                   <p className="flex flex-row items-center gap-2">
-                    <Users size={12} /> {user.github.followersNumber}
+                    <Users size={15} /> {user.github.followersNumber || 0}
                   </p>
                 </TooltipTrigger>
                 <TooltipContent>
-                  <p>{user.github.followersNumber} followers</p>
+                  <p>{user.github.followersNumber || 0} followers</p>
                 </TooltipContent>
               </Tooltip>
 
               <Tooltip>
                 <TooltipTrigger>
                   <p className="flex flex-row items-center gap-2">
-                    <Star size={12} /> {user.github.subscriptionsNumber}
+                    <Star size={15} /> {user.github.subscriptionsNumber || 0}
                   </p>
                 </TooltipTrigger>
                 <TooltipContent>
-                  <p>{user.github.subscriptionsNumber} starred</p>
-                </TooltipContent>
-              </Tooltip>
-              <Tooltip>
-                <TooltipTrigger>
-                  <p className="flex flex-row items-center gap-2">
-                    <Building size={12} /> {user.github.organizationsNumber}
-                  </p>
-                </TooltipTrigger>
-                <TooltipContent>
-                  <p>{user.github.organizationsNumber} organizations</p>
+                  <p>{user.github.subscriptionsNumber || 0} starred</p>
                 </TooltipContent>
               </Tooltip>
 
               <Tooltip>
                 <TooltipTrigger>
                   <p className="flex flex-row items-center gap-2">
-                    <FolderGit size={12} /> {user.github.publicReposNumber}
+                    <Building size={15} />{" "}
+                    {user.github.organizationsNumber || 0}
+                  </p>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>{user.github.organizationsNumber || 0} organizations</p>
+                </TooltipContent>
+              </Tooltip>
+
+              <Tooltip>
+                <TooltipTrigger>
+                  <p className="flex flex-row items-center gap-2">
+                    <FolderGit size={15} /> {user.github.publicReposNumber || 0}
                   </p>
                 </TooltipTrigger>
                 <TooltipContent>
@@ -115,7 +122,7 @@ async function UserComponent({ user }: { user: User }) {
               <Tooltip>
                 <TooltipTrigger>
                   <p className="flex flex-row items-center gap-2">
-                    <Code size={12} /> {user.github.publicGistsNumber}
+                    <Code size={15} /> {user.github.publicGistsNumber}
                   </p>
                 </TooltipTrigger>
                 <TooltipContent>
@@ -124,6 +131,7 @@ async function UserComponent({ user }: { user: User }) {
               </Tooltip>
             </TooltipProvider>
           </div>
+          {/* Github Button */}
           <div className="flex gap-4">
             <Button variant={"outline"}>
               <a
@@ -135,62 +143,21 @@ async function UserComponent({ user }: { user: User }) {
                 View on <Github size={16} />
               </a>
             </Button>
-            {/* <ButtonAddFriend
-              sendFriendship={sendFriendship}
-              userId={userId}
-              friendId={user._id.toString()}
-            /> */}
+            <div className="self-end">
+              {/* Friend Form  */}
+              {actualUserId && actualUserId !== user._id.toString() && (
+                // user.isFriend && (
+                <AddFriendForm receiverId={user._id.toString()} />
+              )}
+            </div>
           </div>
         </div>
       </div>
-      <div className="flex flex-row justify-between">
-        <div>
-          <div className="flex flex-row items-center gap-8">
-            <Globe size={16} />
-            <a
-              href={"https://" + user.info.website}
-              target="_blank"
-              rel="noreferrer"
-            >
-              {user.info.website}
-            </a>
-          </div>
-          <div className="flex flex-row items-center gap-8">
-            <Mail size={16} />
-            {user.info.email}
-          </div>
-          {/* {user.socials && (
-              <div className="flex flex-row items-center gap-8">
-                <Twitter size={16} />
-                <a
-                  href={`https://twitter.com/${user.socials}`}
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  {user.twitterUsername}
-                </a>
-              </div>
-            )} */}
-        </div>
-        <div>
-          <div className="flex flex-row items-center gap-8">
-            <Building size={16} />
-            {user.info.company}
-          </div>
 
-          <div className="flex flex-row items-center gap-8">
-            <MapPinHouse size={16} />
-            {user.info.location}
-          </div>
-        </div>
-      </div>
-      <div className="text-md flex flex-row items-center gap-8">
-        <p
-          className={`italic before:text-2xl before:font-bold before:content-['"'] after:text-2xl after:font-bold after:content-['"']`}
-        >
-          {user.github.bio}
-        </p>
-      </div>
+        {/* User Info */}
+      <UserInfo user={user} actualUserId={actualUserId} />
+
+      {/* Tech Stack */}
       <div>
         <h3 className="flex flex-wrap gap-4 font-semibold">
           <Layers size={24} />
@@ -233,6 +200,7 @@ async function UserComponent({ user }: { user: User }) {
           </TableBody>
         </Table>
       </div>
+      {/* Friends */}
       <div>
         <h3 className="flex flex-wrap gap-4 font-semibold">
           <CircleUserRound size={24} />
@@ -240,6 +208,7 @@ async function UserComponent({ user }: { user: User }) {
         </h3>
         <div></div>
       </div>
+      {/* Projects */}
       <div>
         <h3 className="flex flex-wrap gap-4 font-semibold">
           <FolderGit size={24} />
@@ -253,9 +222,9 @@ async function UserComponent({ user }: { user: User }) {
               : 0}
           </p>
           <p>
-            Projects suggested:{" "}
-            {user.projects.projectsSuggested
-              ? user.projects.projectsSuggested.length
+            Projects Invited:{" "}
+            {user.projects.projectsInvited
+              ? user.projects.projectsInvited.length
               : 0}
           </p>
           <p>

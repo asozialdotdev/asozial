@@ -76,7 +76,7 @@ function UserCard({ user, actualUserId }: UserCardProps) {
             {/* Friend Form  */}
             {actualUserId &&
               actualUserId !== user._id.toString() &&
-              user.isFriend && (
+              !user.isFriend && (
                 <AddFriendForm receiverId={user._id.toString()} />
               )}
           </div>
