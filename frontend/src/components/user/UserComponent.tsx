@@ -73,11 +73,11 @@ function UserComponent({ user }: { user: User }) {
               <Tooltip>
                 <TooltipTrigger>
                   <p className="flex flex-row items-center gap-2">
-                    <Users size={12} /> {user.github.followerNumber}
+                    <Users size={12} /> {user.github.followersNumber}
                   </p>
                 </TooltipTrigger>
                 <TooltipContent>
-                  <p>{user.github.followerNumber} followers</p>
+                  <p>{user.github.followersNumber} followers</p>
                 </TooltipContent>
               </Tooltip>
 

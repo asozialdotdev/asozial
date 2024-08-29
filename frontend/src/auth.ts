@@ -35,6 +35,7 @@ export const {
   ],
   callbacks: {
     async signIn({ user, profile, account }) {
+
       const db = client.db();
 
       const existingUser = await db
@@ -47,10 +48,12 @@ export const {
             profile?.repos_url as string,
             account?.access_token as string,
           );
+
           const githubRepoLanguages = await getUserGithubRepoLanguages(
             githubRepos,
             account?.access_token as string,
           );
+
           const newUser = {
             username: profile?.login || "",
             info: {
@@ -121,7 +124,21 @@ export const {
         const updatedUser = {
           _id: existingUser._id,
           skills: {
+            ...existingUser.skills,
             codingLanguages: githubRepoLanguages,
+          },
+          github: {
+            ...existingUser.github,
+            bio: profile?.bio,
+            apiUrl: profile?.url,
+            followersNumber: profile?.followers,
+            followingNumber: profile?.following,
+            publicReposNumber: profile?.public_repos,
+            publicGistsNumber: profile?.public_gists,
+            privateGistsNumber: profile?.private_gists,
+            collaboratorsNumber: profile?.collaborators,
+            createdAt: profile?.created_at,
+            updatedAt: profile?.updated_at,
           },
           lastLogin: Date.now(),
         };
