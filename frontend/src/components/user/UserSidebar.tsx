@@ -11,7 +11,7 @@ import SidebarFriendsList from "../common/sidebar/SidebarFriendsList";
 import SidebarButtons from "../common/sidebar/SidebarButtons";
 import { SearchIcon } from "lucide-react";
 import MatchIcon from "../common/ui/icons/MatchIcon";
-import FriendStatusCard from "../dashboard/FriendStatusCard";
+import FriendStatusCard from "../friendship/FriendStatusTab";
 import SidebarRequests from "../common/sidebar/SidebarRequests";
 
 function UserSidebar() {

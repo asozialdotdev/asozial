@@ -189,7 +189,6 @@ friendshipsRouter.get(
   }
 );
 
-
 // GET all declined friendships
 
 friendshipsRouter.get(
@@ -283,6 +282,56 @@ friendshipsRouter.get(
     } catch (error: any) {
       console.error("Error fetching user friendships:", error);
       res.status(500).send("Error fetching user friendships");
+    }
+  }
+);
+
+friendshipsRouter.get(
+  "/:userId/isFriend/:friendId",
+  async (req: Request, res: Response, next: NextFunction) => {
+    const { userId, friendId } = req.params;
+
+    try {
+      const user = await User.findById(userId);
+      const friend = await User.findById(friendId);
+      if (!user || !friend) {
+        return res.status(404).json({ message: "User not found" });
+      }
+
+      const friendship = await Friendship.findOne({
+        $or: [
+          {
+            senderId: new ObjectId(userId),
+            receiverId: new ObjectId(friendId),
+          },
+          {
+            senderId: new ObjectId(friendId),
+            receiverId: new ObjectId(userId),
+          },
+        ],
+      }).populate({
+        path: "senderId receiverId",
+        select: "username info.image",
+        model: User,
+      });
+
+      if (!friendship) {
+        return res.json({ isFriend: false, status: "none" });
+      }
+
+      let status = "none";
+      if (friendship.status === "accepted") {
+        status = "friend";
+      } else if (friendship.status === "pending") {
+        status = "pending";
+      } else if (friendship.status === "declined") {
+        status = "rejected";
+      }
+
+      res.json({ isFriend: status === "friend", status });
+    } catch (error: any) {
+      console.error("Error checking friendship status:", error);
+      res.status(500).send("Error checking friendship status");
     }
   }
 );
