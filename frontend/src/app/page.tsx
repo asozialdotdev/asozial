@@ -1,25 +1,12 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
-import { useSprings, animated } from "@react-spring/web";
+import React from "react";
 import { Button } from "@/components/ui/button";
-import PageContainer from "@/components/common/containers/PageContainer";
-import { auth } from "@/auth";
 import { signIn } from "@/actions";
-import bearlogo from "/public/bearlogo.jpg";
-import bearlogoBlurred from "/public/bearLogoBlurred.jpg";
 import bearlogoDark from "/public/bearlogoDark.jpg";
 import bearlogoBlurredDark from "/public/bearLogoBlurredDark.jpg";
 import Image from "next/image";
 import { FaGithub } from "react-icons/fa";
-import ToggleTheme from "@/components/common/ui/buttons/ToggleTheme";
-
-// if (
-//   window.matchMedia &&
-//   window.matchMedia("(prefers-color-scheme: dark)").matches
-// ) {
-//   //
-// }
 
 const heroText = (text: string, strong: string) => {
   return (
