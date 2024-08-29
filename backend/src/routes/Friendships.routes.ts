@@ -254,7 +254,7 @@ friendshipsRouter.get(
           { friends: { $in: [new ObjectId(userId)] } },
         ],
       }).populate({
-        path: "senderId receiverId",
+        path: "friends",
         select: "username info.image",
         model: User,
       });
@@ -268,11 +268,6 @@ friendshipsRouter.get(
       const declinedFriendships = userFriendships.filter(
         (friendship) => friendship.status === "declined"
       );
-
-      console.log("userFriendships", userFriendships);
-      console.log("acceptedFriendships", acceptedFriendships);
-      console.log("pendingFriendships", pendingFriendships);
-      console.log("declinedFriendships", declinedFriendships);
 
       res.json({
         accepted: acceptedFriendships,
