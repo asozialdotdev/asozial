@@ -58,11 +58,11 @@ function Navbar() {
               userId={session?.user?.id}
               username={session?.user?.githubUsername || ""}
               src={session?.user?.image || ""}
-              isInNavbar
             />
           )}
-
-          <ToggleTheme />
+          <span className="xs:hidden sm:hidden md:hidden">
+            <ToggleTheme />
+          </span>
 
           <Button
             size="icon"

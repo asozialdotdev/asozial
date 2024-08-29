@@ -78,7 +78,7 @@ function SyncedProjectForm({ project, syncedData }: SyncedProjectFormProps) {
     setValue("description", description);
     setValue("githubRepo", html_url);
     setValue("techStack", language ? [language] : []);
-  }, [syncedData]);
+  }, [html_url, description, language, setValue]);
 
   const handleCheckedChange = (
     checked: boolean | string,
