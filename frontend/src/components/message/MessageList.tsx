@@ -33,7 +33,7 @@ function MessageList({
                 src={message?.senderId?.info?.image}
                 username={message?.senderId?.username}
               />
-              <p>{message.content}</p>
+              <p>{message?.content}</p>
             </PageCard>
           );
         })}
