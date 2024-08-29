@@ -13,6 +13,7 @@ async function MessagePage() {
           return (
             <Link
               href={`/messages/${friendship._id}`}
+              key={friendship._id}
               className="flex flex-col gap-10"
             >
               {friendship.friends[0]}
