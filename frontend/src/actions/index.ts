@@ -4,4 +4,3 @@ export * from "./users.server";
 export * from "./auth.server";
 export * from "./file-upload.server"
 export * from "./friendships.server";
-export * from "./users.server"

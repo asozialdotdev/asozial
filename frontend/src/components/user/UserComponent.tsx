@@ -71,7 +71,7 @@ async function UserComponent({ user }: { user: User }) {
         <div className="flex flex-col justify-evenly gap-4">
           {/* Username */}
           <h3 className="text-2xl font-semibold">{user.username}</h3>
-          <p className="text-xs">Github user since {formattedDate}</p>
+          <p className="text-sm">Github user since {formattedDate}</p>
           <div className="flex flex-row justify-start gap-6 text-xs">
             {/* Followers, Subscriptions, Organizations, Public Repos, Public Gists */}
             <TooltipProvider>

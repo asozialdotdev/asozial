@@ -12,13 +12,15 @@ type UpdateUserInfoState = {
     location?: string[];
     email?: string[];
     bio?: string[];
+    _form?: string[];
   };
+
   success?: boolean;
 };
 
 const updateUserInfo = async (
-  formData: FormData,
   formState: UpdateUserInfoState,
+  formData: FormData,
 ): Promise<UpdateUserInfoState> => {
   const session = await auth();
   const userId = session?.user?.id;
@@ -39,7 +41,7 @@ const updateUserInfo = async (
   }
 
   try {
-    const response = await fetch(`${baseUrl}/api/users/edit`, {
+    const response = await fetch(`${baseUrl}/api/users`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
@@ -64,11 +66,19 @@ const updateUserInfo = async (
     };
   } catch (error) {
     console.error("Error updating user info:", error);
-    return {
-      errors: {
-        email: ["Invalid email format"],
-      },
-    };
+    if (error instanceof Error) {
+      return {
+        errors: {
+          _form: ["Failed to update user info"],
+        },
+      };
+    } else {
+      return {
+        errors: {
+          email: ["Email not valid"],
+        },
+      };
+    }
   }
 };
 

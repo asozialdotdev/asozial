@@ -1,10 +1,13 @@
+"use client";
 import { User } from "@/types/User";
 
 import { Input } from "../ui/input";
 import EditUserButtons from "./EditUserButtons";
 import CustomLabel from "../common/ui/Label";
+import { updateUserInfo } from "@/actions/users.server/updateUserInfo.server";
 import { useFormState } from "react-dom";
-import { updateUserInfo } from "@/actions/users.server";
+import ErrorMessage from "../common/ui/ErrorMessage";
+import { useEffect, useRef } from "react";
 
 type EditUserFormProps = {
   toggleEdit: () => void;
@@ -16,11 +19,23 @@ function EditUserForm({ toggleEdit, user }: EditUserFormProps) {
     errors: {},
   });
 
+  const formRef = useRef<HTMLFormElement>(null);
   const success = formState.success;
   const errors = formState.errors;
+
+  useEffect(() => {
+    if (success) {
+      toggleEdit();
+    }
+  });
+
   return (
     <>
-      <form className="flex h-auto w-full flex-col gap-6">
+      <form
+        action={action}
+        ref={formRef}
+        className="flex h-auto w-full flex-col gap-6"
+      >
         <div className="flex flex-col justify-around gap-4 lg:flex-row">
           <div className="flex flex-col gap-4">
             <div className="flex flex-row items-center gap-8">
@@ -33,6 +48,9 @@ function EditUserForm({ toggleEdit, user }: EditUserFormProps) {
                   placeholder="https://yourwebsite.com"
                   className="w-full max-w-md lg:w-[15rem]"
                 />
+                {errors.website && (
+                  <ErrorMessage>{errors.website.join(", ")}</ErrorMessage>
+                )}
               </div>
             </div>
             <div className="flex w-full flex-col">
@@ -45,6 +63,9 @@ function EditUserForm({ toggleEdit, user }: EditUserFormProps) {
                 placeholder="you@areawesome.com"
                 className="w-full max-w-md lg:w-[15rem]"
               />
+              {errors.email && (
+                <ErrorMessage>{errors.email.join(", ")}</ErrorMessage>
+              )}
             </div>
           </div>
 
@@ -59,6 +80,9 @@ function EditUserForm({ toggleEdit, user }: EditUserFormProps) {
                 placeholder="Where do you work?"
                 className="w-full max-w-md lg:w-[15rem]"
               />
+              {errors.company && (
+                <ErrorMessage>{errors.company.join(", ")}</ErrorMessage>
+              )}
             </div>
 
             <div className="flex w-full flex-col">
@@ -71,6 +95,9 @@ function EditUserForm({ toggleEdit, user }: EditUserFormProps) {
                 placeholder="Location"
                 className="w-full max-w-md lg:w-[15rem]"
               />
+              {errors.location && (
+                <ErrorMessage>{errors.location.join(", ")}</ErrorMessage>
+              )}
             </div>
           </div>
         </div>
@@ -91,6 +118,10 @@ function EditUserForm({ toggleEdit, user }: EditUserFormProps) {
               placeholder="Bio"
               className="w-full max-w-md"
             />
+            {errors.bio && <ErrorMessage>{errors.bio.join(", ")}</ErrorMessage>}
+            {errors._form && (
+              <ErrorMessage>{errors._form.join(", ")}</ErrorMessage>
+            )}
           </div>
         </div>
         <EditUserButtons toggleEdit={toggleEdit} />
