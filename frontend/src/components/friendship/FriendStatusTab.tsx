@@ -10,6 +10,7 @@ import { Friendship } from "@/types/Friendship";
 
 async function FriendStatusTab() {
   const session = await auth();
+  const actualUserId = session?.user.id;
   const { accepted, pending, declined } = await getUserFriendStatuses();
 
   const sentPending =
@@ -34,7 +35,7 @@ async function FriendStatusTab() {
         </TabsList>
         {/*Accept tab*/}
         <TabsContent value="accepted">
-          <FriendshipAcceptedCard accepted={accepted} />
+          <FriendshipAcceptedCard accepted={accepted} actualUserId={actualUserId} />
         </TabsContent>
         {/* Received Tab*/}
         <TabsContent value="received">

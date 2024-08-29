@@ -33,8 +33,8 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { notFound } from "next/navigation";
-import ButtonAddFriend from "../common/ui/buttons/ButtonAddFriend";
-import sendFriendship from "@/actions/friendships.server/sendFriendship.server";
+// import ButtonAddFriend from "../common/ui/buttons/ButtonAddFriend";
+// import sendFriendship from "@/actions/friendships.server/sendFriendship.server";
 import { auth } from "@/auth";
 
 function UserComponent({ user }: { user: User }) {
@@ -135,11 +135,11 @@ function UserComponent({ user }: { user: User }) {
                 View on <Github size={16} />
               </a>
             </Button>
-            <ButtonAddFriend
+            {/* <ButtonAddFriend
               sendFriendship={sendFriendship}
               userId={userId}
               friendId={user._id.toString()}
-            />
+            /> */}
           </div>
         </div>
       </div>

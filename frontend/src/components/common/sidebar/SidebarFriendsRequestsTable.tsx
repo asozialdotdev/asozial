@@ -3,8 +3,12 @@ import SidebarCardSkeleton from "./SidebarCardSkeleton";
 import ErrorMessage from "../ui/ErrorMessage";
 import { Friendship } from "@/types/Friendship";
 import SidebarFriendsRequestsCard from "./SidebarFriendsRequestsCard";
+import { useSession } from "next-auth/react";
 
 function SidebarFriendsRequestsTable() {
+  const session = useSession();
+  const actualUserId = session?.data?.user?.id;
+
   const { friendsRequests, friendsError, friendsLoading } = useRequests();
   const { pending } = friendsRequests;
 
@@ -32,10 +36,12 @@ function SidebarFriendsRequestsTable() {
 
   const renderRequests = (friendship: Friendship) => {
     return (
-      <SidebarFriendsRequestsCard
-        key={friendship._id.toString()}
-        friendship={friendship}
-      />
+      friendship?.senderId?._id?.toString() !== actualUserId && (
+        <SidebarFriendsRequestsCard
+          key={friendship._id.toString()}
+          friendship={friendship}
+        />
+      )
     );
   };
   return (
