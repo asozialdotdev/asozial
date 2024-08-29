@@ -208,22 +208,7 @@ const getUserGithubRepoLanguages = async (
     },
   );
 
-  const languagesObject = sortedUserTechStackWithColors.reduce(
-    (acc, data) => {
-      acc[data.language] = {
-        language: data.language,
-        lines: data.lines,
-        projects: data.projects,
-        bgColor: data.bgColor,
-        textColor: data.textColor,
-        Icon: data.Icon,
-      };
-      return acc;
-    },
-    {} as { [key: string]: LanguageData },
-  );
-
-  return { languages: languagesObject };
+  return sortedUserTechStackWithColors;
 };
 
 export {

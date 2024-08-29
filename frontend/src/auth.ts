@@ -6,11 +6,11 @@ import authConfig from "../auth.config";
 import { baseUrl } from "@/constants";
 import axios from "axios";
 import {
-  getUserGithubFollowers,
-  getUserGithubFollowing,
-  getUserGithubSubscriptions,
-  getUserGithubPublicGists,
-  getUserGithubOrganizations,
+  // getUserGithubFollowers,
+  // getUserGithubFollowing,
+  // getUserGithubSubscriptions,
+  // getUserGithubPublicGists,
+  // getUserGithubOrganizations,
   getUserGithubRepos,
   getUserGithubRepoLanguages,
 } from "@/actions/users.server";
@@ -76,10 +76,12 @@ export const {
             profile?.repos_url as string,
             account?.access_token as string,
           );
+          console.log("githubRepos", githubRepos);
           const githubRepoLanguages = await getUserGithubRepoLanguages(
             githubRepos,
             account?.access_token as string,
           );
+          console.log("githubRepoLanguages", githubRepoLanguages);
           const newUser = {
             username: profile?.login || "",
             info: {
