@@ -1,22 +1,21 @@
 import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 import { FolderGit } from "lucide-react";
 function GithubReposIcon() {
   return (
-    <TooltipProvider>
-      <Tooltip>
-        <TooltipTrigger>
-          <span>
-            <FolderGit size={23} className="cursor-help" />
-          </span>
-        </TooltipTrigger>
-        <TooltipContent>Location</TooltipContent>
-      </Tooltip>
-    </TooltipProvider>
+    <Popover>
+      <PopoverTrigger asChild>
+        <button>
+          <FolderGit size={23} />
+        </button>
+      </PopoverTrigger>
+      <PopoverContent side="top" className="w-30 p-3">
+        Github Repos
+      </PopoverContent>
+    </Popover>
   );
 }
 

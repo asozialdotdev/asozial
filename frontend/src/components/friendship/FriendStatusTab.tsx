@@ -16,20 +16,20 @@ async function FriendStatusTab() {
   const sentPending =
     pending &&
     pending.filter((friendship: Friendship) => {
-      return friendship.senderId?._id === session?.user.id;
+      return friendship.senderId?._id === actualUserId;
     });
   const receivedPending =
     pending &&
     pending.filter((friendship: Friendship) => {
-      return friendship.receiverId?._id === session?.user.id;
+      return friendship.receiverId?._id === actualUserId;
     });
 
   const receivedAccepted = accepted.filter((friendship: Friendship) => {
-    return friendship.receiverId?._id === session?.user.id;
+    return friendship.receiverId?._id === actualUserId;
   });
 
   const sentAccepted = accepted.filter((friendship: Friendship) => {
-    return friendship.senderId?._id === session?.user.id;
+    return friendship.senderId?._id === actualUserId;
   });
 
   return (
