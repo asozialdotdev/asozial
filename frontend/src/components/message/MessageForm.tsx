@@ -25,7 +25,7 @@ function MessageInput({ friendshipId }: { friendshipId: FriendshipId }) {
   }, [formState]);
 
   return (
-    <form ref={formRef} action={action} className="mt-2">
+    <form ref={formRef} action={action} className="mt-2w w-full">
       <div className="mt-6 flex w-full flex-col gap-2">
         <CustomLabel required htmlFor="content">
           Message
