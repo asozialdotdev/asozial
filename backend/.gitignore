@@ -4,3 +4,6 @@ node_modules
 
 # mac
 .DS_Store
+
+# deployment
+dist
