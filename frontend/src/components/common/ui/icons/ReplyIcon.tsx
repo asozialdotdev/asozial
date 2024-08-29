@@ -7,7 +7,7 @@ import {
 
 import { MessageSquareReply } from "lucide-react";
 
-function ReplyIcon({ toggleOpen }: { toggleOpen: () => void }) {
+function ReplyIcon({ toggleOpen }: { toggleOpen?: () => void }) {
   return (
     <TooltipProvider>
       <Tooltip>

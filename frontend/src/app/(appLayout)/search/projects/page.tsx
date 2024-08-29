@@ -41,7 +41,6 @@ async function ProjectsPage({ searchParams }: ProjectsPageProps) {
         memberProjects={memberProjects.projects}
         memberTotalPages={memberProjects.totalPages}
         currentPage={currentPage}
-        query={query}
       />
     </PageContainer>
   );
