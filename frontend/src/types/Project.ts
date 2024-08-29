@@ -42,6 +42,7 @@ type Project = {
   placeholder?: string;
   slug: string;
   mainLanguage: string;
+  topics: string[];
   members?: {
     membersDeclined: Member[];
     membersJoined: Member[];
