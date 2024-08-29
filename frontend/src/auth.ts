@@ -51,12 +51,12 @@ export const {
             profile?.repos_url as string,
             account?.access_token as string,
           );
-          console.log("githubRepos", githubRepos);
+
           const githubRepoLanguages = await getUserGithubRepoLanguages(
             githubRepos,
             account?.access_token as string,
           );
-          console.log("githubRepoLanguages", githubRepoLanguages);
+
           const newUser = {
             username: profile?.login || "",
             info: {
@@ -129,30 +129,21 @@ export const {
         const updatedUser = {
           _id: existingUser._id,
           skills: {
+            ...existingUser.skills,
             codingLanguages: githubRepoLanguages,
           },
           github: {
-            id: profile?.id,
-            nodeId: profile?.node_id,
-            login: profile?.login,
-            accessToken: account?.access_token,
+            ...existingUser.github,
             bio: profile?.bio,
             apiUrl: profile?.url,
-            followersUrl: profile?.followers_url,
             followersNumber: profile?.followers,
-            followingUrl: profile?.following_url,
             followingNumber: profile?.following,
-            publicGistsUrl: profile?.gists_url,
+            publicReposNumber: profile?.public_repos,
             publicGistsNumber: profile?.public_gists,
             privateGistsNumber: profile?.private_gists,
-            starredUrl: profile?.starred_url,
-            subscriptionsUrl: profile?.subscriptions_url,
-            organizationsUrl: profile?.organizations_url,
-            reposUrl: profile?.repos_url,
-            publicReposNumber: profile?.public_repos,
+            collaboratorsNumber: profile?.collaborators,
             createdAt: profile?.created_at,
             updatedAt: profile?.updated_at,
-            collaboratorsNumber: profile?.collaborators,
           },
           lastLogin: Date.now(),
         };

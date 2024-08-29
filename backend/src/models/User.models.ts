@@ -98,7 +98,7 @@ const userSchema = new Schema(
       eventsUrl: { type: String },
       followersUrl: { type: String },
       followers: [{ type: Object }],
-      followerNumber: { type: Number },
+      followersNumber: { type: Number },
       followingUrl: { type: String },
       following: [{ type: Object }],
       followingNumber: { type: Number },
