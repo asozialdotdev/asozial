@@ -7,6 +7,7 @@ const projectSchema = new Schema(
     pitch: { type: String },
     githubRepo: { type: String },
     techStack: [{ type: String, default: [] }],
+    topics: [{ type: String }],
     mainLanguage: { type: String },
     image: { type: String },
     placeholder: { type: String },

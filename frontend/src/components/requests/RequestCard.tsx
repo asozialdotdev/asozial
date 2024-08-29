@@ -27,8 +27,6 @@ type RequestCardProps = {
 };
 
 async function RequestCard({ project, member }: RequestCardProps) {
-  console.log("project>>>>>>>>>>", project);
-  console.log("member>>>>>>>>>>", member);
   const session = await auth();
   const username = session?.user?.githubUsername as string;
   const { _id: memberId, info } = member;

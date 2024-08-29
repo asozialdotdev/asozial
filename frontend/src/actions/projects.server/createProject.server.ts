@@ -25,7 +25,6 @@ const createProject = async (data: CreateUpdateProject) => {
     }
 
     project = await response.json();
-    console.log("project", project);
   } catch (error) {
     console.error("Error creating project:", error);
     return { error: true, message: "Failed to create project" };

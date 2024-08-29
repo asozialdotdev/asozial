@@ -24,7 +24,6 @@ const getAllUsers = async (
       throw new Error("Failed to fetch users");
     }
     const users = await response.json();
-    console.log("Searched users:", users);
     return users;
   } catch (error) {
     console.error("Error fetching users:", error);

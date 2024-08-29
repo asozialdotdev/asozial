@@ -6,11 +6,6 @@ import authConfig from "../auth.config";
 import { baseUrl } from "@/constants";
 import axios from "axios";
 import {
-  getUserGithubFollowers,
-  getUserGithubFollowing,
-  getUserGithubSubscriptions,
-  getUserGithubPublicGists,
-  getUserGithubOrganizations,
   getUserGithubRepos,
   getUserGithubRepoLanguages,
 } from "@/actions/users.server";
@@ -40,9 +35,6 @@ export const {
   ],
   callbacks: {
     async signIn({ user, profile, account }) {
-      console.log("Account:", account);
-      console.log("Profile:", profile);
-      console.log("User:", user);
 
       const db = client.db();
 
@@ -52,34 +44,16 @@ export const {
 
       if (!existingUser) {
         try {
-          // const githubFollowers = await getUserGithubFollowers(
-          //   profile?.followers_url as string,
-          //   account?.access_token as string,
-          // );
-          // const githubFollowing = await getUserGithubFollowing(
-          //   profile?.following_url as string,
-          //   account?.access_token as string,
-          // );
-          // const githubSubscriptions = await getUserGithubSubscriptions(
-          //   profile?.subscriptions_url as string,
-          //   account?.access_token as string,
-          // );
-          // const githubPublicGists = await getUserGithubPublicGists(
-          //   profile?.gists_url as string,
-          //   account?.access_token as string,
-          // );
-          // const githubOrganizations = await getUserGithubOrganizations(
-          //   profile?.organizations_url as string,
-          //   account?.access_token as string,
-          // );
           const githubRepos = await getUserGithubRepos(
             profile?.repos_url as string,
             account?.access_token as string,
           );
+
           const githubRepoLanguages = await getUserGithubRepoLanguages(
             githubRepos,
             account?.access_token as string,
           );
+
           const newUser = {
             username: profile?.login || "",
             info: {
@@ -110,24 +84,16 @@ export const {
               bio: profile?.bio,
               apiUrl: profile?.url,
               followersUrl: profile?.followers_url,
-              //followers: githubFollowers,
               followersNumber: profile?.followers,
               followingUrl: profile?.following_url,
-              //following: githubFollowing,
               followingNumber: profile?.following,
               publicGistsUrl: profile?.gists_url,
-              //publicGists: githubPublicGists,
               publicGistsNumber: profile?.public_gists,
               privateGistsNumber: profile?.private_gists,
               starredUrl: profile?.starred_url,
               subscriptionsUrl: profile?.subscriptions_url,
-              //subscriptions: githubSubscriptions,
-              //subscriptionsNumber: githubSubscriptions.length,
               organizationsUrl: profile?.organizations_url,
-              //organizations: githubOrganizations,
-              //organizationsNumber: githubOrganizations.length,
               reposUrl: profile?.repos_url,
-              //publicRepos: githubRepos,
               publicReposNumber: profile?.public_repos,
               createdAt: profile?.created_at,
               updatedAt: profile?.updated_at,
@@ -140,34 +106,12 @@ export const {
               "Content-Type": "application/json",
             },
           });
-          console.log("response", response.data);
 
           user.id = response.data._id;
         } catch (error: any) {
-          console.log("Error creating user in database", error.message);
           return false;
         }
       } else {
-        // const githubFollowers = await getUserGithubFollowers(
-        //   profile?.followers_url as string,
-        //   account?.access_token as string,
-        // );
-        // const githubFollowing = await getUserGithubFollowing(
-        //   profile?.following_url as string,
-        //   account?.access_token as string,
-        // );
-        // const githubSubscriptions = await getUserGithubSubscriptions(
-        //   profile?.subscriptions_url as string,
-        //   account?.access_token as string,
-        // );
-        // const githubPublicGists = await getUserGithubPublicGists(
-        //   profile?.gists_url as string,
-        //   account?.access_token as string,
-        // );
-        // const githubOrganizations = await getUserGithubOrganizations(
-        //   profile?.organizations_url as string,
-        //   account?.access_token as string,
-        // );
         const githubRepos = await getUserGithubRepos(
           profile?.repos_url as string,
           account?.access_token as string,
@@ -180,7 +124,21 @@ export const {
         const updatedUser = {
           _id: existingUser._id,
           skills: {
+            ...existingUser.skills,
             codingLanguages: githubRepoLanguages,
+          },
+          github: {
+            ...existingUser.github,
+            bio: profile?.bio,
+            apiUrl: profile?.url,
+            followersNumber: profile?.followers,
+            followingNumber: profile?.following,
+            publicReposNumber: profile?.public_repos,
+            publicGistsNumber: profile?.public_gists,
+            privateGistsNumber: profile?.private_gists,
+            collaboratorsNumber: profile?.collaborators,
+            createdAt: profile?.created_at,
+            updatedAt: profile?.updated_at,
           },
           lastLogin: Date.now(),
         };
@@ -196,7 +154,6 @@ export const {
             maxBodyLength: 1000000000,
           },
         );
-        console.log("response", response.data);
 
         user.id = existingUser._id.toString();
       }

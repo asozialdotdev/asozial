@@ -19,7 +19,6 @@ const getPendingFriendsRequests = async () => {
       );
     }
     const data = await response.json();
-    console.log("Pending Friends Request", data);
     return data;
   } catch (error) {
     console.error("Error fetching pending friend requests:", error);

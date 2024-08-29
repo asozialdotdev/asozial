@@ -21,7 +21,6 @@ function SyncedProject({ project }: { project: Project }) {
     errors: {},
   });
   const formRef = useRef<HTMLFormElement>(null);
-  console.log(formState.data, "formState");
 
   useEffect(() => {
     if (formState.success) {

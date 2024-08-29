@@ -21,7 +21,6 @@ const createProjectFromGithub = async (repoUrl: string) => {
     });
 
     project = await result.json();
-    console.log("project", project);
     return project;
   } catch (error) {
     console.error("Error creating project", error);

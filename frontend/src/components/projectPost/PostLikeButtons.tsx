@@ -29,7 +29,6 @@ function ProjectPostLikeButtons({ projectPost }: ProjectPostLikeButtonsProps) {
   const [userDisliked, setUserDisliked] = useState(false);
 
   const { theme } = useTheme();
-  console.log("theme", theme);
 
   const userId = useMemo(
     () => projectPost.userId._id.toString(),

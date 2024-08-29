@@ -28,7 +28,6 @@ const deleteProjectPost = async (projectPostId: ProjectPostId) => {
       throw new Error(`Failed to delete post: ${response.statusText}`);
     }
     const { post } = await response.json();
-    console.log("Deleted post:", post);
     return { error: false, message: "Post deleted" };
   } catch (error) {
     console.error("Error deleting post:", error);

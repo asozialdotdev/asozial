@@ -33,9 +33,13 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { notFound } from "next/navigation";
+import ButtonAddFriend from "../common/ui/buttons/ButtonAddFriend";
+import sendFriendship from "@/actions/friendships.server/sendFriendship.server";
+import { auth } from "@/auth";
 
 function UserComponent({ user }: { user: User }) {
-  console.log("user on page", user);
+  const session = auth();
+  const userId = session?.user?.id;
 
   let formattedDate = "Unknown";
   if (user?.github?.createdAt) {
@@ -69,11 +73,11 @@ function UserComponent({ user }: { user: User }) {
               <Tooltip>
                 <TooltipTrigger>
                   <p className="flex flex-row items-center gap-2">
-                    <Users size={12} /> {user.github.followerNumber}
+                    <Users size={12} /> {user.github.followersNumber}
                   </p>
                 </TooltipTrigger>
                 <TooltipContent>
-                  <p>{user.github.followerNumber} followers</p>
+                  <p>{user.github.followersNumber} followers</p>
                 </TooltipContent>
               </Tooltip>
 
@@ -120,16 +124,23 @@ function UserComponent({ user }: { user: User }) {
               </Tooltip>
             </TooltipProvider>
           </div>
-          <Button variant={"outline"}>
-            <a
-              href={user.github.url}
-              target="_blank"
-              rel="noreferrer"
-              className="flex flex-row items-center gap-2"
-            >
-              View on <Github size={16} />
-            </a>
-          </Button>
+          <div className="flex gap-4">
+            <Button variant={"outline"}>
+              <a
+                href={user.github.url}
+                target="_blank"
+                rel="noreferrer"
+                className="flex flex-row items-center gap-2"
+              >
+                View on <Github size={16} />
+              </a>
+            </Button>
+            <ButtonAddFriend
+              sendFriendship={sendFriendship}
+              userId={userId}
+              friendId={user._id.toString()}
+            />
+          </div>
         </div>
       </div>
       <div className="flex flex-row justify-between">

@@ -99,7 +99,6 @@ function ExistingProjectForm() {
     setIsLoadingCreating(true);
     setErrorCreating("");
     const { isUnique } = await checkProjectTitle(selectedRepo?.name as string);
-    console.log("isUnique", isUnique);
     if (!isUnique) {
       setErrorCreating(
         "A project with this name already exists for your account.",
@@ -116,8 +115,6 @@ function ExistingProjectForm() {
     }
     setIsLoadingCreating(false);
   };
-
-  console.log("errorRepos", errorRepos);
 
   if (isLoadingRepos) {
     return (
@@ -140,11 +137,11 @@ function ExistingProjectForm() {
         placeholder="Start typing the name of your Github repo"
         value={searchTerm}
         onChange={handleInputChange}
-        className="h-14 lg:w-[75%] w-full"
+        className="h-14 w-full lg:w-[75%]"
         ref={inputRef}
       />
 
-      <div ref={dropdownRef} className="relative lg:w-[70%] w-[95%]">
+      <div ref={dropdownRef} className="relative w-[95%] lg:w-[70%]">
         {filteredRepos.length > 0 && (
           <ul className="dark:shadow-netral-700/30 absolute z-10 mt-2 h-auto max-h-60 w-full overflow-y-auto rounded-md border border-dashed border-zinc-300 bg-white p-2 shadow-lg dark:border-zinc-600 dark:bg-zinc-800">
             {filteredRepos.map((repo: GithubRepo) => (

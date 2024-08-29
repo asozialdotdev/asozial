@@ -110,7 +110,6 @@ function NewProjectForm() {
       image,
       placeholder,
     };
-    console.log("finalData", finalData);
     const result = await createProject(finalData);
     if (result?.error) {
       console.error("Error creating project");

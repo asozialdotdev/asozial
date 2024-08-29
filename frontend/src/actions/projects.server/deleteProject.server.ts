@@ -1,4 +1,4 @@
-'use server'
+"use server";
 import { auth } from "@/auth";
 import { ProjectId } from "@/types/Project";
 import { fetchProjectById } from "./fetchProjectById.server";
@@ -23,7 +23,6 @@ const deleteProject = async (projectId: ProjectId) => {
     });
 
     const deleteProject = await response.json();
-    console.log("Deleted deleteProject:", deleteProject);
     return { error: false, message: "Project deleted" };
   } catch (error) {
     console.error("Error deleting project:", error);

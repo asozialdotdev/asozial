@@ -139,8 +139,6 @@ function SyncedProjectForm({ project, syncedData }: SyncedProjectFormProps) {
   };
 
   const image = watch("image");
-  console.log("image", image);
-  console.log("uploadedImage", uploadedImage);
 
   const handleDeleteProject = async () => {
     setIsDeleting(true);

@@ -16,7 +16,6 @@ const syncGithubRepo = async (
   formState: SyncFormState,
   formData: FormData,
 ): Promise<SyncFormState> => {
-  console.log("SYNC IS CALLED>>>>>>", formData);
   const session = await auth();
   const owner = session?.user?.githubUsername;
 
@@ -36,8 +35,6 @@ const syncGithubRepo = async (
       `https://api.github.com/repos/${owner}/${result.data.repo}`,
     );
 
-    console.log("RESPONSE>>>>>", response);
-
     if (!response.ok) {
       if (response.status === 404) {
         return {
@@ -49,8 +46,6 @@ const syncGithubRepo = async (
       throw new Error("Error syncing Github repo");
     }
     const data = await response.json();
-
-    console.log("Synced Repo>>>>>>>", data);
 
     return {
       errors: {},

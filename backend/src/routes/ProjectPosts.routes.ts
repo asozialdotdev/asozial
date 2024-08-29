@@ -10,7 +10,6 @@ const projectPostRouter = express.Router();
 projectPostRouter.get(
   "/",
   async (req: Request, res: Response, next: NextFunction) => {
-    console.log("get all projectPosts called");
     try {
       const { projectId } = req.query;
       if (!projectId) {
@@ -27,7 +26,6 @@ projectPostRouter.get(
           select: "slug",
         })
         .populate("replyCount");
-      console.log("Projects with reply counts >>>>><<<<>>>><<<<", projectPosts);
       res.status(200).json(projectPosts);
     } catch (error) {
       next(error);
@@ -40,11 +38,9 @@ projectPostRouter.get(
 projectPostRouter.post(
   "/",
   async (req: Request, res: Response, next: NextFunction) => {
-    console.log("POST /api/posts called");
     try {
       const { title, content, image, placeholder, projectId, userId } =
         req.body;
-      console.log("projectIDDDDDD", projectId);
 
       if (!title || !content || !projectId || !userId) {
         return res.status(400).json({
@@ -55,7 +51,6 @@ projectPostRouter.post(
       // Ensure the project exists
       const project = await Project.findById(projectId);
       if (!project) {
-        console.log("error is here");
         return res.status(404).json({ message: "Project not found" });
       }
 
@@ -84,7 +79,6 @@ projectPostRouter.post(
 projectPostRouter.get(
   "/:projectPostId",
   async (req: Request, res: Response, next: NextFunction) => {
-    console.log("GET /api/posts/:postId called");
     try {
       const post = await ProjectPost.findById(req.params.projectPostId)
         .populate({

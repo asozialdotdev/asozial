@@ -29,7 +29,6 @@ type UserCardProps = {
 };
 
 function UserCard({ user, actualUserId }: UserCardProps) {
-  console.log("UserCARD>>>>", user.skills.codingLanguages);
   return (
     <li className="relative flex w-full flex-col gap-4 rounded-lg border-2 border-dashed border-zinc-300 bg-inherit bg-zinc-100 px-8 py-8 hover:bg-zinc-200/10 dark:border-zinc-600 dark:bg-inherit dark:bg-zinc-800 dark:shadow-neutral-700/30 dark:hover:bg-zinc-700/10">
       <div className="flex flex-col gap-4">

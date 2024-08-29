@@ -16,11 +16,13 @@ const checkMembersApplied = async () => {
       throw new Error("Failed to fetch members applied");
     }
     const projects = await res.json();
-    console.log("appliedProjects", projects);
     return { error: false, message: "Sucess", projects };
   } catch (error) {
     console.error("Failed to fetch members applied", error);
-    return { error: true, message: "Failed to get requests. Please try again." };
+    return {
+      error: true,
+      message: "Failed to get requests. Please try again.",
+    };
   }
 };
 
