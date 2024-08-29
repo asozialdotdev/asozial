@@ -64,15 +64,6 @@ function ProjectCard({ project }: ProjectCardProps) {
                   userId={member._id.toString()}
                 />
               ))}
-
-            {/* {array.map((i) => (
-              <UserAvatar
-                key={i}
-                src="https://avatars.dicebear.com/api/avataaars/username.svg"
-                username="username"
-                userId="123"
-              />
-            ))} */}
           </CardContent>
         </div>
 

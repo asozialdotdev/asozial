@@ -6,7 +6,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Inputs, Project } from "@/types/Project";
+import { Inputs } from "@/types/Project";
 import { Control, Controller, Field } from "react-hook-form";
 import { projectStatus } from "@/constants";
 

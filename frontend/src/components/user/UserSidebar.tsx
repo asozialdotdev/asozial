@@ -1,17 +1,12 @@
 "use client";
 
 import { useSidebarsContext } from "@/context/SidebarsContext";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useSession } from "next-auth/react";
-import { Button } from "../ui/button";
-import { signOut } from "@/actions";
 import ButtonBack from "../common/ui/buttons/ButtonBack";
 import SidebarTitle from "../common/sidebar/SidebarTitle";
-import SidebarFriendsList from "../common/sidebar/SidebarFriendsList";
 import SidebarButtons from "../common/sidebar/SidebarButtons";
 import { SearchIcon } from "lucide-react";
 import MatchIcon from "../common/ui/icons/MatchIcon";
-import FriendStatusCard from "../friendship/FriendStatusTab";
 import SidebarRequests from "../common/sidebar/SidebarRequests";
 
 function UserSidebar() {

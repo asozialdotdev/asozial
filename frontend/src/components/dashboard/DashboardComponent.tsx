@@ -1,13 +1,10 @@
 import DashboardHeader from "./DashboardHeader";
 import FriendStatusCard from "../friendship/FriendStatusTab";
 import { auth } from "@/auth";
-import { checkMembersApplied } from "@/actions/projects.server";
-// import RequestsTable from "./RequestsTable";
 
 async function DashboardComponent() {
   const session = await auth();
   const username = session?.user?.githubUsername;
-  // const { projects } = await checkMembersApplied();
   return (
     <section className="flex w-full flex-col">
       <DashboardHeader />

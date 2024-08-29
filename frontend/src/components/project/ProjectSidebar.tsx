@@ -10,8 +10,6 @@ import SearchIcon from "../common/ui/icons/SearchIcon";
 import MatchIcon from "../common/ui/icons/MatchIcon";
 import ProjectCreateIcon from "../common/ui/icons/ProjectCreateIcon";
 import SidebarButtons from "../common/sidebar/SidebarButtons";
-import SidebarFriendsList from "../common/sidebar/SidebarFriendsList";
-import SidebarProjectRequests from "../common/sidebar/SidebarRequests";
 import SidebarRequests from "../common/sidebar/SidebarRequests";
 
 function ProjectSidebar() {

@@ -10,7 +10,6 @@ const fetchAllMembersFromAProject = async (projectId: ProjectId) => {
       `${baseUrl}/api/projects/${projectId}/members`,
 
       { cache: "no-store" },
-      // { next: { revalidate: 3 } },
     );
     if (!response.ok) {
       throw new Error(`Failed to fetch project: ${response.statusText}`);

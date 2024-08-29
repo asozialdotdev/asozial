@@ -1,7 +1,6 @@
 "use server";
 import { auth } from "@/auth";
 import { baseUrl } from "@/constants";
-import { checkProjectTitle } from "./checkProjectTitle.server";
 
 // POST create a project from Github
 const createProjectFromGithub = async (repoUrl: string) => {

@@ -3,8 +3,6 @@
 import { auth } from "@/auth";
 import { baseUrl } from "@/constants";
 import { ProjectPostId } from "@/types/ProjectPost";
-import { revalidatePath } from "next/cache";
-import { redirect } from "next/dist/server/api-utils";
 
 //DELETE a project post
 

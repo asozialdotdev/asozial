@@ -1,13 +1,11 @@
 "use client";
 
-import { Button } from "../ui/button";
 import { createMessage } from "@/actions/message.server/createMessage.server";
 import { useFormState } from "react-dom";
 import { useEffect, useRef, useState } from "react";
 import ErrorMessage from "../common/ui/ErrorMessage";
 import CustomLabel from "../common/ui/Label";
 import MessageFormButton from "./MessageFormButton";
-import { Input } from "../ui/input";
 import { Textarea } from "../ui/textarea";
 import type { FriendshipId } from "@/types/Friendship";
 

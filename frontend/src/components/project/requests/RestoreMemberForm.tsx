@@ -5,7 +5,6 @@ import { restoreMember } from "@/actions";
 import ErrorMessage from "../../common/ui/ErrorMessage";
 import CustomLabel from "../../common/ui/Label";
 import { ProjectId } from "@/types/Project";
-import RemoveButton from "./RemoveButton";
 import { UserId } from "@/types/User";
 import RestoreButton from "./RestoreButton";
 

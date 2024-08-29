@@ -3,13 +3,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Suspense, useState } from "react";
 import ProjectCardLoadingSkeleton from "./ProjectCardsLoadingSkeleton";
 import UserAvatar from "../common/ui/image/UserAvatar";
-import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "../ui/card";
+import { Card, CardFooter, CardHeader, CardTitle } from "../ui/card";
 import { Button } from "../ui/button";
 import { Member, ProjectId } from "@/types/Project";
 import RemoveMemberForm from "./requests/RemoveMemberForm";

@@ -1,9 +1,5 @@
 "use client";
-import {
-  checkMembersApplied,
-  getPendingFriendsRequests,
-  getUserFriendStatuses,
-} from "@/actions";
+import { checkMembersApplied, getUserFriendStatuses } from "@/actions";
 
 import { Project } from "@/types/Project";
 import { createContext, useContext, useEffect, useState } from "react";

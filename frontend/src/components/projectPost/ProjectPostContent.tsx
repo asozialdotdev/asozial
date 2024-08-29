@@ -34,7 +34,7 @@ function ProjectPostContent({
   const post = projectPost;
 
   const { userId, title, content, createdAt, updatedAt } = projectPost;
-  const username = userId.username;
+  const username = userId.info.username;
 
   const formattedCreatedAt = formattedData(createdAt);
   const formattedUpdatedAt = formattedData(updatedAt);

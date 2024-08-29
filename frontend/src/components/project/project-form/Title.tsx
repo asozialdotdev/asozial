@@ -12,7 +12,7 @@ import { Inputs } from "@/types/Project";
 import { SquareCheck } from "lucide-react";
 
 //Lib
-import { Control, FieldErrors, UseFormSetValue } from "react-hook-form";
+import { FieldErrors, UseFormSetValue } from "react-hook-form";
 import SuccessMessage from "@/components/common/ui/SuccessMessage";
 import LoadingTextButton from "@/components/common/ui/loading/LoadingTextButton";
 

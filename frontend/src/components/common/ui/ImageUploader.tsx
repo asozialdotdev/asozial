@@ -1,12 +1,10 @@
 "use client";
 
 import { useRef, useState } from "react";
-import Image from "next/image";
 import { uploadFile } from "@/actions";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
-import LoadingSpinner from "./loading/LoadingSpinner";
 import { SquareCheckBig, Upload } from "lucide-react";
 import LoadingTextButton from "./loading/LoadingTextButton";
 import ErrorMessage from "./ErrorMessage";

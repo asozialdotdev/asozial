@@ -19,7 +19,6 @@ import {
   useRef,
   useState,
 } from "react";
-import { GoComment } from "react-icons/go";
 
 //Types
 import type { ProjectPostId, Reply, ReplyId } from "@/types/ProjectPost";

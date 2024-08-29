@@ -6,7 +6,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import useSpokenLanguages from "@/hooks/useSpokenLanguages";
 import { Control, Controller, FieldErrors } from "react-hook-form";
 import { Inputs } from "@/types/Project";
 import CustomLabel from "@/components/common/ui/Label";

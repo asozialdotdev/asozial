@@ -3,7 +3,6 @@ import slack from "/public/socials/slack.png";
 import notion from "/public/socials/notion.png";
 import gitlab from "/public/socials/gitlab.png";
 import { Project, SocialsData } from "@/types/Project";
-import React from "react";
 import {
   FaLaravel,
   FaPython,
