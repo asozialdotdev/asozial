@@ -1,6 +1,5 @@
 import { languagesWithColors } from "@/constants";
 import { cn } from "@/lib/utils";
-import clsx from "clsx";
 import { formatDistance } from "date-fns";
 
 const techStackClass = (language: string) => {

@@ -2,7 +2,6 @@ import { fetchAllMembersFromAProject } from "@/actions";
 import PageContainer from "@/components/common/containers/PageContainer";
 import PageTitle from "@/components/common/sidebar/SidebarTitle";
 import MembersTabs from "@/components/project/MembersTabs";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ProjectId } from "@/types/Project";
 
 async function MembersPage({ params }: { params: { projectId: ProjectId } }) {

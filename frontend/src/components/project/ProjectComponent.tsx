@@ -23,7 +23,7 @@ import { techStackClass, setStatusIcon } from "@/utils";
 import { socialsData } from "@/constants";
 
 //Types
-import type { Member, Project } from "@/types/Project";
+import type { Project } from "@/types/Project";
 
 type ProjectComponentProps = {
   project: Project;

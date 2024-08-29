@@ -1,13 +1,8 @@
 "use client";
-//React
-import { useRef, useState } from "react";
-
 //Next
 import { useSession } from "next-auth/react";
 
 //Hooks
-// import { useOutsideClick } from "@/hooks/useOutsideClick";
-// import useCombinedRef from "@/hooks/useCombinedRef";
 import { useWindowWidth } from "@/hooks/useWindowWidth";
 import { useSidebarsContext } from "@/context/SidebarsContext";
 
@@ -15,9 +10,6 @@ import { useSidebarsContext } from "@/context/SidebarsContext";
 import ToggleTheme from "../ui/buttons/ToggleTheme";
 //UI
 import { Button } from "@/components/ui/button";
-import logo from "/public/logo.png";
-import { contributors } from "@/constants";
-import UserAvatar from "@/components/common/ui//image/UserAvatar";
 import NavbarLinks from "./NavbarLinks";
 import { Menu, SquareUserRound } from "lucide-react";
 import NavbarAsozialMenu from "./NavbarAsozialMenu";
@@ -33,10 +25,6 @@ function Navbar() {
     isUserSidebarOpen,
   } = useSidebarsContext();
 
-  // const navRef = useRef<HTMLDivElement>(null);
-  // useOutsideClick(() => setIsOpen(false), navRef);
-  // const combinedRefs = useCombinedRef(navRef, projectHeaderRef, userHeaderRef);
-
   const { width } = useWindowWidth();
 
   const { data: session, status } = useSession();
@@ -44,7 +32,6 @@ function Navbar() {
   return (
     <>
       <nav
-        // ref={combinedRefs}
         className={`border-b-1 sticky top-0 z-50 flex w-full justify-between gap-2 bg-light px-6 py-2 text-dark dark:bg-dark dark:text-light`}
       >
         <section className="flex items-center gap-5">
@@ -65,10 +52,7 @@ function Navbar() {
 
         <NavbarLinks />
 
-        <section
-          className="flex items-center gap-2"
-          //  ref={combinedRefs}
-        >
+        <section className="flex items-center gap-2">
           {status === "authenticated" && session?.user && (
             <NavbarAccountMenu
               userId={session?.user?.id}

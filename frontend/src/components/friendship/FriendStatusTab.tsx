@@ -6,7 +6,7 @@ import FriendshipSentCard from "./FriendshipSentCard";
 import FriendshipAcceptedCard from "./FriendshipAcceptedCard";
 import FriendshipReceivedCard from "./FriendshipReceivedCard";
 import FriendshipRejectedCard from "./FriendshipRejectedCard";
-import { Friendship, FriendshipId } from "@/types/Friendship";
+import { Friendship } from "@/types/Friendship";
 
 async function FriendStatusTab() {
   const session = await auth();

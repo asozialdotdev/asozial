@@ -1,4 +1,3 @@
-import { searchForUserProjects } from "@/actions";
 import ProjectCard from "./ProjectCard";
 import { Project } from "@/types/Project";
 import { notFound } from "next/navigation";

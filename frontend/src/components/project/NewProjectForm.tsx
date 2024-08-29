@@ -15,7 +15,6 @@ import useSpokenLanguages from "@/hooks/useSpokenLanguages";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { createProjectSchema } from "@/lib/schema";
-import { z } from "zod";
 
 //Components
 import FormImage from "./project-form/FormImage";
@@ -35,8 +34,7 @@ import { ImageT } from "../common/ui/ImageUploader";
 function NewProjectForm() {
   const [error, setError] = useState<string | null>(null);
   const [uploadedImage, setUploadedImage] = useState<ImageT | null>(null);
-  const { spokenLanguages, isLoadingSpokenLanguages, errorSpokenLanguages } =
-    useSpokenLanguages();
+  const { spokenLanguages } = useSpokenLanguages();
 
   const {
     handleSubmit,

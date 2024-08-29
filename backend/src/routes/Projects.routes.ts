@@ -1,14 +1,12 @@
 import dotenv from "dotenv";
 import express, { Request, Response, NextFunction } from "express";
 import axios from "axios";
-import { ObjectId } from "mongoose";
 
 import Project from "../models/Project.models";
 import ProjectPost from "../models/ProjectPost.models";
 import ProjectPostReply from "../models/ProjectPostReply.models";
 import User from "../models/User.models";
 import { generateSlug } from "../utils";
-import { Types } from "mongoose";
 
 const projectsRouter = express.Router();
 
@@ -947,10 +945,6 @@ projectsRouter.put(
         { _id: matchedUserId },
         {
           $push: { "projects.projectsJoined": project._id },
-          // $pull: {
-          //   "matches.projects.pending": project._id,
-          //   "matches.projects.suggested": project._id,
-          // },
         },
         { new: true }
       );
@@ -992,10 +986,6 @@ projectsRouter.put(
         { _id: matchedUserId },
         {
           $push: { "projects.projectsDeclined": project._id },
-          // $pull: {
-          //   "matches.projects.pending": project._id,
-          //   "matches.projects.suggested": project._id,
-          // },
         },
         { new: true }
       );

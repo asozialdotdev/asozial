@@ -1,4 +1,4 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card } from "@/components/ui/card";
 import DashboardFriendItem from "./FriendshipItem";
 import { Friendship } from "@/types/Friendship";
 

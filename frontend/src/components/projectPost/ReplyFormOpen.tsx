@@ -7,12 +7,10 @@ import { useFormState } from "react-dom";
 
 //Components
 import ReplyFormButton from "./ReplyFormButton";
-import ReplyLikeButtons from "./ReplyLikeButtons";
 
 //Ui
 import { Textarea } from "../ui/textarea";
-import { useEffect, useRef, useState } from "react";
-import { GoComment } from "react-icons/go";
+import { useEffect, useRef } from "react";
 
 //Types
 import type { ProjectPostId, Reply, ReplyId } from "@/types/ProjectPost";

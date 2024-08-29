@@ -25,7 +25,6 @@ import { auth } from "@/auth";
 
 //Types
 import type { Member, ProjectId } from "@/types/Project";
-import { UserId } from "@/types/User";
 
 type Params = {
   username: string;

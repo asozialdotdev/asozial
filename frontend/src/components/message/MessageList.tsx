@@ -19,9 +19,6 @@ function MessageList({ messages }: { messages: Message[] }) {
               className={`flex w-3/4 flex-row items-center gap-4 ${message.senderId.toString() === userId ? "justify-end" : "justify-start"}`}
             >
               <p>{message.content}</p>
-              {/* <sup className="self-end">{message.senderId.toString()}</sup> */}
-
-              {/* <p>{message.createdAt?.toLocaleDateString()}</p> */}
             </PageCard>
           );
         })}
