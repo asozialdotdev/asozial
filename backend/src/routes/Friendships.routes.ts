@@ -249,7 +249,7 @@ friendshipsRouter.get(
           { friends: { $in: [new ObjectId(userId)] } },
         ],
       }).populate({
-        path: "senderId receiverId",
+        path: "friends",
         select: "username info.image",
         model: User,
       });
