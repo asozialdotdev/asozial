@@ -2,8 +2,21 @@
 import { auth } from "@/auth";
 import { baseUrl } from "@/constants";
 
-const sendFriendship = async (senderId: string, receiverId: string) => {
+export type SendFriendshipState = {
+  errors: {
+    send?: string[];
+  };
+  success?: boolean;
+  data?: any;
+};
+
+const sendFriendship = async (
+  formState: SendFriendshipState,
+  formData: FormData,
+): Promise<SendFriendshipState> => {
   const session = await auth();
+  const senderId = session?.user?.id;
+  const receiverId = formData.get("receiverId") as string;
   try {
     const response = await fetch(`${baseUrl}/api/friends`, {
       method: "POST",
@@ -11,23 +24,33 @@ const sendFriendship = async (senderId: string, receiverId: string) => {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        senderId: session?.user?.id,
+        senderId,
         receiverId,
       }),
     });
 
-    if (!response.ok) {
-      const errorData = await response.json();
-      console.log("API responded with error:", errorData);
-      return errorData;
-    }
-
     const data = await response.json();
-    return data;
+
+    if (response.status === 409) {
+      return {
+        errors: {
+          send: ["You are already send a request or you are already friends."],
+        },
+      };
+    }
+    return {
+      errors: {},
+      success: true,
+      data,
+    };
   } catch (error: any) {
     console.log("Error sending friendship:", error.message);
-    return { message: "Error sending request" };
+    return {
+      errors: {
+        send: ["Error sending friendship. Please try again."],
+      },
+    };
   }
 };
 
-export default sendFriendship;
+export { sendFriendship };

@@ -159,23 +159,31 @@ friendshipsRouter.put(
 );
 
 // GET all pending friendships
-
 friendshipsRouter.get(
   "/pending",
   async (req: Request, res: Response, next: NextFunction) => {
+    console.log("Friendships pending is called");
     try {
-      const { actualUser } = req.body;
+      const { actualUser } = req.query;
+      console.log("actualUser>>>>>>>>>", actualUser);
 
-      const user = await User.findById(actualUser).populate("friends.pending");
+      const user = await User.findById(actualUser)
+        .populate({
+          path: "friends.pending", // Populate the 'friends.pending' array
+          select: "info.username info.image", // Select only username and image fields
+        })
+        .exec();
 
-      if (!user || !user.friends?.pending.length) {
-        res.status(404).send("You don't have any pending friendships!");
-        console.error("No pending friendships found");
-        return;
+      if (!user) {
+        console.error("No user found");
+        return res.status(404).send("No user found");
       }
 
-      res.json(user.friends.pending);
+      console.log("use pending>>>>>>>>>", user.friends?.pending);
+
+      res.json(user.friends?.pending || []); // Return the pending friends or an empty array if none
     } catch (error) {
+      console.error("Error fetching pending friendships:", error);
       next(error);
     }
   }
@@ -274,6 +282,56 @@ friendshipsRouter.get(
     } catch (error: any) {
       console.error("Error fetching user friendships:", error);
       res.status(500).send("Error fetching user friendships");
+    }
+  }
+);
+
+friendshipsRouter.get(
+  "/:userId/isFriend/:friendId",
+  async (req: Request, res: Response, next: NextFunction) => {
+    const { userId, friendId } = req.params;
+
+    try {
+      const user = await User.findById(userId);
+      const friend = await User.findById(friendId);
+      if (!user || !friend) {
+        return res.status(404).json({ message: "User not found" });
+      }
+
+      const friendship = await Friendship.findOne({
+        $or: [
+          {
+            senderId: new ObjectId(userId),
+            receiverId: new ObjectId(friendId),
+          },
+          {
+            senderId: new ObjectId(friendId),
+            receiverId: new ObjectId(userId),
+          },
+        ],
+      }).populate({
+        path: "senderId receiverId",
+        select: "username info.image",
+        model: User,
+      });
+
+      if (!friendship) {
+        return res.json({ isFriend: false, status: "none" });
+      }
+
+      let status = "none";
+      if (friendship.status === "accepted") {
+        status = "friend";
+      } else if (friendship.status === "pending") {
+        status = "pending";
+      } else if (friendship.status === "declined") {
+        status = "rejected";
+      }
+
+      res.json({ isFriend: status === "friend", status });
+    } catch (error: any) {
+      console.error("Error checking friendship status:", error);
+      res.status(500).send("Error checking friendship status");
     }
   }
 );

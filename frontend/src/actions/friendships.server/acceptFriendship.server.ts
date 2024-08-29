@@ -2,9 +2,21 @@
 import { auth } from "@/auth";
 import { baseUrl } from "@/constants";
 
-const acceptFriendship = async (friendshipId: string) => {
+export type AcceptFriendshipState = {
+  errors: {
+    accept?: string[];
+  };
+  success?: boolean;
+  data?: any;
+};
+
+const acceptFriendship = async (
+  formState: AcceptFriendshipState,
+  formData: FormData,
+): Promise<AcceptFriendshipState> => {
   const session = await auth();
   const userId = session?.user?.id;
+  const friendshipId = formData.get("friendshipId") as string;
   try {
     const response = await fetch(
       `${baseUrl}/api/friends/${friendshipId}/accept`,
@@ -13,16 +25,24 @@ const acceptFriendship = async (friendshipId: string) => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ userId: session?.user?.id, friendshipId }),
+        body: JSON.stringify({ userId, friendshipId }),
       },
     );
 
     const data = await response.json();
-    return data;
+    return {
+      errors: {},
+      success: true,
+      data,
+    };
   } catch (error: any) {
     console.log("Error accepting friendship:", error.message);
-    return { message: "Error accepting friendship" };
+    return {
+      errors: {
+        accept: ["Error accepting friendship. Please try again."],
+      },
+    };
   }
 };
 
-export default acceptFriendship;
+export { acceptFriendship };

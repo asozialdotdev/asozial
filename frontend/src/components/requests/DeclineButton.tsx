@@ -5,22 +5,23 @@ import { SquareCheck } from "lucide-react";
 import LoadingTextButton from "../common/ui/loading/LoadingTextButton";
 type DeclineButtonProps = {
   declineSuccess: boolean | undefined;
+  sidebar?: boolean;
 };
 
-function DeclineButton({ declineSuccess }: DeclineButtonProps) {
+function DeclineButton({ declineSuccess, sidebar }: DeclineButtonProps) {
   const { pending } = useFormStatus();
   return (
     <Button
       variant="secondary"
       disabled={pending || declineSuccess}
       size="sm"
-      className=""
+      className={sidebar ? "h-6 w-auto text-xs" : "text-sm"}
     >
       {pending ? (
         <LoadingTextButton />
       ) : declineSuccess ? (
         <span className="flex items-center gap-1">
-          <SquareCheck size={18} />
+          <SquareCheck size={sidebar ? 14 : 18} />
           <p>Declined</p>
         </span>
       ) : (

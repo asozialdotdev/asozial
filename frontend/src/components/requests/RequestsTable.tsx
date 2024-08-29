@@ -1,6 +1,7 @@
 import SidebarTitle from "../common/sidebar/SidebarTitle";
-import RequestCard from "./RequestCard";
+
 import { Project } from "@/types/Project";
+import RequestCard from "./RequestCard";
 
 type RequestsTableProps = {
   projects: Project[];

@@ -3,15 +3,14 @@
 import { useState } from "react";
 
 //Components
-import SearchBar from "../common/ui/SearchBar";
+import SearchBar from "./SearchBar";
 
 //UI
-import { Button } from "../ui/button";
 
 //Types
 import { usePathname, useSearchParams, useRouter } from "next/navigation";
 
-function SearchProjects() {
+function SearchComponent() {
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const router = useRouter();
@@ -54,4 +53,4 @@ function SearchProjects() {
   );
 }
 
-export default SearchProjects;
+export default SearchComponent;

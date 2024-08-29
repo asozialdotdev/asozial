@@ -77,6 +77,13 @@ const syncGithubRepoSchema = z.object({
   repo: z.string().min(1, "Provide your cool repo name"),
 });
 
+const createMessageSchema = z.object({
+  content: z
+    .string()
+    .min(1, "At least try to write something")
+    .max(1000, "Maximum of 1000 characters, bitte 🙏"),
+});
+
 export {
   createProjectSchema,
   createPostSchema,
@@ -85,4 +92,5 @@ export {
   mainLanguageSchema,
   syncGithubRepoSchema,
   descriptionSchema,
+  createMessageSchema,
 };

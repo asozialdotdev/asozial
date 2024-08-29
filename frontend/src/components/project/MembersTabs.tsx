@@ -11,10 +11,10 @@ import {
   CardTitle,
 } from "../ui/card";
 import { Button } from "../ui/button";
-import AcceptDeclineForm from "../dashboard/AcceptDeclineForm";
 import { Member, ProjectId } from "@/types/Project";
 import RemoveMemberForm from "./requests/RemoveMemberForm";
 import RestoreMember from "./requests/RestoreMemberForm";
+import AcceptDeclineForm from "../requests/AcceptDeclineForm";
 
 const array = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
