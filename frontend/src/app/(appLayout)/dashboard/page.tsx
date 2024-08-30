@@ -11,10 +11,10 @@ async function DashboardPage() {
   const session = await auth();
   const username = session?.user?.githubUsername;
 
-  const result = await getUserByUsername(username);
-  const friends = await getUserFriendStatuses();
-
-  console.log("result>>>>>>>>>>", result)
+  const [result, friends] = await Promise.all([
+    getUserByUsername(username),
+    getUserFriendStatuses(),
+  ]);
 
   const { accepted } = friends;
   return (

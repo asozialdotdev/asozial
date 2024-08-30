@@ -263,7 +263,6 @@ usersRouter.get(
   }
 );
 
-
 // GET 1 user with with friendship status
 
 usersRouter.get(

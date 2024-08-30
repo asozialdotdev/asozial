@@ -8,8 +8,10 @@ import { Suspense } from "react";
 async function Page({ params }: { params: { username: string } }) {
   const { username } = params;
 
-  const result = await getUserByUsername(username);
-  const friends = await getUserFriendStatuses();
+  const [result, friends] = await Promise.all([
+    getUserByUsername(username),
+    getUserFriendStatuses(),
+  ]);
 
   const { accepted } = friends;
 
