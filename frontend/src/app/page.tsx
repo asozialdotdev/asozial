@@ -7,6 +7,7 @@ import bearlogoDark from "/public/bearlogoDark.jpg";
 import bearlogoBlurredDark from "/public/bearLogoBlurredDark.jpg";
 import Image from "next/image";
 import { FaGithub } from "react-icons/fa";
+import LoadingSpinner from "@/components/common/ui/loading/LoadingSpinner";
 
 const heroText = (text: string, strong: string) => {
   return (
@@ -18,6 +19,7 @@ const heroText = (text: string, strong: string) => {
 };
 
 function LandingPage() {
+  const [clicked, setClicked] = React.useState(false);
   return (
     <div className="relative h-screen w-screen bg-[#1C2121]">
       <div className="h-screenlg:w-1/2 absolute inset-0 z-0 mx-auto xl:w-1/2">
@@ -46,9 +48,13 @@ function LandingPage() {
               {heroText("Build something", "sick")}
             </div>
             <form action={signIn} className="flex flex-row justify-end">
-              <Button className="flex gap-3 px-8" type="submit">
-                Sign in with
-                <FaGithub size={24} />
+              <Button
+                className="flex gap-3 px-8"
+                type="submit"
+                onClick={() => setClicked(true)}
+              >
+                {clicked ? "Signing in..." : "Sign in with"}
+                {clicked ? <FaGithub size={24} /> : <LoadingSpinner />}
               </Button>
             </form>
           </div>
