@@ -54,7 +54,7 @@ function LandingPage() {
                 onClick={() => setClicked(true)}
               >
                 {clicked ? "Signing in..." : "Sign in with"}
-                {clicked ? <FaGithub size={24} /> : <LoadingSpinner />}
+                {clicked ? <LoadingSpinner /> : <FaGithub size={24} />}
               </Button>
             </form>
           </div>

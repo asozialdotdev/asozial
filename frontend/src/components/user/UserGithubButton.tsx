@@ -6,7 +6,7 @@ function UserGithubButton({ user }: { user: User }) {
   return (
     <Button variant={"outline"}>
       <a
-        href={user.github.url}
+        href={`https://github.com/${user.info.username}`}
         target="_blank"
         rel="noreferrer"
         className="flex flex-row items-center gap-2"
