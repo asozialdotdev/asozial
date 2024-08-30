@@ -24,7 +24,7 @@ import ApplyProject from "@/components/project/requests/ApplyProject";
 import { auth } from "@/auth";
 
 //Types
-import type { Member, ProjectId } from "@/types/Project";
+import type { ProjectId } from "@/types/Project";
 
 type Params = {
   username: string;
@@ -33,7 +33,6 @@ type Params = {
 };
 
 async function Page({ params }: { params: Params }) {
-  const session = await auth();
   const paramsObj = params;
   const { projectId } = paramsObj;
 

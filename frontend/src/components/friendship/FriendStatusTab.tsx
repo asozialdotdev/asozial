@@ -16,13 +16,21 @@ async function FriendStatusTab() {
   const sentPending =
     pending &&
     pending.filter((friendship: Friendship) => {
-      return friendship.senderId?._id === session?.user.id;
+      return friendship.senderId?._id === actualUserId;
     });
   const receivedPending =
     pending &&
     pending.filter((friendship: Friendship) => {
-      return friendship.receiverId?._id === session?.user.id;
+      return friendship.receiverId?._id === actualUserId;
     });
+
+  const receivedAccepted = accepted.filter((friendship: Friendship) => {
+    return friendship.receiverId?._id === actualUserId;
+  });
+
+  const sentAccepted = accepted.filter((friendship: Friendship) => {
+    return friendship.senderId?._id === actualUserId;
+  });
 
   return (
     <div className="h-auto w-full rounded bg-white p-4 shadow dark:bg-black">
@@ -35,7 +43,11 @@ async function FriendStatusTab() {
         </TabsList>
         {/*Accept tab*/}
         <TabsContent value="accepted">
-          <FriendshipAcceptedCard accepted={accepted} actualUserId={actualUserId} />
+          <FriendshipAcceptedCard
+            receivedAccepted={receivedAccepted}
+            sentAccepted={sentAccepted}
+            actualUserId={actualUserId}
+          />
         </TabsContent>
         {/* Received Tab*/}
         <TabsContent value="received">

@@ -1,13 +1,9 @@
 "use client";
 
-import PageContainer from "@/components/common/containers/PageContainer";
+import NotFoundComponent from "@/components/common/ui/NotFoundComponent";
 
 function ErrorProjectById() {
-  return (
-    <PageContainer className="w-full max-w-screen-md">
-      There was an error fetching this post
-    </PageContainer>
-  );
+  return <NotFoundComponent message="Failed to display this post" />;
 }
 
 export default ErrorProjectById;

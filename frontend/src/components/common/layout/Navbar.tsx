@@ -61,8 +61,6 @@ function Navbar() {
             />
           )}
 
-          <ToggleTheme />
-
           <Button
             size="icon"
             variant="ghost"

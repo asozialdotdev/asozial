@@ -34,9 +34,8 @@ function UserSidebar() {
       ref={userSidebarRef}
     >
       <ButtonBack className="absolute right-3 top-1 z-20" size={30} />
-      <SidebarTitle>Friends</SidebarTitle>
+      <SidebarTitle className='text-center'>Friends</SidebarTitle>
       <SidebarButtons links={links} />
-      {/* <SidebarFriendsList /> */}
       <SidebarRequests user />
     </aside>
   );

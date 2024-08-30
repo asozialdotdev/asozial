@@ -1,22 +1,21 @@
 import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
-import { FolderCode, Users } from "lucide-react";
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { FolderCode } from "lucide-react";
 function TotalProjectsOwned() {
   return (
-    <TooltipProvider>
-      <Tooltip>
-        <TooltipTrigger>
-          <span>
-            <FolderCode size={23} className="cursor-help" />
-          </span>
-        </TooltipTrigger>
-        <TooltipContent>Projects Owned</TooltipContent>
-      </Tooltip>
-    </TooltipProvider>
+    <Popover>
+      <PopoverTrigger asChild>
+        <button>
+          <FolderCode size={23} />
+        </button>
+      </PopoverTrigger>
+      <PopoverContent side="top" className="w-30 p-3">
+        Projects Owned
+      </PopoverContent>
+    </Popover>
   );
 }
 

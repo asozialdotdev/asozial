@@ -12,6 +12,7 @@ import UserAvatar from "../ui/image/UserAvatar";
 import { User, Settings, LogOut } from "lucide-react";
 import { signOut } from "@/actions";
 import { Button } from "@/components/ui/button";
+import ToggleTheme from "../ui/buttons/ToggleTheme";
 
 type NavbarAccountMenuProps = {
   userId: string;
@@ -22,7 +23,7 @@ type NavbarAccountMenuProps = {
 function NavbarAccountMenu({ userId, username, src }: NavbarAccountMenuProps) {
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger className="text-2xl">
+      <DropdownMenuTrigger className="cursor-pointer text-2xl">
         <UserAvatar
           src={src}
           userId={userId}
@@ -36,19 +37,24 @@ function NavbarAccountMenu({ userId, username, src }: NavbarAccountMenuProps) {
           {username}
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
-        <DropdownMenuItem asChild className="text-lg">
+        <DropdownMenuItem
+          asChild
+          className="flex cursor-pointer flex-row justify-between text-lg"
+        >
           <Link href="/profile" className="flex flex-row items-center gap-2">
             <User /> profile
           </Link>
         </DropdownMenuItem>
-        <DropdownMenuItem asChild className="text-lg">
-          <Link href="/settings" className="flex flex-row items-center gap-2">
-            <Settings />
-            settings
-          </Link>
+        <DropdownMenuItem
+          asChild
+          className="flex cursor-pointer flex-row items-center gap-2 text-lg"
+        >
+          <div className="flex cursor-pointer flex-row justify-between text-lg">
+            <ToggleTheme />
+            theme
+          </div>
         </DropdownMenuItem>
-        <DropdownMenuSeparator />
-        <DropdownMenuItem asChild className="text-lg">
+        <DropdownMenuItem asChild className="cursor-pointer text-lg">
           <form action={signOut}>
             <Button type="submit">
               <LogOut />

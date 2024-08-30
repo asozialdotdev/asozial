@@ -17,8 +17,8 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import type { UserId } from "@/types/User";
 
 type UserAvatarProps = {
-  src: string;
-  username: string;
+  src?: string;
+  username?: string;
   userId?: UserId;
   className?: string;
   isInNavbar?: boolean;

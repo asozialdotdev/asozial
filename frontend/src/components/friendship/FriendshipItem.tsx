@@ -22,11 +22,8 @@ function FriendshipItem({
   status,
 }: FriendshipItemProps) {
   return (
-    <div
-      key={username}
-      className="flex flex-row items-center justify-between "
-    >
-      <div className="flex flex-row items-center gap-4">
+    <div key={username} className="flex flex-row items-center justify-between">
+      <div className="flex flex-row flex-wrap items-center gap-4">
         <UserAvatar
           src={image}
           userId={userId}

@@ -13,13 +13,13 @@ function SidebarRequests({
     <div className="flex w-full flex-col gap-4 font-semibold">
       {project && (
         <>
-          <SidebarTitle>Requests</SidebarTitle>
+          <SidebarTitle className='ml-4'>Requests</SidebarTitle>
           <SidebarProjectRequestsTable />
         </>
       )}
       {user && (
         <>
-          <SidebarTitle className="self-end">Requests</SidebarTitle>
+          <SidebarTitle className="self-end mr-4">Requests</SidebarTitle>
           <SidebarFriendsRequestsTable />
         </>
       )}

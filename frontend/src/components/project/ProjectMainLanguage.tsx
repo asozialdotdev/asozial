@@ -20,11 +20,17 @@ import CustomLabel from "../common/ui/Label";
 
 type Input = z.infer<typeof mainLanguageSchema>;
 
-function ProjectMainLanguage({ project }: { project: Project }) {
+function ProjectMainLanguage({
+  project,
+  isOwner,
+}: {
+  project: Project;
+  isOwner: boolean;
+}) {
   const [isEditing, setIsEditing] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const { spokenLanguages } = useSpokenLanguages();
-  const session = useSession();
+
   const {
     handleSubmit,
 
@@ -50,8 +56,6 @@ function ProjectMainLanguage({ project }: { project: Project }) {
       toggleEditing();
     }
   };
-
-  const isOwner = project.owner._id === session.data?.user?.id;
 
   return (
     <div
