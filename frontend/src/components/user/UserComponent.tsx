@@ -11,6 +11,7 @@ import UserGithubStatus from "./UserGithubStatus";
 import type { User } from "../../types/User";
 import { Project } from "@/types/Project";
 import { Friendship } from "@/types/Friendship";
+import UserComponentAvatar from "./UserComponentAvatar";
 
 type ProjectJoined = {
   _id: string;
@@ -67,18 +68,7 @@ async function UserComponent({ result, friends }: UserComponentProps) {
     <section className="flex w-full flex-col gap-8 pb-4 text-lg font-light">
       <div className="flex w-full items-center justify-center gap-4">
         {/* Avatar */}
-        {user && user.info.image && user.info.image ? (
-          <Image
-            className="rounded-full border-4 border-dark p-1 dark:border-light"
-            src={user.info.image}
-            alt={user.username}
-            loading="lazy"
-            width={100}
-            height={100}
-          />
-        ) : (
-          <div className="h-24 w-24 rounded-full bg-gray-200 dark:bg-gray-800"></div>
-        )}
+        <UserComponentAvatar user={user} />
 
         <div className="flex flex-col justify-evenly gap-4">
           {/* Username */}
