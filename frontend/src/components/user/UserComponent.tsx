@@ -43,9 +43,14 @@ type UserComponentProps = {
     isFriends: boolean;
   };
   friends: Friendship[];
+  dashboard?: boolean;
 };
 
-async function UserComponent({ result, friends }: UserComponentProps) {
+async function UserComponent({
+  result,
+  friends,
+  dashboard,
+}: UserComponentProps) {
   const {
     user,
     counts: { projectsOwnedCount, projectsJoinedCount },
@@ -72,7 +77,9 @@ async function UserComponent({ result, friends }: UserComponentProps) {
 
         <div className="flex flex-col justify-evenly gap-4">
           {/* Username */}
-          <h3 className="text-2xl font-semibold">{user.username}</h3>
+          {!dashboard && (
+            <h3 className="text-2xl font-semibold">{user.info.username}</h3>
+          )}
           <p className="text-sm">Github user since {formattedDate}</p>
           <UserGithubStatus user={user} />
           {/* Github Button */}

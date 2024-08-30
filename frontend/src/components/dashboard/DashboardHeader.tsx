@@ -1,13 +1,14 @@
 import { auth } from "@/auth";
+import PageTitle from "../common/ui/PageTitle";
 
 async function DashboardHeader() {
   const session = await auth();
   return (
-    <div>
-      <h2 className="text-lg">
-        Welcome back,{" "}
+    <div className="mr-10 flex flex-col items-center justify-center gap-2">
+      <PageTitle className="font-normal">
+        Welcome,{" "}
         <span className="font-semibold">{session?.user.githubUsername}</span>
-      </h2>
+      </PageTitle>
       <p className="text-sm text-zinc-500 dark:text-zinc-400">
         A quick overview of your account.
       </p>

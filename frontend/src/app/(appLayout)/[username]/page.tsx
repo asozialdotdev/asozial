@@ -10,7 +10,7 @@ async function Page({ params }: { params: { username: string } }) {
     getUserFriendStatuses(),
   ]);
   const { accepted } = friends;
-  console.log("friends accepted >>>>>>>>>>", accepted);
+  
   return (
     <PageContainer>
       <UserComponent result={result} friends={accepted} />

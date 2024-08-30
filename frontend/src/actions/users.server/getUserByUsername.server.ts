@@ -2,7 +2,7 @@
 
 import { baseUrl } from "@/constants";
 
-const getUserByUsername = async (username: string) => {
+const getUserByUsername = async (username: string | undefined | null) => {
   try {
     const res = await fetch(`${baseUrl}/api/users/${username}`, {
       cache: "no-store",

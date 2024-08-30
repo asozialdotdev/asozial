@@ -2,6 +2,7 @@ import { CircleUserRound } from "lucide-react";
 import UserAvatar from "../common/ui/image/UserAvatar";
 import { User, UserId } from "@/types/User";
 import { Friendship } from "@/types/Friendship";
+import Link from "next/link";
 
 type UserFriendsProps = {
   user: User;
@@ -20,10 +21,12 @@ function UserFriends({ user, actualUserId, friends }: UserFriendsProps) {
 
   return (
     <div className="flex flex-col gap-4">
-      <h3 className="flex flex-wrap gap-4 font-semibold">
-        <CircleUserRound size={24} />
-        Friends ({receivedAccepted.length + sentAccepted.length})
-      </h3>
+      <Link href={`${user.info.username}/friends`}>
+        <h3 className="flex flex-wrap gap-4 font-semibold hover:opacity-75">
+          <CircleUserRound size={24} />
+          Friends ({receivedAccepted.length + sentAccepted.length})
+        </h3>
+      </Link>
       {/* Display friends of the actual user */}
       {actualUserId === user._id ? (
         <div className="flex flex-wrap gap-4">
