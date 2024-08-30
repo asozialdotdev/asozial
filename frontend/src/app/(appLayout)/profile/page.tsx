@@ -15,7 +15,7 @@ async function ProfilePage() {
   }
   return (
     <PageContainer className="gap-8">
-      <UserComponent user={user} />
+      {/* <UserComponent user={user} /> */}
     </PageContainer>
   );
 }

@@ -2,7 +2,7 @@ import React from "react";
 import { cn } from "@/lib/utils";
 
 type PageContainerProps = {
-  children: React.ReactNode;
+  children?: React.ReactNode;
   className?: string;
 };
 
