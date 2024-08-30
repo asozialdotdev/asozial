@@ -22,7 +22,7 @@ type NavbarAccountMenuProps = {
 function NavbarAccountMenu({ userId, username, src }: NavbarAccountMenuProps) {
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger className="text-2xl">
+      <DropdownMenuTrigger className="cursor-pointer text-2xl">
         <UserAvatar
           src={src}
           userId={userId}
@@ -36,19 +36,12 @@ function NavbarAccountMenu({ userId, username, src }: NavbarAccountMenuProps) {
           {username}
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
-        <DropdownMenuItem asChild className="text-lg">
+        <DropdownMenuItem asChild className="cursor-pointer text-lg">
           <Link href="/profile" className="flex flex-row items-center gap-2">
             <User /> profile
           </Link>
         </DropdownMenuItem>
-        <DropdownMenuItem asChild className="text-lg">
-          <Link href="/settings" className="flex flex-row items-center gap-2">
-            <Settings />
-            settings
-          </Link>
-        </DropdownMenuItem>
-        <DropdownMenuSeparator />
-        <DropdownMenuItem asChild className="text-lg">
+        <DropdownMenuItem asChild className="cursor-pointer text-lg">
           <form action={signOut}>
             <Button type="submit">
               <LogOut />
