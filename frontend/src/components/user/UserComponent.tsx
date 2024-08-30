@@ -12,6 +12,7 @@ import type { User } from "../../types/User";
 import { Project } from "@/types/Project";
 import { Friendship } from "@/types/Friendship";
 import UserComponentAvatar from "./UserComponentAvatar";
+import { notFound } from "next/navigation";
 
 type ProjectJoined = {
   _id: string;
@@ -53,9 +54,10 @@ async function UserComponent({
 }: UserComponentProps) {
   const {
     user,
-    counts: { projectsOwnedCount, projectsJoinedCount },
+    counts: { projectsOwnedCount = 0, projectsJoinedCount = 0 },
     isFriends,
   } = result;
+  if (!user) return notFound();
   const { projectsOwned, projectsJoined } = user;
 
   const session = await auth();

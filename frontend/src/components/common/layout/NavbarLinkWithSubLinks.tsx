@@ -25,7 +25,10 @@ function NavbarLinkItemWithSubLinks({
 }: NavbarLinkItemWithSubLinksProps) {
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger asChild className="flex flex-row items-center gap-2">
+      <DropdownMenuTrigger
+        asChild
+        className="flex cursor-pointer flex-row items-center gap-2"
+      >
         <Button
           variant="ghost"
           className="flex flex-row flex-nowrap items-center gap-2"
