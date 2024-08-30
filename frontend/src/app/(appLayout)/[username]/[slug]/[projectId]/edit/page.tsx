@@ -1,10 +1,13 @@
-import { fetchProjectById } from "@/actions";
+import { checkIsOwner, fetchProjectById } from "@/actions";
 import { auth } from "@/auth";
 import PageContainer from "@/components/common/containers/PageContainer";
 import ButtonBack from "@/components/common/ui/buttons/ButtonBack";
+import NotFoundComponent from "@/components/common/ui/NotFoundComponent";
 import PageTitle from "@/components/common/ui/PageTitle";
 import EditProject from "@/components/project/EditProject";
+import NewProjectLoadingSkeleton from "@/components/project/NewProjectLoadingSkeleton";
 import { ProjectId } from "@/types/Project";
+import { Suspense } from "react";
 
 async function EditProjectPage({
   params,
@@ -12,27 +15,22 @@ async function EditProjectPage({
   params: { projectId: ProjectId };
 }) {
   const { projectId } = params;
-  const project = await fetchProjectById(projectId);
-  const session = await auth();
-  const isOwner = project.owner._id === session?.user?.id;
+  const [project, isOwner] = await Promise.all([
+    fetchProjectById(projectId),
+    checkIsOwner(projectId),
+  ]);
 
   if (!isOwner) {
     return (
-      <div className="flex w-full flex-col items-center justify-center gap-4 pb-6">
-        <PageTitle className="text-center">
-          You are not the owner of this project
-        </PageTitle>
-        <div className="flex items-center gap-2">
-          <ButtonBack size={40} />
-          <p className="text-xl font-semibold">Go Back</p>
-        </div>
-      </div>
+      <NotFoundComponent page="Edit Project" message="You should not be here" />
     );
   }
   return (
     <PageContainer className="gap-4">
       <PageTitle>Edit Project</PageTitle>
-      <EditProject project={project} />
+      <Suspense fallback={<NewProjectLoadingSkeleton />}>
+        <EditProject project={project} />
+      </Suspense>
     </PageContainer>
   );
 }

@@ -13,7 +13,13 @@ import CustomLabel from "../common/ui/Label";
 
 type Input = z.infer<typeof descriptionSchema>;
 
-function ProjectDescription({ project }: { project: Project }) {
+function ProjectDescription({
+  project,
+  isOwner,
+}: {
+  project: Project;
+  isOwner: boolean;
+}) {
   const [isEditing, setIsEditing] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -43,8 +49,6 @@ function ProjectDescription({ project }: { project: Project }) {
       toggleEditing();
     }
   };
-
-  const isOwner = project.owner._id === session.data?.user?.id;
 
   return (
     <div

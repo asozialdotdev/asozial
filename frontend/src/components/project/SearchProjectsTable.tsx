@@ -6,7 +6,7 @@ type SearchProjectsTableProps = {
   projects: Project[];
 };
 
-async function SearchProjectsTable({ projects }: SearchProjectsTableProps) {
+function SearchProjectsTable({ projects }: SearchProjectsTableProps) {
   if (projects.length === 0) {
     <p>No projects found</p>;
   }

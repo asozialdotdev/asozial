@@ -65,10 +65,10 @@ async function ProjectComponent({
       </div>
 
       {/* Description */}
-      <ProjectDescription project={project} />
+      <ProjectDescription project={project} isOwner={isOwner} />
 
       {/* Pitch*/}
-      <ProjectPitch project={project} />
+      <ProjectPitch project={project} isOwner={isOwner} />
 
       {/* Tech stack */}
       <div className="flex flex-wrap gap-4 px-4 py-6">
@@ -90,7 +90,7 @@ async function ProjectComponent({
       </div>
 
       {/* Language */}
-      <ProjectMainLanguage project={project} />
+      <ProjectMainLanguage project={project} isOwner={isOwner} />
       {/* Members */}
       <div className="flex flex-col">
         <div className="flex items-center gap-2">

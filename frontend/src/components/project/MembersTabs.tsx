@@ -26,8 +26,6 @@ function MembersTabs({ result, projectId }: MembersTabsProps) {
   const { membersJoined, membersApplied, membersInvited, membersAvoided } =
     result;
 
-  const membersJo = membersJoined.map((member) => member);
-
   const [activeTab, setActiveTab] = useState("joined");
 
   const handleTabChange = (tab: string) => {

@@ -12,11 +12,15 @@ import { useSession } from "next-auth/react";
 
 type Input = z.infer<typeof pitchSchema>;
 
-function ProjectPitch({ project }: { project: Project }) {
+function ProjectPitch({
+  project,
+  isOwner,
+}: {
+  project: Project;
+  isOwner: boolean;
+}) {
   const [isEditing, setIsEditing] = useState(false);
   const [error, setError] = useState<string | null>(null);
-
-  const session = useSession();
 
   const {
     handleSubmit,
@@ -42,8 +46,6 @@ function ProjectPitch({ project }: { project: Project }) {
       toggleEditing();
     }
   };
-
-  const isOwner = project.owner._id === session.data?.user?.id;
 
   return (
     <div
