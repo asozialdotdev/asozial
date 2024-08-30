@@ -3,6 +3,8 @@ import PageTitle from "@/components/common/ui/PageTitle";
 import React from "react";
 import Image from "next/image";
 import bearlogo from "/public/bearlogo.jpg";
+import { Github } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 function page() {
   return (
@@ -13,12 +15,22 @@ function page() {
         alt="bear logo"
         className="h-[400px] w-[400px] rounded-lg"
       />
-      Lorem ipsum dolor, sit amet consectetur adipisicing elit. Dolor ea nihil
-      temporibus dignissimos veniam officiis adipisci reiciendis quisquam illo
-      libero, eveniet, natus, alias voluptas quas! Maiores repellendus veniam
-      dolores, quia tempora facilis sit unde quas aut eos voluptatibus adipisci
-      dolor voluptate laboriosam quisquam voluptatum saepe dolorum ipsa culpa
-      nobis blanditiis.
+      <p>
+        asozial is an open-source, developer focused and developer driven social
+        media platform.
+      </p>
+      <p>
+        It was created at Ironhack, Berlin by three students, one teacher, and a
+        thousand cups of coffee.
+      </p>
+      <Button variant="ghost">
+        <a
+          href="https://github.com/jrcopeti/asozial"
+          className="flex flex-row justify-evenly gap-2"
+        >
+          Contribute on <Github size={24} />
+        </a>
+      </Button>
     </PageContainer>
   );
 }
