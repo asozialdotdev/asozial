@@ -22,7 +22,7 @@ function SidebarProjectRequestsTable() {
   }
   if (projectsRequests.length === 0) {
     return (
-      <p className="text-sm text-neutral-500 dark:text-neutral-400">
+      <p className="text-sm text-neutral-500 dark:text-neutral-400 ml-4">
         No requests yet
       </p>
     );

@@ -11,6 +11,11 @@ function SidebarFriendsRequestsTable() {
 
   const { friendsRequests, friendsError, friendsLoading } = useRequests();
   const { pending } = friendsRequests;
+  console.log(pending, "friendsRequests pending");
+
+  const receivedAccepted = pending.filter((friendship: Friendship) => {
+    return friendship.receiverId?._id === actualUserId;
+  });
 
   if (friendsLoading) {
     return (
@@ -26,9 +31,9 @@ function SidebarFriendsRequestsTable() {
     return <ErrorMessage>{friendsError}</ErrorMessage>;
   }
 
-  if (pending.length === 0 || !pending) {
+  if (receivedAccepted.length === 0 || !receivedAccepted) {
     return (
-      <p className="text-sm text-neutral-500 dark:text-neutral-400">
+      <p className="mr-4 self-end text-sm text-neutral-500 dark:text-neutral-400">
         No requests yet
       </p>
     );
@@ -46,7 +51,7 @@ function SidebarFriendsRequestsTable() {
   };
   return (
     <div className="flex flex-col">
-      {pending.map((friendship) => renderRequests(friendship))}
+      {receivedAccepted.map((friendship) => renderRequests(friendship))}
     </div>
   );
 }

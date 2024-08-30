@@ -39,19 +39,19 @@ function UserCard({ user, actualUserId }: UserCardProps) {
             username={user.info.username || user.github.username}
             userId={user._id}
           />
-          <Link href={`${baseUrl}/${user.info.username}`}>
-            <h1 className="text-2xl">
+          <Link href={`/${user.info.username}`}>
+            <h2 className="break-all text-2xl">
               {user.info.username || user.github.username}
-            </h1>
+            </h2>
           </Link>
           <div className="flex items-center gap-2">
             <LocationIcon />
-            <p className="text-sm">{user.info.location}</p>
+            <p className="text-sm">{user.info.location || "Planet Earth"}</p>
           </div>
         </div>
 
-        {/* Content on the Right */}
-        <div className="flex items-center justify-between gap-4">
+        {/* Icons */}
+        <div className="flex items-center justify-between gap-4 flex-wrap">
           <section className="flex items-center gap-4">
             <div className="flex items-center gap-2">
               <GithubReposIcon />
@@ -72,8 +72,8 @@ function UserCard({ user, actualUserId }: UserCardProps) {
             </div>
           </section>
 
-          <div className="">
-            {/* Friend Form on the Right */}
+          <div className='self-end'>
+            {/* Friend Form  */}
             {actualUserId &&
               actualUserId !== user._id.toString() &&
               !user.isFriend && (
@@ -95,9 +95,12 @@ function UserCard({ user, actualUserId }: UserCardProps) {
 
       <div>
         <p
-          className={`italic before:text-2xl before:font-bold before:content-['"'] after:text-2xl after:font-bold after:content-['"']`}
+          className={
+            user.github.bio &&
+            `italic before:text-2xl before:font-bold before:content-['"'] after:text-2xl after:font-bold after:content-['"']`
+          }
         >
-          {user.github.bio}
+          {user.github.bio || ""}
         </p>
       </div>
     </li>

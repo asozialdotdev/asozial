@@ -13,19 +13,14 @@ function FriendshipSentCard({ sentPending }: { sentPending: Friendship[] }) {
                 key={friendship.receiverId?._id.toString()}
                 className="relative mb-4 w-full border-dashed border-zinc-300 bg-inherit bg-zinc-100 p-4 hover:bg-zinc-200/10 dark:border-zinc-600 dark:bg-inherit dark:bg-zinc-800 dark:shadow-neutral-700/30 dark:hover:bg-zinc-700/10"
               >
-                <CardHeader>
-                  <CardTitle>Sent</CardTitle>
-                </CardHeader>
-                <CardContent className="flex flex-col gap-2">
-                  <DashboardFriendItem
-                    key={friendship.receiverId?._id.toString()}
-                    friendshipId={friendship._id}
-                    userId={friendship.receiverId?._id.toString()}
-                    username={friendship.receiverId?.username}
-                    image={friendship.receiverId?.info.image}
-                    status="sent"
-                  />
-                </CardContent>
+                <DashboardFriendItem
+                  key={friendship.receiverId?._id.toString()}
+                  friendshipId={friendship._id}
+                  userId={friendship.receiverId?._id.toString()}
+                  username={friendship.receiverId?.username}
+                  image={friendship.receiverId?.info.image}
+                  status="sent"
+                />
               </Card>
             ),
         )

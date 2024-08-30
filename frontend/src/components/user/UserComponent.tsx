@@ -1,45 +1,65 @@
-import type { CodingLanguage, User } from "../../types/User";
-import {
-  Mail,
-  Building,
-  MapPinHouse,
-  Globe,
-  Github,
-  FolderGit,
-  CircleUserRound,
-  Users,
-  Star,
-  Code,
-  Twitter,
-  Layers,
-} from "lucide-react";
-import { Button } from "@/components/ui/button";
 import Image from "next/image";
-
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
-
-import {
-  Table,
-  TableBody,
-  TableCaption,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-import { notFound } from "next/navigation";
-// import ButtonAddFriend from "../common/ui/buttons/ButtonAddFriend";
-// import sendFriendship from "@/actions/friendships.server/sendFriendship.server";
 import { auth } from "@/auth";
+import AddFriendForm from "../requests/AddFriendForm";
+import UserInfo from "./UserInfo";
+import UserFriends from "./UserFriends";
+import UserProjectsOwned from "./UserProjectsOwned";
+import UserProjectsJoined from "./UserProjectsJoined";
+import UserTechStack from "./UserTechStack";
+import UserGithubButton from "./UserGithubButton";
+import UserGithubStatus from "./UserGithubStatus";
+import type { User } from "../../types/User";
+import { Project } from "@/types/Project";
+import { Friendship } from "@/types/Friendship";
+import UserComponentAvatar from "./UserComponentAvatar";
 
-async function UserComponent({ user }: { user: User }) {
+type ProjectJoined = {
+  _id: string;
+  title: string;
+  slug: string;
+  username: {
+    info: {
+      username: string;
+    };
+  };
+};
+
+type UserComponentProps = {
+  result: {
+    user: User & {
+      friendsAccepted: User[];
+      projectsOwned: Project[];
+      projectsJoined: ProjectJoined[];
+
+      friendsCount: number;
+      projectsOwnedCount: number;
+      projectsJoinedCount: number;
+    };
+    counts: {
+      friendsCount: number;
+      projectsOwnedCount: number;
+      projectsJoinedCount: number;
+    };
+    isFriends: boolean;
+  };
+  friends: Friendship[];
+  dashboard?: boolean;
+};
+
+async function UserComponent({
+  result,
+  friends,
+  dashboard,
+}: UserComponentProps) {
+  const {
+    user,
+    counts: { projectsOwnedCount, projectsJoinedCount },
+    isFriends,
+  } = result;
+  const { projectsOwned, projectsJoined } = user;
+
   const session = await auth();
-  const userId = session?.user?.id;
+  const actualUserId = session?.user?.id;
 
   let formattedDate = "Unknown";
   if (user?.github?.createdAt) {
@@ -50,222 +70,55 @@ async function UserComponent({ user }: { user: User }) {
     });
   }
   return (
-    <section className="flex flex-col gap-8 text-lg font-light">
-      <div className="flex items-center justify-evenly gap-4">
-        {user && user.info.image && user.info.image ? (
-          <Image
-            className="rounded-full border-4 border-dark p-1 dark:border-light"
-            src={user.info.image}
-            alt={user.username}
-            loading="lazy"
-            width={100}
-            height={100}
-          />
-        ) : (
-          <div className="h-24 w-24 rounded-full bg-gray-200 dark:bg-gray-800"></div>
-        )}
+    <section className="flex w-full flex-col gap-8 pb-4 text-lg font-light">
+      <div className="flex w-full items-center justify-center gap-4">
+        {/* Avatar */}
+        <UserComponentAvatar user={user} />
 
-        <div className="flex flex-col justify-evenly gap-2">
-          <h3 className="text-2xl font-semibold">{user.username}</h3>
-          <p className="text-xs">Github user since {formattedDate}</p>
-          <div className="flex flex-row justify-start gap-6 text-xs">
-            <TooltipProvider>
-              <Tooltip>
-                <TooltipTrigger>
-                  <p className="flex flex-row items-center gap-2">
-                    <Users size={12} /> {user.github.followersNumber}
-                  </p>
-                </TooltipTrigger>
-                <TooltipContent>
-                  <p>{user.github.followersNumber} followers</p>
-                </TooltipContent>
-              </Tooltip>
-
-              <Tooltip>
-                <TooltipTrigger>
-                  <p className="flex flex-row items-center gap-2">
-                    <Star size={12} /> {user.github.subscriptionsNumber}
-                  </p>
-                </TooltipTrigger>
-                <TooltipContent>
-                  <p>{user.github.subscriptionsNumber} starred</p>
-                </TooltipContent>
-              </Tooltip>
-              <Tooltip>
-                <TooltipTrigger>
-                  <p className="flex flex-row items-center gap-2">
-                    <Building size={12} /> {user.github.organizationsNumber}
-                  </p>
-                </TooltipTrigger>
-                <TooltipContent>
-                  <p>{user.github.organizationsNumber} organizations</p>
-                </TooltipContent>
-              </Tooltip>
-
-              <Tooltip>
-                <TooltipTrigger>
-                  <p className="flex flex-row items-center gap-2">
-                    <FolderGit size={12} /> {user.github.publicReposNumber}
-                  </p>
-                </TooltipTrigger>
-                <TooltipContent>
-                  <p>{user.github.publicReposNumber} public repos</p>
-                </TooltipContent>
-              </Tooltip>
-              <Tooltip>
-                <TooltipTrigger>
-                  <p className="flex flex-row items-center gap-2">
-                    <Code size={12} /> {user.github.publicGistsNumber}
-                  </p>
-                </TooltipTrigger>
-                <TooltipContent>
-                  <p>{user.github.publicGistsNumber} public gists</p>
-                </TooltipContent>
-              </Tooltip>
-            </TooltipProvider>
-          </div>
+        <div className="flex flex-col justify-evenly gap-4">
+          {/* Username */}
+          {!dashboard && (
+            <h3 className="text-2xl font-semibold">{user.info.username}</h3>
+          )}
+          <p className="text-sm">Github user since {formattedDate}</p>
+          <UserGithubStatus user={user} />
+          {/* Github Button */}
           <div className="flex gap-4">
-            <Button variant={"outline"}>
-              <a
-                href={user.github.url}
-                target="_blank"
-                rel="noreferrer"
-                className="flex flex-row items-center gap-2"
-              >
-                View on <Github size={16} />
-              </a>
-            </Button>
-            {/* <ButtonAddFriend
-              sendFriendship={sendFriendship}
-              userId={userId}
-              friendId={user._id.toString()}
-            /> */}
-          </div>
-        </div>
-      </div>
-      <div className="flex flex-row justify-between">
-        <div>
-          <div className="flex flex-row items-center gap-8">
-            <Globe size={16} />
-            <a
-              href={"https://" + user.info.website}
-              target="_blank"
-              rel="noreferrer"
-            >
-              {user.info.website}
-            </a>
-          </div>
-          <div className="flex flex-row items-center gap-8">
-            <Mail size={16} />
-            {user.info.email}
-          </div>
-          {/* {user.socials && (
-              <div className="flex flex-row items-center gap-8">
-                <Twitter size={16} />
-                <a
-                  href={`https://twitter.com/${user.socials}`}
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  {user.twitterUsername}
-                </a>
-              </div>
-            )} */}
-        </div>
-        <div>
-          <div className="flex flex-row items-center gap-8">
-            <Building size={16} />
-            {user.info.company}
-          </div>
+            <UserGithubButton user={user} />
 
-          <div className="flex flex-row items-center gap-8">
-            <MapPinHouse size={16} />
-            {user.info.location}
+            <div className="self-end">
+              {/* Friend Form  */}
+              {actualUserId &&
+                actualUserId !== user._id.toString() &&
+                !isFriends && (
+                  <AddFriendForm receiverId={user._id.toString()} />
+                )}
+            </div>
           </div>
         </div>
       </div>
-      <div className="text-md flex flex-row items-center gap-8">
-        <p
-          className={`italic before:text-2xl before:font-bold before:content-['"'] after:text-2xl after:font-bold after:content-['"']`}
-        >
-          {user.github.bio}
-        </p>
-      </div>
-      <div>
-        <h3 className="flex flex-wrap gap-4 font-semibold">
-          <Layers size={24} />
-          Tech Stack
-        </h3>
-        <Table className="text-center">
-          <TableHeader>
-            <TableRow className="text-center">
-              <TableHead className="text-center">Icon</TableHead>
-              <TableHead className="text-center">Language</TableHead>
-              <TableHead className="text-center">Lines of code</TableHead>
-              <TableHead className="text-center">Projects</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {user.skills.codingLanguages.map(
-              ({
-                language,
-                lines,
-                projects,
-                textColor,
-                Icon,
-              }: CodingLanguage) => (
-                <TableRow key={language}>
-                  <TableCell>
-                    {Icon ? (
-                      <Icon
-                        className={`mx-auto max-h-6 max-w-6 ${textColor}`}
-                      />
-                    ) : (
-                      <p className={`mx-auto ${textColor}`}>?</p>
-                    )}
-                  </TableCell>
-                  <TableCell>{language}</TableCell>
-                  <TableCell>{new Intl.NumberFormat().format(lines)}</TableCell>
-                  <TableCell>{projects}</TableCell>
-                </TableRow>
-              ),
-            )}
-          </TableBody>
-        </Table>
-      </div>
-      <div>
-        <h3 className="flex flex-wrap gap-4 font-semibold">
-          <CircleUserRound size={24} />
-          Friends
-        </h3>
-        <div></div>
-      </div>
-      <div>
-        <h3 className="flex flex-wrap gap-4 font-semibold">
-          <FolderGit size={24} />
-          Projects
-        </h3>
-        <div>
-          <p>
-            Projects joined:{" "}
-            {user.projects.projectsJoined
-              ? user.projects.projectsJoined.length
-              : 0}
-          </p>
-          <p>
-            Projects suggested:{" "}
-            {user.projects.projectsSuggested
-              ? user.projects.projectsSuggested.length
-              : 0}
-          </p>
-          <p>
-            Projects applied:{" "}
-            {user.projects.projectsApplied
-              ? user.projects.projectsApplied.length
-              : 0}
-          </p>
-        </div>
-      </div>
+
+      {/* User Info */}
+      <UserInfo user={user} actualUserId={actualUserId} />
+
+      {/* Tech Stack */}
+      <UserTechStack user={user} />
+
+      {/* Friends */}
+      <UserFriends user={user} actualUserId={actualUserId} friends={friends} />
+
+      {/* Projects Owned */}
+      <UserProjectsOwned
+        user={user}
+        projectsOwned={projectsOwned}
+        projectsOwnedCount={projectsOwnedCount}
+      />
+
+      {/* Projects Joined */}
+      <UserProjectsJoined
+        projectsJoinedCount={projectsJoinedCount}
+        projectsJoined={projectsJoined}
+      />
     </section>
   );
 }
