@@ -12,6 +12,7 @@ import {
   Code,
   Twitter,
   Layers,
+  FolderInput,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
@@ -26,22 +27,69 @@ import {
 import {
   Table,
   TableBody,
-  TableCaption,
   TableCell,
   TableHead,
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { notFound } from "next/navigation";
-// import ButtonAddFriend from "../common/ui/buttons/ButtonAddFriend";
-// import sendFriendship from "@/actions/friendships.server/sendFriendship.server";
+
 import { auth } from "@/auth";
 import AddFriendForm from "../requests/AddFriendForm";
 import UserInfo from "./UserInfo";
+import { Project } from "@/types/Project";
+import UserAvatar from "../common/ui/image/UserAvatar";
+import Link from "next/link";
+import { Friendship } from "@/types/Friendship";
 
-async function UserComponent({ user }: { user: User }) {
+type ProjectsJoined = Project & {
+  username: {
+    info: {
+      username: string;
+    };
+  };
+};
+
+type UserComponentProps = {
+  result: {
+    user: User & {
+      friendsAccepted: User[];
+      projectsOwned: Project[];
+      projectsJoined: ProjectsJoined[];
+
+      friendsCount: number;
+      projectsOwnedCount: number;
+      projectsJoinedCount: number;
+    };
+    counts: {
+      friendsCount: number;
+      projectsOwnedCount: number;
+      projectsJoinedCount: number;
+    };
+    isFriends: boolean;
+  };
+  friends: Friendship[];
+};
+
+async function UserComponent({ result, friends }: UserComponentProps) {
+  const {
+    user,
+    counts: { projectsOwnedCount, projectsJoinedCount },
+    isFriends,
+  } = result;
+  const { projectsOwned, projectsJoined, friendsAccepted } = user;
+  console.log("friends accepted >>>>>>>>>>", friends);
+  console.log("result >>>>>>>>>>", result);
+
   const session = await auth();
   const actualUserId = session?.user?.id;
+
+  const receivedAccepted = friends.filter((friendship: Friendship) => {
+    return friendship.receiverId?._id === actualUserId;
+  });
+
+  const sentAccepted = friends.filter((friendship: Friendship) => {
+    return friendship.senderId?._id === actualUserId;
+  });
 
   let formattedDate = "Unknown";
   if (user?.github?.createdAt) {
@@ -52,8 +100,8 @@ async function UserComponent({ user }: { user: User }) {
     });
   }
   return (
-    <section className="flex flex-col gap-8 text-lg font-light w-full">
-      <div className="flex items-center justify-center gap-4 w-full">
+    <section className="flex w-full flex-col gap-8 pb-4 text-lg font-light">
+      <div className="flex w-full items-center justify-center gap-4">
         {/* Avatar */}
         {user && user.info.image && user.info.image ? (
           <Image
@@ -145,16 +193,17 @@ async function UserComponent({ user }: { user: User }) {
             </Button>
             <div className="self-end">
               {/* Friend Form  */}
-              {actualUserId && actualUserId !== user._id.toString() && (
-                // user.isFriend && (
-                <AddFriendForm receiverId={user._id.toString()} />
-              )}
+              {actualUserId &&
+                actualUserId !== user._id.toString() &&
+                !isFriends && (
+                  <AddFriendForm receiverId={user._id.toString()} />
+                )}
             </div>
           </div>
         </div>
       </div>
 
-        {/* User Info */}
+      {/* User Info */}
       <UserInfo user={user} actualUserId={actualUserId} />
 
       {/* Tech Stack */}
@@ -201,38 +250,157 @@ async function UserComponent({ user }: { user: User }) {
         </Table>
       </div>
       {/* Friends */}
-      <div>
+      {/* Friends */}
+      <div className="flex flex-col gap-4">
         <h3 className="flex flex-wrap gap-4 font-semibold">
           <CircleUserRound size={24} />
-          Friends
+          Friends ({receivedAccepted.length + sentAccepted.length})
         </h3>
-        <div></div>
+        {actualUserId === user._id ? (
+          <div className="flex flex-wrap gap-4">
+            {receivedAccepted.map((friendship) => (
+              <UserAvatar
+                key={
+                  friendship?.senderId?._id?.toString() === actualUserId
+                    ? friendship?.receiverId?._id.toString()
+                    : friendship?.senderId?._id.toString()
+                }
+                userId={
+                  friendship?.senderId?._id.toString() === actualUserId
+                    ? friendship?.receiverId?._id.toString()
+                    : friendship?.senderId?._id.toString()
+                }
+                username={
+                  friendship?.senderId?.username === actualUserId
+                    ? friendship?.receiverId?.username
+                    : friendship?.senderId?.username
+                }
+                src={
+                  friendship?.senderId?.info?.image === actualUserId
+                    ? friendship?.receiverId?.info?.image
+                    : friendship?.senderId?.info?.image
+                }
+              />
+            ))}
+
+            {sentAccepted.map((friendship) => (
+              <UserAvatar
+                key={
+                  friendship?.senderId?._id?.toString() !== actualUserId
+                    ? friendship?.receiverId?._id.toString()
+                    : friendship?.senderId?._id.toString()
+                }
+                userId={
+                  friendship?.senderId?._id.toString() !== actualUserId
+                    ? friendship?.receiverId?._id.toString()
+                    : friendship?.senderId?._id.toString()
+                }
+                username={
+                  friendship?.senderId?.username !== actualUserId
+                    ? friendship?.receiverId?.username
+                    : friendship?.senderId?.username
+                }
+                src={
+                  friendship?.senderId?.info?.image !== actualUserId
+                    ? friendship?.receiverId?.info?.image
+                    : friendship?.senderId?.info?.image
+                }
+              />
+            ))}
+          </div>
+        ) : (
+          <div className="flex flex-wrap gap-4">
+            {receivedAccepted.map((friendship) => {
+              const friendId =
+                friendship?.senderId?._id.toString() === actualUserId
+                  ? friendship?.receiverId?._id.toString()
+                  : friendship?.senderId?._id.toString();
+
+              // Display friends of the visited user, excluding the actual user
+              return (
+                <UserAvatar
+                  key={friendId}
+                  userId={friendId}
+                  username={
+                    friendship?.senderId?._id.toString() === user._id.toString()
+                      ? friendship?.receiverId?.username
+                      : friendship?.senderId?.username
+                  }
+                  src={
+                    friendship?.senderId?._id.toString() === user._id.toString()
+                      ? friendship?.receiverId?.info?.image
+                      : friendship?.senderId?.info?.image
+                  }
+                />
+              );
+            })}
+
+            {sentAccepted.map((friendship) => {
+              const friendId =
+                friendship?.receiverId?._id.toString() === actualUserId
+                  ? friendship?.senderId?._id.toString()
+                  : friendship?.receiverId?._id.toString();
+
+          
+              return (
+                <UserAvatar
+                  key={friendId}
+                  userId={friendId}
+                  username={
+                    friendship?.receiverId?._id.toString() ===
+                    user._id.toString()
+                      ? friendship?.senderId?.username
+                      : friendship?.receiverId?.username
+                  }
+                  src={
+                    friendship?.receiverId?._id.toString() ===
+                    user._id.toString()
+                      ? friendship?.senderId?.info?.image
+                      : friendship?.receiverId?.info?.image
+                  }
+                />
+              );
+            })}
+          </div>
+        )}
       </div>
+
       {/* Projects */}
-      <div>
+      <div className="flex flex-col gap-4">
         <h3 className="flex flex-wrap gap-4 font-semibold">
           <FolderGit size={24} />
-          Projects
+          Projects Owned ({projectsOwnedCount})
         </h3>
-        <div>
-          <p>
-            Projects joined:{" "}
-            {user.projects.projectsJoined
-              ? user.projects.projectsJoined.length
-              : 0}
-          </p>
-          <p>
-            Projects Invited:{" "}
-            {user.projects.projectsInvited
-              ? user.projects.projectsInvited.length
-              : 0}
-          </p>
-          <p>
-            Projects applied:{" "}
-            {user.projects.projectsApplied
-              ? user.projects.projectsApplied.length
-              : 0}
-          </p>
+        <div className="flex items-center gap-4">
+          {projectsOwned.map((project) => (
+            <Link
+              href={`/${user.info.username}/${project.slug}/${project._id}`}
+              className="flex gap-4 hover:opacity-75"
+            >
+              <h3 className="font-semibold text-neutral-500 dark:text-neutral-400">
+                {project.title}
+              </h3>
+            </Link>
+          ))}
+        </div>
+      </div>
+
+      <div className="flex flex-col gap-4">
+        <h3 className="flex flex-wrap gap-4 font-semibold">
+          <FolderGit size={24} />
+          Projects Joined ({projectsJoinedCount})
+        </h3>
+        <div className="flex items-center gap-4">
+          {projectsJoined.map((project) => (
+            <Link
+              href={`/${project.username.info.username}/${project.slug}/${project._id}`}
+              className="flex gap-4 hover:opacity-75"
+            >
+              <h3 className="font-semibold text-neutral-500 dark:text-neutral-400">
+                {project.title}
+              </h3>
+            </Link>
+          ))}
         </div>
       </div>
     </section>

@@ -1,14 +1,20 @@
 "use server";
+
 import { baseUrl } from "@/constants";
-import axios from "axios";
 
 const getUserByUsername = async (username: string) => {
-  "use server";
   try {
-    const res = await axios.get(`${baseUrl}/api/users/${username}`);
-    return res.data;
+    const res = await fetch(`${baseUrl}/api/users/${username}`, {
+      cache: "no-store",
+    });
+    if (!res.ok) {
+      throw new Error(`Failed to get user by username: ${res.statusText}`);
+    }
+    const data = await res.json();
+    return data;
   } catch (error: any) {
-    return error;
+    console.log("Failed to get user by username:", error);
+    return { error: true, message: "Failed to get user by username" };
   }
 };
 
