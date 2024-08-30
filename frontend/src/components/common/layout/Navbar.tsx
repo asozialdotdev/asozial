@@ -60,9 +60,6 @@ function Navbar() {
               src={session?.user?.image || ""}
             />
           )}
-          <span className="xs:hidden sm:hidden md:hidden lg:block xl:block">
-            <ToggleTheme />
-          </span>
 
           <Button
             size="icon"
