@@ -14,10 +14,10 @@ function NavbarAsozialMenu() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger className="cursor-pointer hover:scale-110">
-        <span className="xs:hidden sm:hidden md:hidden lg:block lg:text-2xl xl:block xl:text-2xl">
+        <span className="hidden xxs:hidden xs:hidden sm:hidden md:hidden lg:block lg:text-2xl xl:block xl:text-2xl">
           asozial
         </span>
-        <span className="lg:hidden xl:hidden">
+        <span className="block lg:hidden xl:hidden">
           <AsozialLogo />
         </span>
       </DropdownMenuTrigger>

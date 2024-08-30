@@ -49,7 +49,7 @@ function NavbarLinks() {
     },
   ];
   return (
-    <ul className="flex items-center gap-6 xs:gap-2 sm:gap-2 md:gap-2">
+    <ul className="flex items-center gap-1 xs:gap-2 sm:gap-2 md:gap-2 lg:gap-6 xl:gap-6 2xl:gap-6">
       {navbarLinks.map((link) => (
         <li key={link.name}>
           <NavbarLinkItemWithSubLinks
