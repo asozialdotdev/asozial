@@ -10,7 +10,7 @@ import { CodingLanguage, User } from "@/types/User";
 import { Layers } from "lucide-react";
 function UserTechStack({ user }: { user: User }) {
   return (
-    <div>
+    <div className="h-[420px] overflow-y-scroll">
       <h3 className="flex flex-wrap gap-4 font-semibold">
         <Layers size={24} />
         Tech Stack
@@ -18,7 +18,6 @@ function UserTechStack({ user }: { user: User }) {
       <Table className="text-center">
         <TableHeader>
           <TableRow className="text-center">
-            <TableHead className="text-center">Icon</TableHead>
             <TableHead className="text-center">Language</TableHead>
             <TableHead className="text-center">Lines of code</TableHead>
             <TableHead className="text-center">Projects</TableHead>
@@ -31,17 +30,14 @@ function UserTechStack({ user }: { user: User }) {
               lines,
               projects,
               textColor,
-              Icon,
+              bgColor,
             }: CodingLanguage) => (
               <TableRow key={language}>
                 <TableCell>
-                  {Icon ? (
-                    <Icon className={`mx-auto max-h-6 max-w-6 ${textColor}`} />
-                  ) : (
-                    <p className={`mx-auto ${textColor}`}>?</p>
-                  )}
+                  <p className={`${bgColor} mx-auto rounded-xl py-2`}>
+                    {language}
+                  </p>
                 </TableCell>
-                <TableCell>{language}</TableCell>
                 <TableCell>{new Intl.NumberFormat().format(lines)}</TableCell>
                 <TableCell>{projects}</TableCell>
               </TableRow>

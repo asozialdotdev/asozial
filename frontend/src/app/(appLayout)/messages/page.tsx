@@ -25,11 +25,15 @@ async function MessagePage() {
                 className="flex flex-col gap-10"
               >
                 <div className="flex flex-row items-center gap-6">
-                  <UserAvatar
-                    src={friend.info.image}
-                    username={friend.username}
-                  />
-                  <h1 className="text-lg">{friend.username}</h1>
+                  {friend && (
+                    <>
+                      <UserAvatar
+                        src={friend?.info?.image}
+                        username={friend?.username}
+                      />
+                      <h1 className="text-lg">{friend.username}</h1>
+                    </>
+                  )}
                 </div>
               </Link>
             </PageCard>

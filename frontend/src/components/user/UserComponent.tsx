@@ -54,10 +54,9 @@ async function UserComponent({
 }: UserComponentProps) {
   const {
     user,
-    counts: { projectsOwnedCount = 0, projectsJoinedCount = 0 },
+    counts: { projectsOwnedCount, projectsJoinedCount },
     isFriends,
   } = result;
-  if (!user) return notFound();
   const { projectsOwned, projectsJoined } = user;
 
   const session = await auth();
