@@ -72,7 +72,7 @@ async function UserComponent({
   }
   return (
     <section className="flex w-full flex-col gap-8 pb-4 text-lg font-light">
-      <div className="flex w-full items-center justify-center gap-4">
+      <div className="flex w-full items-center flex-col lg:flex-row justify-center gap-4">
         {/* Avatar */}
         <UserComponentAvatar user={user} />
 
