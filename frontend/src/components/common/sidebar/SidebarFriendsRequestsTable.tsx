@@ -11,7 +11,6 @@ function SidebarFriendsRequestsTable() {
 
   const { friendsRequests, friendsError, friendsLoading } = useRequests();
   const { pending } = friendsRequests;
-  console.log(pending, "friendsRequests pending");
 
   const receivedAccepted = pending.filter((friendship: Friendship) => {
     return friendship.receiverId?._id === actualUserId;
