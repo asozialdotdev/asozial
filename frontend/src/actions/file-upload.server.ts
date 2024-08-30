@@ -4,7 +4,7 @@ import { getPlaiceholder } from "plaiceholder";
 
 const uploadFile = async (formData: FormData) => {
   try {
-    const response = await fetch(`http://${baseUrl}/api/upload-image`, {
+    const response = await fetch(`https://${baseUrl}/api/upload-image`, {
       method: "POST",
       body: formData,
     });
