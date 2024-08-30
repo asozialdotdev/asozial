@@ -53,7 +53,7 @@ async function UserComponent({
 }: UserComponentProps) {
   const {
     user,
-    counts: { projectsOwnedCount, projectsJoinedCount },
+    counts: { projectsOwnedCount = 0, projectsJoinedCount = 0},
     isFriends,
   } = result;
   const { projectsOwned, projectsJoined } = user;
