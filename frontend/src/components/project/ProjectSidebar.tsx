@@ -38,18 +38,10 @@ function ProjectSidebar() {
 
   return (
     <aside
-      className={`z-40 flex h-full w-[18rem] flex-col items-center gap-10 overflow-y-auto overflow-x-hidden bg-gray-100 px-[1rem] py-[1rem] text-3xl text-dark shadow-md transition-transform duration-150 ease-in-out dark:bg-zinc-900 dark:text-light ${isProjectSidebarOpen ? "translate-x-0 xl:translate-x-full" : "translate-x-full xl:translate-x-0"}`}
+      className={`z-50 flex h-full w-[18rem] flex-col items-center gap-10 overflow-y-auto overflow-x-hidden bg-gray-100 px-[1rem] py-[1rem] text-3xl text-dark shadow-md transition-transform duration-150 ease-in-out dark:bg-zinc-900 dark:text-light ${isProjectSidebarOpen ? "translate-x-0 xl:translate-x-full" : "translate-x-full xl:translate-x-0"}`}
       ref={projectSidebarRef}
     >
       <SidebarTitle>Projects</SidebarTitle>
-      <SidebarButtons links={links} />
-      <SidebarTitle>Projects</SidebarTitle>
-      <SidebarButtons links={links} />  <SidebarTitle>Projects</SidebarTitle>
-      <SidebarButtons links={links} />  <SidebarTitle>Projects</SidebarTitle>
-      <SidebarButtons links={links} />  <SidebarTitle>Projects</SidebarTitle>
-      <SidebarButtons links={links} />  <SidebarTitle>Projects</SidebarTitle>
-      <SidebarButtons links={links} />  <SidebarTitle>Projects</SidebarTitle>
-      <SidebarButtons links={links} />  <SidebarTitle>Projects</SidebarTitle>
       <SidebarButtons links={links} />
       <SidebarRequests project />
     </aside>
