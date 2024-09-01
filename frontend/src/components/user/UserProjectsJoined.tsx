@@ -26,7 +26,7 @@ function UserProjectsJoined({
         <FolderGit size={24} />
         Projects Joined ({projectsJoinedCount})
       </h3>
-      <div className="flex items-center gap-4">
+      <div className="flex flex-wrap items-center gap-4">
         {projectsJoined.map((project) => (
           <Link
             key={project._id.toString()}

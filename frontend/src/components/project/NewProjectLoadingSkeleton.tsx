@@ -4,7 +4,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 function NewProjectLoadingSkeleton() {
   return (
     <PageContainer className="w-full max-w-screen-md">
-      <section className="mt-2 flex w-full flex-col gap-1 border-zinc-300 p-4 hover:bg-zinc-100 dark:border-zinc-600 dark:shadow-neutral-700/30 dark:hover:bg-zinc-800">
+      <section className="mt-2 flex w-full flex-col gap-1 border-zinc-300 lg:p-4 hover:bg-zinc-100 dark:border-zinc-600 dark:shadow-neutral-700/30 dark:hover:bg-zinc-800">
         <div className="flex flex-col items-start gap-4">
           <Skeleton className="h-8 w-full bg-zinc-300 dark:bg-zinc-600" />
 

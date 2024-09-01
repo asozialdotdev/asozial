@@ -6,6 +6,8 @@ import PageTitle from "@/components/common/ui/PageTitle";
 import { auth } from "@/auth";
 import SearchComponent from "@/components/common/ui/SearchComponent";
 import UsersTable from "@/components/user/UsersTable";
+import UserCardLoadingSkeleton from "@/components/user/UserCardLoadingSkeleton";
+import { Suspense } from "react";
 
 type UsersPageProps = {
   searchParams: {
@@ -26,12 +28,14 @@ async function UsersPage({ searchParams }: UsersPageProps) {
     <PageContainer>
       <PageTitle>User Search</PageTitle>
       <SearchComponent />
-      <UsersTable
-        allUsers={users}
-        actualUserId={actualUserId}
-        currentPage={currentPage}
-        totalPages={totalPages}
-      />
+      <Suspense fallback={<UserCardLoadingSkeleton />}>
+        <UsersTable
+          allUsers={users}
+          actualUserId={actualUserId}
+          currentPage={currentPage}
+          totalPages={totalPages}
+        />
+      </Suspense>
     </PageContainer>
   );
 }
