@@ -11,8 +11,6 @@ async function ConversationList() {
   const session = await auth();
   const userId = session?.user?.id;
 
-  console.log(accepted);
-
   if (!userId) {
     return (
       <PageCard className="flex w-full flex-col">No Conversations</PageCard>
@@ -131,9 +129,9 @@ async function ConversationList() {
                             </div>
                           ) : (
                             <p className="text-lg">
-                              Don't be so{" "}
+                              Don&#39;t be so{" "}
                               <strong className="text-xl">asozial!</strong> say
-                              'Hello, world!'
+                              &#39;Hello, world!&#39;
                             </p>
                           )}
                         </div>
