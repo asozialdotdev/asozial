@@ -1,5 +1,6 @@
 import express, { Request, Response, NextFunction } from "express";
-import User, { UserDocument } from "../models/User.models";
+import User from "../models/User.models";
+import Message from "../models/Message.models";
 import Friendship from "../models/Friendship.models";
 import { ObjectId } from "mongodb"; // Ensure you import ObjectId from mongoose
 
@@ -260,9 +261,30 @@ friendshipsRouter.get(
           model: User,
         });
 
-      const acceptedFriendships = userFriendships.filter(
-        (friendship) => friendship.status === "accepted"
+      const acceptedFriendships = await Promise.all(
+        userFriendships
+          .filter((friendship) => friendship.status === "accepted")
+          .map(async (friendship) => {
+            let mostRecentMessage = null;
+
+            if (friendship.messages && friendship.messages.length > 0) {
+              mostRecentMessage =
+                friendship.messages[friendship.messages.length - 1];
+
+              if (mostRecentMessage) {
+                mostRecentMessage = await Message.findOne({
+                  _id: mostRecentMessage._id,
+                });
+              }
+            }
+
+            return {
+              ...friendship.toObject(),
+              mostRecentMessage,
+            };
+          })
       );
+
       const pendingFriendships = userFriendships.filter(
         (friendship) => friendship.status === "pending"
       );

@@ -19,11 +19,23 @@ messagesRouter.get(
         .populate({
           path: "messages",
           select: "senderId content createdAt",
+          model: Message,
         })
         .populate({
           path: "friends",
           select: "username info.image",
+          model: User,
         });
+
+      if (friendship) {
+        const messageDetails = friendship.messages.map((message: any) => ({
+          senderId: message.senderId,
+          content: message.content,
+          createdAt: message.createdAt,
+        }));
+
+        console.log(messageDetails);
+      }
 
       //only updating when one user reads the messages
 
