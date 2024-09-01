@@ -11,26 +11,42 @@ type UserFriendsProps = {
 };
 
 function UserFriends({ user, actualUserId, friends }: UserFriendsProps) {
-  const receivedAccepted = friends.filter((friendship: Friendship) => {
-    return friendship.receiverId?._id === actualUserId;
-  });
+  const actualUserReceivedAccepted = friends.filter(
+    (friendship: Friendship) => {
+      return friendship.receiverId?._id === actualUserId;
+    },
+  );
 
-  const sentAccepted = friends.filter((friendship: Friendship) => {
+  const actualUserSentAccepted = friends.filter((friendship: Friendship) => {
     return friendship.senderId?._id === actualUserId;
   });
+
+  const receivedAccepted = friends.filter((friendship: Friendship) => {
+    return friendship.receiverId?._id === user._id;
+  });
+  const sentAccepted = friends.filter((friendship: Friendship) => {
+    return friendship.senderId?._id === user._id;
+  });
+
+  const isActualUser = actualUserId === user._id;
+  console.log("isActualUser", isActualUser);
 
   return (
     <div className="flex flex-col gap-4">
       <Link href={`${user.info.username}/friends`}>
         <h3 className="flex flex-wrap gap-4 font-semibold hover:opacity-75">
           <CircleUserRound size={24} />
-          Friends ({receivedAccepted.length + sentAccepted.length})
+          Friends (
+          {isActualUser
+            ? actualUserReceivedAccepted.length + actualUserSentAccepted.length
+            : receivedAccepted.length + sentAccepted.length}
+          )
         </h3>
       </Link>
       {/* Display friends of the actual user */}
       {actualUserId === user._id ? (
         <div className="flex flex-wrap gap-4">
-          {receivedAccepted.map((friendship) => (
+          {actualUserReceivedAccepted.map((friendship) => (
             <UserAvatar
               key={
                 friendship?.senderId?._id?.toString() === actualUserId
@@ -55,7 +71,7 @@ function UserFriends({ user, actualUserId, friends }: UserFriendsProps) {
             />
           ))}
 
-          {sentAccepted.map((friendship) => (
+          {actualUserSentAccepted.map((friendship) => (
             <UserAvatar
               key={
                 friendship?.senderId?._id?.toString() !== actualUserId
