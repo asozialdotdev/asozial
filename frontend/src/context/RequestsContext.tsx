@@ -4,6 +4,7 @@ import { checkMembersApplied, getUserFriendStatuses } from "@/actions";
 import { Project } from "@/types/Project";
 import { createContext, useContext, useEffect, useState } from "react";
 import { Friendship } from "@/types/Friendship";
+import { useSession } from "next-auth/react";
 
 type FriendsRequest = {
   accepted: Friendship[];
@@ -37,6 +38,8 @@ const defaultContextValue: RequestsContextType = {
 const RequestContext = createContext<RequestsContextType>(defaultContextValue);
 
 function RequestsProvider({ children }: { children: React.ReactNode }) {
+  const session = useSession();
+  const userId = session?.data?.user.id;
   const [projectsRequests, setProjectsRequests] = useState([]);
   const [projectsError, setProjectsError] = useState("");
   const [projectsLoading, setProjectsLoading] = useState(true);
@@ -50,46 +53,49 @@ function RequestsProvider({ children }: { children: React.ReactNode }) {
   const [friendsLoading, setFriendsLoading] = useState(true);
 
   useEffect(() => {
-    const getAllProjectsRequests = async () => {
-      try {
-        setProjectsLoading(true);
-        setProjectsError("");
-        const response = await checkMembersApplied();
-        if (!response.error) {
-          setProjectsRequests(response.projects);
-        } else {
-          setProjectsError(response.message);
+    if (userId) {
+      const getAllProjectsRequests = async () => {
+        try {
+          setProjectsLoading(true);
+          setProjectsError("");
+          const response = await checkMembersApplied();
+          if (!response.error) {
+            setProjectsRequests(response.projects);
+          } else {
+            setProjectsError(response.message);
+          }
+        } catch (error) {
+          setProjectsError("An unexpected error occurred");
+        } finally {
+          setProjectsLoading(false);
         }
-      } catch (error) {
-        setProjectsError("An unexpected error occurred");
-      } finally {
-        setProjectsLoading(false);
-      }
-    };
+      };
 
-    getAllProjectsRequests();
-  }, []);
+      getAllProjectsRequests();
+    }
+  }, [userId]);
 
   useEffect(() => {
-    const getAllFriendsRequests = async () => {
-      try {
-        setFriendsLoading(true);
-        setFriendsError("");
-        const response = await getUserFriendStatuses();
-        if (!response.error) {
-          setFriendsRequests(response);
-        } else {
-          setFriendsError(response.message);
+    if (userId) {
+      const getAllFriendsRequests = async () => {
+        try {
+          setFriendsLoading(true);
+          setFriendsError("");
+          const response = await getUserFriendStatuses();
+          if (!response.error) {
+            setFriendsRequests(response);
+          } else {
+            setFriendsError(response.message);
+          }
+        } catch (error) {
+          setFriendsError("An unexpected error occurred");
+        } finally {
+          setFriendsLoading(false);
         }
-      } catch (error) {
-        setFriendsError("An unexpected error occurred");
-      } finally {
-        setFriendsLoading(false);
-      }
-    };
-
-    getAllFriendsRequests();
-  }, []);
+      };
+      getAllFriendsRequests();
+    }
+  }, [userId]);
 
   return (
     <RequestContext.Provider

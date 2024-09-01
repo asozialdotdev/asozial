@@ -10,7 +10,7 @@ async function Page({ params }: { params: { username: string } }) {
 
   const [result, friends] = await Promise.all([
     getUserByUsername(username),
-    getUserFriendStatuses(),
+    getUserFriendStatuses(username),
   ]);
 
   const { accepted } = friends;

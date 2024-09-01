@@ -1,5 +1,6 @@
 import express, { Request, Response, NextFunction } from "express";
-import User, { UserDocument } from "../models/User.models";
+import User from "../models/User.models";
+import Message from "../models/Message.models";
 import Friendship from "../models/Friendship.models";
 import { ObjectId } from "mongodb"; // Ensure you import ObjectId from mongoose
 
@@ -231,11 +232,12 @@ friendshipsRouter.delete(
 );
 
 friendshipsRouter.get(
-  "/:userId/status",
+  "/:username/status",
   async (req: Request, res: Response, next: NextFunction) => {
-    const userId = req.params.userId;
+    const username = req.params.username;
+    console.log("username>>>>>>", username);
     try {
-      const user = await User.findById(userId);
+      const user = await User.findOne({ username });
       if (!user) {
         res.status(404).send("User not found");
         console.error("User not found");
@@ -244,9 +246,9 @@ friendshipsRouter.get(
 
       const userFriendships = await Friendship.find({
         $or: [
-          { senderId: new ObjectId(userId) },
-          { receiverId: new ObjectId(userId) },
-          { friends: { $in: [new ObjectId(userId)] } },
+          { senderId: user._id },
+          { receiverId: user._id },
+          { friends: { $in: [user._id] } },
         ],
       })
         .populate({
@@ -260,15 +262,42 @@ friendshipsRouter.get(
           model: User,
         });
 
-      const acceptedFriendships = userFriendships.filter(
-        (friendship) => friendship.status === "accepted"
+      const acceptedFriendships = await Promise.all(
+        userFriendships
+          .filter((friendship) => friendship.status === "accepted")
+          .map(async (friendship) => {
+            let mostRecentMessage = null;
+
+            if (friendship.messages && friendship.messages.length > 0) {
+              mostRecentMessage =
+                friendship.messages[friendship.messages.length - 1];
+
+              if (mostRecentMessage) {
+                mostRecentMessage = await Message.findOne({
+                  _id: mostRecentMessage._id,
+                });
+              }
+            }
+
+            return {
+              ...friendship.toObject(),
+              mostRecentMessage,
+            };
+          })
       );
+
       const pendingFriendships = userFriendships.filter(
         (friendship) => friendship.status === "pending"
       );
       const declinedFriendships = userFriendships.filter(
         (friendship) => friendship.status === "declined"
       );
+
+      console.log ({
+        accepted: acceptedFriendships,
+        pending: pendingFriendships,
+        declined: declinedFriendships,
+      })
 
       res.json({
         accepted: acceptedFriendships,
@@ -281,55 +310,5 @@ friendshipsRouter.get(
     }
   }
 );
-
-// friendshipsRouter.get(
-//   "/:userId/isFriend/:friendId",
-//   async (req: Request, res: Response, next: NextFunction) => {
-//     const { userId, friendId } = req.params;
-
-//     try {
-//       const user = await User.findById(userId);
-//       const friend = await User.findById(friendId);
-//       if (!user || !friend) {
-//         return res.status(404).json({ message: "User not found" });
-//       }
-
-//       const friendship = await Friendship.findOne({
-//         $or: [
-//           {
-//             senderId: new ObjectId(userId),
-//             receiverId: new ObjectId(friendId),
-//           },
-//           {
-//             senderId: new ObjectId(friendId),
-//             receiverId: new ObjectId(userId),
-//           },
-//         ],
-//       }).populate({
-//         path: "senderId receiverId",
-//         select: "username info.image",
-//         model: User,
-//       });
-
-//       if (!friendship) {
-//         return res.json({ isFriend: false, status: "none" });
-//       }
-
-//       let status = "none";
-//       if (friendship.status === "accepted") {
-//         status = "friend";
-//       } else if (friendship.status === "pending") {
-//         status = "pending";
-//       } else if (friendship.status === "declined") {
-//         status = "rejected";
-//       }
-
-//       res.json({ isFriend: status === "friend", status });
-//     } catch (error: any) {
-//       console.error("Error checking friendship status:", error);
-//       res.status(500).send("Error checking friendship status");
-//     }
-//   }
-// );
 
 export default friendshipsRouter;
