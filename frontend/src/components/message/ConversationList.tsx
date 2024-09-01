@@ -11,6 +11,8 @@ async function ConversationList() {
   const session = await auth();
   const userId = session?.user?.id;
 
+  console.log(accepted);
+
   if (!userId) {
     return (
       <PageCard className="flex w-full flex-col">No Conversations</PageCard>
@@ -21,14 +23,29 @@ async function ConversationList() {
       {accepted &&
         accepted
           .sort((a: any, b: any) => {
+            const aHasMostRecentMessage = a.mostRecentMessage ? true : false;
+            const bHasMostRecentMessage = b.mostRecentMessage ? true : false;
+
+            if (aHasMostRecentMessage && bHasMostRecentMessage) {
+              return (
+                new Date(b.updatedAt).getTime() -
+                new Date(a.updatedAt).getTime()
+              );
+            }
+
+            if (aHasMostRecentMessage) return -1;
+            if (bHasMostRecentMessage) return 1;
+
             if (a.updatedAt && b.updatedAt) {
               return (
                 new Date(b.updatedAt).getTime() -
                 new Date(a.updatedAt).getTime()
               );
             }
+
             if (a.updatedAt) return -1;
             if (b.updatedAt) return 1;
+
             return 0;
           })
           .map((conversation: Friendship) => {
@@ -36,7 +53,7 @@ async function ConversationList() {
               (friend): friend is ConversationFriend =>
                 friend._id.toString() !== userId.toString(),
             );
-            console.log(conversation?.messages?.length);
+            console.log(conversation?.messages);
             return (
               <PageCard
                 key={conversation._id.toString()}
