@@ -8,7 +8,7 @@ const usersRouter = express.Router();
 usersRouter.get(
   "/search",
   async (req: Request, res: Response, next: NextFunction) => {
-    const { query, page = 1, limit = 10, actualUserId } = req.query; // Accept actualUserId as a query parameter
+    const { query, page = 1, limit = 10, actualUserId } = req.query;
 
     try {
       const searchQuery = query

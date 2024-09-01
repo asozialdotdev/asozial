@@ -2,22 +2,21 @@
 import { auth } from "@/auth";
 import { baseUrl } from "@/constants";
 
-const getUserFriendStatuses = async () => {
+const getUserFriendStatuses = async (userUsername: string = "") => {
   const session = await auth();
+  const actualUsername = session?.user?.githubUsername;
+  const username = userUsername || actualUsername;
   if (!session) {
     console.error("No session found");
     return;
   }
   try {
-    const response = await fetch(
-      `${baseUrl}/api/friends/${session.user.id}/status`,
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
+    const response = await fetch(`${baseUrl}/api/friends/${username}/status`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
       },
-    );
+    });
     if (!response.ok) {
       throw new Error(
         `Failed to fetch friend requests: ${response.statusText}`,
