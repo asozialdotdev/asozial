@@ -32,6 +32,7 @@ type Friendship = {
   receiverId?: ReceiverId;
   friends?: Types.ObjectId[] | ConversationFriend[];
   messages?: Message[];
+  mostRecentMessage?: Message;
   status: "pending" | "accepted" | "declined";
   createdAt?: Date;
   updatedAt?: Date;

@@ -268,19 +268,14 @@ friendshipsRouter.get(
             let mostRecentMessage = null;
 
             if (friendship.messages && friendship.messages.length > 0) {
-              const mostRecentMessageId = friendship.messages.reduce(
-                (latest: any, message: any) => {
-                  return new Date(message.createdAt) >
-                    new Date(latest.createdAt)
-                    ? message._id
-                    : latest._id;
-                },
-                friendship.messages[0]._id
-              );
+              mostRecentMessage =
+                friendship.messages[friendship.messages.length - 1];
 
-              mostRecentMessage = await Message.findOne({
-                _id: mostRecentMessageId,
-              });
+              if (mostRecentMessage) {
+                mostRecentMessage = await Message.findOne({
+                  _id: mostRecentMessage._id,
+                });
+              }
             }
 
             return {

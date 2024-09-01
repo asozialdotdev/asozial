@@ -53,7 +53,6 @@ async function ConversationList() {
               (friend): friend is ConversationFriend =>
                 friend._id.toString() !== userId.toString(),
             );
-            console.log(conversation?.messages);
             return (
               <PageCard
                 key={conversation._id.toString()}
@@ -106,26 +105,37 @@ async function ConversationList() {
                               })()}
                           </p>
                         </div>
-                        <div className="flex w-full flex-row justify-between">
-                          {conversation?.messages && (
-                            <p className="text-xl">
-                              {conversation.messages.length > 0
-                                ? conversation.messages.length
-                                : "asozial! say 'Hello, world!'"}
-                            </p>
-                          )}
-                          {conversation?.updatedAt &&
-                            conversation?.createdAt &&
-                            conversation?.messages &&
-                            conversation?.messages.length > 0 && (
-                              <div className="flex flex-col gap-4">
-                                Last message:{" "}
+                        <div className="flex w-full flex-row">
+                          {conversation.mostRecentMessage?.createdAt ? (
+                            <div className="flex w-full flex-row items-center justify-between">
+                              <div className="flex w-3/4 flex-row items-center gap-4">
+                                <p>
+                                  {conversation.mostRecentMessage.senderId.toString() ===
+                                  userId
+                                    ? "You: "
+                                    : "Them:"}
+                                </p>
+                                <p className="flex flex-wrap overflow-hidden break-words text-lg">
+                                  {conversation.mostRecentMessage.content}
+                                </p>
+                              </div>
+
+                              <p className="">
                                 {formatDistanceToNow(
-                                  new Date(conversation.updatedAt),
+                                  new Date(
+                                    conversation?.mostRecentMessage?.createdAt,
+                                  ),
                                 )}{" "}
                                 ago
-                              </div>
-                            )}
+                              </p>
+                            </div>
+                          ) : (
+                            <p className="text-lg">
+                              Don't be so{" "}
+                              <strong className="text-xl">asozial!</strong> say
+                              'Hello, world!'
+                            </p>
+                          )}
                         </div>
                       </div>
                     )}
