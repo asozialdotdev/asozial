@@ -42,7 +42,7 @@ function UserCardLoadingSkeleton() {
           ))}
         </div>
 
-        <div className='flex flex-col gap-2'>
+        <div className="flex flex-col gap-2">
           {/* Bio Skeleton */}
           <Skeleton className="h-4 w-full rounded bg-zinc-300 dark:bg-zinc-600" />
           <Skeleton className="h-4 w-3/4 rounded bg-zinc-300 dark:bg-zinc-600" />
@@ -87,7 +87,7 @@ function UserCardLoadingSkeleton() {
           ))}
         </div>
 
-        <div className='flex flex-col gap-2'>
+        <div className="flex flex-col gap-2">
           {/* Bio Skeleton */}
           <Skeleton className="h-4 w-full rounded bg-zinc-300 dark:bg-zinc-600" />
           <Skeleton className="h-4 w-3/4 rounded bg-zinc-300 dark:bg-zinc-600" />
@@ -132,7 +132,7 @@ function UserCardLoadingSkeleton() {
           ))}
         </div>
 
-        <div className='flex flex-col gap-2'>
+        <div className="flex flex-col gap-2">
           {/* Bio Skeleton */}
           <Skeleton className="h-4 w-full rounded bg-zinc-300 dark:bg-zinc-600" />
           <Skeleton className="h-4 w-3/4 rounded bg-zinc-300 dark:bg-zinc-600" />

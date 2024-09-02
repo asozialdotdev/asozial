@@ -131,7 +131,11 @@ projectsRouter.get(
   async (req: Request, res: Response, next: NextFunction) => {
     const { title, userId } = req.query;
     try {
-      const existingProject = await Project.findOne({ title, owner: userId });
+      const existingProject = await Project.findOne({
+        title: { $regex: `^${title}$`, $options: "i" },
+        owner: userId,
+      });
+
       res.json({ isUnique: !existingProject });
     } catch (error) {
       next(error);
