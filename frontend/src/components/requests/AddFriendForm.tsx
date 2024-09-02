@@ -15,11 +15,10 @@ function AddFriendForm({ receiverId }: { receiverId: string }) {
       <CustomLabel htmlFor="send"></CustomLabel>
       <input type="hidden" name="receiverId" value={receiverId} />
       <ButtonAddFriend success={success} />
-      <div className='absolute bottom-2 right-4 z-40 text-[8px] lg:text-sm bg-white p-2 dark:bg-black'>
-
-      {formState.errors?.send && (
-        <ErrorMessage>{formState.errors?.send.join(", ")}</ErrorMessage>
-      )}
+      <div className="absolute bottom-2 right-4 z-40 p-2 text-[8px] lg:text-sm">
+        {formState.errors?.send && (
+          <ErrorMessage>{formState.errors?.send.join(", ")}</ErrorMessage>
+        )}
       </div>
     </form>
   );

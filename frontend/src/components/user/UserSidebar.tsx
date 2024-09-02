@@ -30,11 +30,11 @@ function UserSidebar() {
 
   return (
     <aside
-      className={`relative z-50 flex h-full w-[18rem] flex-col gap-10 overflow-y-auto bg-gray-100 px-[1rem] py-[1rem] text-3xl text-dark shadow-md transition-transform duration-150 ease-in-out dark:bg-zinc-900 dark:text-light ${isUserSidebarOpen ? "translate-x-0 xl:-translate-x-full" : "-translate-x-full xl:translate-x-0"}`}
+      className={`relative z-40 flex h-full w-[18rem] flex-col gap-10 overflow-y-auto overflow-x-hidden bg-gray-100 px-[1rem] py-[1rem] text-3xl text-dark shadow-md transition-transform duration-150 ease-in-out dark:bg-zinc-900 dark:text-light ${isUserSidebarOpen ? "translate-x-0 xl:-translate-x-full" : "-translate-x-full xl:translate-x-0"}`}
       ref={userSidebarRef}
     >
       <ButtonBack className="absolute right-3 top-1 z-20" size={30} />
-      <SidebarTitle className='text-center'>Friends</SidebarTitle>
+      <SidebarTitle className="text-center">Friends</SidebarTitle>
       <SidebarButtons links={links} />
       <SidebarRequests user />
     </aside>

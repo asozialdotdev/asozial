@@ -21,15 +21,16 @@ function UserFriends({ user, actualUserId, friends }: UserFriendsProps) {
     return friendship.senderId?._id === actualUserId;
   });
 
-  const receivedAccepted = friends.filter((friendship: Friendship) => {
-    return friendship.receiverId?._id === user._id;
-  });
-  const sentAccepted = friends.filter((friendship: Friendship) => {
+  const visitedUserReceivedAccepted = friends.filter(
+    (friendship: Friendship) => {
+      return friendship.receiverId?._id === user._id;
+    },
+  );
+  const visitedUserSentAccepted = friends.filter((friendship: Friendship) => {
     return friendship.senderId?._id === user._id;
   });
 
   const isActualUser = actualUserId === user._id;
-  console.log("isActualUser", isActualUser);
 
   return (
     <div className="flex flex-col gap-4">
@@ -39,84 +40,36 @@ function UserFriends({ user, actualUserId, friends }: UserFriendsProps) {
           Friends (
           {isActualUser
             ? actualUserReceivedAccepted.length + actualUserSentAccepted.length
-            : receivedAccepted.length + sentAccepted.length}
+            : visitedUserReceivedAccepted.length +
+              visitedUserSentAccepted.length}
           )
         </h3>
       </Link>
       {/* Display friends of the actual user */}
-      {actualUserId === user._id ? (
+      {isActualUser ? (
         <div className="flex flex-wrap gap-4">
-          {actualUserReceivedAccepted.map((friendship) => (
-            <UserAvatar
-              key={
-                friendship?.senderId?._id?.toString() === actualUserId
-                  ? friendship?.receiverId?._id.toString()
-                  : friendship?.senderId?._id.toString()
-              }
-              userId={
-                friendship?.senderId?._id.toString() === actualUserId
-                  ? friendship?.receiverId?._id.toString()
-                  : friendship?.senderId?._id.toString()
-              }
-              username={
-                friendship?.senderId?.username === actualUserId
-                  ? friendship?.receiverId?.username
-                  : friendship?.senderId?.username
-              }
-              src={
-                friendship?.senderId?.info?.image === actualUserId
-                  ? friendship?.receiverId?.info?.image
-                  : friendship?.senderId?.info?.image
-              }
-            />
-          ))}
-
-          {actualUserSentAccepted.map((friendship) => (
-            <UserAvatar
-              key={
-                friendship?.senderId?._id?.toString() !== actualUserId
-                  ? friendship?.receiverId?._id.toString()
-                  : friendship?.senderId?._id.toString()
-              }
-              userId={
-                friendship?.senderId?._id.toString() !== actualUserId
-                  ? friendship?.receiverId?._id.toString()
-                  : friendship?.senderId?._id.toString()
-              }
-              username={
-                friendship?.senderId?.username !== actualUserId
-                  ? friendship?.receiverId?.username
-                  : friendship?.senderId?.username
-              }
-              src={
-                friendship?.senderId?.info?.image !== actualUserId
-                  ? friendship?.receiverId?.info?.image
-                  : friendship?.senderId?.info?.image
-              }
-            />
-          ))}
-        </div>
-      ) : (
-        // Display friends of the visited user
-        <div className="flex flex-wrap gap-4">
-          {receivedAccepted.map((friendship) => {
-            const friendId =
-              friendship?.senderId?._id.toString() === actualUserId
-                ? friendship?.receiverId?._id.toString()
-                : friendship?.senderId?._id.toString();
-
-            // Display friends of the visited user, excluding the actual user
+          {actualUserReceivedAccepted.map((friendship) => {
+            const actualUserIsSender =
+              friendship?.senderId?._id?.toString() === actualUserId;
             return (
               <UserAvatar
-                key={friendId}
-                userId={friendId}
+                key={
+                  actualUserIsSender
+                    ? friendship?.receiverId?._id.toString()
+                    : friendship?.senderId?._id.toString()
+                }
+                userId={
+                  actualUserIsSender
+                    ? friendship?.receiverId?._id.toString()
+                    : friendship?.senderId?._id.toString()
+                }
                 username={
-                  friendship?.senderId?._id.toString() === user._id.toString()
+                  actualUserIsSender
                     ? friendship?.receiverId?.username
                     : friendship?.senderId?.username
                 }
                 src={
-                  friendship?.senderId?._id.toString() === user._id.toString()
+                  actualUserIsSender
                     ? friendship?.receiverId?.info?.image
                     : friendship?.senderId?.info?.image
                 }
@@ -124,23 +77,90 @@ function UserFriends({ user, actualUserId, friends }: UserFriendsProps) {
             );
           })}
 
-          {sentAccepted.map((friendship) => {
-            const friendId =
-              friendship?.receiverId?._id.toString() === actualUserId
-                ? friendship?.senderId?._id.toString()
-                : friendship?.receiverId?._id.toString();
-
+          {actualUserSentAccepted.map((friendship) => {
+            const actualUserIsReceiver =
+              friendship?.receiverId?._id?.toString() === actualUserId;
             return (
               <UserAvatar
-                key={friendId}
-                userId={friendId}
+                key={
+                  actualUserIsReceiver
+                    ? friendship?.senderId?._id.toString()
+                    : friendship?.receiverId?._id.toString()
+                }
+                userId={
+                  actualUserIsReceiver
+                    ? friendship?.senderId?._id.toString()
+                    : friendship?.receiverId?._id.toString()
+                }
                 username={
-                  friendship?.receiverId?._id.toString() === user._id.toString()
+                  actualUserIsReceiver
                     ? friendship?.senderId?.username
                     : friendship?.receiverId?.username
                 }
                 src={
-                  friendship?.receiverId?._id.toString() === user._id.toString()
+                  actualUserIsReceiver
+                    ? friendship?.senderId?.info?.image
+                    : friendship?.receiverId?.info?.image
+                }
+              />
+            );
+          })}
+        </div>
+      ) : (
+        // Display friends of the visited user
+        <div className="flex flex-wrap gap-4">
+          {visitedUserReceivedAccepted.map((friendship) => {
+            const userIsSender =
+              friendship?.senderId?._id.toString() === user._id.toString();
+            return (
+              <UserAvatar
+                key={
+                  userIsSender
+                    ? friendship?.receiverId?._id.toString()
+                    : friendship?.senderId?._id.toString()
+                }
+                userId={
+                  userIsSender
+                    ? friendship?.receiverId?._id.toString()
+                    : friendship?.senderId?._id.toString()
+                }
+                username={
+                  userIsSender
+                    ? friendship?.receiverId?.username
+                    : friendship?.senderId?.username
+                }
+                src={
+                  userIsSender
+                    ? friendship?.receiverId?.info?.image
+                    : friendship?.senderId?.info?.image
+                }
+              />
+            );
+          })}
+
+          {visitedUserSentAccepted.map((friendship) => {
+            const userIsReceiver =
+              friendship?.receiverId?._id.toString() === user._id.toString();
+
+            return (
+              <UserAvatar
+                key={
+                  userIsReceiver
+                    ? friendship?.senderId?.username
+                    : friendship?.receiverId?.username
+                }
+                userId={
+                  userIsReceiver
+                    ? friendship?.senderId?.username
+                    : friendship?.receiverId?.username
+                }
+                username={
+                  userIsReceiver
+                    ? friendship?.senderId?.username
+                    : friendship?.receiverId?.username
+                }
+                src={
+                  userIsReceiver
                     ? friendship?.senderId?.info?.image
                     : friendship?.receiverId?.info?.image
                 }

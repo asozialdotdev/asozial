@@ -11,31 +11,72 @@ usersRouter.get(
     const { query, page = 1, limit = 10, actualUserId } = req.query;
 
     try {
+      // Define the search query dynamically
       const searchQuery = query
         ? {
             $or: [
               { "info.username": { $regex: query, $options: "i" } },
               { "info.name": { $regex: query, $options: "i" } },
+              {
+                "skills.codingLanguages.language": {
+                  $regex: query,
+                  $options: "i",
+                },
+              },
             ],
           }
         : {};
 
-      // Use aggregation to fetch user data along with additional computed fields
+      // Aggregation pipeline to get user details and accepted friends count
       const usersAggregation = await User.aggregate([
-        { $match: searchQuery }, // Apply the search query
+        { $match: searchQuery },
 
-        // Calculate total projects owned and joined by counting the array length
+        // Add a field to calculate owned and joined projects and friends count
         {
           $addFields: {
             totalProjectsOwned: {
               $size: { $ifNull: ["$projects.projectsOwned", []] },
-            }, // Calculate total owned projects
+            },
             totalProjectsMembers: {
               $size: { $ifNull: ["$projects.projectsJoined", []] },
-            }, // Calculate total member projects
-            totalFriends: { $size: { $ifNull: ["$friends.accepted", []] } }, // Calculate total friends from accepted friendships
+            },
           },
         },
+
+        // Lookup to find the accepted friends count
+        {
+          $lookup: {
+            from: "Friendship",
+            let: { userId: "$_id" },
+            pipeline: [
+              {
+                $match: {
+                  $expr: {
+                    $and: [
+                      { $eq: ["$status", "accepted"] },
+                      {
+                        $or: [
+                          { $eq: ["$senderId", "$$userId"] },
+                          { $eq: ["$receiverId", "$$userId"] },
+                        ],
+                      },
+                    ],
+                  },
+                },
+              },
+            ],
+            as: "acceptedFriends",
+          },
+        },
+
+        // Calculate the total number of accepted friends
+        {
+          $addFields: {
+            totalFriends: { $size: "$acceptedFriends" },
+          },
+        },
+
+        // Project only the needed fields
         {
           $project: {
             "info.username": 1,
@@ -50,14 +91,16 @@ usersRouter.get(
             totalFriends: 1,
           },
         },
-        { $skip: (+page - 1) * +limit }, // Pagination
-        { $limit: +limit }, // Limit
+
+        // Pagination
+        { $skip: (+page - 1) * +limit },
+        { $limit: +limit },
       ]);
 
       // Fetch friendships to determine if the users found are friends with the actual user
       const friendshipStatus = await Friendship.find({
         $or: [{ senderId: actualUserId }, { receiverId: actualUserId }],
-        status: "accepted", // Only check for accepted friendships
+        status: "accepted",
       })
         .select("senderId receiverId")
         .lean()
@@ -76,17 +119,11 @@ usersRouter.get(
       // Add friendship status to the users aggregation result
       const usersWithFriendshipStatus = usersAggregation.map((user) => ({
         ...user,
-        isFriend: friendIds.has(user._id.toString()), // Check if user ID is in the friendIds set
+        isFriend: friendIds.has(user._id.toString()),
       }));
 
       const totalUsers = await User.countDocuments(searchQuery);
       const totalPages = Math.ceil(totalUsers / +limit);
-
-      ({
-        users: usersWithFriendshipStatus,
-        totalPages,
-        currentPage: +page,
-      });
 
       res.json({
         users: usersWithFriendshipStatus,
@@ -107,33 +144,16 @@ usersRouter.get(
     if (!user) {
       return res.status(404).json({ error: "User not found" });
     }
-    const userId = user._id.toString();
+    const userId = user._id;
 
     try {
       const results = await User.aggregate([
         {
-          $match: { _id: new ObjectId(userId) },
+          $match: { _id: userId },
         },
         {
           $lookup: {
-            from: "User", // Correct collection name for user model
-            localField: "friends.accepted",
-            foreignField: "_id",
-            as: "friendsAccepted",
-            pipeline: [
-              {
-                $project: {
-                  _id: 1,
-                  "info.username": 1,
-                  "info.image": 1,
-                },
-              },
-            ],
-          },
-        },
-        {
-          $lookup: {
-            from: "Project", // Correct collection name for project model
+            from: "Project",
             localField: "projects.projectsOwned",
             foreignField: "_id",
             as: "projectsOwned",
@@ -150,7 +170,7 @@ usersRouter.get(
         },
         {
           $lookup: {
-            from: "Project", // Correct collection name for project model
+            from: "Project",
             localField: "projects.projectsJoined",
             foreignField: "_id",
             as: "projectsJoined",
@@ -160,7 +180,7 @@ usersRouter.get(
                   _id: 1,
                   title: 1,
                   slug: 1,
-                  owner: 1, // Include the owner field
+                  owner: 1,
                 },
               },
             ],
@@ -168,7 +188,7 @@ usersRouter.get(
         },
         {
           $lookup: {
-            from: "User", // Second lookup to get the owner's username
+            from: "User",
             localField: "projectsJoined.owner",
             foreignField: "_id",
             as: "projectOwners",
@@ -212,7 +232,6 @@ usersRouter.get(
         },
         {
           $addFields: {
-            friendsCount: { $size: "$friendsAccepted" },
             projectsOwnedCount: { $size: "$projectsOwned" },
             projectsJoinedCount: { $size: "$projectsJoined" },
           },
@@ -227,7 +246,6 @@ usersRouter.get(
             friendsAccepted: 1,
             projectsOwned: 1,
             projectsJoined: 1,
-            friendsCount: 1,
             projectsOwnedCount: 1,
             projectsJoinedCount: 1,
           },
@@ -250,7 +268,6 @@ usersRouter.get(
       res.json({
         user,
         counts: {
-          friendsCount: user.friendsCount,
           projectsOwnedCount: user.projectsOwnedCount,
           projectsJoinedCount: user.projectsJoinedCount,
         },

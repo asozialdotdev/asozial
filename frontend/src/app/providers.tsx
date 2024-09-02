@@ -6,18 +6,18 @@ import { RequestsProvider } from "@/context/RequestsContext";
 function Providers({ children }: { children: React.ReactNode }) {
   return (
     <SessionProvider>
-      <RequestsProvider>
-        <SidebarsProviders>
-          <ThemeProvider
-            attribute="class"
-            defaultTheme="system"
-            enableSystem
-            disableTransitionOnChange
-          >
-            {children}
-          </ThemeProvider>
-        </SidebarsProviders>
-      </RequestsProvider>
+      <ThemeProvider
+
+        attribute="class"
+        defaultTheme="system"
+        enableSystem
+
+        disableTransitionOnChange
+      >
+        <RequestsProvider>
+          <SidebarsProviders>{children}</SidebarsProviders>
+        </RequestsProvider>
+      </ThemeProvider>
     </SessionProvider>
   );
 }

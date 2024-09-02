@@ -58,7 +58,7 @@ function NavbarLinkItemWithSubLinks({
             <DropdownMenuItem asChild key={subLink.name}>
               <Link
                 href={subLink.href}
-                className="flex flex-row items-center gap-2"
+                className="flex flex-row items-center gap-2 cursor-pointer"
               >
                 <subLink.Icon />
                 {subLink.name}
