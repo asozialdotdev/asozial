@@ -46,9 +46,9 @@ function SidebarsProviders({ children }: { children: React.ReactNode }) {
       }
     },
     userSidebarRef,
-    userHeaderRef,
     projectSidebarRef,
-    projectHeaderRef,
+    // userHeaderRef,
+    // projectHeaderRef,
   );
 
   function toggleUserSidebar() {

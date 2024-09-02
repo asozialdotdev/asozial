@@ -23,6 +23,7 @@ async function UsersPage({ searchParams }: UsersPageProps) {
   const currentPage = Number(searchParams.page) || 1;
   const limit = 10;
   const { users, totalPages } = await getAllUsers(query, currentPage, limit);
+  console.log("users:::::::{{{{{}}}}}}}}))))))<<>>>>>>>>>>", users);
 
   return (
     <PageContainer>

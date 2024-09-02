@@ -1,5 +1,7 @@
-import Image from "next/image";
+//Lib
 import { auth } from "@/auth";
+
+//Components
 import AddFriendForm from "../requests/AddFriendForm";
 import UserInfo from "./UserInfo";
 import UserFriends from "./UserFriends";
@@ -8,11 +10,12 @@ import UserProjectsJoined from "./UserProjectsJoined";
 import UserTechStack from "./UserTechStack";
 import UserGithubButton from "./UserGithubButton";
 import UserGithubStatus from "./UserGithubStatus";
+import UserComponentAvatar from "./UserComponentAvatar";
+
+//Types
 import type { User } from "../../types/User";
 import { Project } from "@/types/Project";
 import { Friendship } from "@/types/Friendship";
-import UserComponentAvatar from "./UserComponentAvatar";
-import { notFound } from "next/navigation";
 
 type ProjectJoined = {
   _id: string;
@@ -57,6 +60,7 @@ async function UserComponent({
     counts: { projectsOwnedCount, projectsJoinedCount },
     isFriend,
   } = result;
+  console.log("UserComponent -> user", user, isFriend);
   const { projectsOwned, projectsJoined } = user;
 
   const session = await auth();
@@ -89,9 +93,9 @@ async function UserComponent({
 
             <div className="self-end">
               {/* Friend Form  */}
-              {actualUserId &&
-                actualUserId !== user._id.toString() &&
-                !isFriend && <AddFriendForm receiverId={user._id.toString()} />}
+              {actualUserId !== user._id.toString() && !isFriend && (
+                <AddFriendForm receiverId={user._id.toString()} />
+              )}
             </div>
           </div>
         </div>

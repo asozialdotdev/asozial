@@ -18,7 +18,9 @@ async function Page({ params }: { params: { username: string } }) {
   return (
     <PageContainer>
       <Suspense fallback={<UserComponentSkeleton />}>
-        <UserComponent result={result} friends={accepted} />
+        {result && friends && (
+          <UserComponent result={result} friends={accepted} />
+        )}
       </Suspense>
     </PageContainer>
   );
