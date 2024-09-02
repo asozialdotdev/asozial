@@ -60,7 +60,6 @@ async function UserComponent({
     counts: { projectsOwnedCount, projectsJoinedCount },
     isFriend,
   } = result;
-  console.log("UserComponent -> user", user, isFriend);
   const { projectsOwned, projectsJoined } = user;
 
   const session = await auth();
