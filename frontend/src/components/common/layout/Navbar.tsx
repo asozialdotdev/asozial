@@ -35,7 +35,7 @@ function Navbar() {
   return (
     <>
       <nav
-        ref={mergedRef}
+        // ref={mergedRef}
         className={`border-b-1 sticky top-0 z-50 flex w-full justify-between gap-2 bg-light px-6 py-2 text-dark dark:bg-dark dark:text-light`}
       >
         <section className="flex items-center gap-5">

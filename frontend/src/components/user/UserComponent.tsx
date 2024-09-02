@@ -41,7 +41,7 @@ type UserComponentProps = {
       projectsOwnedCount: number;
       projectsJoinedCount: number;
     };
-    isFriends: boolean;
+    isFriend: boolean;
   };
   friends: Friendship[];
   dashboard?: boolean;
@@ -55,7 +55,7 @@ async function UserComponent({
   const {
     user,
     counts: { projectsOwnedCount, projectsJoinedCount },
-    isFriends,
+    isFriend,
   } = result;
   const { projectsOwned, projectsJoined } = user;
 
@@ -72,7 +72,7 @@ async function UserComponent({
   }
   return (
     <section className="flex w-full flex-col gap-8 pb-4 text-lg font-light">
-      <div className="flex w-full items-center flex-col lg:flex-row justify-center gap-4">
+      <div className="flex w-full flex-col items-center justify-center gap-4 lg:flex-row">
         {/* Avatar */}
         <UserComponentAvatar user={user} />
 
@@ -91,9 +91,7 @@ async function UserComponent({
               {/* Friend Form  */}
               {actualUserId &&
                 actualUserId !== user._id.toString() &&
-                !isFriends && (
-                  <AddFriendForm receiverId={user._id.toString()} />
-                )}
+                !isFriend && <AddFriendForm receiverId={user._id.toString()} />}
             </div>
           </div>
         </div>
