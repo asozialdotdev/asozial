@@ -9,6 +9,7 @@ usersRouter.get(
   "/search",
   async (req: Request, res: Response, next: NextFunction) => {
     const { query, page = 1, limit = 10, actualUserId } = req.query;
+    console.log("query", query);
 
     try {
       // Define the search query dynamically
@@ -23,6 +24,7 @@ usersRouter.get(
                   $options: "i",
                 },
               },
+              { "info.location": { $regex: query, $options: "i" } },
             ],
           }
         : {};
