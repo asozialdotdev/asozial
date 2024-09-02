@@ -235,7 +235,6 @@ friendshipsRouter.get(
   "/:username/status",
   async (req: Request, res: Response, next: NextFunction) => {
     const username = req.params.username;
-    console.log("username>>>>>>", username);
     try {
       const user = await User.findOne({ username });
       if (!user) {
@@ -293,11 +292,11 @@ friendshipsRouter.get(
         (friendship) => friendship.status === "declined"
       );
 
-      console.log ({
+      console.log({
         accepted: acceptedFriendships,
         pending: pendingFriendships,
         declined: declinedFriendships,
-      })
+      });
 
       res.json({
         accepted: acceptedFriendships,

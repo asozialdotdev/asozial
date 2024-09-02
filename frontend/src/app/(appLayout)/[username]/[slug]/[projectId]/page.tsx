@@ -25,6 +25,7 @@ import { auth } from "@/auth";
 
 //Types
 import type { ProjectId } from "@/types/Project";
+import PostLoadingSkeleton from "@/components/project/PostLoadingSkeleton";
 
 type Params = {
   username: string;
@@ -47,6 +48,7 @@ async function Page({ params }: { params: Params }) {
   if (!project) {
     notFound();
   }
+
   return (
     <PageContainer className="gap-4">
       {/* Project */}
@@ -57,14 +59,15 @@ async function Page({ params }: { params: Params }) {
           isOwner={isOwner}
         />
       </Suspense>
-
-      {isMember || isOwner ? (
-        // Posts
-        <ProjectPostsList projectPosts={posts} projectId={projectId} />
-      ) : (
-        // Apply Project
-        <ApplyProject project={project} hasApplied={hasApplied} />
-      )}
+      <Suspense fallback={<PostLoadingSkeleton />}>
+        {isMember || isOwner ? (
+          // Posts
+          <ProjectPostsList projectPosts={posts} projectId={projectId} />
+        ) : (
+          // Apply Project
+          <ApplyProject project={project} hasApplied={hasApplied} />
+        )}
+      </Suspense>
     </PageContainer>
   );
 }

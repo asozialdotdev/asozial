@@ -35,14 +35,23 @@ function UserAvatar({
     <TooltipProvider key={username}>
       <Tooltip>
         <TooltipTrigger asChild>
-          <Link href={`/${isInNavbar ? "account" : username}`}>
+          {isInNavbar ? (
             <Avatar className={cn("flex-shrink-0", className)}>
               <AvatarImage src={src} alt={username} />
               <AvatarFallback>
                 {username?.charAt(0).toUpperCase()}
               </AvatarFallback>
             </Avatar>
-          </Link>
+          ) : (
+            <Link href={`/${username}`}>
+              <Avatar className={cn("flex-shrink-0", className)}>
+                <AvatarImage src={src} alt={username} />
+                <AvatarFallback>
+                  {username?.charAt(0).toUpperCase()}
+                </AvatarFallback>
+              </Avatar>
+            </Link>
+          )}
         </TooltipTrigger>
         <TooltipContent
           side={isInNavbar ? "left" : undefined}
