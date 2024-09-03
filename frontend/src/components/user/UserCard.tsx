@@ -1,22 +1,21 @@
-import {
-  FileText,
-  FolderCode,
-  FolderGit,
-  FolderInput,
-  MapPinHouse,
-  Users,
-} from "lucide-react";
+//Next
+import Link from "next/link";
+
+//Ui
 import UserAvatar from "../common/ui/image/UserAvatar";
+import FriendshipPendingIcon from "../common/ui/icons/FriendshipPendingIcon";
+import IsFriendIcon from "../common/ui/icons/IsFriendIcon";
 import AddFriendForm from "../requests/AddFriendForm";
-import { User, UserId } from "@/types/User";
-import { baseUrl } from "@/constants";
 import TotalFriendsIcon from "../common/ui/icons/TotalFriendsIcon";
 import TotalProjectsJoinedIcon from "../common/ui/icons/TotalProjectsJoinedIcon";
 import TotalProjectsOwned from "../common/ui/icons/TotalProjectsOwned";
 import LocationIcon from "../common/ui/icons/LocationIcon";
 import GithubReposIcon from "../common/ui/icons/GithubReposIcon";
-import Link from "next/link";
+
+//Utils
 import { techStackClass } from "@/utils";
+//Types
+import { User, UserId } from "@/types/User";
 
 type UserCardProps = {
   user: User & {
@@ -24,11 +23,13 @@ type UserCardProps = {
     totalFriends?: number;
     totalProjectsOwned?: number;
     totalProjectsMembers?: number;
+    hasPendingFriendship?: boolean;
   };
   actualUserId?: UserId;
 };
 
 function UserCard({ user, actualUserId }: UserCardProps) {
+  const isActualUser = actualUserId === user._id;
   return (
     <li className="relative flex w-full flex-col gap-4 rounded-lg border-2 border-dashed border-zinc-300 bg-inherit bg-zinc-100 px-8 py-8 hover:bg-zinc-200/10 dark:border-zinc-600 dark:bg-inherit dark:bg-zinc-800 dark:shadow-neutral-700/30 dark:hover:bg-zinc-700/10">
       <div className="flex flex-col gap-4">
@@ -51,7 +52,7 @@ function UserCard({ user, actualUserId }: UserCardProps) {
         </div>
 
         {/* Icons */}
-        <div className="flex items-center justify-between gap-4 flex-wrap">
+        <div className="flex flex-wrap items-center justify-between gap-4">
           <section className="flex items-center gap-4">
             <div className="flex items-center gap-2">
               <GithubReposIcon />
@@ -72,13 +73,17 @@ function UserCard({ user, actualUserId }: UserCardProps) {
             </div>
           </section>
 
-          <div className='self-end'>
+          <div className="self-end">
             {/* Friend Form  */}
-            {actualUserId &&
-              actualUserId !== user._id.toString() &&
-              !user.isFriend && (
-                <AddFriendForm receiverId={user._id.toString()} />
-              )}
+            {!isActualUser && !user.isFriend && !user.hasPendingFriendship && (
+              <AddFriendForm receiverId={user._id.toString()} />
+            )}
+            {!isActualUser && user.hasPendingFriendship && (
+              <FriendshipPendingIcon />
+            )}
+            {!isActualUser && user.isFriend && !user.hasPendingFriendship && (
+              <IsFriendIcon />
+            )}
           </div>
         </div>
       </div>

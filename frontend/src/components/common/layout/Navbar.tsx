@@ -19,10 +19,8 @@ import useCombinedRef from "@/hooks/useCombinedRef";
 function Navbar() {
   const {
     toggleProjectSidebar,
-    projectHeaderRef,
     isProjectSidebarOpen,
     toggleUserSidebar,
-    userHeaderRef,
     isUserSidebarOpen,
   } = useSidebarsContext();
 
@@ -30,12 +28,9 @@ function Navbar() {
 
   const { data: session, status } = useSession();
 
-  const mergedRef = useCombinedRef(projectHeaderRef, userHeaderRef);
-
   return (
     <>
       <nav
-        // ref={mergedRef}
         className={`border-b-1 sticky top-0 z-50 flex w-full justify-between gap-2 bg-light px-6 py-2 text-dark dark:bg-dark dark:text-light`}
       >
         <section className="flex items-center gap-5">
