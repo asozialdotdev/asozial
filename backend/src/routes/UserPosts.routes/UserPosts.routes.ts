@@ -1,6 +1,6 @@
 import express, { Request, Response, NextFunction } from "express";
-import UserPost from "../models/UserPost.models";
-import Friendship from "../models/Friendship.models";
+import UserPost from "../../models/UserPost.models";
+import Friendship from "../../models/Friendship.models";
 
 const usersPostRouter = express.Router();
 

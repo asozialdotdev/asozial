@@ -1,9 +1,9 @@
 import express, { Request, Response, NextFunction } from "express";
 
-import User from "../models/User.models";
-import Project from "../models/Project.models";
-import UserMatch from "../models/UserMatch.models";
-import ProjectMatch from "../models/ProjectMatch.models";
+import User from "../../models/User.models";
+import Project from "../../models/Project.models";
+import UserMatch from "../../models/UserMatch.models";
+import ProjectMatch from "../../models/ProjectMatch.models";
 
 const matchRouter = express.Router();
 

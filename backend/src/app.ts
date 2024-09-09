@@ -3,17 +3,17 @@ import express from "express";
 import "./db";
 
 import dashboardRouter from "./routes/index";
-import usersRouter from "./routes/Users.routes";
-import projectsRouter from "./routes/Projects.routes";
-import projectPostRouter from "./routes/ProjectPosts.routes";
-import projectPostReplyRouter from "./routes/ProjectPostReply.routes";
-import githubRouter from "./routes/Auth.routes";
-import friendshipsRouter from "./routes/Friendships.routes";
-import userPostsRouter from "./routes/UserPosts.routes";
-import messagesRouter from "./routes/Messages.routes";
-import fileRouter from "./routes/FileUploader.routes";
-import searchRouter from "./routes/Search.router";
-import matchRouter from "./routes/Match.routes";
+import usersRouter from "./routes/Users.routes/Users.routes";
+import projectsRouter from "./routes/Projects.routes/Projects.routes";
+import projectPostRouter from "./routes/ProjectPosts.routes/ProjectPosts.routes";
+import projectPostReplyRouter from "./routes/ProjectPostReply.routes/ProjectPostReply.routes";
+import githubRouter from "./routes/Auth.routes/Auth.routes";
+import friendshipsRouter from "./routes/Friendship.routes/Friendships.routes";
+import userPostsRouter from "./routes/UserPosts.routes/UserPosts.routes";
+import messagesRouter from "./routes/Messages.routes/Messages.routes";
+import fileRouter from "./routes/FileUploader.routes/FileUploader.routes";
+import searchRouter from "./routes/Search.routes/Search.routes";
+import matchRouter from "./routes/Match.routes/Match.routes";
 
 const app = express();
 config(app);

@@ -1,8 +1,8 @@
 import express, { Request, Response, NextFunction } from "express";
-import ProjectPost from "../models/ProjectPost.models";
-import ProjectPostReply from "../models/ProjectPostReply.models";
-import Project from "../models/Project.models";
-import User from "../models/User.models";
+import ProjectPost from "../../models/ProjectPost.models";
+import ProjectPostReply from "../../models/ProjectPostReply.models";
+import Project from "../../models/Project.models";
+import User from "../../models/User.models";
 
 const projectPostRouter = express.Router();
 

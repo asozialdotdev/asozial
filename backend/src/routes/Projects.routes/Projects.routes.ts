@@ -2,11 +2,11 @@ import dotenv from "dotenv";
 import express, { Request, Response, NextFunction } from "express";
 import axios from "axios";
 
-import Project from "../models/Project.models";
-import ProjectPost from "../models/ProjectPost.models";
-import ProjectPostReply from "../models/ProjectPostReply.models";
-import User from "../models/User.models";
-import { generateSlug } from "../utils";
+import Project from "../../models/Project.models";
+import ProjectPost from "../../models/ProjectPost.models";
+import ProjectPostReply from "../../models/ProjectPostReply.models";
+import User from "../../models/User.models";
+import { generateSlug } from "../../utils";
 
 const projectsRouter = express.Router();
 
