@@ -1,7 +1,7 @@
 import dotenv from "dotenv";
 import express, { Request, Response, NextFunction } from "express";
-import User from "../models/User.models";
-import Project from "../models/Project.models";
+import User from "../../models/User.models";
+import Project from "../../models/Project.models";
 
 const searchRouter = express.Router();
 

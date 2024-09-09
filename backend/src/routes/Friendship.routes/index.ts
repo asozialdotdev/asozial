@@ -1,8 +1,7 @@
 import express, { Request, Response, NextFunction } from "express";
-import User from "../models/User.models";
-import Message from "../models/Message.models";
-import Friendship from "../models/Friendship.models";
-import { ObjectId } from "mongodb"; // Ensure you import ObjectId from mongoose
+import User from "../../models/User.models";
+import Message from "../../models/Message.models";
+import Friendship from "../../models/Friendship.models";
 
 const friendshipsRouter = express.Router();
 
@@ -94,12 +93,12 @@ friendshipsRouter.put(
 
       await User.findByIdAndUpdate(friendship.senderId, {
         $pull: { "friends.pending": friendship.receiverId },
-        $addToSet: { "friends.accepted": friendship.senderId },
+        $addToSet: { "friends.accepted": friendship.receiverId },
       });
 
       await User.findByIdAndUpdate(friendship.receiverId, {
         $pull: { "friends.pending": friendship.senderId },
-        $addToSet: { "friends.accepted": friendship.receiverId },
+        $addToSet: { "friends.accepted": friendship.senderId },
       });
 
       res.status(200).json(friendship);

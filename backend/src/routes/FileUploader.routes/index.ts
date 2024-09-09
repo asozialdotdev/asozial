@@ -1,6 +1,6 @@
 import express, { Request, Response, NextFunction } from "express";
-import fileUploader from "../config/cloudinary.config";
-import User from "../models/User.models";
+import fileUploader from "../../config/cloudinary.config";
+import User from "../../models/User.models";
 
 const fileRouter = express.Router();
 

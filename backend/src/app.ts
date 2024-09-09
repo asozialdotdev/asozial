@@ -8,11 +8,11 @@ import projectsRouter from "./routes/Projects.routes";
 import projectPostRouter from "./routes/ProjectPosts.routes";
 import projectPostReplyRouter from "./routes/ProjectPostReply.routes";
 import githubRouter from "./routes/Auth.routes";
-import friendshipsRouter from "./routes/Friendships.routes";
+import friendshipsRouter from "./routes/Friendship.routes";
 import userPostsRouter from "./routes/UserPosts.routes";
 import messagesRouter from "./routes/Messages.routes";
 import fileRouter from "./routes/FileUploader.routes";
-import searchRouter from "./routes/Search.router";
+import searchRouter from "./routes/Search.routes";
 import matchRouter from "./routes/Match.routes";
 
 const app = express();

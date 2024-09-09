@@ -1,6 +1,6 @@
 import express, { Request, Response, NextFunction } from "express";
-import User from "../models/User.models";
-import Friendship from "../models/Friendship.models";
+import User from "../../models/User.models";
+import Friendship from "../../models/Friendship.models";
 import { ObjectId } from "mongodb";
 
 const usersRouter = express.Router();

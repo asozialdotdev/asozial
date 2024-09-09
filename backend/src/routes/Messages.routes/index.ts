@@ -1,7 +1,7 @@
 import express, { Request, Response, NextFunction } from "express";
-import Message from "../models/Message.models";
-import User from "../models/User.models";
-import Friendship from "../models/Friendship.models";
+import Message from "../../models/Message.models";
+import User from "../../models/User.models";
+import Friendship from "../../models/Friendship.models";
 import { ObjectId } from "mongodb";
 
 const messagesRouter = express.Router();
