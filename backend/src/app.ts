@@ -13,7 +13,7 @@ import userPostsRouter from "./routes/UserPosts.routes";
 import messagesRouter from "./routes/Messages.routes";
 import fileRouter from "./routes/FileUploader.routes";
 import searchRouter from "./routes/Search.routes";
-import matchRouter from "./routes/Match.routes";
+import matchRouter from "./routes/Match";
 
 const app = express();
 config(app);
