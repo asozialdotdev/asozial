@@ -11,7 +11,7 @@ import githubRouter from "./routes/Auth.routes";
 import friendshipsRouter from "./routes/Friendship";
 import userPostsRouter from "./routes/UserPosts.routes";
 import messagesRouter from "./routes/Messages.routes";
-import fileRouter from "./routes/FileUploader.routes";
+import fileRouter from "./routes/FileUploader";
 import searchRouter from "./routes/Search.routes";
 import matchRouter from "./routes/Match";
 
