@@ -3,17 +3,17 @@ import express from "express";
 import "./db";
 
 import dashboardRouter from "./routes/index";
-import usersRouter from "./routes/Users.routes";
-import projectsRouter from "./routes/Projects.routes";
-import projectPostRouter from "./routes/ProjectPosts.routes";
-import projectPostReplyRouter from "./routes/ProjectPostReply.routes";
+import usersRouter from "./routes/Users";
+import projectsRouter from "./routes/Projects";
+import projectPostRouter from "./routes/ProjectsPosts";
+import projectPostReplyRouter from "./routes/ProjectsPostsReply";
 import githubRouter from "./routes/Auth.routes";
-import friendshipsRouter from "./routes/Friendship.routes";
-import userPostsRouter from "./routes/UserPosts.routes";
-import messagesRouter from "./routes/Messages.routes";
-import fileRouter from "./routes/FileUploader.routes";
-import searchRouter from "./routes/Search.routes";
-import matchRouter from "./routes/Match.routes";
+import friendshipsRouter from "./routes/Friendship";
+import userPostsRouter from "./routes/UserPosts";
+import messagesRouter from "./routes/Messages";
+import fileRouter from "./routes/FileUploader";
+import searchRouter from "./routes/Search";
+import matchRouter from "./routes/Match";
 
 const app = express();
 config(app);
