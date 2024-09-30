@@ -6,19 +6,24 @@ import { auth } from "@/auth";
 jest.mock("@/auth");
 
 describe("DashboardHeader", () => {
-  it("renders the DashboardHeader component with user information", async () => {
-    // Explicitly type the auth mock
-    const mockAuth = auth as unknown as jest.MockedFunction<
-      () => Promise<AuthReturnType>
-    >;
-
-    // Define the type for the mock return value
-    type AuthReturnType = {
-      user: {
-        githubUsername: string;
-      };
+  // Define the type for the mock return value
+  type AuthReturnType = {
+    user: {
+      githubUsername: string;
     };
+  };
 
+  // Explicitly type the auth mock
+  const mockAuth = auth as unknown as jest.MockedFunction<
+    () => Promise<AuthReturnType>
+  >;
+
+  beforeEach(() => {
+    // Reset the mock before each test
+    jest.resetAllMocks();
+  });
+
+  it("renders the DashboardHeader component with user information", async () => {
     // Mock the auth function to return a fake session
     mockAuth.mockResolvedValue({
       user: {
