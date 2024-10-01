@@ -4,6 +4,7 @@ type PageTitleProps = {
   children: React.ReactNode;
   className?: string;
 };
+
 function PageTitle({ children, className }: PageTitleProps) {
   return (
     <h1
