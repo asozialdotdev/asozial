@@ -30,7 +30,9 @@
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts",
-    "declarations.d.ts"
+    "jest.setup.js",
+    "jest.config.js",
+    "babel.config.js"
   ],
   "exclude": ["node_modules"]
 }

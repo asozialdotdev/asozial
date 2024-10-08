@@ -3,5 +3,11 @@
     "next/core-web-vitals",
     "plugin:testing-library/react",
     "plugin:jest-dom/recommended"
-  ]
+  ],
+  "plugins": ["testing-library", "jest-dom"],
+  "env": {
+    "jest": true,
+    "browser": true,
+    "node": true
+  }
 }
