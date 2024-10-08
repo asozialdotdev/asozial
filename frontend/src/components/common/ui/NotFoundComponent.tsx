@@ -2,7 +2,7 @@ import Image from "next/image";
 import PageContainer from "../containers/PageContainer";
 import ButtonBack from "./buttons/ButtonBack";
 import PageTitle from "./PageTitle";
-import bearNotFound from "/public/bearNotFound.webp";
+import bearNotFound from "@/../public/bearNotFound.webp";
 
 type NotFoundComponentProps = {
   page?: string;

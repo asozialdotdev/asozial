@@ -41,7 +41,7 @@ function SearchComponent() {
 
   return (
     <div className="flex flex-col items-center gap-4">
-      <form onSubmit={handleSearch}>
+      <form role="form" onSubmit={handleSearch}>
         <SearchBar
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}

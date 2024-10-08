@@ -9,7 +9,7 @@ type PaginationProps = {
   currentPage: number;
 };
 
-function Pagination({ totalPages,currentPage }: PaginationProps) {
+function Pagination({ totalPages, currentPage }: PaginationProps) {
   const { width } = useWindowWidth();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -34,7 +34,6 @@ function Pagination({ totalPages,currentPage }: PaginationProps) {
   };
 
   const maxPages = getMaxPages(width);
-
 
   const createPageURL = (pageNumber: number) => {
     const params = new URLSearchParams(searchParams);
