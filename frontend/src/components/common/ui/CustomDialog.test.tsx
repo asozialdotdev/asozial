@@ -1,5 +1,6 @@
 import { render, screen, fireEvent } from "@testing-library/react";
 import CustomDialog from "./CustomDialog";
+import { Button } from "@/components/ui/button";
 
 const mockHandler = jest.fn();
 
