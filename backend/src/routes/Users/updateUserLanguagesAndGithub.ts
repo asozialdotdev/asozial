@@ -1,4 +1,5 @@
 import { Request, Response, NextFunction } from "express";
+import mongoose from "mongoose";
 import User from "../../models/User.models";
 
 export const updateUserLanguagesAndGithub = async (
@@ -8,6 +9,14 @@ export const updateUserLanguagesAndGithub = async (
 ) => {
   try {
     const { _id, codingLanguages, github } = req.body;
+
+    if (!mongoose.Types.ObjectId.isValid(_id)) {
+      return res.status(400).json({ error: "Invalid user ID" });
+    }
+
+    if (!Array.isArray(codingLanguages) || typeof github !== 'string') {
+      return res.status(400).json({ error: "Invalid input data" });
+    }
 
     const updatedUser = await User.findByIdAndUpdate(
       _id,
