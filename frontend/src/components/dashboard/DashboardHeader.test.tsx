@@ -1,16 +1,12 @@
-import { render, screen } from '@testing-library/react';
-import DashboardHeader from './DashboardHeader';
-import { auth } from '@/auth';
+import { render, screen } from "@testing-library/react";
+import DashboardHeader from "./DashboardHeader";
+import { auth } from "@/auth";
 
-jest.mock('@/auth', () => ({
-	auth: jest.fn(),
-}));
-
-describe('DashboardHeader', () => {
-	it('renders welcome message with GitHub username', async () => {
-		auth.mockResolvedValue({
+describe("DashboardHeader", () => {
+	it("renders welcome message with GitHub username", async () => {
+		(auth as jest.Mock).mockResolvedValue({
 			user: {
-				githubUsername: 'testuser',
+				githubUsername: "testuser",
 			},
 		});
 
@@ -19,7 +15,7 @@ describe('DashboardHeader', () => {
 		expect(await screen.findByText(/Welcome,/i)).toBeInTheDocument();
 		expect(await screen.findByText(/testuser/i)).toBeInTheDocument();
 		expect(
-			screen.getByText(/A quick overview of your account/i)
+			screen.getByText(/A quick overview of your account/i),
 		).toBeInTheDocument();
 	});
 });
