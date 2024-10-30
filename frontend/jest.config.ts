@@ -11,8 +11,12 @@ const config = {
 	preset: 'ts-jest/presets/default-esm',
 	extensionsToTreatAsEsm: ['.ts', '.tsx'],
 	moduleNameMapper: {
-		'^@/auth$': '<rootDir>/src/auth.ts',
+		"^@/(.*)$": "<rootDir>/src/$1",
+		"^@/auth$": "<rootDir>/src/auth.ts",
 	},
+	transformIgnorePatterns: [
+		"/node_modules/(?!(plaiceholder)/)", // Ignore all except `plaiceholder`
+	],
 };
 
 module.exports = createJestConfig(config);
