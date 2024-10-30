@@ -44,7 +44,7 @@ function CustomDialog({
             {isDeleting ? <LoadingTextButton text="Deleting" /> : "Confirm"}
           </Button>
           <DialogClose asChild>
-            <Button asChild variant="outline">
+            <Button variant="outline">
               Cancel
             </Button>
           </DialogClose>
