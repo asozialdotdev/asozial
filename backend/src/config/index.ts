@@ -2,9 +2,17 @@ import Express from "express";
 import Morgan from "morgan";
 import cookieParser from "cookie-parser";
 import cors from "cors";
+import rateLimit from "express-rate-limit";
+
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 100,
+});
 
 export default (app: Express.Application) => {
   app.set("trust proxy", 1);
+
+  app.use(limiter);
 
   app.use(
     cors({
