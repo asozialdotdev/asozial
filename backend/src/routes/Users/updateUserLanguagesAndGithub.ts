@@ -10,13 +10,22 @@ export const updateUserLanguagesAndGithub = async (
   try {
     const { _id, codingLanguages, github } = req.body;
 
-    if (!mongoose.Types.ObjectId.isValid(_id)) {
-      return res.status(400).json({ error: "Invalid user ID" });
-    }
+    console.log(_id, codingLanguages, github);
 
-    if (!Array.isArray(codingLanguages) || typeof github !== 'string') {
-      return res.status(400).json({ error: "Invalid input data" });
-    }
+    // if (!mongoose.Types.ObjectId.isValid(_id)) {
+    //   console.log("Invalid user ID");
+    //   return res.status(400).json({ error: "Invalid user ID" });
+    // }
+
+    // if (!Array.isArray(codingLanguages)) {
+    //   console.log("Invalid coding languages");
+    //   return res.status(400).json({ error: "Invalid input data" });
+    // }
+
+    // if (typeof github !== "string") {
+    //   console.log("Invalid github");
+    //   return res.status(400).json({ error: "Invalid input data" });
+    // }
 
     const updatedUser = await User.findByIdAndUpdate(
       _id,
