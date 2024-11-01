@@ -51,7 +51,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={kanit.className} suppressHydrationWarning>
-      <body className="flex h-[100dvh] w-[100dwh] flex-col justify-between ">
+      <body className="flex h-[100dvh] w-[100dwh] flex-col justify-between">
         <Providers>{children}</Providers>
       </body>
     </html>

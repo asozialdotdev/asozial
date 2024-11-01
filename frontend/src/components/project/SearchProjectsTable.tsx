@@ -16,7 +16,7 @@ function SearchProjectsTable({ projects }: SearchProjectsTableProps) {
   }
 
   return (
-    <article className="grid grid-cols-1 gap-4 pb-6 lg:grid-cols-2 2xl:grid-cols-3 2xl:gap-8">
+    <article className="grid grid-cols-1 gap-4 pb-6 lg:grid-cols-2 2xl:grid-cols-3 2xl:gap-8 justify-items-center">
       {projects.map((project: Project) => (
         <ProjectCard key={project._id.toString()} project={project} />
       ))}

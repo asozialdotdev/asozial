@@ -1,51 +1,59 @@
 {
-  "name": "asozial",
-  "version": "1.0.0",
-  "description": "A social app for asozial devs",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "concurrently \"cd frontend && npm run dev\" \"cd backend && npm run dev\"",
-    "start": "concurrently \"cd frontend && npm run start\" \"cd backend && npm run start\""
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/jrcopeti/asozial.git"
-  },
-  "contributors": [
-    {
-      "name": "José Copeti",
-      "email": "jrcopeti@gmail.com",
-      "github": "https://github.com/jrcopeti",
-      "linkedin": "https://www.linkedin.com/in/josecopeti/",
-      "website": "https://jrcopeti.hashnode.dev/"
-    },
-    {
-      "name": "Benjamin Elliott",
-      "email": "hello@benjamin.dev",
-      "github": "https://github.com/benjamindotdev",
-      "linkedin": "https://www.linkedin.com/in/benjamindotdev/",
-      "website": "https://benjamin.dev"
-    },
-    {
-      "name": "Mirko Fede",
-      "email": "mirko@asozial.com",
-      "github": "https://github.com/mirkoeffe",
-      "linkedin": "https://www.linkedin.com/in/mirko-fede/",
-      "website": "http://mirkoeffe.shop/"
-    }
-  ],
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/jrcopeti/asozial/issues"
-  },
-  "homepage": "https://github.com/jrcopeti/asozial#readme",
-  "dependencies": {
-    "@auth/core": "^0.34.2",
-    "concurrently": "^8.2.2",
-    "cookie-parser": "^1.4.6",
-    "jsonwebtoken": "^9.0.2",
-    "next-auth": "^5.0.0-beta.20",
-    "react-spring": "^9.7.4"
-  }
+	"name": "asozial",
+	"version": "1.0.0",
+	"description": "A social app for asozial devs",
+	"main": "index.js",
+	"type": "module",
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1",
+		"dev": "concurrently \"cd frontend && npm run dev\" \"cd backend && npm run dev\"",
+		"start": "concurrently \"cd frontend && npm run start\" \"cd backend && npm run start\""
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/jrcopeti/asozial.git"
+	},
+	"contributors": [
+		{
+			"name": "José Copeti",
+			"email": "jrcopeti@gmail.com",
+			"github": "https://github.com/jrcopeti",
+			"linkedin": "https://www.linkedin.com/in/josecopeti/",
+			"website": "https://jrcopeti.hashnode.dev/"
+		},
+		{
+			"name": "Benjamin Elliott",
+			"email": "hello@benjamin.dev",
+			"github": "https://github.com/benjamindotdev",
+			"linkedin": "https://www.linkedin.com/in/benjamindotdev/",
+			"website": "https://benjamin.dev"
+		},
+		{
+			"name": "Mirko Fede",
+			"email": "mirko@asozial.com",
+			"github": "https://github.com/mirkoeffe",
+			"linkedin": "https://www.linkedin.com/in/mirko-fede/",
+			"website": "http://mirkoeffe.shop/"
+		}
+	],
+	"license": "ISC",
+	"bugs": {
+		"url": "https://github.com/jrcopeti/asozial/issues"
+	},
+	"homepage": "https://github.com/jrcopeti/asozial#readme",
+	"dependencies": {
+		"@auth/core": "^0.34.2",
+		"babel-jest": "^29.7.0",
+		"concurrently": "^8.2.2",
+		"cookie-parser": "^1.4.6",
+		"jsonwebtoken": "^9.0.2",
+		"next-auth": "^5.0.0-beta.20",
+		"react-spring": "^9.7.4"
+	},
+	"devDependencies": {
+		"@testing-library/jest-dom": "^6.6.2",
+		"@types/jest": "^29.5.14",
+		"jest": "^29.7.0",
+		"ts-jest": "^29.2.5"
+	}
 }
